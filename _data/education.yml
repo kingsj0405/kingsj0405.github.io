@@ -1,13 +1,13 @@
 # Degree
-- degree: Bachelor of Arts, Human Rights
-  uni: Yale University
-  year: 2004 &mdash; 2008
+- degree: Bachelor of Computer Science
+  uni: Yonsei University
+  year: 2014 &mdash; 2019
   awards:
-    - award: Summa Cumme Laude graduate
-  summary: If you had any meaningful roles at college, feel free to write about them here
+    - award: 20182 Software Capstone Excellence Award
+    - award: 20191 Software Capstone Excellence Award
+  summary: My final GPA was 3.34/4.3. And I was VP of <a href="https://poolc.org/">PoolC</a>, Programming Clubs on Engineering College.
 
-- degree: High School Diploma
-  uni: Springfield High School
-  year: 2004
-  award: Most likely to succeed
-  summary: You can choose to have either a single or multiple awards
+- degree: Exchange Student at Department of Information Technology
+  uni: Uppsala University
+  year: 2018
+  summary: Nice achievement on Advanced Computer Architecture
