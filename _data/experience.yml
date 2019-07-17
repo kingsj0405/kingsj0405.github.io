@@ -1,7 +1,12 @@
 # Jobs
 - company: Computational Intelligence & Photography (Yonsei Univ.)
+  position: Researcher
+  duration: Oct, 2019 &mdash; Present
+  summary: Face Aging Generation, Shot Boundary Detection
+
+- company: Computational Intelligence & Photography (Yonsei Univ.)
   position: Undergraduate Intern
-  duration: Aug, 2018 &mdash; Present
+  duration: Aug, 2018 &mdash; Aug, 2019
   summary: Face Aging Recognition, Fake Image Detection, Optical Character Recognition
 
 - company: EWOOSOFT
