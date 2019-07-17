@@ -23,7 +23,7 @@ resume_contact_address:         "50, Yonsei-ro, Seodaemun-gu, Seoul, Republic of
 resume_header_contact_info:     "50, Yonsei-ro, Seodaemun-gu, Seoul, Republic of Korea • (02) 2123-5709 • kingsj0405@gmail.com"
 display_header_contact_info:    "false"
 
-resume_header_intro: "<p>I'm a student pursuing a Doctor's degree in Computer Science. I'm studying under <a href='https://sites.google.com/site/seonjookim/'>Professor Seonju Kim</a>. Currently researching on Computer Vision, Machine Learning and especially Deep learning. I have experience with Cross-platform Mobile, Cloud Computing and Backend Development.</p>"
+resume_header_intro: "<p>I'm a student pursuing a Doctor's degree in Computer Science. I'm studying under <a href='https://sites.google.com/site/seonjookim/'>Professor Seonjoo Kim</a>. Currently researching on Computer Vision, Machine Learning and especially Deep learning. I have experience with Cross-platform Mobile, Cloud Computing and Backend Development.</p>"
 
 # use "yes" to display the email contact button,
 # "no" to display an "I'm not looking for work" message,
