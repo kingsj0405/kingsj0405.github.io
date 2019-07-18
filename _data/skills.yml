@@ -1,12 +1,18 @@
 # Skills
-# Organizational leadership
-- skill: Organizational leadership
-  description: I have several years of experience leading organziations from community groups to business departments. From public speaking, to mentoring, to coordination of people and events, I can lead in any context.
+- skill: Deep-learning
+  description: Many CNN architecture, tensorflow v1, pytorch
 
-# Communications strategy
-- skill: Communications strategy
-  description: Content and marketing strategy,
+- skill: Machine-learning
+  description: numpy, scipy, xgboost, pandas, matplotlib
 
-# Digital content development and creation
-- skill: Digital content development and creation
-  description: Copy writing, graphic design, web design, front-end web development, print design
+- skill: Backend Development
+  description: Django, Flask, RESTful API
+
+- skill: Cloud computing
+  description: mininet, Openstack
+
+- skill: Cross-Platform Mobile
+  description: Xamarin.Forms(Android + iOS)
+
+- skill: Problem Solving(Data Structure + Algorithm)
+  description: <a href="https://www.acmicpc.net/user/kingsj0405">Baekjoon</a>, <a href="https://codeforces.com/profile/Bismute">Codeforces</a> specialist
