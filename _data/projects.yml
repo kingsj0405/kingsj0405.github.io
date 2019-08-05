@@ -1,6 +1,23 @@
 # Projects
 # uncomment the urls if you wish to display them, and add your own URL
 
+- project: Optical Character Recognition
+  role: Researcher & Developer
+  duration: Mar, 2019 &mdash; Jun, 2019
+  # url:
+  description: Optical Character Recognition For Korean
+
+- project: Face Aging Generation
+  role: Researcher & Developer
+  duration: Sept, 2018 &mdash; Nov, 2018
+  # url:
+  description: Face Aging Generation with CAAE(Conditional Adversarial Auto-Encoder)
+
+- project: Indoor Positioning with Android
+  role: Developer(Oursourcing) of Android Application for Experiment
+  duration: July, 2018 &mdash; Oct, 2018
+  description: Indoor Positioning with Wifi-RTT(802.11mc)
+
 - project: doughsam.com
   role: Developer
   duration: 2016 &mdash; Present
@@ -13,14 +30,17 @@
   # url: "https://yangspace.co.kr"
   description: Ruby on rails for v1, Django for v2, Django for v3(<a href="https://github.com/yangspace">Source</a>), Try to make confluence liked blog
 
-- project: Face Aging Generation
-  role: Researcher & Developer
-  duration: Sept, 2018 &mdash; Nov, 2018
-  # url:
-  description: Face Aging Generation with CAAE(Conditional Adversarial Auto-Encoder), <a href="https://github.com/kingsj0405/20182-capstone">Source</a>
+- project: Combini
+  role: Developer(Oursourcing) of Android Application with AR(Augmented Reality)
+  duration: Mar, 2016 &mdash; May, 2016
+  description: X-design(Capstone lecture on YSU) outsourcing with LG, Use AR character and bar-code for combinient store
 
-- project: Optical Character Recognition
-  role: Researcher & Developer
-  duration: Mar, 2019 &mdash; Jun, 2019
-  # url:
-  description: Optical Character Recognition For Korean, <a href="https://github.com/kingsj0405/20191-capstone">Source</a>
+- project: Alarimi
+  role: Developer(Oursourcing) of Android Application with Bluetooth Beacon
+  duration: Sept, 2015 &mdash; Oct, 2015
+  description: X-design(Capstone lecture on YSU) outsourcing with LG, Use bluetooth beacon to check the object is near at a certain time
+
+- project: Eat with us
+  role: Developer(Outsourcing) of Arduino Application
+  duration: Mar, 2015 &mdash; May, 2015
+  description: X-design(Capstone lecture on YSU) outsourcing with LG, Use contact sensor to check existance of person on remote
