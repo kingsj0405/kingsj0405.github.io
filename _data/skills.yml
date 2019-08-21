@@ -1,18 +1,27 @@
 # Skills
 - skill: Deep-learning
-  description: Many CNN architecture, tensorflow v1, pytorch
+  description: pytorch, tensorflow v1
 
 - skill: Machine-learning
   description: numpy, scipy, xgboost, pandas, matplotlib
 
 - skill: Backend Development
-  description: Django, Flask, RESTful API
-
-- skill: Cloud computing
-  description: mininet, Openstack
+  description: Django, Flask, OpenAPI, Swagger UI
 
 - skill: Cross-Platform Mobile
   description: Xamarin.Forms(Android + iOS), Android with Java
 
+- skill: Cross-Platform Descktop Application
+  description: Qt 5, PyQt
+
 - skill: Problem Solving(Data Structure + Algorithm)
   description: <a href="https://www.acmicpc.net/user/kingsj0405">Baekjoon</a>, <a href="https://codeforces.com/profile/Bismute">Codeforces</a> specialist
+
+- skill: Continous Integration
+  description: Github + TravisCI or CircleCI, Jenkins
+
+- skill: In-house Service Management(Version Control, Orchestration)
+  description: Gitlab, Atlassian Products(Jira, Confluence, Fisheye & Crucible), Docker, Docker-Compose, Docker-Swarm, Docker Registry
+
+- skill: Network + Cloud computing
+  description: mininet, Openstack
