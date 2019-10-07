@@ -1,21 +1,16 @@
 # Projects
 # uncomment the urls if you wish to display them, and add your own URL
 
-- project: Optical Character Recognition
-  role: Researcher
-  duration: Sept, 2019 &mdash; Present
-  description: Detect and recognize character on Image
-
 - project: Video Highlight
   role: Researcher
   duration: Sept, 2019 &mdash; Present
-  description: Find video highlight on Baseball Game Video
+  description: Unsupervised video summarization with Unpaired data(direction)
 
 - project: Face Aging Generation
   role: Researcher & Developer
   duration: Sept, 2018 &mdash; Aug, 2019
   # url:
-  description: Follow current state-of-the-art, Try to come up with idea
+  description: Tensor Algebra, Conditional Auto-Encoder, CycleGAN
 
 - project: Indoor Positioning with Android Oreo
   role: Developer(Oursourcing)
