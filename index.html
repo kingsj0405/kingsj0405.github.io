@@ -1,137 +1,196 @@
-<!DOCTYPE html>
-<html lang="en-US">
+<!doctype html>
+<html lang="en">
 
 <head>
-
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	
-	<!-- SEO -->
-	<title>Sejong Yang - Homepage</title>
-	<meta name="description" content="Homepage of Sejong Yang, link to CV, blog, SNS" />
-	<meta name="robots" content="index, follow" />
-	<meta name="referrer" content="always" />
-
-	<!-- Social & Open Graph -->
-	<meta property="og:title" content="Sejong Yang - Homepage" />
-	<meta property="og:description" content="Homepage of Sejong Yang, link to CV, blog, SNS" />
-	<meta property="og:image" content="https://demo.onepagelove.com/fullsingle-html/me/images/social.jpg"> <!-- include your hosted image full URL -->
-	<meta property="og:url" content="https://yangspace.co.kr" />
-	<meta name="twitter:title" content="Sejong Yang - Homepage" >
-	<meta name="twitter:description" content="Homepage of Sejong Yang, link to CV, blog, SNS" />
-	<meta name="twitter:image" content="https://demo.onepagelove.com/fullsingle-html/me/images/social.jpg" /> <!-- include your hosted image full URL -->
-	<meta name="twitter:card" content="Draw something on the whiteboard" />
-	<meta name="twitter:site" content="@kingsj0405_twit" />
-	<meta name="twitter:creator" content="@kingsj0405_twit" />
-
-	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="images/favicon.png" sizes="32x32">
-
-	<!-- Styles -->
-	<link rel='stylesheet' href='assets/css/me.css' type='text/css' media='screen' />
-	<meta name="viewport" content="width=device-width,initial-scale=1" />
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon"
+        href="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2">
+    <title>Sejong Yang</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body id="fullsingle" class="page-template-page-fullsingle-me">
+<body>
 
-<div class="fs-me">
+    <!-- idea: have a javascript animated loss function converging in the header? :p -->
+    <div id="dhead" class="container">
+        <div class="row">
+            <div id="dpic">
+                <img src="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2"
+                    class="ppic" />
+            </div>
+            <div id="ddesc">
+                <h1>Sejong Yang</h1>
+                <h2>Student, Developer, and Researcher</h2>
+                <div id="dico">
+                    <a href="https://docs.google.com/document/d/1O8wgY4iJWdymFItZw9uZPKQet-H9S4zj6Ks9MW36RRs" title="CV">
+                        <img src="assets/cv.svg" class="iico" /></a>
+                    <a href="https://github.com/kingsj0405" title="Github">
+                        <img src="https://simpleicons.org/icons/github.svg" class="iico" /></a>
+                    <a href="https://scholar.google.com/citations?user=qnIiorsAAAAJ" title="Google Scholar">
+                        <img src="https://simpleicons.org/icons/googlescholar.svg" class="iico" /></a>
+                    <img src="https://simpleicons.org/icons/maildotru.svg" style="cursor: pointer;" class="iico"
+                        id="iemail" title="click to reveal email" />
+                    <a href="https://twitter.com/kingsj0405_twit" title="Twitter">
+                        <img src="https://simpleicons.org/icons/twitter.svg" class="iico" /></a>
+                    <a href="https://www.instagram.com/kingsj0405" title="Instagram">
+                        <img src="https://simpleicons.org/icons/instagram.svg" class="iico" /></a>
+                    <a href="https://velog.io/@bismute" title="Velog">
+                        <img src="https://simpleicons.org/icons/velog.svg" class="iico" /></a>
+                </div>
+                <div id="demail"></div> <!-- will reveal email -->
+            </div>
+        </div>
+    </div>
 
-	<!-- Content Container -->
-	<div class="me-content">
-		
-		<div class="logo">
-			
-			<img src="images/logo.png" alt="Logo" />
+    <hr>
 
-		</div>
+        <div class="entry row">
+            <div class="timespan">
+                2019 - present
+            </div>
+            <div class="ico">
+                <div class="entry-dot"></div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/95/YonseiUniversityEmblem.svg/150px-YonseiUniversityEmblem.svg.png"
+                    style="max-width: 50px;" />
+            </div>
+            <div class="desc">
+                I am a PhD Candidate with <a href="https://www.yonsei.ac.kr/en_sc/index.jsp">Yonsei University</a>,
+                supervised by Prof. <a href="https://sites.google.com/site/seonjookim/">Seon Joo Kim</a>.
+                I have explorered super resolution, lightweight deep nerual network, and face recognition.
+                Currently I am very much interested in manipulating images by
+                    generative adversarial network(GAN),
+                    3D morphable model, and
+                    multi-modal representation like visual-audio or visual-text.
+            </div>
+        </div>
 
-		<div class="bio">
-			
-			<p>This is me. I push codes at <a href="https://github.com/kingsj0405">Github</a>, write posts on <a href="https://velog.io/@bismute">Velog</a> and share daily life on <a href="https://www.instagram.com/kingsj0405/">Instagram</a>.</p>
+        <div class="entry row">
+            <div class="timespan">
+                2014.03 - 2019.08
+            </div>
+            <div class="ico">
+                <div class="entry-dot"></div>
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/95/YonseiUniversityEmblem.svg/150px-YonseiUniversityEmblem.svg.png"
+                    style="max-width: 50px;" />
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Uppsala_University_logo.svg/170px-Uppsala_University_logo.svg.png"
+                    style="max-width: 50px;" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Kakao_CI_yellow.svg/220px-Kakao_CI_yellow.svg.png"
+                    style="max-width: 50px; margin-top: 15px; margin-bottom: 15px" />
+                <img src="https://www.ewoosoft.com/files/attach/xeicon/favicon.ico"
+                    style="max-width: 50px;" class="iico" />
+            </div>
+            <div class="desc">
+                BEng at <a href='https://www.yonsei.ac.kr/en_sc/index.jsp'>Yonsei University</a>.
+                This is the place where I know what is ''coding'' for the first time,
+                and I managed to get a degree of computer science from it at the end.
+                <br>
+                I also spent a wonderful sprint semester as an exchange student at
+                <a href="https://www.uu.se/en">Uppsala University</a> in 2018.
+                <br>
+                At that moment, I persue full-stack software engineer✨ as my future role.
+                <br>
+                So I have software assistant experience at <a href="https://www.kakaocorp.com/page/">Kakao</a>
+                developing a component for <a href="https://www.openstack.org/">openstack</a>.
+                I learn the basic of network, virtualization, and cloud computing from the experience.
+                <br>
+                In <a href="https://www.ewoosoft.com/">Ewoosoft</a>, I participate as a developer of
+                <a href="https://www.ewoosoft.com/ezmobile">EzMobile</a>, <a href="https://www.ewoosoft.com/ez3d_i">Ez3D-i</a>.
+                I learn how to use 
+                    <a href="https://dotnet.microsoft.com/en-us/apps/xamarin">Xamarin.Forms</a>,
+                    <a href="https://doc.qt.io/qt-5/qt5-intro.html">Qt5</a>, and
+                    <a href="https://flask.palletsprojects.com/en/2.2.x/">Flask</a>
+                for developing enterprise-level product.
+                I also become familar with collaboration/devops tools like
+                    <a href="https://www.atlassian.com/software/jira">Jira</a>,
+                    <a href="https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html">Atlassian</a>,
+                    <a href="https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html">Crucible and Fisheye</a>,
+                    <a href="https://github.com/">Github</a>, and
+                    <a href="https://circleci.com/migrate-jenkins-to-circleci/">Jenkins</a>
+                with <a href="https://en.wikipedia.org/wiki/Waterfall_model">Waterfall development model</a>
+                in the experiment.
+            </div>
+        </div>
+    </div>
 
-		</div>
 
-		<div class="network">
-			
-			<ul>
-				<li>
-					<a class="icon-cv" href="https://docs.google.com/document/d/1O8wgY4iJWdymFItZw9uZPKQet-H9S4zj6Ks9MW36RRs">
-						<svg class="svg-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-							<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-							<g><g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)"><path d="M1222.9,110v-4900H3826h2603.1v1174v1174h1174h1174v3726v3726H5000H1222.9V110z M4479.4,3721.2c163.3-48.5,296-160.8,364.9-308.8c30.6-63.8,53.6-119.9,48.5-125.1c-5.1-2.6-79.1-23-163.3-43.4l-158.2-38.3l-33.2,76.6c-117.4,257.8-518.1,250.1-635.5-12.8c-68.9-153.1-68.9-525.7-2.6-676.3c140.4-303.7,574.2-270.5,655.9,53.6c10.2,48.5,30.6,66.4,58.7,58.7c23-7.7,94.4-28.1,163.3-45.9c66.4-17.9,120-40.8,120-51c0-58.7-94.4-222-181.2-316.5c-168.4-183.8-472.1-245-747.8-150.6c-160.8,56.1-352.2,247.5-408.3,410.9c-91.9,262.9-76.6,607.4,35.7,824.3C3752,3677.8,4129.7,3825.8,4479.4,3721.2z M5561.5,3149.5c107.2-313.9,201.6-561.5,209.3-548.7c7.6,12.8,97,273.1,196.5,579.3l186.3,553.8h173.5h176.1l-112.3-311.4c-61.3-173.5-188.9-535.9-285.8-803.9l-173.5-492.5h-178.7h-178.6L5385.4,2657c-102.1,291-232.2,653.3-285.8,803.9l-99.6,275.6l181.2-7.7l183.8-7.7L5561.5,3149.5z M7245.8,748V543.9H5000H2754.2V748v204.2H5000h2245.8V748z M7245.8-540.8v-216.9H5000H2754.2v216.9v216.9H5000h2245.8V-540.8z M7245.8-1842.3v-216.9H5000H2754.2v216.9v216.9H5000h2245.8V-1842.3z"/><path d="M6658.9-3718.1V-4790h199.1h196.5l834.5,837.1c456.8,459.4,844.7,860.1,860.1,890.7c15.3,30.6,28.1,135.3,28.1,234.8v181.2H7718H6658.9V-3718.1z M8215.6-3062.2c0-2.6-262.9-270.5-587-592.1l-587-587v594.6v592.1h587C7952.8-3054.6,8215.6-3057.1,8215.6-3062.2z"/><path d="M7271.4-3480.8v-224.6l216.9,216.9c120,120,216.9,219.5,216.9,222c0,5.1-97,7.6-216.9,7.6h-216.9V-3480.8z"/></g></g>
-						</svg>
-					</a>
-				</li>
+    <!-- <div style="background-color: #eee; padding-bottom: 8px; margin-top: 10px;"> -->
+    <div class="container">
+        <div class="ctitle">Selected Publications</div>
 
-				<li>
-					<a class="icon-linkedin" href="https://www.linkedin.com/in/sejong-yang-242696116/">
-						<svg class="svg-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-							<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-							<g><path d="M936.1,63.9C900.2,28,856.9,10,806.3,10H193.8c-50.6,0-93.9,18-129.8,53.9C28,99.8,10,143.1,10,193.7v612.5c0,50.6,18,93.9,53.9,129.8C99.9,972,143.1,990,193.8,990h612.5c50.6,0,93.9-18,129.8-53.9C972,900.1,990,856.9,990,806.3V193.7C990,143.1,972,99.8,936.1,63.9z M308.6,830.5H161.2V387.7h147.4V830.5z M295.2,305.7c-15.3,14.7-35.5,22-60.6,22h-0.6c-24.2,0-43.9-7.3-59-22c-15.1-14.7-22.7-32.9-22.7-54.6c0-22.1,7.8-40.4,23.3-54.9c15.5-14.5,35.6-21.7,60.3-21.7c24.7,0,44.4,7.2,59.3,21.7c14.9,14.5,22.5,32.8,23,54.9C318.2,272.9,310.5,291,295.2,305.7z M838.8,830.5H691.4V593.8c0-66.8-24.7-100.2-74-100.2c-18.7,0-34.4,5.2-47.2,15.6c-12.8,10.4-22.3,23.1-28.7,38c-3,7.7-4.5,19.6-4.5,35.7v247.6H389.6c1.3-267.1,1.3-414.7,0-442.8H537v62.5c31-48.5,75-72.7,132.1-72.7c51,0,92.1,16.8,123.1,50.4c31,33.6,46.6,83.2,46.6,148.7L838.8,830.5L838.8,830.5z"/></g>
-						</svg>
-					</a>
-				</li>
+        <div class="pub">
+            <div class="pub-title">Not available</div>
+            <div class="pub-venue">Under Review</div>
+            <div class="pub-authors">Not available</div>
+            <div>
+                [<a href="/">arXiv</a>]
+                [<a href="/">code</a>]
+                [<a href="/">project page</a>]
+                [<a href="/">demo video</a>]
+            </div>
+        </div>
 
-				<li>
-					<a class="icon-twitter" href="https://twitter.com/kingsj0405_twit">
-						<svg class="svg-icon" viewBox="0 0 20 20">
-							<path fill="none" d="M18.258,3.266c-0.693,0.405-1.46,0.698-2.277,0.857c-0.653-0.686-1.586-1.115-2.618-1.115c-1.98,0-3.586,1.581-3.586,3.53c0,0.276,0.031,0.545,0.092,0.805C6.888,7.195,4.245,5.79,2.476,3.654C2.167,4.176,1.99,4.781,1.99,5.429c0,1.224,0.633,2.305,1.596,2.938C2.999,8.349,2.445,8.19,1.961,7.925C1.96,7.94,1.96,7.954,1.96,7.97c0,1.71,1.237,3.138,2.877,3.462c-0.301,0.08-0.617,0.123-0.945,0.123c-0.23,0-0.456-0.021-0.674-0.062c0.456,1.402,1.781,2.422,3.35,2.451c-1.228,0.947-2.773,1.512-4.454,1.512c-0.291,0-0.575-0.016-0.855-0.049c1.588,1,3.473,1.586,5.498,1.586c6.598,0,10.205-5.379,10.205-10.045c0-0.153-0.003-0.305-0.01-0.456c0.7-0.499,1.308-1.12,1.789-1.827c-0.644,0.28-1.334,0.469-2.06,0.555C17.422,4.782,17.99,4.091,18.258,3.266"></path>
-						</svg>
-					</a>
-				</li>
+        <div>
+            <br>
+            More on <a href="https://scholar.google.com.sg/citations?hl=en&pli=1&user=qnIiorsAAAAJ">Google Scholar</a>
+        </div>
+    </div>
+    <!-- </div> -->
 
-				<li>
-					<a class="icon-instagram" href="https://www.instagram.com/kingsj0405/">
-						<svg class="svg-icon" viewBox="0 0 20 20">
-							<path fill="none" d="M14.52,2.469H5.482c-1.664,0-3.013,1.349-3.013,3.013v9.038c0,1.662,1.349,3.012,3.013,3.012h9.038c1.662,0,3.012-1.35,3.012-3.012V5.482C17.531,3.818,16.182,2.469,14.52,2.469 M13.012,4.729h2.26v2.259h-2.26V4.729z M10,6.988c1.664,0,3.012,1.349,3.012,3.012c0,1.664-1.348,3.013-3.012,3.013c-1.664,0-3.012-1.349-3.012-3.013C6.988,8.336,8.336,6.988,10,6.988 M16.025,14.52c0,0.831-0.676,1.506-1.506,1.506H5.482c-0.831,0-1.507-0.675-1.507-1.506V9.247h1.583C5.516,9.494,5.482,9.743,5.482,10c0,2.497,2.023,4.52,4.518,4.52c2.494,0,4.52-2.022,4.52-4.52c0-0.257-0.035-0.506-0.076-0.753h1.582V14.52z"></path>
-						</svg>
-					</a>
-				</li>
+    <div class="container">
+        <div class="ctitle">Miscellanies</div>
+        <ul style="padding-left: 10px;">
+            <li>I like and play many kinds of steam game.</li>
+        </ul>
+    </div>
 
-				<li>
-					<a class="icon-facebook" href="https://www.facebook.com/kingsj0405/">
-						<svg class="svg-icon" viewBox="0 0 20 20">
-							<path fill="none" d="M11.344,5.71c0-0.73,0.074-1.122,1.199-1.122h1.502V1.871h-2.404c-2.886,0-3.903,1.36-3.903,3.646v1.765h-1.8V10h1.8v8.128h3.601V10h2.403l0.32-2.718h-2.724L11.344,5.71z"></path>
-						</svg>
-					</a>
-				</li>
+    <br><br><br><br><br><br><br><br><br><br><br>
 
-				<li>
-					<a class="icon-youtube" href="https://www.youtube.com/channel/UCdBezGS0TAkpGGM_f4q92Ag">
-						<svg class="svg-icon" viewBox="0 0 20 20">
-							<path fill="none" d="M9.426,7.625h0.271c0.596,0,1.079-0.48,1.079-1.073V4.808c0-0.593-0.483-1.073-1.079-1.073H9.426c-0.597,0-1.079,0.48-1.079,1.073v1.745C8.347,7.145,8.83,7.625,9.426,7.625 M9.156,4.741c0-0.222,0.182-0.402,0.404-0.402c0.225,0,0.405,0.18,0.405,0.402V6.62c0,0.222-0.181,0.402-0.405,0.402c-0.223,0-0.404-0.181-0.404-0.402V4.741z M12.126,7.625c0.539,0,1.013-0.47,1.013-0.47v0.403h0.81V3.735h-0.81v2.952c0,0-0.271,0.335-0.54,0.335c-0.271,0-0.271-0.202-0.271-0.202V3.735h-0.81v3.354C11.519,7.089,11.586,7.625,12.126,7.625 M6.254,7.559H7.2v-2.08l1.079-2.952H7.401L6.727,4.473L6.052,2.527H5.107l1.146,2.952V7.559z M11.586,12.003c-0.175,0-0.312,0.104-0.405,0.204v2.706c0.086,0.091,0.213,0.18,0.405,0.18c0.405,0,0.405-0.451,0.405-0.451v-2.188C11.991,12.453,11.924,12.003,11.586,12.003 M14.961,8.463c0,0-2.477-0.129-4.961-0.129c-2.475,0-4.96,0.129-4.96,0.129c-1.119,0-2.025,0.864-2.025,1.93c0,0-0.203,1.252-0.203,2.511c0,1.252,0.203,2.51,0.203,2.51c0,1.066,0.906,1.931,2.025,1.931c0,0,2.438,0.129,4.96,0.129c2.437,0,4.961-0.129,4.961-0.129c1.117,0,2.024-0.864,2.024-1.931c0,0,0.202-1.268,0.202-2.51c0-1.268-0.202-2.511-0.202-2.511C16.985,9.328,16.078,8.463,14.961,8.463 M7.065,10.651H6.052v5.085H5.107v-5.085H4.095V9.814h2.97V10.651z M9.628,15.736h-0.81v-0.386c0,0-0.472,0.45-1.012,0.45c-0.54,0-0.606-0.515-0.606-0.515v-3.991h0.809v3.733c0,0,0,0.193,0.271,0.193c0.27,0,0.54-0.322,0.54-0.322v-3.604h0.81V15.736z M12.801,14.771c0,0,0,1.03-0.742,1.03c-0.455,0-0.73-0.241-0.878-0.429v0.364h-0.876V9.814h0.876v1.92c0.135-0.142,0.464-0.439,0.878-0.439c0.54,0,0.742,0.45,0.742,1.03V14.771z M15.973,12.39v1.287h-1.688v0.965c0,0,0,0.451,0.405,0.451s0.405-0.451,0.405-0.451v-0.45h0.877v0.708c0,0-0.136,0.901-1.215,0.901c-1.08,0-1.282-0.901-1.282-0.901v-2.51c0,0,0-1.095,1.282-1.095S15.973,12.39,15.973,12.39 M14.69,12.003c-0.405,0-0.405,0.45-0.405,0.45v0.579h0.811v-0.579C15.096,12.453,15.096,12.003,14.69,12.003"></path>
-						</svg>
-					</a>
-				</li>
+    <footer>
+        <div>
+            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. Hosted by
+            <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+            <br>
+            <div id="last_update"> </div>
+        </div>
+    </footer>
 
-				<li>
-					<a class="icon-email" href="mailto:sejong.yang@yonsei.ac.kr">
-						<svg class="svg-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-							<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-							<g><path d="M664.7,461L990,185.5v663.6L664.7,461z M13.7,150.5h973.8L500.6,560.1L13.7,150.5z M500.5,600.2l142.8-120.7l310.3,370h-906l310.3-366.3L500.5,600.2z"/><path d="M335.3,461L10,185.5v663.6L335.3,461z"/></g>
-						</svg>
-					</a>
-				</li>
-			</ul>
 
-		</div>
+    <script type="text/javascript">
+        // attempt hiding email information from spambots
+        var e_is_shown = false;
+        document.getElementById('iemail').addEventListener("click", function () {
+            let demail = document.getElementById('demail');
+            demail.innerHTML = '{first_name}.{last_name}' + ' _at_ ' + 'yonsei' + '.ac.kr';
+            demail.style.opacity = e_is_shown ? 0 : 1;
+            e_is_shown = !e_is_shown;
+        })
+        // automatically set footer information
+        document.getElementById("cr_title").innerHTML = document.title;
+        var dd = new Date()
+        document.getElementById("cr_end").innerHTML = dd.getUTCFullYear();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let repos = JSON.parse(this.responseText);
+                repos.forEach((repo) => {
+                    if (repo.name == "kingsj0405.github.io") {
+                        // console.log(repo)
+                        var lastUpdated = new Date(repo.pushed_at).toLocaleString("ko-KR", {
+                            timeZone: "Asia/Seoul", day: "2-digit", month: "short", year: "numeric",
+                            hour: "2-digit", minute: "2-digit", timeZoneName: "short"
+                        });
+                        document.getElementById("last_update").innerHTML = 'Last updated: ' + lastUpdated
+                        var createDate = new Date(repo.created_at);
+                        document.getElementById("cr_from").innerHTML = createDate.getUTCFullYear();
+                    }
+                });
+            }
+        };
+        xhttp.open("GET", "https://api.github.com/users/kingsj0405/repos", true);
+        xhttp.send();
 
-		<div class="credit">
-
-			<p class="copyright">&copy; 2020 Sejong Yang - <a href="https://onepagelove.com/me">Me Template</a> by <a href="https://onepagelove.com">One Page Love</a>, Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</p>
-
-			<!-- 
-			To edit this credit you can remove the CCA 3.0 license for only $5 here: https://onepagelove.com/me 
-			this really helps contribute towards us developing more templates and means the world to me!
-			Cheers, Rob (@robhope)
-			-->
-
-		</div>
-
-	</div>
-
-</div>
-
+    </script>
 </body>
+
 </html>
