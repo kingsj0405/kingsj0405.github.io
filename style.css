@@ -102,22 +102,25 @@ hr {
     vertical-align: top;
     border-left: 2px solid #cfcfcf;
     position: relative;
+    text-align: center;
 }
 .ico img {
     border-radius: 5px;
     width: 100%;
     max-width: 50px;
     max-height: 50px;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .ico-top {
-    margin-top: -15px;
+    margin-top: -10px;
 }
 .desc {
     grid-column: span 10;
     vertical-align: top;
     font-size: 17px;
-    padding-left: 20px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-bottom: 20px;
 }
 .entry {
