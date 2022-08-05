@@ -106,8 +106,12 @@ hr {
 .ico img {
     border-radius: 5px;
     width: 100%;
-    max-width: 80px;
-    margin-left: 10px;
+    max-width: 50px;
+    max-height: 50px;
+    margin-left: 20px;
+}
+.ico-top {
+    margin-top: -15px;
 }
 .desc {
     grid-column: span 10;
