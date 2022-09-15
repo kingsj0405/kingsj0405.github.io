@@ -241,6 +241,10 @@ hr {
     display: block;
     color: #900;
 }
+.pub-image {
+    max-width: 100%;
+    max-height: 200px;
+}
 .tul {
     text-align: center;
     padding: 0;
