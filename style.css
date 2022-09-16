@@ -39,7 +39,6 @@ body a:hover {
 }
 #ddesc {
     padding-top: 40px;
-    padding-left: 20px;
     grid-column: span 6;
 }
 @media (max-width: 991px) {
