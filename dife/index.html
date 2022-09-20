@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>DIFE</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <base href="/"> -->
+
+    <!--FACEBOOK-->
+    <!-- <meta property="og:image" content="https://donydchen.github.io/sem2nerf/img/sem2nerf_square.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="922">
+    <meta property="og:image:height" content="830">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://donydchen.github.io/sem2nerf/" />
+    <meta property="og:title" content="Sem2NeRF" />
+    <meta property="og:description"
+        content="Project page for Sem2NeRF: Converting Single-View Semantic Masks to Neural Radiance Fields." /> -->
+
+    <!--TWITTER-->
+    <!-- <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sem2NeRF" />
+    <meta name="twitter:description"
+        content="Project page for Sem2NeRF: Converting Single-View Semantic Masks to Neural Radiance Fields." />
+    <meta name="twitter:image" content="https://donydchen.github.io/sem2nerf/img/sem2nerf_square.png" /> -->
+
+
+    <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+    <!-- <link rel="icon" type="image/png" href="img/seal_icon.png"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="container" id="main">
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                <b>DIFE</b>: Dense Interspecies Face Embedding</br>
+                <small>
+                    NeruIPS 2022
+                </small>
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                    <li>
+                        <a href="https://yangspace.co.kr/">
+                            Sejong Yang
+                        </a>
+                        </br>Yonsei University
+                    </li>
+                    <li>
+                            Subin Jeon
+                        </br>Yonsei University
+                    </li>
+                    <li>
+                        <a href="http://snam.ml/">
+                            Seonghyeon Nam
+                        </a>
+                        </br>York University
+                    </li><br>
+                    <li>
+                        <a href="https://sites.google.com/site/seonjookim/">
+                            Seon Joo Kim
+                        </a>
+                        </br>Yonsei University
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center">
+                <ul class="nav nav-pills nav-justified">
+                    <li>
+                        <a href="">
+                            <image src="img/paper.png" height="60px">
+                                <h4><strong>arXiv Preprint(TODO)</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <image src="img/youtube_icon.png" height="60px">
+                                <h4><strong>Demo Video(TODO)</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/kingsj0405/DIFE">
+                            <image src="img/github.png" height="60px">
+                                <h4><strong>Code</strong></h4>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Abstract
+                </h3>
+                <image src="img/dife.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        Dense Interspecies Face Embedding (DIFE) is a new direction for understanding faces of various animals by extracting common features among animal faces including human face.
+                        There are three main obstacles for interspecies face understanding: (1) lack of animal data compared to human, (2) ambiguous connection between faces of various animals, and (3) extreme shape and style variance.
+                        To cope with the lack of data, we utilize multi-teacher knowledge distillation of CSE and StyleGAN2 requiring no additional data or label.
+                        Then we synthesize pseudo pair images through the latent space exploration of StyleGAN2 to find implicit associations between different animal faces.
+                        Finally, we introduce the semantic matching loss to overcome the problem of extreme shape differences between species.
+                        To quantitatively evaluate our method over possible previous methodologies like unsupervised keypoint detection, we perform interspecies facial keypoint transfer on MAFL and AP-10K.
+                        Furthermore, the results of other applications like interspecies face image manipulation and dense keypoint transfer are provided. 
+                    </p>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Video
+                </h3>
+                (TODO)
+                <!-- <div class="text-center">
+                    <div style="position:relative;padding-top:56.25%;">
+                        <iframe src="https://www.youtube.com/embed/cYr3Dz8N_9E" allowfullscreen
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    More Results
+                </h3>
+                (TODO)
+                <!-- <p style="text-align:center;">
+                    <image src="img/model_archi.png" height="50px" class="img-responsive">
+                </p>
+                <p class="text-justify">
+                    Architecture of the Sem2NeRF framework. It aims to convert a single-view semantic mask to a 3D scene
+                    represented by
+                    NeRF. Specifically, a given semantic mask will be partitioned into patches, which will be further
+                    encoded by a
+                    patch-based encoder into a latent style code of a pretrained NeRF-based 3D
+                    generator. A region R will be randomly sampled to enforce awareness of differences among
+                    regions. And an optional latent vector z is included to enable multi-modal synthesis
+                </p> -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Citation
+                </h3>
+                <div class="form-group col-md-10 col-md-offset-1">
+                    <textarea id="bibtex" class="form-control" readonly>
+@article{yang2022dife,
+    title={Dense Interspecies Face Embedding},
+    author={Yang, Sejong and Jeon, Subin and Nam, Seonghyeon and Kim, Seon Joo},
+    journal={Advances in Neural Information Processing Systems (NeruIPS)},
+    year={2022}
+}
+                    </textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Acknowledgements
+                </h3>
+                <p class="text-justify">
+                    The website template was borrowed from <a href="https://jonbarron.info/mipnerf/">Mip-NeRF</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
