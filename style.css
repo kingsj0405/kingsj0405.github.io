@@ -36,6 +36,8 @@ body a:hover {
 #dpic {
     grid-column: span 6;
     text-align: right;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 #ddesc {
     padding-top: 40px;
@@ -109,9 +111,6 @@ hr {
     max-width: 50px;
     max-height: 50px;
     margin-left: 10px;
-}
-.ico-top {
-    margin-top: -10px;
 }
 .desc {
     grid-column: span 10;
