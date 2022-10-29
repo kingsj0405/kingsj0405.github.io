@@ -13,7 +13,7 @@
     <!-- <base href="/"> -->
 
     <!--FACEBOOK-->
-    <meta property="og:image" content="https://yangspace.co.kr/dife/img/dife_teaser.png">
+    <meta property="og:image" content="https://yangspace.co.kr/dife/img/dife/teaser.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="922">
     <meta property="og:image:height" content="830">
@@ -28,7 +28,7 @@
     <meta name="twitter:title" content="DIFE" />
     <meta name="twitter:description"
         content="Project page for Dense Interspecies Face Embedding" />
-    <meta name="twitter:image" content="https://yangspace.co.kr/dife/img/dife_teaser.png" />
+    <meta name="twitter:image" content="https://yangspace.co.kr/dife/img/dife/teaser.png" />
 
 
     <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
@@ -99,19 +99,13 @@
                 <ul class="nav nav-pills nav-justified">
                     <li>
                         <a href="https://openreview.net/forum?id=m67FNFdgLO9">
-                            <image src="img/paper.png" height="60px">
+                            <image src="img/dife/paper.png" height="60px">
                                 <h4><strong>Paper</strong></h4>
                         </a>
                     </li>
                     <li>
-                        <a href="">
-                            <image src="img/youtube_icon.png" height="60px">
-                                <h4><strong>Demo Video(Coming Soon)</strong></h4>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://yangspace.co.kr/dife/img/dife_poster.png">
-                            <image src="img/dife_poster_thumbnail.png" height="60px">
+                        <a href="https://yangspace.co.kr/dife/img/dife/poster.png">
+                            <image src="img/dife/poster_thumbnail.png" height="60px">
                                 <h4><strong>Poster</strong></h4>
                         </a>
                     </li>
@@ -125,62 +119,98 @@
             </div>
         </div>
 
-
-
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
                     Abstract
                 </h3>
-                <image src="img/dife.png" class="img-responsive" alt="overview"><br>
+                <image src="img/dife/teaser.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
                         Dense Interspecies Face Embedding (DIFE) is a new direction for understanding faces of various animals by extracting common features among animal faces including human face.
                         There are three main obstacles for interspecies face understanding: (1) lack of animal data compared to human, (2) ambiguous connection between faces of various animals, and (3) extreme shape and style variance.
-                        To cope with the lack of data, we utilize multi-teacher knowledge distillation of CSE and StyleGAN2 requiring no additional data or label.
-                        Then we synthesize pseudo pair images through the latent space exploration of StyleGAN2 to find implicit associations between different animal faces.
-                        Finally, we introduce the semantic matching loss to overcome the problem of extreme shape differences between species.
-                        To quantitatively evaluate our method over possible previous methodologies like unsupervised keypoint detection, we perform interspecies facial keypoint transfer on MAFL and AP-10K.
-                        Furthermore, the results of other applications like interspecies face image manipulation and dense keypoint transfer are provided. 
                     </p>
             </div>
         </div>
 
-
-
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
-                    Video
+                    Our Method
                 </h3>
-                (TODO)
-                <!-- <div class="text-center">
-                    <div style="position:relative;padding-top:56.25%;">
-                        <iframe src="https://www.youtube.com/embed/cYr3Dz8N_9E" allowfullscreen
-                            style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
-                    </div>
-                </div> -->
+                <image src="img/dife/method.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        To cope with the lack of data, we utilize multi-teacher knowledge distillation of CSE and StyleGAN2 requiring no additional data or label.
+                        Then we synthesize pseudo pair images through the latent space exploration of StyleGAN2 to find implicit associations between different animal faces.
+                    </p>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Interspecies Dense Keypoint Detection
+                </h3>
+                <image src="img/dife/exp_dkd.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        The result of dense keypoint detection without supervised learning for facial landmarks of human and animal faces.
+                    </p>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
-                    More Results
+                    Interspecies Face Parsing
                 </h3>
-                (TODO)
-                <!-- <p style="text-align:center;">
-                    <image src="img/model_archi.png" height="50px" class="img-responsive">
-                </p>
-                <p class="text-justify">
-                    Architecture of the Sem2NeRF framework. It aims to convert a single-view semantic mask to a 3D scene
-                    represented by
-                    NeRF. Specifically, a given semantic mask will be partitioned into patches, which will be further
-                    encoded by a
-                    patch-based encoder into a latent style code of a pretrained NeRF-based 3D
-                    generator. A region R will be randomly sampled to enforce awareness of differences among
-                    regions. And an optional latent vector z is included to enable multi-modal synthesis
-                </p> -->
+                <image src="img/dife/exp_ifp.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        The result of interspecies face parsing without supervised learning for facial landmarks of human and animal faces.
+                    </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    The examples of synthesized pseudo-pair data
+                </h3>
+                <image src="img/dife/exp_pds.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        The pseudo-pair data should have same face geometry with the oritin and the synthesized image should be natural at the same time.
+                    </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    The results of interspecies keypoint transfer
+                </h3>
+                <image src="img/dife/exp_ikt1.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        To quantitatively evaluate our method over possible previous methodologies like unsupervised keypoint detection, we perform interspecies facial keypoint
+                        transfer on MAFL and AP-10K.
+                    </p>
+                <image src="img/dife/exp_ikt2_1.png" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        This table shows the quantitative result of the interspecies keypoint transfer on WFLW and
+                        AnimalWeb with 9 landmarks including the corners of the eye and mouth. Our method shows
+                        the best performance compared to previous methods on every domain pair.
+                    </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    The results of human keypoint detection
+                </h3>
+                <image src="img/dife/exp_hkd.PNG" class="img-responsive" alt="overview"><br>
+                    <p class="text-justify">
+                        Even though our embedder is trained on synthesized datasets, not the target dataset, DIFE shows
+                        compatible performance with the early study results of each category meaning DIFE is the apposite
+                        baseline for cross-domain face understanding.
+                    </p>
             </div>
         </div>
 
