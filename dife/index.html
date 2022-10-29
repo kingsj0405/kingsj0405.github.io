@@ -148,23 +148,12 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
-                    Interspecies Dense Keypoint Detection
+                    Interspecies Dense Keypoint Detection, Interspecies Face Parsing
                 </h3>
-                <image src="img/dife/exp_dkd.png" class="img-responsive" alt="overview"><br>
+                <image src="img/dife/exp_dkd_ifp.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        The result of dense keypoint detection without supervised learning for facial landmarks of human and animal faces.
-                    </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <h3>
-                    Interspecies Face Parsing
-                </h3>
-                <image src="img/dife/exp_ifp.png" class="img-responsive" alt="overview"><br>
-                    <p class="text-justify">
-                        The result of interspecies face parsing without supervised learning for facial landmarks of human and animal faces.
+                        Even though DIFE is trained without dense annotations of animal faces, interspecies dense keypoint could be found.
+                        In the results of interspecies face parsing, the eye, nose, mouth, and hairy parts are discovered means DIFE has proper semantic information for the interspecies face.
                     </p>
             </div>
         </div>
@@ -176,7 +165,8 @@
                 </h3>
                 <image src="img/dife/exp_pds.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        The pseudo-pair data should have same face geometry with the oritin and the synthesized image should be natural at the same time.
+                        The synthesized images are natural and the face geometry of them are same with each origin images.
+                        Therefore, we manage to use the pair for semantic matching.
                     </p>
             </div>
         </div>
@@ -184,7 +174,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
-                    The results of interspecies keypoint transfer
+                    Interspecies Keypoint Transfer
                 </h3>
                 <image src="img/dife/exp_ikt1.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
@@ -203,7 +193,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
-                    The results of human keypoint detection
+                    The comparison with SOTA methods on human keypoint detection
                 </h3>
                 <image src="img/dife/exp_hkd.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
