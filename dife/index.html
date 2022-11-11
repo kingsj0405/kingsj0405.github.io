@@ -20,14 +20,12 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://yangspace.co.kr/dife/" />
     <meta property="og:title" content="DIFE" />
-    <meta property="og:description"
-        content="Project page for Dense Interspecies Face Embedding" />
+    <meta property="og:description" content="Project page for Dense Interspecies Face Embedding" />
 
     <!--TWITTER-->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="DIFE" />
-    <meta name="twitter:description"
-        content="Project page for Dense Interspecies Face Embedding" />
+    <meta name="twitter:description" content="Project page for Dense Interspecies Face Embedding" />
     <meta name="twitter:image" content="https://yangspace.co.kr/dife/img/dife/teaser.png" />
 
 
@@ -74,7 +72,7 @@
                         </br>Yonsei University
                     </li>
                     <li>
-                            Subin Jeon
+                        Subin Jeon
                         </br>Yonsei University
                     </li>
                     <li>
@@ -126,7 +124,8 @@
                 </h3>
                 <image src="img/dife/teaser.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        Dense Interspecies Face Embedding (DIFE) is a new direction for understanding faces of various animals by extracting common features among animal faces including human face.
+                        Dense Interspecies Face Embedding (DIFE) is a new direction for understanding faces of various
+                        animals by extracting common features among animal faces including human face.
                         There are three main obstacles for interspecies face understanding:
                         <strong>(1) lack of animal data compared to human</strong>,
                         <strong>(2) ambiguous connection between faces of various animals</strong>>, and
@@ -138,12 +137,23 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
+                    Presentation (Korean)
+                </h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uHoGtV-loWM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
                     Our Method
                 </h3>
                 <image src="img/dife/method.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        To cope with the lack of data, we utilize multi-teacher knowledge distillation of CSE and StyleGAN2 requiring no additional data or label.
-                        Then we synthesize pseudo pair images through the latent space exploration of StyleGAN2 to find implicit associations between different animal faces.
+                        To cope with the lack of data, we utilize multi-teacher knowledge distillation of CSE and
+                        StyleGAN2 requiring no additional data or label.
+                        Then we synthesize pseudo pair images through the latent space exploration of StyleGAN2 to find
+                        implicit associations between different animal faces.
                     </p>
             </div>
         </div>
@@ -155,8 +165,10 @@
                 </h3>
                 <image src="img/dife/exp_dkd_ifp.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        Even though DIFE is trained without dense annotations of animal faces, interspecies dense keypoint could be found.
-                        In the results of interspecies face parsing, the eye, nose, mouth, and hairy parts are discovered
+                        Even though DIFE is trained without dense annotations of animal faces, interspecies dense
+                        keypoint could be found.
+                        In the results of interspecies face parsing, the eye, nose, mouth, and hairy parts are
+                        discovered
                         which means <strong>DIFE has proper semantic information for the interspecies face</strong>.
                     </p>
             </div>
@@ -169,8 +181,10 @@
                 </h3>
                 <image src="img/dife/exp_pds.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        The synthesized images are natural and the face geometry of them are same with each origin images.
-                        Therefore, we could utilize <strong> synthesized pseudo-pair data for semantic matching between faces of different species</strong>.
+                        The synthesized images are natural and the face geometry of them are same with each origin
+                        images.
+                        Therefore, we could utilize <strong> synthesized pseudo-pair data for semantic matching between
+                            faces of different species</strong>.
                     </p>
             </div>
         </div>
@@ -182,15 +196,16 @@
                 </h3>
                 <image src="img/dife/exp_ikt1.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
-                        To quantitatively evaluate our method over possible previous methodologies like unsupervised keypoint detection, we perform interspecies facial keypoint
+                        To quantitatively evaluate our method over possible previous methodologies like unsupervised
+                        keypoint detection, we perform interspecies facial keypoint
                         transfer on MAFL and AP-10K.
                     </p>
-                <image src="img/dife/exp_ikt2_1.png" class="img-responsive" alt="overview"><br>
-                    <p class="text-justify">
-                        This table shows the quantitative result of the interspecies keypoint transfer on WFLW and
-                        AnimalWeb with 9 landmarks including the corners of the eye and mouth. Our method shows
-                        the best performance compared to previous methods on every domain pair.
-                    </p>
+                    <image src="img/dife/exp_ikt2_1.png" class="img-responsive" alt="overview"><br>
+                        <p class="text-justify">
+                            This table shows the quantitative result of the interspecies keypoint transfer on WFLW and
+                            AnimalWeb with 9 landmarks including the corners of the eye and mouth. Our method shows
+                            the best performance compared to previous methods on every domain pair.
+                        </p>
             </div>
         </div>
 
@@ -202,7 +217,8 @@
                 <image src="img/dife/exp_hkd.png" class="img-responsive" alt="overview"><br>
                     <p class="text-justify">
                         Even though our embedder is trained on synthesized datasets, not the target dataset, DIFE shows
-                        compatible performance with the early study results of each category meaning DIFE is the apposite
+                        compatible performance with the early study results of each category meaning DIFE is the
+                        apposite
                         baseline for cross-domain face understanding.
                     </p>
             </div>
