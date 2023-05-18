@@ -316,6 +316,24 @@ hr {
     max-height: 200px;
 }
 
+.videowrapper {
+    float: none;
+    clear: both;
+    width: 100%;
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 25px;
+    height: 0;
+}
+.videowrapper iframe {
+    padding: 3%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 94%;
+    height: 94%;
+}
+
 .tul {
     text-align: center;
     padding: 0;
