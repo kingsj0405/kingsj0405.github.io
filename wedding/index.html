@@ -36,7 +36,7 @@
     <link href="css/ekko-lightbox.css" rel="stylesheet" />
     <link href="styles/main.css" rel="stylesheet" />
     <link
-      href="https://fonts.googleapis.com/css?family=Gamja+Flower|Gugi|Noto+Serif+KR|Stylish|Sunflower:300"
+      href="https://fonts.googleapis.com/css?family=Gamja+Flower|Gugi|Noto+Serif+KR|Stylish|Sunflower:300|Cormorant+Garamond:400,500,600,700"
       rel="stylesheet"
     />
     <script src="https://code.jquery.com/jquery-2.2.1.js"></script>
@@ -53,9 +53,127 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.js"
       type="text/javascript"
     ></script>
+    <style>
+      .sparkle {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .sparkle::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.3) 100%);
+      }
+      .sparkle::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="1" fill="white" opacity="0.5"/></svg>');
+        background-size: 20px 20px;
+        animation: sparkle 2s linear infinite;
+      }
+      @keyframes sparkle {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      .ww-home-page {
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/main-background.jpeg") no-repeat center center;
+        background-size: cover;
+        background-position: 50%;
+        height: 100vh;
+        min-height: 480px;
+        position: relative;
+      }
+      .ww-wedding-announcement {
+        position: relative;
+        z-index: 2;
+      }
+      .ww-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+      }
+      .ww-couple-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 700;
+      }
+      .ww-section {
+        background-color: rgba(255, 255, 255, 0.95);
+      }
+      .ww-gift-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/gift/gift-background.jpg") no-repeat center center;
+        background-size: cover;
+        padding: 50px 0;
+      }
+      
+      /* Redirect overlay styles */
+      #redirect-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        color: white;
+        font-family: 'Noto Serif KR', serif;
+      }
+      
+      #redirect-overlay h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      #redirect-overlay p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      
+      #countdown {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      
+      #stay-button {
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      #stay-button:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+      }
+    </style>
   </head>
 
   <body id="top">
+    <!-- Redirect overlay -->
+    <div id="redirect-overlay">
+      <h2>세종과 승희의 결혼식</h2>
+      <p>공식 청첩장으로 이동합니다</p>
+      <div id="countdown">5</div>
+      <button id="stay-button">이 페이지에 머무르기</button>
+    </div>
+    
+    <div class="sparkle"></div>
     <header></header>
     <div id="fb-root"></div>
     <script
@@ -76,23 +194,19 @@
             "
           >
             <div class="container ww-announcement-container">
-              <p class="ww-couple-name ww-title" style="font-size: 2em; font-family: 'Noto Serif KR', serif">세종</p>
-              <p class="ww-couple-name ww-title" style="font-size: 1.5em; font-family: 'Noto Serif KR', serif">&</p>
-              <p class="ww-couple-name ww-title" style="font-size: 2em; font-family: 'Noto Serif KR', serif">승희</p>
+              <p class="ww-couple-name ww-title" style="font-size: 3em;">세종</p>
+              <p class="ww-couple-name ww-title" style="font-size: 2em;">&</p>
+              <p class="ww-couple-name ww-title" style="font-size: 3em;">승희</p>
               <br /><br /><br /><br /><br /><br />
               <p
                 class="h2 mt-5 ww-title"
-                style="font-family: 'Gugi', cursive; font-size: 1em"
+                style="font-size: 1.2em;"
               >
                 | 저희 결혼합니다! |
               </p>
               <p
                 class="h2 mt-5 ww-title"
-                style="
-                  font-family: 'Noto Serif KR', serif;
-                  font-size: 1em;
-                  letter-spacing: -1px;
-                "
+                style="font-size: 1.2em;"
               >
                 <b style="font-size: 1.4em">2025. 08. 09. 토요일 05:00 PM</b>
                 <br />
@@ -153,12 +267,13 @@
                     class="h2 ww-title"
                     style="
                       font-family: 'Sunflower', sans-serif;
-                      font-size: 1.5em;
+                      font-size: 1.8em;
                     "
                   >
                     양세종
                   </h3>
-                  <img alt="Bride" class="img-fluid" src="images/groom.jpeg" />
+                  <p class="text-muted">양태동 · 이경희 의 장남</p>
+                  <img alt="Bride" class="img-fluid rounded-circle" src="images/groom.jpeg" style="max-width: 300px; border: 5px solid #f8f9fa;" />
                 </div>
               </div>
               <div class="col-md-6">
@@ -167,12 +282,13 @@
                     class="h2 ww-title"
                     style="
                       font-family: 'Sunflower', sans-serif;
-                      font-size: 1.5em;
+                      font-size: 1.8em;
                     "
                   >
                     남승희
                   </h3>
-                  <img alt="Groom" class="img-fluid" src="images/bride.jpeg" />
+                  <p class="text-muted">남수우 · 장윤화 의 장녀</p>
+                  <img alt="Groom" class="img-fluid rounded-circle" src="images/bride.jpeg" style="max-width: 300px; border: 5px solid #f8f9fa;" />
                 </div>
               </div>
             </div>
@@ -203,7 +319,15 @@
                       >
                     </li>
                     <br />
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.1921203477777!2d127.04397577573191!3d37.503386672055086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca405bf628fc3%3A0x12da834f0c728f7c!2z7JWE7Y6g6rCA66qoIOyEoOumiQ!5e0!3m2!1sko!2skr!4v1745656596626!5m2!1sko!2skr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div class="map-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                      <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.1921203477777!2d127.04397577573191!3d37.503386672055086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca405bf628fc3%3A0x12da834f0c728f7c!2z7JWE7Y6g6rCA66qoIOyEoOumiQ!5e0!3m2!1sko!2skr!4v1745656596626!5m2!1sko!2skr" 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                      </iframe>
+                    </div>
                   </ul>
                 </div>
               </div>
@@ -211,7 +335,7 @@
                 <div class="my-3">
                   <img
                     alt="Wedding Party"
-                    class="img-fluid"
+                    class="img-fluid rounded"
                     src="images/wedding-party.jpg"
                   />
                 </div>
@@ -237,7 +361,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 1"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic1.jpeg"
                       />
                     </a>
@@ -246,7 +370,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 2"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic2.jpeg"
                       />
                     </a>
@@ -255,7 +379,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 3"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic3.jpeg"
                       />
                     </a>
@@ -264,7 +388,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 4"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic4.jpeg"
                       />
                     </a>
@@ -273,7 +397,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 5"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic5.jpeg"
                       />
                     </a>
@@ -282,7 +406,7 @@
                     <a data-gallery="ww-gallery" data-toggle="lightbox">
                       <img
                         alt="Gallery Pic 6"
-                        class="img-fluid"
+                        class="img-fluid rounded"
                         src="images/pic6.jpeg"
                       />
                     </a>
@@ -301,7 +425,7 @@
           <div class="ww-gift-section">
             <div class="container">
               <div class="col text-center mb-5">
-                <h6 style="font-family: 'Noto Serif KR', serif">
+                <h6 style="font-family: 'Noto Serif KR', serif; line-height: 2;">
                   함께 있을 때 가장 나 다운 모습이 되고 함께 있을 때 미래를
                   꿈꾸게 하는 사람을 만났습니다.<br /><br />
 
@@ -317,7 +441,7 @@
                   style="font-family: 'Noto Serif KR', serif"
                   >마음을 전하는 곳</h7
                 >
-                <h5 style="font-family: 'Noto Serif KR', serif; font-size: 1em;">
+                <h5 style="font-family: 'Noto Serif KR', serif; font-size: 1.2em; line-height: 2;">
                   우리은행 1002-950-095884 양세종
                   <br />
                   토스뱅크 1000-0554-5101 남승희
@@ -345,5 +469,33 @@
         ></i>
       </div>
     </div>
+    
+    <!-- Redirect script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const redirectOverlay = document.getElementById('redirect-overlay');
+        const countdownElement = document.getElementById('countdown');
+        const stayButton = document.getElementById('stay-button');
+        const redirectUrl = 'https://pwinvitation.com/rPPKIPnXQUoG';
+        let countdown = 5;
+        
+        // Update countdown
+        const countdownInterval = setInterval(function() {
+          countdown--;
+          countdownElement.textContent = countdown;
+          
+          if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = redirectUrl;
+          }
+        }, 1000);
+        
+        // Stay button click handler
+        stayButton.addEventListener('click', function() {
+          clearInterval(countdownInterval);
+          redirectOverlay.style.display = 'none';
+        });
+      });
+    </script>
   </body>
 </html>
