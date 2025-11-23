@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Star Trek 3D Chess: Perfect Structure</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #050505; color: #eee; font-family: 'Segoe UI', sans-serif; display: flex; }
+        #game-container { display: flex; width: 100vw; height: 100vh; }
+        
+        #view-3d { width: 70%; height: 100%; position: relative; background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%); }
+        
+        #sidebar { width: 30%; height: 100%; background: #111; border-left: 2px solid #333; display: flex; flex-direction: column; }
+        .panel-header { padding: 15px; border-bottom: 1px solid #333; background: #151515; }
+        .panel-header h2 { margin: 0; color: #00d2ff; font-size: 1.2em; }
+        
+        .control-group { padding: 10px; display: flex; gap: 5px; justify-content: center; background: #1a1a1a; }
+        button { background: #333; color: #00d2ff; border: 1px solid #00d2ff; padding: 5px 12px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #00d2ff; color: #000; }
+
+        #log-panel { flex-grow: 1; padding: 10px; font-family: monospace; color: #888; overflow-y: auto; font-size: 0.9em; }
+        
+        /* Rule Popup */
+        #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: rgba(10, 10, 15, 0.95); border: 1px solid #00d2ff; padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        #rule-modal h3 { color: #ffcc00; border-bottom: 1px solid #444; margin-top: 0; padding-bottom: 10px; }
+        #rule-modal a { color: #00d2ff; }
+        .close-btn { position: absolute; top: 10px; right: 15px; border: none; background: none; color: #ff4444; font-size: 1.5em; cursor: pointer; }
+    </style>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="view-3d"></div>
+    <div id="sidebar">
+        <div class="panel-header">
+            <h2>Tri-Dimensional Chess</h2>
+            <div style="font-size:0.8em; color:#aaa; margin-top:5px;">Franklin Mint Configuration</div>
+        </div>
+        <div class="control-group">
+            <button id="btn-reset">Reset Game</button>
+            <button id="btn-rules">Rules & Info</button>
+        </div>
+        <div id="log-panel">
+            <div>> Warp Core Online.</div>
+            <div>> Structural Integrity Field: Stable.</div>
+        </div>
+    </div>
+</div>
+
+<div id="rule-modal">
+    <button class="close-btn" onclick="document.getElementById('rule-modal').style.display='none'">&times;</button>
+    <h3>Structure & Rules</h3>
+    <p>This board faithfully reproduces the <b>overlapping staircase structure</b> seen in Star Trek.</p>
+    <ul>
+        <li><b>Main Boards:</b> Three 4x4 boards stacked. The middle board overlaps the back half of the bottom board. The top board overlaps the back half of the middle board.</li>
+        <li><b>Attack Boards:</b> Attached to the exposed corners of the Main Boards.</li>
+    </ul>
+    <p>Reference: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">The Andrew Bartmess Rules</a></p>
+</div>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // --- Constants ---
+    const SQ = 14; // Square Size
+    const LEVEL_H = 25; // Height between Main Levels
+    
+    // --- Game Logic ---
+    const gameState = {
+        board: new Array(64).fill(null),
+        turn: 'white',
+        selected: null,
+        moves: []
+    };
+
+    // --- 3D Scene Vars ---
+    let scene, camera, renderer, controls;
+    let squareMeshes = {}; // Map logic index to mesh
+    let pieceMeshes = {};
+
+    function init() {
+        setupScene();
+        setupPhysicalBoards(); // Draw the glass plates
+        setupLogicalSquares(); // Draw the clickable squares on top
+        setupPieces();
+        
+        document.getElementById('btn-reset').onclick = resetGame;
+        document.getElementById('btn-rules').onclick = () => document.getElementById('rule-modal').style.display='block';
+        
+        animate();
+    }
+
+    function setupScene() {
+        const container = document.getElementById('view-3d');
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050505);
+        scene.fog = new THREE.FogExp2(0x050505, 0.0015);
+
+        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        // Camera Angle: Isometric-ish side view to show steps clearly
+        camera.position.set(100, 80, 100);
+        camera.lookAt(0, 20, 0);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Lighting
+        const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambient);
+        
+        const spot = new THREE.SpotLight(0xffffff, 1.2);
+        spot.position.set(50, 150, 50);
+        spot.castShadow = true;
+        scene.add(spot);
+
+        const rimLight = new THREE.PointLight(0x00d2ff, 0.5);
+        rimLight.position.set(-50, 50, -50);
+        scene.add(rimLight);
+        
+        // Spine/Stand
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(15, 20, 5, 32), new THREE.MeshStandardMaterial({color:0x222}));
+        base.position.set(0, -2.5, 0);
+        scene.add(base);
+        
+        const spine = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 90, 16), new THREE.MeshStandardMaterial({color:0x888}));
+        // Spine position needs to be roughly center of the whole structure
+        // Main 1 Center Z ~ 2*SQ. Main 3 Back Z ~ -6*SQ. Center ~ -2*SQ.
+        spine.position.set(0, 40, -2 * SQ); 
+        scene.add(spine);
+    }
+
+    // --- 1. Draw the Physical Glass Boards (The Structure) ---
+    function setupPhysicalBoards() {
+        // Helper to create a board
+        const createBoard = (w, h, x, y, z, color) => {
+            const geo = new THREE.BoxGeometry(w * SQ, 1, h * SQ);
+            const mat = new THREE.MeshPhysicalMaterial({
+                color: color, 
+                metalness: 0.1, roughness: 0.1, transmission: 0.6, opacity: 0.5, transparent: true
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            scene.add(mesh);
+            
+            // Frame
+            const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0x888888 }));
+            mesh.add(edges);
+            
+            // Support Arm to Spine
+            const armGeo = new THREE.CylinderGeometry(1, 1, 30); // Simplified length
+            armGeo.rotateZ(Math.PI/2);
+            const arm = new THREE.Mesh(armGeo, new THREE.MeshStandardMaterial({color:0x666}));
+            // Connect roughly to spine Z center
+            arm.position.set(0, -2, ((-2*SQ) - z)); 
+            mesh.add(arm);
+        };
+
+        // Positions are critical for the "Overlap" look.
+        // Z-Axis: Positive is Front, Negative is Back.
+        
+        // Main Board 1 (Bottom): 4x4. Center at Z = 1.5 * SQ (Covers Z 3.5 to -0.5)
+        // No, let's use coordinate system where Rank 0 starts at Z=0.
+        // Rank 0 Z = 0. Rank 1 Z = -SQ.
+        // Main 1 (Ranks 0-3 physically): Z range [0.5*SQ, -3.5*SQ]. Center Z = -1.5 * SQ.
+        // Let's define Board Centers.
+        
+        // MAIN 1 (Level 1): The "Front" Board.
+        // Physically holds Ranks 1-4 (Indices 0-3 relative).
+        // Center X=0. Y=0. Z = 0.
+        createBoard(4, 4, 0, 0, 0, 0x003366);
+
+        // MAIN 2 (Level 2): The "Middle" Board.
+        // Physically holds Ranks 3-6. 
+        // It overlaps the BACK HALF of Main 1.
+        // Main 1 Back Half is Z = [-SQ, -2*SQ].
+        // Main 2 Front Half starts there.
+        // Shift Back by 2 Squares (-2 * SQ) relative to Main 1.
+        // Shift Up by LEVEL_H.
+        createBoard(4, 4, 0, LEVEL_H, -2 * SQ, 0x003366);
+
+        // MAIN 3 (Level 3): The "Top" Board.
+        // Physically holds Ranks 5-8.
+        // Overlaps Back Half of Main 2.
+        // Shift Back by 2 Squares relative to Main 2 (Total -4 * SQ).
+        // Shift Up by 2 * LEVEL_H.
+        createBoard(4, 4, 0, 2 * LEVEL_H, -4 * SQ, 0x003366);
+
+        // ATTACK BOARDS (2x2)
+        // QL1 (White Q-Side): Attached to Main 1 Front-Left.
+        // Pos: Left of Main 1 (-3 * SQ), Front of Main 1 (Z=SQ).
+        // Level: 1.5 (Midway 1-2).
+        createBoard(2, 2, -3 * SQ, LEVEL_H * 0.5, SQ, 0x660000);
+
+        // KL1 (White K-Side): Attached to Main 1 Front-Right.
+        createBoard(2, 2, 3 * SQ, LEVEL_H * 0.5, SQ, 0x660000);
+
+        // QL3 (Black Q-Side): Attached to Main 3 Back-Left.
+        // Main 3 Center Z is -4*SQ. Back is -6*SQ.
+        // We want it at the "Open" corner. Main 3 is topmost.
+        // Usually attached to the REAR corners of the logical board.
+        // Logical Rank 8.
+        createBoard(2, 2, -3 * SQ, LEVEL_H * 2.5, -5 * SQ, 0x660000);
+
+        // KL3 (Black K-Side)
+        createBoard(2, 2, 3 * SQ, LEVEL_H * 2.5, -5 * SQ, 0x660000);
+    }
+
+    // --- 2. Calculate 3D Position for Logic Index (0-63) ---
+    // This maps the abstract chess move (e.g., e4) to the physical location.
+    function getLogicPos(index) {
+        const file = index % 8; // 0-7 (a-h)
+        const rank = Math.floor(index / 8); // 0-7 (1-8)
+
+        const isAttackFile = file < 2 || file > 5; // Files a,b or g,h
+        
+        // X Coordinate
+        // Main boards are Files c-f (2-5). Center is 3.5.
+        // (file - 3.5) * SQ maps 2->-1.5, 5->1.5. Correct.
+        let x = (file - 3.5) * SQ;
+        
+        // Z & Y Coordinate logic
+        let y = 0;
+        let z = 0;
+
+        if (!isAttackFile) {
+            // --- MAIN BOARDS (Files c-f) ---
+            // Rank 0, 1 -> Main 1 (Front)
+            // Rank 2, 3 -> Main 2 (Front) -- Overlaps Main 1 Back
+            // Rank 4, 5 -> Main 3 (Front) -- Overlaps Main 2 Back
+            // Rank 6, 7 -> Main 3 (Back)
+            
+            // Physical Board Z-Centers:
+            // M1: 0. M2: -2*SQ. M3: -4*SQ.
+            // Within a board, Row offset: Front=1.5*SQ, Back=-1.5*SQ.
+            // Rank 0 (White Base) is at the very front of Main 1.
+            
+            // Let's calculate global Z based on Visual Rank.
+            // Visual Rank 0 (Frontmost) -> Z = 1.5 * SQ.
+            // Visual Rank 7 (Backmost) -> Z = -5.5 * SQ.
+            // Formula: Z = 1.5*SQ - (rank * SQ).
+            
+            z = 1.5 * SQ - (rank * SQ);
+
+            // Height (Y) based on which board captures this rank logically
+            // Rules for Franklin Mint Style (Standard):
+            // White Main (L1): Ranks 1-4? No. 
+            // Bartmess Rules:
+            // Level 1: White Main. (Carries Logic Ranks 1-2? or 1-4?)
+            // Playable Mapping:
+            // Ranks 0,1 -> Level 1
+            // Ranks 2,3 -> Level 2
+            // Ranks 4,5 -> Level 3 (Front)
+            // Ranks 6,7 -> Level 3 (Back)? 
+            // Wait, Main 3 covers Ranks 5-8? 
+            // Let's use the Visual Staircase Logic:
+            if (rank <= 1) y = 0;             // Main 1
+            else if (rank <= 3) y = LEVEL_H;  // Main 2
+            else y = LEVEL_H * 2;             // Main 3
+            
+        } else {
+            // --- ATTACK BOARDS ---
+            // Spread X further out
+            x = (file < 2) ? -3 * SQ + (file - 0.5) * SQ : 3 * SQ + (file - 6.5) * SQ;
+            
+            // Rank 0,1 -> White Attack (L 1.5)
+            // Rank 6,7 -> Black Attack (L 3.5)
+            // Note: Ranks 2-5 on files a,b,g,h are VOID (don't exist).
+            
+            if (rank <= 1) {
+                y = LEVEL_H * 0.5;
+                // Align with Main 1 Front
+                // Main 1 Front Z is roughly 1.5*SQ. 
+                // Attack board is 2x2. Rank 0 is Front.
+                // Z = SQ + (0.5*SQ) - (rank * SQ)?
+                // Let's anchor to the boards created in setupPhysicalBoards.
+                // QL1 Center Z = SQ. 
+                // Local Rank 0 -> Z = SQ + 0.5*SQ = 1.5*SQ.
+                // Local Rank 1 -> Z = SQ - 0.5*SQ = 0.5*SQ.
+                z = 1.5 * SQ - (rank * SQ);
+            } 
+            else if (rank >= 6) {
+                y = LEVEL_H * 2.5;
+                // Align with Main 3 Back
+                // QL3 Center Z = -5 * SQ.
+                // Rank 7 (Backmost) -> Z = -5 * SQ - 0.5*SQ = -5.5*SQ.
+                // Rank 6 -> Z = -4.5*SQ.
+                // In 0-7 index: rank 7 is back.
+                // Map rank 6 -> Front of Attack Board, rank 7 -> Back.
+                const localR = rank - 6; // 0 or 1
+                // Z center -5*SQ.
+                // Front (r6) -> -4.5*SQ. Back (r7) -> -5.5*SQ.
+                z = -4.5 * SQ - (localR * SQ);
+            }
+            else {
+                return null; // Void Square
+            }
+        }
+
+        return new THREE.Vector3(x, y, z);
+    }
+
+    function setupLogicalSquares() {
+        const geo = new THREE.BoxGeometry(SQ * 0.9, 0.5, SQ * 0.9);
+        
+        for (let i = 0; i < 64; i++) {
+            const pos = getLogicPos(i);
+            if (!pos) continue; // Void
+
+            const isBlack = ((i % 8) + Math.floor(i / 8)) % 2 === 1;
+            const mat = new THREE.MeshPhongMaterial({
+                color: isBlack ? 0x222222 : 0xeeeeee,
+                emissive: 0x000000
+            });
+            
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(pos);
+            mesh.position.y += 0.5; // Sit on top of glass
+            
+            mesh.userData = { index: i, baseColor: mat.color.getHex() };
+            scene.add(mesh);
+            squareMeshes[i] = mesh;
+            
+            // Click Handler
+            mesh.callback = () => handleSquareClick(i);
+        }
+        
+        // Raycaster
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        renderer.domElement.addEventListener('pointerdown', (e) => {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(Object.values(squareMeshes));
+            if(intersects.length > 0) intersects[0].object.callback();
+        });
+    }
+
+    function setupPieces() {
+        // Standard Setup String
+        const setup = "RNBQKBNRPPPPPPPP................................pppppppprnbqkbnr";
+        const symbols = {'P':'♙','R':'♖','N':'♘','B':'♗','Q':'♕','K':'♔','p':'♟','r':'♜','n':'♞','b':'♝','q':'♛','k':'♚','.':null};
+
+        for(let i=0; i<64; i++) {
+            const char = setup[i];
+            if(char !== '.') {
+                const color = char === char.toUpperCase() ? 'white' : 'black';
+                gameState.board[i] = { 
+                    type: char.toLowerCase(), 
+                    color: color, 
+                    symbol: symbols[char] 
+                };
+            }
+        }
+        renderPieces();
+    }
+
+    function renderPieces() {
+        // Clear old
+        Object.values(pieceMeshes).forEach(m => scene.remove(m));
+        pieceMeshes = {};
+
+        gameState.board.forEach((p, i) => {
+            if(!p) return;
+            const pos = getLogicPos(i);
+            if(!pos) return;
+
+            // Create Piece Sprite
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            
+            // Style
+            const isWhite = p.color === 'white';
+            ctx.fillStyle = isWhite ? '#fff' : '#222';
+            ctx.beginPath(); ctx.arc(64,64,60,0,Math.PI*2); ctx.fill();
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = isWhite ? '#daa520' : '#cc0000';
+            ctx.stroke();
+            
+            ctx.font = "90px serif";
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillStyle = isWhite ? '#000' : '#cc0000';
+            ctx.fillText(p.symbol, 64, 70);
+
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: tex });
+            const sprite = new THREE.Sprite(mat);
+            
+            sprite.scale.set(10, 10, 1);
+            sprite.position.copy(pos);
+            sprite.position.y += 6; // Lift piece
+            
+            scene.add(sprite);
+            pieceMeshes[i] = sprite;
+        });
+    }
+
+    function handleSquareClick(idx) {
+        const p = gameState.board[idx];
+        const isOwn = p && p.color === gameState.turn;
+
+        // Reset Highlights
+        Object.values(squareMeshes).forEach(m => m.material.emissive.setHex(0x000000));
+
+        if (isOwn) {
+            gameState.selected = idx;
+            gameState.moves = getMoves(idx);
+            
+            // Highlight Selected
+            squareMeshes[idx].material.emissive.setHex(0x00ff00);
+            // Highlight Moves
+            gameState.moves.forEach(m => {
+               if(squareMeshes[m]) squareMeshes[m].material.emissive.setHex(0xffff00); 
+            });
+            log(`Selected ${p.symbol} at ${indexToNotation(idx)}`);
+        } 
+        else if (gameState.selected !== null && gameState.moves.includes(idx)) {
+            movePiece(gameState.selected, idx);
+        } 
+        else {
+            gameState.selected = null;
+            gameState.moves = [];
+        }
+    }
+
+    function movePiece(from, to) {
+        const p = gameState.board[from];
+        const target = gameState.board[to];
+        
+        gameState.board[to] = p;
+        gameState.board[from] = null;
+        
+        log(`${p.symbol} moves ${indexToNotation(from)} -> ${indexToNotation(to)}`);
+        if(target) log(`Captured ${target.symbol}!`);
+        
+        gameState.turn = gameState.turn === 'white' ? 'black' : 'white';
+        gameState.selected = null;
+        gameState.moves = [];
+        
+        // Simple Refresh
+        Object.values(squareMeshes).forEach(m => m.material.emissive.setHex(0x000000));
+        renderPieces();
+    }
+
+    // --- Helpers ---
+    function getMoves(idx) {
+        // Very basic logic for structure demo
+        // Allow jumping for non-sliding to demonstrate height traversal
+        const p = gameState.board[idx];
+        const moves = [];
+        
+        // Blindly checking all squares for demo purpose logic
+        // Real logic needs path checking through 3D space
+        for(let i=0; i<64; i++) {
+            if(getLogicPos(i)) { // If valid square
+                if(i !== idx && (!gameState.board[i] || gameState.board[i].color !== p.color)) {
+                    // Just a distance filter for playability demo
+                    const f1 = idx%8, r1 = Math.floor(idx/8);
+                    const f2 = i%8, r2 = Math.floor(i/8);
+                    if(Math.abs(f1-f2) <= 2 && Math.abs(r1-r2) <= 2) moves.push(i);
+                }
+            }
+        }
+        return moves;
+    }
+    
+    function indexToNotation(i) {
+        const f = ['a','b','c','d','e','f','g','h'][i%8];
+        const r = Math.floor(i/8) + 1;
+        return f+r;
+    }
+
+    function log(msg) {
+        const p = document.getElementById('log-panel');
+        p.innerHTML += `<div>${msg}</div>`;
+        p.scrollTop = p.scrollHeight;
+    }
+    
+    function resetGame() {
+        gameState.board.fill(null);
+        gameState.turn = 'white';
+        setupPieces();
+        log("--- Game Reset ---");
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    init();
+</script>
+</body>
+</html>
