@@ -174,7 +174,7 @@
         button.addEventListener("click", function () {
             shown = !shown;
             email.dataset.shown = shown ? "true" : "false";
-            email.textContent = shown ? "sejong.yang@yonsei.ac.kr" : "";
+            email.textContent = shown ? "angelo.yang@lgresearch.ai" : "";
             email.style.opacity = shown ? "1" : "0";
             var key = shown ? "home.hero.hideEmail" : "home.hero.showEmail";
             var label = getNestedValue(currentDictionary || dictionary, key);
