@@ -13,29 +13,35 @@
       gtag('config', 'G-P3WVFM8R4D');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-og-title" name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="type" property="og:type" content="website">
     <meta name="image" property="og:image" content="https://avatars.githubusercontent.com/u/13496612?v=4">
-    <meta name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-description" name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="author" content="Sejong Yang">
     <meta name="url" property="og:url" content="https://yangspace.co.kr">
     <link rel="shortcut icon"
         href="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2">
     <title>Sejong Yang</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/assets/js/i18n.js" defer></script>
 </head>
 
-<body>
+<body data-page="projects">
     <div class="topnav">
-        <a href="/">Home</a>
-        <a href="/pubs">Publications</a>
-        <a class="active" href="/projects">Projects</a>
-        <a href="https://blog.yangspace.co.kr/" title="Blog">Blog</a>
+        <a href="/" data-i18n="common.nav.home" data-localized-link="true">Home</a>
+        <a href="/pubs" data-i18n="common.nav.publications" data-localized-link="true">Publications</a>
+        <a class="active" href="/projects" data-i18n="common.nav.projects" data-localized-link="true">Projects</a>
+        <a class="topnav-pill" href="https://blog.yangspace.co.kr/" title="Blog" data-i18n="common.nav.blog">Blog</a>
+        <div class="lang-switcher" aria-label="Language switcher">
+            <button type="button" data-lang-switch="ko">KO</button>
+            <span>|</span>
+            <button type="button" data-lang-switch="en">EN</button>
+        </div>
     </div>
 
     <!-- <div style="background-color: #eee; padding-bottom: 8px; margin-top: 10px;"> -->
     <div class="container">
-        <div class="ctitle">Research Projects</div>
+        <div class="ctitle" data-i18n="projects.sections.research">Research Projects</div>
 
         <div class="pub">
             <div class="pub-title">Generating Paired Data beyond Human Face by Diffusion Feature-based Filter</div>
@@ -47,10 +53,10 @@
                 Cameron Smith, and
                 Deepali Aneja.
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_diff.png" class="pub-image" />
             </div>
-            <div>
+            <div data-i18n-html="projects.research.diff.links">
                 [<a href="https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa">Technical Report</a>]
                 [<a href="https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo">Google Presentation</a>]
             </div>
@@ -65,10 +71,10 @@
                 Yang Zhou, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_thmm_dit.gif" class="pub-image" />
             </div>
-            <div>
+            <div data-i18n-html="projects.research.thmm.links">
                 [<a href="https://openreview.net/forum?id=6nNO2iscsQL">Technical Report</a>]
                 [<a href="https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk">Google Presentation</a>]
             </div>
@@ -83,12 +89,8 @@
                 Subin Jeon, and
                 Seon Joo Kim.
             </div>
-            <div>
-                <p>
-                    - Reproduce <a href="https://arxiv.org/abs/2004.11598">Deep3dPortrait</a> as baseline <br>
-                    - Improve expression manipulation and speed with SOTA 3DMM model <br>
-                    - Funded by Samsung Research
-                </p>
+            <div data-i18n-html="projects.research.portrait.desc">
+                <p>- Reproduce <a href="https://arxiv.org/abs/2004.11598">Deep3dPortrait</a> as baseline <br>- Improve expression manipulation and speed with SOTA 3DMM model <br>- Funded by Samsung Research</p>
             </div>
         </div>
 
@@ -104,12 +106,8 @@
                 Younghyun Jo, and
                 Seon Joo Kim.
             </div>
-            <div>
-                <p>
-                    - Reproduce <a href="https://arxiv.org/abs/1808.08396">Noiseprint</a> for blind deepfake detection <br>
-                    - Try multiple classification models like ResNet+RNN, C3D, and I3D <br>
-                    - Funded by NIS
-                </p>
+            <div data-i18n-html="projects.research.deepfake.desc">
+                <p>- Reproduce <a href="https://arxiv.org/abs/1808.08396">Noiseprint</a> for blind deepfake detection <br>- Try multiple classification models like ResNet+RNN, C3D, and I3D <br>- Funded by NIS</p>
             </div>
         </div>
 
@@ -121,15 +119,10 @@
                 In Cho, and
                 Seon Joo Kim.
             </div>
-            <div>
-                <p>
-                    - 3D Point Cloud needs sampling of large datapoint <br>
-                    - Try Classification, Registration, Restoration efficiently <br>
-                    - Try unsupervised learning for importance score like pruning <br>
-                    - Failed due to there is no concrete criteria like weight norm
-                </p>
+            <div data-i18n-html="projects.research.ssn.desc">
+                <p>- 3D Point Cloud needs sampling of large datapoint <br>- Try Classification, Registration, Restoration efficiently <br>- Try unsupervised learning for importance score like pruning <br>- Failed due to there is no concrete criteria like weight norm</p>
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_ssn.png" class="pub-image" />
             </div>
         </div>
@@ -142,16 +135,11 @@
                 Younghyun Jo, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="projects.research.srpruning.links">
                 [<a href="https://github.com/kingsj0405/SRPruning">Code</a>]
             </div>
-            <div>
-                <p>
-                    - Network Pruning for Super Resolution <br>
-                    - Finding Lottery Ticket in Decoder (<a href="https://velog.io/@bismute/The-Lottery-Ticket-Hypothesis%EC%99%80-%EA%B7%B8-%ED%9B%84%EC%86%8D-%EC%97%B0%EA%B5%AC%EB%93%A4-%EB%A6%AC%EB%B7%B0">My Korean Blog Article</a>)<br>
-                    - Try with multiple SR models like VDSR, MSRResNet, CARN, SRDenseNet, RDN, RRDB, RCAN
-                    - Try baselines like SNIP, GraSP, and SynFlow
-                </p>
+            <div data-i18n-html="projects.research.srpruning.desc">
+                <p>- Network Pruning for Super Resolution <br>- Finding Lottery Ticket in Decoder (<a href="https://velog.io/@bismute/The-Lottery-Ticket-Hypothesis%EC%99%80-%EA%B7%B8-%ED%9B%84%EC%86%8D-%EC%97%B0%EA%B5%AC%EB%93%A4-%EB%A6%AC%EB%B7%B0">My Korean Blog Article</a>)<br>- Try with multiple SR models like VDSR, MSRResNet, CARN, SRDenseNet, RDN, RRDB, RCAN <br>- Try baselines like SNIP, GraSP, and SynFlow</p>
             </div>
         </div>
 
@@ -164,7 +152,7 @@
                 Jeongil Yang, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="projects.research.ocr.links">
                 [<a href="https://youtu.be/jjAswMaWJKI">Video - Demo</a>]
             </div>
             <div class="videowrapper">
@@ -181,7 +169,7 @@
                 Yoonwoo Park, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="projects.research.faceaging.links">
                 [<a href="https://youtu.be/nmukIcs4bmY">Video - Demo</a>]
                 [<a href="https://github.com/kingsj0405/Face-Aging-CAAE">code</a>]
             </div>
@@ -190,7 +178,7 @@
             </div>
         </div>
 
-        <div class="ctitle">Engineering Projects</div>
+        <div class="ctitle" data-i18n="projects.sections.engineering">Engineering Projects</div>
 
         <div class="pub">
             <div class="pub-title">Landmark Location Classification</div>
@@ -198,15 +186,11 @@
             <div class="pub-authors">
                 Sejong Yang
             </div>
-            <div>
+            <div data-i18n-html="projects.engineering.landmark.links">
                 [<a href="https://www.notion.so/kingsj0405/Dacon-Landmark-Classification-102615b6b9044980a6fc0caac4c4cfcf">Notion</a>]
             </div>
-            <div>
-                <p>
-                    - Image classification with landmark location <br>
-                    - Try multiple models like EfficientNet, ResNet, ResNext, MoCo v2 <br>
-                    - Get event prize money for sharing code
-                </p>
+            <div data-i18n-html="projects.engineering.landmark.desc">
+                <p>- Image classification with landmark location <br>- Try multiple models like EfficientNet, ResNet, ResNext, MoCo v2 <br>- Get event prize money for sharing code</p>
             </div>
         </div>
 
@@ -227,17 +211,11 @@
             <div class="pub-authors">
                 Sejong Yang
             </div>
-            <div>
+            <div data-i18n-html="projects.engineering.spam.links">
                 [<a href="https://github.com/kingsj0405/SRPruning">Code</a>]
             </div>
-            <div>
-                <p>
-                    - <a href="https://campaign.naver.com/airush/">NAVER AI Rush 2020</a> 1 Round <br>
-                    - Advance to the next round with Rank 23 <br>
-                    - Try multiple classification models like ResNet, EfficientNet <br>
-                    - Try multiple ways to deal with data imbalance like Focal Loss, Label Smoothing, Temperature Scaling <br>
-                    - Try multiple optimizers and schedulers like RAdam, CosineLRScheduler
-                </p>
+            <div data-i18n-html="projects.engineering.spam.desc">
+                <p>- <a href="https://campaign.naver.com/airush/">NAVER AI Rush 2020</a> 1 Round <br>- Advance to the next round with Rank 23 <br>- Try multiple classification models like ResNet, EfficientNet <br>- Try multiple ways to deal with data imbalance like Focal Loss, Label Smoothing, Temperature Scaling <br>- Try multiple optimizers and schedulers like RAdam, CosineLRScheduler</p>
             </div>
         </div>
 
@@ -247,13 +225,11 @@
             <div class="pub-authors">
                 Sejong Yang
             </div>
-            <div>
+            <div data-i18n-html="projects.engineering.blog.links">
                 [<a href="https://github.com/kingsj0405/yangspace_v3">code</a>]
             </div>
-            <div>
-                <p>
-                    Django-based blog like <a href="https://www.atlassian.com/ko/software/confluence">Confluence</a>.
-                </p>
+            <div data-i18n-html="projects.engineering.blog.desc">
+                <p>Django-based blog like <a href="https://www.atlassian.com/ko/software/confluence">Confluence</a>.</p>
             </div>
         </div>
 
@@ -266,12 +242,8 @@
                 Namhyu Seo, and
                 Jeongil Yang.
             </div>
-            <div>
-                <p>
-                    Django-based Yonsei University Class Schedule Management Web Service <br>
-                    - Crawl class schedule and mileage history from Yonsei University Database <br>
-                    - Schedule editor like <a href="https://everytime.kr/">everytime</a>
-                </p>
+            <div data-i18n-html="projects.engineering.doughsam.desc">
+                <p>Django-based Yonsei University Class Schedule Management Web Service <br>- Crawl class schedule and mileage history from Yonsei University Database <br>- Schedule editor like <a href="https://everytime.kr/">everytime</a></p>
             </div>
         </div>
 
@@ -282,13 +254,10 @@
                 Sejong Yang, and
                 Chanhoo Lee.
             </div>
-            <div>
-                <p>
-                    Gloves Hand recognition with OpenCV<br>
-                    Jingle Bell rings when hands are on each bell on the screen
-                </p>
+            <div data-i18n-html="projects.engineering.jinglebell.desc">
+                <p>Gloves Hand recognition with OpenCV<br>Jingle Bell rings when hands are on each bell on the screen</p>
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_prismx.png" class="pub-image" />
             </div>
         </div>
@@ -304,7 +273,7 @@
 
     <footer>
         <div>
-            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. Hosted by
+            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. <span data-i18n="common.footer.hostedBy">Hosted by</span>
             <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
             <br>
             <div id="last_update"> </div>

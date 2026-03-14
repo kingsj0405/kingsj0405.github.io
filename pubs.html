@@ -13,29 +13,35 @@
       gtag('config', 'G-P3WVFM8R4D');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-og-title" name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="type" property="og:type" content="website">
     <meta name="image" property="og:image" content="https://avatars.githubusercontent.com/u/13496612?v=4">
-    <meta name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-description" name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="author" content="Sejong Yang">
     <meta name="url" property="og:url" content="https://yangspace.co.kr">
     <link rel="shortcut icon"
         href="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2">
     <title>Sejong Yang</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/assets/js/i18n.js" defer></script>
 </head>
 
-<body>
+<body data-page="pubs">
     <div class="topnav">
-        <a href="/">Home</a>
-        <a class="active" href="/pubs">Publications</a>
-        <a href="/projects">Projects</a>
-        <a href="https://blog.yangspace.co.kr/" title="Blog">Blog</a>
+        <a href="/" data-i18n="common.nav.home" data-localized-link="true">Home</a>
+        <a class="active" href="/pubs" data-i18n="common.nav.publications" data-localized-link="true">Publications</a>
+        <a href="/projects" data-i18n="common.nav.projects" data-localized-link="true">Projects</a>
+        <a class="topnav-pill" href="https://blog.yangspace.co.kr/" title="Blog" data-i18n="common.nav.blog">Blog</a>
+        <div class="lang-switcher" aria-label="Language switcher">
+            <button type="button" data-lang-switch="ko">KO</button>
+            <span>|</span>
+            <button type="button" data-lang-switch="en">EN</button>
+        </div>
     </div>
 
     <!-- <div style="background-color: #eee; padding-bottom: 8px; margin-top: 10px;"> -->
     <div class="container">
-        <div class="ctitle">Publications</div>
+        <div class="ctitle" data-i18n="pubs.sections.title">Publications</div>
 
         <div class="pub">
             <div class="pub-title">IF-MDM: Implicit Face Motion Diffusion Model for High-Fidelity Realtime Talking Head Generation</div>
@@ -46,11 +52,11 @@
                 Seoung Wug Oh, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="pubs.items.ifmdm.links">
                 [<a href="https://arxiv.org/abs/2412.04000">paper</a>]
                 [<a href="https://bit.ly/ifmdm_supplementary">supplementary for videos</a>]
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/pub_ifmdm.png" class="pub-image" />
             </div>
         </div>
@@ -64,12 +70,12 @@
                 Seonghyeon Nam, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="pubs.items.dife.links">
                 [<a href="https://openreview.net/forum?id=m67FNFdgLO9">paper</a>]
                 [<a href="https://github.com/kingsj0405/DIFE">code</a>]
                 [<a href="https://yangspace.co.kr/dife/">project page</a>]
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/pub_dife.png" class="pub-image" />
             </div>
         </div>
@@ -83,12 +89,12 @@
                 Sejong Yang, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="pubs.items.srflow.links">
                 [<a
                     href="https://openaccess.thecvf.com/content/CVPR2021W/NTIRE/papers/Jo_SRFlow-DA_Super-Resolution_Using_Normalizing_Flow_With_Deep_Convolutional_Block_CVPRW_2021_paper.pdf">paper</a>]
                 [<a href="https://github.com/yhjo09/SRFlow-DA">code</a>]
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/pub_dsr.png" class="pub-image" />
             </div>
         </div>
@@ -101,12 +107,12 @@
                 Sejong Yang, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="pubs.items.esr.links">
                 [<a
                     href="https://openaccess.thecvf.com/content_CVPRW_2020/papers/w31/Jo_Investigating_Loss_Functions_for_Extreme_Super-Resolution_CVPRW_2020_paper.pdf">paper</a>]
                 [<a href="https://github.com/kingsj0405/ciplab-NTIRE-2020">code</a>]
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/pub_esr.png" class="pub-image" />
             </div>
         </div>
@@ -121,7 +127,7 @@
 
     <footer>
         <div>
-            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. Hosted by
+            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. <span data-i18n="common.footer.hostedBy">Hosted by</span>
             <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
             <br>
             <div id="last_update"> </div>

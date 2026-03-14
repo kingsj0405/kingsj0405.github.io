@@ -17,24 +17,30 @@
         crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-6322306086276809">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-og-title" name="title" property="og:title" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="type" property="og:type" content="website">
     <meta name="image" property="og:image" content="https://avatars.githubusercontent.com/u/13496612?v=4">
-    <meta name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
+    <meta id="meta-description" name="description" property="og:description" content="Sejong Yang's Homepage (YangSpace)">
     <meta name="author" content="Sejong Yang">
     <meta name="url" property="og:url" content="https://yangspace.co.kr">
     <link rel="shortcut icon"
         href="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2">
     <title>Sejong Yang</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/assets/js/i18n.js" defer></script>
 </head>
 
-<body>
+<body data-page="home">
     <div class="topnav">
-        <a class="active" href="/">Home</a>
-        <a href="/pubs">Publications</a>
-        <a href="/projects">Projects</a>
-        <a href="https://blog.yangspace.co.kr/" title="Blog">Blog</a>
+        <a class="active" href="/" data-i18n="common.nav.home" data-localized-link="true">Home</a>
+        <a href="/pubs" data-i18n="common.nav.publications" data-localized-link="true">Publications</a>
+        <a href="/projects" data-i18n="common.nav.projects" data-localized-link="true">Projects</a>
+        <a class="topnav-pill" href="https://blog.yangspace.co.kr/" title="Blog" data-i18n="common.nav.blog">Blog</a>
+        <div class="lang-switcher" aria-label="Language switcher">
+            <button type="button" data-lang-switch="ko">KO</button>
+            <span>|</span>
+            <button type="button" data-lang-switch="en">EN</button>
+        </div>
     </div>
 
     <!-- idea: have a javascript animated loss function converging in the header? :p -->
@@ -45,7 +51,7 @@
             </div>
             <div id="ddesc">
                 <h1>Sejong Yang</h1>
-                <h2>Learner, Developer, and Researcher</h2>
+                <h2 data-i18n="home.hero.subtitle">Learner, Developer, and Researcher</h2>
                 <div id="dico">
                     <p>
                     |
@@ -67,6 +73,7 @@
                     |
                     </p>
                 </div>
+                <button id="iemail" class="link-button" type="button" data-i18n="home.hero.showEmail">Show Email</button>
                 <div id="demail"></div>
             </div>
         </div>
@@ -75,18 +82,27 @@
     <hr style="margin-bottom: 25px;">
 
     <div class="container">
+        <section class="blog-spotlight">
+            <div class="blog-kicker" data-i18n="home.blog.kicker">From the Blog</div>
+            <h3 data-i18n="home.blog.title">A personal blog with notes, side thoughts, and unnecessary posts</h3>
+            <p class="blog-intro" data-i18n="home.blog.intro">I use the blog for loose notes, build logs, small retrospectives, and whatever else felt worth writing down that day.</p>
+            <div class="blog-actions">
+                <a class="blog-button" href="https://blog.yangspace.co.kr/" target="_blank" rel="noreferrer" data-i18n="home.blog.cta">Visit the blog</a>
+            </div>
+        </section>
+    </div>
+
+    <div class="container">
         <div class="entry row">
-            <div class="timespan">
+            <div class="timespan" data-i18n-html="home.timeline.lgai_current.timespan">
                 2026.03<br>-<br>present
             </div>
             <div class="ico">
                 <div class="entry-dot"></div>
                 <img src="assets/logos/lgresearch-logo-en.png" alt="LG AI Research" style="max-width: 160px; max-height: 40px; object-fit: contain;" />
             </div>
-            <div class="desc">
-                I am currently working as an AI Scientist at <a href="https://www.lgresearch.ai/">LG AI Research</a> (EXAONE Lab), where I contribute to the development of <a href="https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B">K-EXAONE</a> and EXAONE 4.5 for practical use in vertical domains.
-                K-EXAONE ranks 7th on the <a href="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index">Artificial Analysis Intelligence Index</a> (open weights).
-                EXAONE 4.5 is a hybrid VLM combining reasoning and non-reasoning capabilities in a single vision-language model.
+            <div class="desc" data-i18n-html="home.timeline.lgai_current.desc">
+                I am currently working as an AI Scientist at <a href="https://www.lgresearch.ai/">LG AI Research</a> (EXAONE Lab), where I contribute to the development of <a href="https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B">K-EXAONE</a> and EXAONE 4.5 for practical use in vertical domains. K-EXAONE ranks 7th on the <a href="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index">Artificial Analysis Intelligence Index</a> (open weights). EXAONE 4.5 is a hybrid VLM combining reasoning and non-reasoning capabilities in a single vision-language model.
             </div>
         </div>
 
@@ -98,60 +114,47 @@
                 <div class="entry-dot"></div>
                 <img src="assets/logos/yonsei.svg" />
             </div>
-            <div class="desc">
-                I am a Ph.D. Candidate at <a href="https://www.yonsei.ac.kr/en_sc/index.do">Yonsei University</a>,
-                supervised by Prof. <a href="https://sites.google.com/site/seonjookim/">Seon Joo Kim</a>.
-                As a Ph.D student, my main research focus is in face modeling with
-                generative models(VAE, GAN, Normalizing Flows, Diffusion Models),
-                3D model(3DMM, Neural Renderer, NeRF), and
-                multi-modal representation(visual-audio, visual-text).
+            <div class="desc" data-i18n-html="home.timeline.yonsei_phd.desc">
+                I am a Ph.D. Candidate at <a href="https://www.yonsei.ac.kr/en_sc/index.do">Yonsei University</a>, supervised by Prof. <a href="https://sites.google.com/site/seonjookim/">Seon Joo Kim</a>. As a Ph.D student, my main research focus is in face modeling with generative models(VAE, GAN, Normalizing Flows, Diffusion Models), 3D model(3DMM, Neural Renderer, NeRF), and multi-modal representation(visual-audio, visual-text).
             </div>
         </div>
 
         <div class="entry row">
-            <div class="timespan" style="color: white">
+            <div class="timespan timespan-hidden" data-i18n-html="home.timeline.lgai_intern.timespan">
                 2025.11<br>-<br>2026.02
             </div>
             <div class="ico">
                 <div class="entry-dot"></div>
                 <img src="assets/logos/lgresearch-logo-en.png" alt="LG AI Research" style="max-width: 160px; max-height: 40px; object-fit: contain;" />
             </div>
-            <div class="desc">
-                I worked as an AI Scientist Intern at <a href="https://www.lgresearch.ai/">LG AI Research</a> (EXAONE Lab) in Seoul, South Korea, where I took a goal-driven approach to data engineering for a Video LLM with fine-grained perception—focusing on delivering reliable, scalable pipelines and measurable progress toward model-ready data rather than over-optimizing for a specific method.
+            <div class="desc" data-i18n-html="home.timeline.lgai_intern.desc">
+                I worked as an AI Scientist Intern at <a href="https://www.lgresearch.ai/">LG AI Research</a> (EXAONE Lab) in Seoul, South Korea, where I took a goal-driven approach to data engineering for a Video LLM with fine-grained perception, focusing on delivering reliable, scalable pipelines and measurable progress toward model-ready data rather than over-optimizing for a specific method.
             </div>
         </div>
 
         <div class="entry row">
-            <div class="timespan" style="color: white">
+            <div class="timespan timespan-hidden" data-i18n-html="home.timeline.adobe.timespan">
                 2023.05<br>-<br>2023.08
             </div>
             <div class="ico">
                 <img src="assets/logos/adobe.svg"
                     style="margin-top: 10px; margin-bottom: 10px;" />
             </div>
-            <div class="desc">
-                I was fortunate to be research scientist intern at <a href="https://www.adobe.com/">Adobe Research</a> in 2023 Summer at San Jose, California
-                to solve the arbitrary talking head generation including human, animal, cartoon and pareidoliaface with StableDiffusion
-                with my wonderful mentors 
-                    <a href="https://yzhou359.github.io/">Yang Zhou</a>,
-                    <a href="https://sites.google.com/view/seoungwugoh/">Seoung Wug Oh</a>,
-                    <a href="https://research.adobe.com/person/cameron-smith/">Cameron Smith</a> and,
-                    <a href="https://research.adobe.com/person/deepali-aneja/">Deepali Aneja</a>.
-                Check projects tab for more information.
+            <div class="desc" data-i18n-html="home.timeline.adobe.desc">
+                I was fortunate to be research scientist intern at <a href="https://www.adobe.com/">Adobe Research</a> in 2023 Summer at San Jose, California to solve the arbitrary talking head generation including human, animal, cartoon and pareidoliaface with StableDiffusion with my wonderful mentors <a href="https://yzhou359.github.io/">Yang Zhou</a>, <a href="https://sites.google.com/view/seoungwugoh/">Seoung Wug Oh</a>, <a href="https://research.adobe.com/person/cameron-smith/">Cameron Smith</a> and <a href="https://research.adobe.com/person/deepali-aneja/">Deepali Aneja</a>. Check projects tab for more information.
             </div>
         </div>
 
         <div class="entry row">
-            <div class="timespan" style="color: white">
+            <div class="timespan timespan-hidden" data-i18n-html="home.timeline.naver.timespan">
                 2020.06<br>-<br>2020.08
             </div>
             <div class="ico">
                 <img src="assets/logos/naver.svg"
                     style="margin-top: 10px; margin-bottom: 10px;" />
             </div>
-            <div class="desc">
-                I have internship experience at <a href="https://www.navercorp.com/">NAVER</a> in 2020 Summer
-                to participate machine learning challenge named <a href="https://campaign.naver.com/clova_airush/">AI Rush</a>.
+            <div class="desc" data-i18n-html="home.timeline.naver.desc">
+                I have internship experience at <a href="https://www.navercorp.com/">NAVER</a> in 2020 Summer to participate machine learning challenge named <a href="https://campaign.naver.com/clova_airush/">AI Rush</a>.
             </div>
         </div>
 
@@ -163,24 +166,20 @@
                 <div class="entry-dot"></div>
                 <img src="assets/logos/yonsei.svg" />
             </div>
-            <div class="desc">
-                As an undergraduate intern in the lab of Seon Joo Kim(My Ph.D. advisor),
-                I try to find video highlights in baseball games automatically with video summarization methods.
+            <div class="desc" data-i18n-html="home.timeline.yonsei_undergrad_intern.desc">
+                As an undergraduate intern in the lab of Seon Joo Kim(My Ph.D. advisor), I try to find video highlights in baseball games automatically with video summarization methods.
             </div>
         </div>
 
         <div class="entry row">
-            <div class="timespan" style="color: white">
+            <div class="timespan timespan-hidden" data-i18n-html="home.timeline.blammedia.timespan">
                 2018.07<br>-<br>2019.08
             </div>
             <div class="ico">
                 <img src="assets/logos/blammedia.ico" />
             </div>
-            <div class="desc">
-                I engage in the start-up <a href="https://blammedia.github.io/">Blammedia</a> as a CTO in 2019.
-                We got the preliminary start-up package investment worth 30M won
-                from the Korea Institute of Startup and Entrepreneurship Development.
-                I learn the market value of technology and product by meeting with venture capitalists.
+            <div class="desc" data-i18n-html="home.timeline.blammedia.desc">
+                I engage in the start-up <a href="https://blammedia.github.io/">Blammedia</a> as a CTO in 2019. We got the preliminary start-up package investment worth 30M won from the Korea Institute of Startup and Entrepreneurship Development. I learn the market value of technology and product by meeting with venture capitalists.
             </div>
         </div>
 
@@ -193,10 +192,8 @@
                 <img
                     src="assets/logos/uppsala.svg" />
             </div>
-            <div class="desc">
-                I spent a wonderful spring semester as an exchange student at
-                <a href="https://www.uu.se/en">Uppsala University</a> in 2018.
-                Learning computer science in different culture was a great experience.
+            <div class="desc" data-i18n-html="home.timeline.uppsala.desc">
+                I spent a wonderful spring semester as an exchange student at <a href="https://www.uu.se/en">Uppsala University</a> in 2018. Learning computer science in different culture was a great experience.
             </div>
         </div>
         <div class="entry row">
@@ -208,23 +205,8 @@
                 <img
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABcCAMAAADUMSJqAAAAdVBMVEX0oBr////zmQDzlwDzmwD+9eb+9+rykwDykQD0nxH//vn1qkb//fb979fyjAD///350qH62rL737z858r979z3vHL1rEz2tGD0nyH74sX1qD761aj2uGj1rlXxiAD4yIz3wnz0oC/5zZj4w4T0oT35z4v1smpBSEBMAAACGElEQVRoge2U25LbIBBEaQaQkNAFXSwsW+vbJv//iRm8dp7sVF62koc55UKoC7VwzyClBEEQBEEQBEEQhP8a0sZ/l7fuXXX8JneKgDsW9Ed7QwUZ5bXO88fo+b74es5rIu0f63jhU/Clw/ZRjpjz46/x6bQfxxvVMXplzvFglLnFmXZxHIeFlM6TuGmljwMrs3kKu6HrhiE1GONwfuceAP7tL8DqaQKSJ4t5AdAB1+KMO7ei53UVXPkUjvfLZ5PHSC+t9RV2TQuq7GiSAxZzCeAN7eu1RygshnWNcB8OM112828hLaGbF2pw3Zb6de5clUPrb+hoQCxqWPS0wXKeR+01qotDbczadaXFdKoLUg4rC6g8BZ4VDb/zXUOyOf9ZoC9PmNoZP7qxPWHf8j45fFSfDjvv16ozG4cHt9BdqLvK64DaZ/N3gWdzN8brhXg9ygG7gHbEOe/8aV5nc3hTbD2nxsmtLPyVue6x/2hLnRRv6acNXNItdCsney2LXArHteSqBlp10ZZcQfsQzNP8VL5rdb8CtpncgYjLh6a88jhpfiemqcNYxjzhfmitmxrH1Tg8BDLZnPKt7V93C7fvFKrgTlqlqXKbUTxyItTbULnoveFJsAdD0bEwXLw5fAnKT5a7xLAe3pnzwUsp6fvJS8o8Rn6pThzVY5LPbb6mHMBTUN7nOLRP6ds+X4IgCIIgCIIgCILwL/kF6WEgEL+F/FAAAAAASUVORK5CYII=" />
             </div>
-            <div class="desc">
-                At <a href="https://www.ewoosoft.com/">Ewoosoft</a>, I participate as a developer of
-                <a href="https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&hl=en">EzMobile</a>, <a
-                    href="https://www.ewoosoft.com/ez3d_i">Ez3D-i</a>.
-                I learn how to use
-                <a href="https://dotnet.microsoft.com/en-us/apps/xamarin">Xamarin.Forms</a>,
-                <a href="https://doc.qt.io/qt-5/qt5-intro.html">Qt5</a>, and
-                <a href="https://flask.palletsprojects.com/en/2.2.x/">Flask</a>
-                for developing the enterprise-level product.
-                I also become familiar with collaboration/devops tools like
-                <a href="https://www.atlassian.com/software/jira">Jira</a>,
-                <a href="https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html">Atlassian</a>,
-                <a href="https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html">Crucible and
-                    Fisheye</a>,
-                <a href="https://github.com/">Github</a>, and
-                <a href="https://circleci.com/migrate-jenkins-to-circleci/">Jenkins</a>
-                with <a href="https://en.wikipedia.org/wiki/Waterfall_model">the waterfall development model</a>.
+            <div class="desc" data-i18n-html="home.timeline.ewoosoft.desc">
+                At <a href="https://www.ewoosoft.com/">Ewoosoft</a>, I participate as a developer of <a href="https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&hl=en">EzMobile</a>, <a href="https://www.ewoosoft.com/ez3d_i">Ez3D-i</a>. I learn how to use <a href="https://dotnet.microsoft.com/en-us/apps/xamarin">Xamarin.Forms</a>, <a href="https://doc.qt.io/qt-5/qt5-intro.html">Qt5</a>, and <a href="https://flask.palletsprojects.com/en/2.2.x/">Flask</a> for developing the enterprise-level product. I also become familiar with collaboration/devops tools like <a href="https://www.atlassian.com/software/jira">Jira</a>, <a href="https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html">Atlassian</a>, <a href="https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html">Crucible and Fisheye</a>, <a href="https://github.com/">Github</a>, and <a href="https://circleci.com/migrate-jenkins-to-circleci/">Jenkins</a> with <a href="https://en.wikipedia.org/wiki/Waterfall_model">the waterfall development model</a>.
             </div>
         </div>
         <div class="entry row">
@@ -236,11 +218,8 @@
                 <img src="assets/logos/kakao.svg"
                     style="margin-top: 10px; margin-bottom: 10px;" />
             </div>
-            <div class="desc">
-                I have software assistant experience at <a href="https://www.kakaocorp.com/page/">Kakao</a> in 2016
-                developing a component for <a href="https://www.openstack.org/">openstack</a>.
-                In the experience, I learn the basics of the network, virtualization, and cloud computing from the
-                experience.
+            <div class="desc" data-i18n-html="home.timeline.kakao.desc">
+                I have software assistant experience at <a href="https://www.kakaocorp.com/page/">Kakao</a> in 2016 developing a component for <a href="https://www.openstack.org/">openstack</a>. In the experience, I learn the basics of the network, virtualization, and cloud computing from the experience.
             </div>
         </div>
         <div class="entry row">
@@ -252,19 +231,14 @@
                 <img
                     src="assets/logos/yonsei.svg" />
             </div>
-            <div class="desc">
-                BEng at <a href='https://www.yonsei.ac.kr/en_sc/index.do'>Yonsei University</a>.
-                This is the place where I know what is "coding" for the first time,
-                and I managed to get a degree in computer science from it in the end.
-                As an undergraduate intern in the lab of Seon Joo Kim(My Ph.D. advisor),
-                I conducted for collecting and purifying data for color constancy task with
-                the hyespectral camera.
+            <div class="desc" data-i18n-html="home.timeline.yonsei_beng.desc">
+                BEng at <a href='https://www.yonsei.ac.kr/en_sc/index.do'>Yonsei University</a>. This is the place where I know what is "coding" for the first time, and I managed to get a degree in computer science from it in the end. As an undergraduate intern in the lab of Seon Joo Kim(My Ph.D. advisor), I conducted for collecting and purifying data for color constancy task with the hyespectral camera.
             </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="ctitle">Selected Publications and Projects</div>
+        <div class="ctitle" data-i18n="home.sections.selected">Selected Publications and Projects</div>
 
         <div class="pub">
             <div class="pub-title">IF-MDM: Implicit Face Motion Diffusion Model for High-Fidelity Realtime Talking Head Generation</div>
@@ -275,11 +249,11 @@
                 Seoung Wug Oh, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="home.selected.ifmdm.links">
                 [<a href="https://arxiv.org/abs/2412.04000">paper</a>]
                 [<a href="https://bit.ly/ifmdm_supplementary">supplementary for videos</a>]
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/pub_ifmdm.png" class="pub-image" />
             </div>
         </div>
@@ -294,10 +268,10 @@
                 Cameron Smith, and
                 Deepali Aneja.
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_diff.png" class="pub-image" />
             </div>
-            <div>
+            <div data-i18n-html="home.selected.diff.links">
                 [<a href="https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa">Technical Report</a>]
                 [<a href="https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo">Google Presentation</a>]
             </div>
@@ -312,10 +286,10 @@
                 Yang Zhou, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div class="pub-media">
                 <img src="assets/proj_thmm_dit.gif" class="pub-image" />
             </div>
-            <div>
+            <div data-i18n-html="home.selected.thmm.links">
                 [<a href="https://openreview.net/forum?id=6nNO2iscsQL">Technical Report</a>]
                 [<a href="https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk">Google Presentation</a>]
             </div>
@@ -330,7 +304,7 @@
                 Seonghyeon Nam, and
                 Seon Joo Kim.
             </div>
-            <div>
+            <div data-i18n-html="home.selected.dife.links">
                 [<a href="https://openreview.net/forum?id=m67FNFdgLO9">paper</a>]
                 [<a href="https://github.com/kingsj0405/DIFE">code</a>]
                 [<a href="https://yangspace.co.kr/dife/">project page</a>]
@@ -353,17 +327,15 @@
     </div>
 
     <div class="container">
-        <div class="ctitle">Miscellanies</div>
+        <div class="ctitle" data-i18n="home.sections.misc">Miscellanies</div>
         <ul style="padding-left: 10px;">
-            <li>
-                I enjoy <b>buying</b> many kinds of steam games.
-                <br>
-                <img src="assets/gabe_logal_newell.jpg" style="max-width:100%; max-height:300px;" />
+            <li data-i18n-html="home.misc.games">
+                I enjoy <b>buying</b> many kinds of steam games.<br><img src="assets/gabe_logal_newell.jpg" class="pub-image" />
             </li>
-            <li>
+            <li data-i18n="home.misc.books">
                 I enjoy reading various genres of books.
             </li>
-            <li>
+            <li data-i18n="home.misc.piano">
                 I enjoy playing the piano for various genres of music.
             </li>
         </ul>
@@ -371,49 +343,12 @@
 
     <footer>
         <div>
-            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. Hosted by
+            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>. <span data-i18n="common.footer.hostedBy">Hosted by</span>
             <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
             <br>
             <div id="last_update"> </div>
         </div>
     </footer>
-
-
-    <script type="text/javascript">
-        // attempt hiding email information from spambots
-        var e_is_shown = false;
-        document.getElementById('iemail').addEventListener("click", function () {
-            let demail = document.getElementById('demail');
-            demail.innerHTML = 'sejong.yang@yonsei.ac.kr';
-            demail.style.opacity = e_is_shown ? 0 : 1;
-            e_is_shown = !e_is_shown;
-        })
-        // automatically set footer information
-        document.getElementById("cr_title").innerHTML = document.title;
-        var dd = new Date()
-        document.getElementById("cr_end").innerHTML = dd.getUTCFullYear();
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let repos = JSON.parse(this.responseText);
-                repos.forEach((repo) => {
-                    if (repo.name == "kingsj0405.github.io") {
-                        // console.log(repo)
-                        var lastUpdated = new Date(repo.pushed_at).toLocaleString("ko-KR", {
-                            timeZone: "Asia/Seoul", day: "2-digit", month: "short", year: "numeric",
-                            hour: "2-digit", minute: "2-digit", timeZoneName: "short"
-                        });
-                        document.getElementById("last_update").innerHTML = 'Last updated: ' + lastUpdated
-                        var createDate = new Date(repo.created_at);
-                        document.getElementById("cr_from").innerHTML = createDate.getUTCFullYear();
-                    }
-                });
-            }
-        };
-        xhttp.open("GET", "https://api.github.com/users/kingsj0405/repos", true);
-        xhttp.send();
-
-    </script>
 </body>
 
 </html>

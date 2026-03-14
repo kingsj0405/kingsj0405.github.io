@@ -1,0 +1,178 @@
+{
+  "lang": "en",
+  "common": {
+    "nav": {
+      "home": "Home",
+      "publications": "Publications",
+      "projects": "Projects",
+      "blog": "Blog"
+    },
+    "footer": {
+      "hostedBy": "Hosted by",
+      "lastUpdated": "Last updated"
+    }
+  },
+  "home": {
+    "meta": {
+      "title": "Sejong Yang",
+      "ogTitle": "Sejong Yang's Homepage (YangSpace)",
+      "description": "Sejong Yang's homepage: learner, developer, and researcher."
+    },
+    "hero": {
+      "subtitle": "Learner, Developer, and Researcher",
+      "showEmail": "Show Email",
+      "hideEmail": "Hide Email"
+    },
+    "blog": {
+      "kicker": "From the Blog",
+      "title": "A personal blog with notes, side thoughts, and unnecessary posts",
+      "intro": "I use the blog for loose notes, build logs, small retrospectives, and whatever else felt worth writing down that day.",
+      "cta": "Visit the blog"
+    },
+    "timeline": {
+      "lgai_current": {
+        "timespan": "2026.03<br>-<br>present",
+        "desc": "I am currently working as an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), where I contribute to the development of <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a> and EXAONE 4.5 for practical use in vertical domains. K-EXAONE ranks 7th on the <a href=\"https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index\">Artificial Analysis Intelligence Index</a> (open weights). EXAONE 4.5 is a hybrid VLM combining reasoning and non-reasoning capabilities in a single vision-language model."
+      },
+      "yonsei_phd": {
+        "desc": "I am a Ph.D. Candidate at <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a>, supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. As a Ph.D student, my main research focus is in face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."
+      },
+      "lgai_intern": {
+        "timespan": "2025.11<br>-<br>2026.02",
+        "desc": "I worked as an AI Scientist Intern at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab) in Seoul, South Korea, where I took a goal-driven approach to data engineering for a Video LLM with fine-grained perception, focusing on reliable, scalable pipelines and measurable progress toward model-ready data."
+      },
+      "adobe": {
+        "timespan": "2023.05<br>-<br>2023.08",
+        "desc": "I was a research scientist intern at <a href=\"https://www.adobe.com/\">Adobe Research</a> in San Jose, California, in summer 2023, working on arbitrary talking head generation across humans, animals, cartoons, and pareidolia faces with Stable Diffusion. I was fortunate to work with <a href=\"https://yzhou359.github.io/\">Yang Zhou</a>, <a href=\"https://sites.google.com/view/seoungwugoh/\">Seoung Wug Oh</a>, <a href=\"https://research.adobe.com/person/cameron-smith/\">Cameron Smith</a>, and <a href=\"https://research.adobe.com/person/deepali-aneja/\">Deepali Aneja</a>. Check the projects tab for more information."
+      },
+      "naver": {
+        "timespan": "2020.06<br>-<br>2020.08",
+        "desc": "I interned at <a href=\"https://www.navercorp.com/\">NAVER</a> in summer 2020 and participated in the machine learning challenge <a href=\"https://campaign.naver.com/clova_airush/\">AI Rush</a>."
+      },
+      "yonsei_undergrad_intern": {
+        "desc": "As an undergraduate intern in Seon Joo Kim's lab, I worked on automatically finding baseball game highlights with video summarization methods."
+      },
+      "blammedia": {
+        "timespan": "2018.07<br>-<br>2019.08",
+        "desc": "I joined the startup <a href=\"https://blammedia.github.io/\">Blammedia</a> as CTO in 2019. We received a preliminary startup package investment worth KRW 30M from the Korea Institute of Startup and Entrepreneurship Development, and I learned the market value of technology and product through meetings with venture capitalists."
+      },
+      "uppsala": {
+        "desc": "I spent a spring semester in 2018 as an exchange student at <a href=\"https://www.uu.se/en\">Uppsala University</a>. Studying computer science in a different culture was a great experience."
+      },
+      "ewoosoft": {
+        "desc": "At <a href=\"https://www.ewoosoft.com/\">Ewoosoft</a>, I worked on <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a> and <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a> as a developer. I learned how to use <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, and <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a> for enterprise products, along with collaboration and DevOps tools such as <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, and <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> in a waterfall development environment."
+      },
+      "kakao": {
+        "desc": "I worked as a software assistant at <a href=\"https://www.kakaocorp.com/page/\">Kakao</a> in 2016, developing a component for <a href=\"https://www.openstack.org/\">OpenStack</a>. Through that experience, I learned the basics of networking, virtualization, and cloud computing."
+      },
+      "yonsei_beng": {
+        "desc": "I earned my BEng at <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a>. It was where I first learned what coding was, and where I ultimately completed my computer science degree. As an undergraduate intern in Seon Joo Kim's lab, I also worked on collecting and refining data for a color constancy task with a hyperspectral camera."
+      }
+    },
+    "sections": {
+      "selected": "Selected Publications and Projects",
+      "misc": "Miscellanies"
+    },
+    "selected": {
+      "ifmdm": {
+        "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">paper</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">supplementary videos</a>]"
+      },
+      "diff": {
+        "links": "[<a href=\"https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa\">technical report</a>] [<a href=\"https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo\">Google presentation</a>]"
+      },
+      "thmm": {
+        "links": "[<a href=\"https://openreview.net/forum?id=6nNO2iscsQL\">technical report</a>] [<a href=\"https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk\">Google presentation</a>]"
+      },
+      "dife": {
+        "links": "[<a href=\"https://openreview.net/forum?id=m67FNFdgLO9\">paper</a>] [<a href=\"https://github.com/kingsj0405/DIFE\">code</a>] [<a href=\"https://yangspace.co.kr/dife/\">project page</a>]"
+      }
+    },
+    "misc": {
+      "games": "I enjoy <b>buying</b> many kinds of Steam games.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" />",
+      "books": "I enjoy reading books across many genres.",
+      "piano": "I enjoy playing the piano across many genres of music."
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "Projects | Sejong Yang",
+      "ogTitle": "Projects | Sejong Yang",
+      "description": "Research and engineering projects by Sejong Yang."
+    },
+    "sections": {
+      "research": "Research Projects",
+      "engineering": "Engineering Projects"
+    },
+    "research": {
+      "diff": {
+        "links": "[<a href=\"https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa\">technical report</a>] [<a href=\"https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo\">Google presentation</a>]"
+      },
+      "thmm": {
+        "links": "[<a href=\"https://openreview.net/forum?id=6nNO2iscsQL\">technical report</a>] [<a href=\"https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk\">Google presentation</a>]"
+      },
+      "portrait": {
+        "desc": "<p>- Reproduced <a href=\"https://arxiv.org/abs/2004.11598\">Deep3dPortrait</a> as a baseline<br>- Improved expression manipulation and speed with a state-of-the-art 3DMM model<br>- Funded by Samsung Research</p>"
+      },
+      "deepfake": {
+        "desc": "<p>- Reproduced <a href=\"https://arxiv.org/abs/1808.08396\">Noiseprint</a> for blind deepfake detection<br>- Tried multiple classification models including ResNet+RNN, C3D, and I3D<br>- Funded by NIS</p>"
+      },
+      "ssn": {
+        "desc": "<p>- Investigated efficient sampling for large 3D point clouds<br>- Explored classification, registration, and restoration settings<br>- Tried unsupervised importance scoring similar to pruning<br>- Stopped because there was no sufficiently concrete optimization criterion such as a reliable weight norm signal</p>"
+      },
+      "srpruning": {
+        "links": "[<a href=\"https://github.com/kingsj0405/SRPruning\">code</a>]",
+        "desc": "<p>- Network pruning for super resolution<br>- Explored lottery ticket behavior in decoders (<a href=\"https://velog.io/@bismute/The-Lottery-Ticket-Hypothesis%EC%99%80-%EA%B7%B8-%ED%9B%84%EC%86%8D-%EC%97%B0%EA%B5%AC%EB%93%A4-%EB%A6%AC%EB%B7%B0\">Korean blog article</a>)<br>- Evaluated VDSR, MSRResNet, CARN, SRDenseNet, RDN, RRDB, and RCAN<br>- Compared against SNIP, GraSP, and SynFlow</p>"
+      },
+      "ocr": {
+        "links": "[<a href=\"https://youtu.be/jjAswMaWJKI\">demo video</a>]"
+      },
+      "faceaging": {
+        "links": "[<a href=\"https://youtu.be/nmukIcs4bmY\">demo video</a>] [<a href=\"https://github.com/kingsj0405/Face-Aging-CAAE\">code</a>]"
+      }
+    },
+    "engineering": {
+      "landmark": {
+        "links": "[<a href=\"https://www.notion.so/kingsj0405/Dacon-Landmark-Classification-102615b6b9044980a6fc0caac4c4cfcf\">Notion</a>]",
+        "desc": "<p>- Image classification with landmark location labels<br>- Tried multiple models including EfficientNet, ResNet, ResNeXt, and MoCo v2<br>- Won event prize money for sharing the code</p>"
+      },
+      "spam": {
+        "links": "[<a href=\"https://github.com/kingsj0405/SRPruning\">code</a>]",
+        "desc": "<p>- Participated in <a href=\"https://campaign.naver.com/airush/\">NAVER AI Rush 2020</a> round 1<br>- Advanced to the next round with rank 23<br>- Tried multiple classification models such as ResNet and EfficientNet<br>- Explored focal loss, label smoothing, and temperature scaling for imbalance<br>- Compared optimizers and schedulers such as RAdam and CosineLRScheduler</p>"
+      },
+      "blog": {
+        "links": "[<a href=\"https://github.com/kingsj0405/yangspace_v3\">code</a>]",
+        "desc": "<p>A Django-based blog inspired by <a href=\"https://www.atlassian.com/ko/software/confluence\">Confluence</a>.</p>"
+      },
+      "doughsam": {
+        "desc": "<p>Django-based Yonsei University class schedule management web service<br>- Crawled class schedules and mileage history from the Yonsei University database<br>- Built a schedule editor similar to <a href=\"https://everytime.kr/\">Everytime</a></p>"
+      },
+      "jinglebell": {
+        "desc": "<p>Glove-hand recognition with OpenCV<br>Jingle Bell plays when the hands are placed over each bell on the screen</p>"
+      }
+    }
+  },
+  "pubs": {
+    "meta": {
+      "title": "Publications | Sejong Yang",
+      "ogTitle": "Publications | Sejong Yang",
+      "description": "Selected publications by Sejong Yang."
+    },
+    "sections": {
+      "title": "Publications"
+    },
+    "items": {
+      "ifmdm": {
+        "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">paper</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">supplementary videos</a>]"
+      },
+      "dife": {
+        "links": "[<a href=\"https://openreview.net/forum?id=m67FNFdgLO9\">paper</a>] [<a href=\"https://github.com/kingsj0405/DIFE\">code</a>] [<a href=\"https://yangspace.co.kr/dife/\">project page</a>]"
+      },
+      "srflow": {
+        "links": "[<a href=\"https://openaccess.thecvf.com/content/CVPR2021W/NTIRE/papers/Jo_SRFlow-DA_Super-Resolution_Using_Normalizing_Flow_With_Deep_Convolutional_Block_CVPRW_2021_paper.pdf\">paper</a>] [<a href=\"https://github.com/yhjo09/SRFlow-DA\">code</a>]"
+      },
+      "esr": {
+        "links": "[<a href=\"https://openaccess.thecvf.com/content_CVPRW_2020/papers/w31/Jo_Investigating_Loss_Functions_for_Extreme_Super-Resolution_CVPRW_2020_paper.pdf\">paper</a>] [<a href=\"https://github.com/kingsj0405/ciplab-NTIRE-2020\">code</a>]"
+      }
+    }
+  }
+}
