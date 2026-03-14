@@ -1,0 +1,178 @@
+{
+  "lang": "ko",
+  "common": {
+    "nav": {
+      "home": "홈",
+      "publications": "논문",
+      "projects": "프로젝트",
+      "blog": "블로그"
+    },
+    "footer": {
+      "hostedBy": "호스팅:",
+      "lastUpdated": "마지막 업데이트"
+    }
+  },
+  "home": {
+    "meta": {
+      "title": "양세종",
+      "ogTitle": "양세종 홈페이지 (YangSpace)",
+      "description": "양세종의 홈페이지: 연구자, 개발자, 그리고 학습자."
+    },
+    "hero": {
+      "subtitle": "배우고 만들고 연구합니다",
+      "showEmail": "이메일 보기",
+      "hideEmail": "이메일 숨기기"
+    },
+    "blog": {
+      "kicker": "블로그 홍보",
+      "title": "메모, 잡생각, 그리고 굳이 안 써도 되는 글들이 올라오는 개인 블로그",
+      "intro": "블로그에는 가벼운 메모, 작업 기록, 짧은 회고, 그리고 그날 그냥 적어두고 싶었던 것들을 올립니다.",
+      "cta": "블로그 보러 가기"
+    },
+    "timeline": {
+      "lgai_current": {
+        "timespan": "2026.03<br>-<br>현재",
+        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 일하고 있습니다. 현재 <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a>과 EXAONE 4.5를 실제 버티컬 도메인에 적용하기 위한 개발에 참여하고 있습니다. K-EXAONE은 공개 가중치 기준 <a href=\"https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index\">Artificial Analysis Intelligence Index</a> 7위를 기록했고, EXAONE 4.5는 reasoning과 non-reasoning을 하나의 비전언어모델에 결합한 하이브리드 VLM입니다."
+      },
+      "yonsei_phd": {
+        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 <a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 지도 아래 박사과정을 마쳤습니다. 박사과정 동안 생성모델(VAE, GAN, Normalizing Flow, Diffusion)을 활용한 얼굴 모델링, 3D 모델(3DMM, Neural Renderer, NeRF), 그리고 시각-오디오 및 시각-텍스트 기반 멀티모달 표현 학습을 중심으로 연구했습니다."
+      },
+      "lgai_intern": {
+        "timespan": "2025.11<br>-<br>2026.02",
+        "desc": "서울의 <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist Intern으로 일했습니다. 세밀한 인지가 필요한 Video LLM을 위해 특정 방법론 자체보다 모델 학습에 바로 투입할 수 있는 신뢰성 있고 확장 가능한 데이터 파이프라인과 측정 가능한 진척을 만드는 데 집중했습니다."
+      },
+      "adobe": {
+        "timespan": "2023.05<br>-<br>2023.08",
+        "desc": "2023년 여름 미국 San Jose의 <a href=\"https://www.adobe.com/\">Adobe Research</a>에서 Research Scientist Intern으로 근무했습니다. 사람, 동물, 만화, 파레이돌리아 얼굴까지 포함하는 arbitrary talking head generation 문제를 Stable Diffusion 기반으로 다뤘고, <a href=\"https://yzhou359.github.io/\">Yang Zhou</a>, <a href=\"https://sites.google.com/view/seoungwugoh/\">Seoung Wug Oh</a>, <a href=\"https://research.adobe.com/person/cameron-smith/\">Cameron Smith</a>, <a href=\"https://research.adobe.com/person/deepali-aneja/\">Deepali Aneja</a>와 함께 일했습니다. 자세한 내용은 projects 탭에 정리되어 있습니다."
+      },
+      "naver": {
+        "timespan": "2020.06<br>-<br>2020.08",
+        "desc": "2020년 여름 <a href=\"https://www.navercorp.com/\">NAVER</a>에서 인턴으로 일하며 머신러닝 대회 <a href=\"https://campaign.naver.com/clova_airush/\">AI Rush</a>에 참여했습니다."
+      },
+      "yonsei_undergrad_intern": {
+        "desc": "학부연구생 시절 김선주 교수님 연구실에서 비디오 요약 기법을 활용해 야구 경기 하이라이트를 자동으로 찾는 연구를 진행했습니다."
+      },
+      "blammedia": {
+        "timespan": "2018.07<br>-<br>2019.08",
+        "desc": "2019년에 스타트업 <a href=\"https://blammedia.github.io/\">Blammedia</a>에서 CTO로 활동했습니다. 한국창업진흥원 예비창업패키지로 3천만 원 규모의 투자를 받았고, 벤처캐피털과의 미팅을 통해 기술과 제품의 시장 가치를 배웠습니다."
+      },
+      "uppsala": {
+        "desc": "2018년 봄학기에는 <a href=\"https://www.uu.se/en\">Uppsala University</a>에서 교환학생으로 지냈습니다. 다른 문화권에서 컴퓨터과학을 공부한 경험이 매우 인상적이었습니다."
+      },
+      "ewoosoft": {
+        "desc": "<a href=\"https://www.ewoosoft.com/\">Ewoosoft</a>에서 <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a>과 <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a> 개발에 참여했습니다. 이 과정에서 <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a>를 이용한 엔터프라이즈 제품 개발을 익혔고, <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> 등 협업/DevOps 도구도 함께 경험했습니다."
+      },
+      "kakao": {
+        "desc": "2016년에는 <a href=\"https://www.kakaocorp.com/page/\">Kakao</a>에서 software assistant로 근무하며 <a href=\"https://www.openstack.org/\">OpenStack</a>용 컴포넌트를 개발했습니다. 이를 통해 네트워크, 가상화, 클라우드 컴퓨팅의 기초를 익혔습니다."
+      },
+      "yonsei_beng": {
+        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 학사 학위를 받았습니다. 처음으로 '코딩'이 무엇인지 알게 된 곳이었고, 결국 그곳에서 학위를 마쳤습니다. 또한 학부연구생으로서 초분광 카메라를 활용한 color constancy 데이터 수집 및 정제 작업도 수행했습니다."
+      }
+    },
+    "sections": {
+      "selected": "대표 논문 및 프로젝트",
+      "misc": "기타"
+    },
+    "selected": {
+      "ifmdm": {
+        "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">논문</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">보충 영상</a>]"
+      },
+      "diff": {
+        "links": "[<a href=\"https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa\">기술 보고서</a>] [<a href=\"https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo\">구글 발표자료</a>]"
+      },
+      "thmm": {
+        "links": "[<a href=\"https://openreview.net/forum?id=6nNO2iscsQL\">기술 보고서</a>] [<a href=\"https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk\">구글 발표자료</a>]"
+      },
+      "dife": {
+        "links": "[<a href=\"https://openreview.net/forum?id=m67FNFdgLO9\">논문</a>] [<a href=\"https://github.com/kingsj0405/DIFE\">코드</a>] [<a href=\"https://yangspace.co.kr/dife/\">프로젝트 페이지</a>]"
+      }
+    },
+    "misc": {
+      "games": "여러 종류의 Steam 게임을 <b>사는 것</b>을 좋아합니다.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" />",
+      "books": "여러 장르의 책을 읽는 것을 좋아합니다.",
+      "piano": "여러 장르의 음악을 피아노로 연주하는 것을 좋아합니다."
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "프로젝트 | 양세종",
+      "ogTitle": "프로젝트 | 양세종",
+      "description": "양세종의 연구 및 엔지니어링 프로젝트."
+    },
+    "sections": {
+      "research": "연구 프로젝트",
+      "engineering": "엔지니어링 프로젝트"
+    },
+    "research": {
+      "diff": {
+        "links": "[<a href=\"https://drive.google.com/file/d/1c16nwpJDdNMxjo1DaYs8aQxt5Y6ic0Sa\">기술 보고서</a>] [<a href=\"https://docs.google.com/presentation/d/1DgqChQfYUq6q-PzcvZ7uGaZU3CYtSdAc0ymmF8WDGlo\">구글 발표자료</a>]"
+      },
+      "thmm": {
+        "links": "[<a href=\"https://openreview.net/forum?id=6nNO2iscsQL\">기술 보고서</a>] [<a href=\"https://docs.google.com/presentation/d/1mDKLJlungPYJEK7jARTxneJoeNtD8T485c9YvLBQpSk\">구글 발표자료</a>]"
+      },
+      "portrait": {
+        "desc": "<p>- <a href=\"https://arxiv.org/abs/2004.11598\">Deep3dPortrait</a>를 베이스라인으로 재현<br>- 최신 3DMM 모델로 표정 조작 품질과 속도 개선<br>- Samsung Research 지원</p>"
+      },
+      "deepfake": {
+        "desc": "<p>- 블라인드 딥페이크 탐지를 위해 <a href=\"https://arxiv.org/abs/1808.08396\">Noiseprint</a> 재현<br>- ResNet+RNN, C3D, I3D 등 다양한 분류 모델 실험<br>- NIS 지원</p>"
+      },
+      "ssn": {
+        "desc": "<p>- 대규모 3D 포인트클라우드 샘플링 문제를 다룸<br>- Classification, Registration, Restoration 설정을 효율적으로 검토<br>- pruning과 유사한 중요도 점수의 비지도 학습 시도<br>- 신뢰할 만한 기준(weight norm 등)이 부족해 중단</p>"
+      },
+      "srpruning": {
+        "links": "[<a href=\"https://github.com/kingsj0405/SRPruning\">코드</a>]",
+        "desc": "<p>- 초해상도용 네트워크 프루닝<br>- Decoder에서의 Lottery Ticket 현상 분석 (<a href=\"https://velog.io/@bismute/The-Lottery-Ticket-Hypothesis%EC%99%80-%EA%B7%B8-%ED%9B%84%EC%86%8D-%EC%97%B0%EA%B5%AC%EB%93%A4-%EB%A6%AC%EB%B7%B0\">한국어 블로그 글</a>)<br>- VDSR, MSRResNet, CARN, SRDenseNet, RDN, RRDB, RCAN 실험<br>- SNIP, GraSP, SynFlow와 비교</p>"
+      },
+      "ocr": {
+        "links": "[<a href=\"https://youtu.be/jjAswMaWJKI\">데모 영상</a>]"
+      },
+      "faceaging": {
+        "links": "[<a href=\"https://youtu.be/nmukIcs4bmY\">데모 영상</a>] [<a href=\"https://github.com/kingsj0405/Face-Aging-CAAE\">코드</a>]"
+      }
+    },
+    "engineering": {
+      "landmark": {
+        "links": "[<a href=\"https://www.notion.so/kingsj0405/Dacon-Landmark-Classification-102615b6b9044980a6fc0caac4c4cfcf\">노션</a>]",
+        "desc": "<p>- 랜드마크 위치 기반 이미지 분류<br>- EfficientNet, ResNet, ResNeXt, MoCo v2 등 다양한 모델 실험<br>- 코드 공유로 이벤트 상금 수상</p>"
+      },
+      "spam": {
+        "links": "[<a href=\"https://github.com/kingsj0405/SRPruning\">코드</a>]",
+        "desc": "<p>- <a href=\"https://campaign.naver.com/airush/\">NAVER AI Rush 2020</a> 1라운드 참가<br>- 23위로 다음 라운드 진출<br>- ResNet, EfficientNet 등 다양한 분류 모델 실험<br>- 데이터 불균형 대응을 위해 Focal Loss, Label Smoothing, Temperature Scaling 실험<br>- RAdam, CosineLRScheduler 등 optimizer/scheduler 비교</p>"
+      },
+      "blog": {
+        "links": "[<a href=\"https://github.com/kingsj0405/yangspace_v3\">코드</a>]",
+        "desc": "<p><a href=\"https://www.atlassian.com/ko/software/confluence\">Confluence</a> 스타일의 Django 기반 블로그.</p>"
+      },
+      "doughsam": {
+        "desc": "<p>연세대학교 시간표 관리용 Django 웹서비스<br>- 연세대 데이터베이스에서 시간표와 마일리지 이력 크롤링<br>- <a href=\"https://everytime.kr/\">에브리타임</a>과 유사한 시간표 에디터 구현</p>"
+      },
+      "jinglebell": {
+        "desc": "<p>OpenCV 기반 장갑 손 인식<br>화면의 각 종 위치에 손이 올라가면 징글벨이 연주되는 AR 프로젝트</p>"
+      }
+    }
+  },
+  "pubs": {
+    "meta": {
+      "title": "논문 | 양세종",
+      "ogTitle": "논문 | 양세종",
+      "description": "양세종의 대표 논문 목록."
+    },
+    "sections": {
+      "title": "논문"
+    },
+    "items": {
+      "ifmdm": {
+        "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">논문</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">보충 영상</a>]"
+      },
+      "dife": {
+        "links": "[<a href=\"https://openreview.net/forum?id=m67FNFdgLO9\">논문</a>] [<a href=\"https://github.com/kingsj0405/DIFE\">코드</a>] [<a href=\"https://yangspace.co.kr/dife/\">프로젝트 페이지</a>]"
+      },
+      "srflow": {
+        "links": "[<a href=\"https://openaccess.thecvf.com/content/CVPR2021W/NTIRE/papers/Jo_SRFlow-DA_Super-Resolution_Using_Normalizing_Flow_With_Deep_Convolutional_Block_CVPRW_2021_paper.pdf\">논문</a>] [<a href=\"https://github.com/yhjo09/SRFlow-DA\">코드</a>]"
+      },
+      "esr": {
+        "links": "[<a href=\"https://openaccess.thecvf.com/content_CVPRW_2020/papers/w31/Jo_Investigating_Loss_Functions_for_Extreme_Super-Resolution_CVPRW_2020_paper.pdf\">논문</a>] [<a href=\"https://github.com/kingsj0405/ciplab-NTIRE-2020\">코드</a>]"
+      }
+    }
+  }
+}
