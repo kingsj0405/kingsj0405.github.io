@@ -32,14 +32,14 @@
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>현재",
-        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 일하고 있습니다. 현재 <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a>과 EXAONE 4.5를 실제 버티컬 도메인에 적용하기 위한 개발에 참여하고 있습니다. K-EXAONE은 공개 가중치 기준 <a href=\"https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index\">Artificial Analysis Intelligence Index</a> 7위를 기록했고, EXAONE 4.5는 reasoning과 non-reasoning을 하나의 비전언어모델에 결합한 하이브리드 VLM입니다."
+        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 정규직으로 일하고 있습니다. reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> 개발에 참여하며, 금융·자동차·생명과학·국방 등 버티컬 도메인 프로젝트를 진행하고 있습니다."
       },
       "yonsei_phd": {
-        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 <a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 지도 아래 박사과정을 마쳤습니다. 박사과정 동안 생성모델(VAE, GAN, Normalizing Flow, Diffusion)을 활용한 얼굴 모델링, 3D 모델(3DMM, Neural Renderer, NeRF), 그리고 시각-오디오 및 시각-텍스트 기반 멀티모달 표현 학습을 중심으로 연구했습니다."
+        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 박사 학위를 취득했습니다 (2019.09 – 2026.02). <a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 지도 아래 <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>를 주제로 졸업 논문을 완성했습니다. 박사과정 동안 생성모델(VAE, GAN, Normalizing Flow, Diffusion)을 활용한 얼굴 모델링, 3D 모델(3DMM, Neural Renderer, NeRF), 그리고 시각-오디오 및 시각-텍스트 기반 멀티모달 표현 학습을 중심으로 연구했습니다."
       },
       "lgai_intern": {
         "timespan": "2025.11<br>-<br>2026.02",
-        "desc": "서울의 <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist Intern으로 일했습니다. 세밀한 인지가 필요한 Video LLM을 위해 특정 방법론 자체보다 모델 학습에 바로 투입할 수 있는 신뢰성 있고 확장 가능한 데이터 파이프라인과 측정 가능한 진척을 만드는 데 집중했습니다."
+        "desc": "박사 졸업 직전인 2025년 겨울을 서울의 <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist Intern으로 보내며, 대한민국 국가 대표 독자 AI 파운데이션 모델 <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a>과 reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://huggingface.co/LGAI-EXAONE/EXAONE-4.5-33B\">EXAONE 4.5</a> 개발에 참여했습니다. 멘토: <a href=\"https://www.linkedin.com/in/soyeon-kim-733107168/\">김소연</a>."
       },
       "adobe": {
         "timespan": "2023.05<br>-<br>2023.08",
@@ -50,7 +50,7 @@
         "desc": "2020년 여름 <a href=\"https://www.navercorp.com/\">NAVER</a>에서 인턴으로 일하며 머신러닝 대회 <a href=\"https://campaign.naver.com/clova_airush/\">AI Rush</a>에 참여했습니다."
       },
       "yonsei_undergrad_intern": {
-        "desc": "학부연구생 시절 김선주 교수님 연구실에서 비디오 요약 기법을 활용해 야구 경기 하이라이트를 자동으로 찾는 연구를 진행했습니다."
+        "desc": "<a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 연구실에서 학부 연구생으로 활동하며 여러 컬러 관련 연구를 도왔습니다: 자동 화이트 밸런스(AWB) 디스플레이 프로젝트, 초분광 카메라를 활용한 야외 조명 관측, color constancy 태스크용 데이터 수집 및 정제 작업 등에 참여했습니다. 또한 비디오 요약 기법을 활용해 야구 경기 하이라이트를 자동으로 찾는 연구도 진행했습니다."
       },
       "blammedia": {
         "timespan": "2018.07<br>-<br>2019.08",
@@ -60,13 +60,13 @@
         "desc": "2018년 봄학기에는 <a href=\"https://www.uu.se/en\">Uppsala University</a>에서 교환학생으로 지냈습니다. 다른 문화권에서 컴퓨터과학을 공부한 경험이 매우 인상적이었습니다."
       },
       "ewoosoft": {
-        "desc": "<a href=\"https://www.ewoosoft.com/\">Ewoosoft</a>에서 <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a>과 <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a> 개발에 참여했습니다. 이 과정에서 <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a>를 이용한 엔터프라이즈 제품 개발을 익혔고, <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> 등 협업/DevOps 도구도 함께 경험했습니다."
+        "desc": "2017년 <a href=\"https://www.ewoosoft.com/\">Ewoosoft</a>에서 개발자로 <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a>과 <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a> 개발에 참여했습니다. <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a>를 이용한 엔터프라이즈 제품 개발을 익혔고, <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> 등 협업/DevOps 도구도 함께 경험했습니다."
       },
       "kakao": {
         "desc": "2016년에는 <a href=\"https://www.kakaocorp.com/page/\">Kakao</a>에서 software assistant로 근무하며 <a href=\"https://www.openstack.org/\">OpenStack</a>용 컴포넌트를 개발했습니다. 이를 통해 네트워크, 가상화, 클라우드 컴퓨팅의 기초를 익혔습니다."
       },
       "yonsei_beng": {
-        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 학사 학위를 받았습니다. 처음으로 '코딩'이 무엇인지 알게 된 곳이었고, 결국 그곳에서 학위를 마쳤습니다. 또한 학부연구생으로서 초분광 카메라를 활용한 color constancy 데이터 수집 및 정제 작업도 수행했습니다."
+        "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 학사 학위를 받았습니다. 처음으로 '코딩'이 무엇인지 알게 된 곳이었고, 결국 그곳에서 학위를 마쳤습니다. 다양한 클럽 활동도 했는데, 공과대학 프로그래밍 동아리 <a href=\"https://poolc.org/\">PoolC</a> 부회장을 지냈고, 태권도부 시범단 활동 및 품새 대회에 참가했으며, 피아노 동아리 Piano In Yonsei 소속으로 백주년기념관 스타인웨이 피아노로 막심 므라비차의 크로아티안 랩소디를 연주했습니다."
       }
     },
     "sections": {
