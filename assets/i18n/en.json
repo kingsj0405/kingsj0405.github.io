@@ -32,14 +32,14 @@
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>present",
-        "desc": "I am currently working as an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), where I contribute to the development of <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a> and EXAONE 4.5 for practical use in vertical domains. K-EXAONE ranks 7th on the <a href=\"https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index\">Artificial Analysis Intelligence Index</a> (open weights). EXAONE 4.5 is a hybrid VLM combining reasoning and non-reasoning capabilities in a single vision-language model."
+        "desc": "I am currently working as an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), contributing to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> — a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model — and applying it to vertical domain projects across finance, automotive, life science, and defense."
       },
       "yonsei_phd": {
-        "desc": "I am a Ph.D. Candidate at <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a>, supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. As a Ph.D student, my main research focus is in face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."
+        "desc": "I received my Ph.D. in Computer Science from <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a> (Sep 2019 – Feb 2026), supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. Thesis: <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>. My research focused on face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."
       },
       "lgai_intern": {
         "timespan": "2025.11<br>-<br>2026.02",
-        "desc": "I worked as an AI Scientist Intern at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab) in Seoul, South Korea, where I took a goal-driven approach to data engineering for a Video LLM with fine-grained perception, focusing on reliable, scalable pipelines and measurable progress toward model-ready data."
+        "desc": "I spent the winter of 2025 as an AI Scientist Intern at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab) in Seoul, just before completing my Ph.D., contributing to <a href=\"https://huggingface.co/LGAI-EXAONE/K-EXAONE-236B-A23B\">K-EXAONE</a> — Korea's national sovereign AI foundation model — and <a href=\"https://huggingface.co/LGAI-EXAONE/EXAONE-4.5-33B\">EXAONE 4.5</a>, a hybrid VLM that unifies reasoning and non-reasoning in a single vision-language model. Mentored by <a href=\"https://www.linkedin.com/in/soyeon-kim-733107168/\">Soyeon Kim</a>."
       },
       "adobe": {
         "timespan": "2023.05<br>-<br>2023.08",
@@ -50,7 +50,7 @@
         "desc": "I interned at <a href=\"https://www.navercorp.com/\">NAVER</a> in summer 2020 and participated in the machine learning challenge <a href=\"https://campaign.naver.com/clova_airush/\">AI Rush</a>."
       },
       "yonsei_undergrad_intern": {
-        "desc": "As an undergraduate intern in Seon Joo Kim's lab, I worked on automatically finding baseball game highlights with video summarization methods."
+        "desc": "As an undergraduate research intern in Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>'s lab, I assisted with several color-related research projects: an auto white balance (AWB) display project, outdoor illumination observation with a hyperspectral camera, and data collection and refinement for color constancy tasks. I also worked on automatically finding baseball game highlights using video summarization methods."
       },
       "blammedia": {
         "timespan": "2018.07<br>-<br>2019.08",
@@ -60,13 +60,13 @@
         "desc": "I spent a spring semester in 2018 as an exchange student at <a href=\"https://www.uu.se/en\">Uppsala University</a>. Studying computer science in a different culture was a great experience."
       },
       "ewoosoft": {
-        "desc": "At <a href=\"https://www.ewoosoft.com/\">Ewoosoft</a>, I worked on <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a> and <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a> as a developer. I learned how to use <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, and <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a> for enterprise products, along with collaboration and DevOps tools such as <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, and <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> in a waterfall development environment."
+        "desc": "In 2017, I worked at <a href=\"https://www.ewoosoft.com/\">Ewoosoft</a> as a developer on <a href=\"https://play.google.com/store/apps/details?id=com.ewoosoft.ezmobile&amp;hl=en\">EzMobile</a> and <a href=\"https://www.ewoosoft.com/ez3d_i\">Ez3D-i</a>. I learned how to use <a href=\"https://dotnet.microsoft.com/en-us/apps/xamarin\">Xamarin.Forms</a>, <a href=\"https://doc.qt.io/qt-5/qt5-intro.html\">Qt5</a>, and <a href=\"https://flask.palletsprojects.com/en/2.2.x/\">Flask</a> for enterprise products, along with collaboration and DevOps tools such as <a href=\"https://www.atlassian.com/software/jira\">Jira</a>, <a href=\"https://confluence.atlassian.com/alldoc/atlassian-documentation-32243719.html\">Atlassian</a>, <a href=\"https://confluence.atlassian.com/crucible/crucible-and-fisheye-298977540.html\">Crucible and Fisheye</a>, <a href=\"https://github.com/\">GitHub</a>, and <a href=\"https://circleci.com/migrate-jenkins-to-circleci/\">Jenkins</a> in a waterfall development environment."
       },
       "kakao": {
         "desc": "I worked as a software assistant at <a href=\"https://www.kakaocorp.com/page/\">Kakao</a> in 2016, developing a component for <a href=\"https://www.openstack.org/\">OpenStack</a>. Through that experience, I learned the basics of networking, virtualization, and cloud computing."
       },
       "yonsei_beng": {
-        "desc": "I earned my BEng at <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a>. It was where I first learned what coding was, and where I ultimately completed my computer science degree. As an undergraduate intern in Seon Joo Kim's lab, I also worked on collecting and refining data for a color constancy task with a hyperspectral camera."
+        "desc": "I earned my BEng in Computer Science from <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a>. It was where I first learned what coding was, and where I completed my degree in the end. Outside of coursework, I was active in several clubs: served as Vice President of <a href=\"https://poolc.org/\">PoolC</a>, the engineering college programming club; competed in poomsae events and performed with the Taekwondo demonstration team; and performed Croatian Rhapsody by Maksim Mrvica on a Steinway piano at Baekjunyeon Memorial Hall as a member of Piano In Yonsei."
       }
     },
     "sections": {
