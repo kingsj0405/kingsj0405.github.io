@@ -29,10 +29,13 @@
       "intro": "블로그에는 가벼운 메모, 작업 기록, 짧은 회고, 그리고 그날 그냥 적어두고 싶었던 것들을 올립니다.",
       "cta": "블로그 보러 가기"
     },
+    "notice": {
+      "recruiting": "EXAONE Lab에서 video understanding, reasoning에 경험이 있는 인턴을 모집합니다. <a href=\"https://www.notion.so/26-EXAONE-Lab-33d192dd5a6f801d8fd9cc3837fcf2eb\" target=\"_blank\">저의 인턴십 당시 멘토였던 소연님께서 작성하신 노션 링크</a>와 <a href=\"https://www.lgresearch.ai/careers/view?seq=252\" target=\"_blank\">지원 링크</a>도 참고해주세요."
+    },
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>현재",
-        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 정규직으로 일하고 있습니다. reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> 개발에 참여하며, 금융·자동차·생명과학·국방 등 버티컬 도메인 프로젝트를 진행하고 있습니다."
+        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 정규직으로 일하고 있습니다. reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> 개발에 참여하며, 금융·자동차·생명과학·국방 등 버티컬 도메인 프로젝트를 진행하고 있습니다. 현재는 이미지·비디오 이해를 지원하는 Mixture-of-Experts(MoE) 기반 멀티모달 언어 모델 EXAONE 5.0 개발에도 참여하고 있습니다."
       },
       "yonsei_phd": {
         "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 박사 학위를 취득했습니다 (2019.09 – 2026.02). <a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 지도 아래 <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>를 주제로 졸업 논문을 완성했습니다. 박사과정 동안 생성모델(VAE, GAN, Normalizing Flow, Diffusion)을 활용한 얼굴 모델링, 3D 모델(3DMM, Neural Renderer, NeRF), 그리고 시각-오디오 및 시각-텍스트 기반 멀티모달 표현 학습을 중심으로 연구했습니다."
