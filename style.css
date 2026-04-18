@@ -46,6 +46,25 @@ body a:hover {
     color: white;
 }
 
+/* Recruiting notice banner */
+.notice-banner {
+    background-color: #1f2623;
+    border-bottom: 2px solid #b96b28;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 15px;
+}
+
+.notice-banner a {
+    color: #f5c98a;
+    text-decoration: underline;
+}
+
+.notice-banner a:hover {
+    color: #fff;
+}
+
 .topnav-pill {
     background: #b96b28;
     color: #fff8ef !important;

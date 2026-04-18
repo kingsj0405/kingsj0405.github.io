@@ -29,10 +29,13 @@
       "intro": "I use the blog for loose notes, build logs, small retrospectives, and whatever else felt worth writing down that day.",
       "cta": "Visit the blog"
     },
+    "notice": {
+      "recruiting": "EXAONE Lab is recruiting interns with experience in video understanding and reasoning. Please refer to <a href=\"https://www.notion.so/26-EXAONE-Lab-33d192dd5a6f801d8fd9cc3837fcf2eb\" target=\"_blank\">this Notion post by Soyeon Kim, my mentor during my internship</a> and the <a href=\"https://www.lgresearch.ai/careers/view?seq=252\" target=\"_blank\">job posting</a>."
+    },
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>present",
-        "desc": "I am currently working as an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), contributing to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> — a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model — and applying it to vertical domain projects across finance, automotive, life science, and defense."
+        "desc": "I am currently working as an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), contributing to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> — a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model — and applying it to vertical domain projects across finance, automotive, life science, and defense. I am also contributing to EXAONE 5.0, a Mixture-of-Experts (MoE) multimodal large language model (MLLM) with image and video understanding capabilities."
       },
       "yonsei_phd": {
         "desc": "I received my Ph.D. in Computer Science from <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a> (Sep 2019 – Feb 2026), supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. Thesis: <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>. My research focused on face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."
