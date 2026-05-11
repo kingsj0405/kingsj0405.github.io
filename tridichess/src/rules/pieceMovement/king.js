@@ -6,6 +6,7 @@
  */
 
 import { allSquaresAt, getVerticalColumn } from '../../model/SquareId.js';
+import { generateCastleTargets } from '../castling.js';
 
 const STEPS = [
     [+1,  0], [-1,  0], [ 0, +1], [ 0, -1],
@@ -28,6 +29,11 @@ export function pseudoMoves(state, piece) {
         const occ = state.getPiece(sq);
         if (occ && occ.color === piece.color) continue;
         out.push(sq);
+    }
+
+    // 캐슬링 후보 (Roth-2012)
+    for (const ct of generateCastleTargets(state, piece)) {
+        out.push(ct);
     }
 
     return out;

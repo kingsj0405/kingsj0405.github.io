@@ -33,7 +33,14 @@ export function pseudoMoves(state, piece) {
     for (const df of [-1, +1]) {
         for (const cap of allSquaresAt(from.absFile + df, from.absRank + dir)) {
             const occ = state.getPiece(cap);
-            if (occ && occ.color !== piece.color) out.push(cap);
+            if (occ) {
+                if (occ.color !== piece.color) out.push(cap);
+            } else if (state.enPassant &&
+                       cap.toString() === state.enPassant.target.toString() &&
+                       state.enPassant.color !== piece.color) {
+                // En passant: target square 비어있어도 합법 캡처
+                out.push(cap);
+            }
         }
     }
 

@@ -370,7 +370,11 @@ function handleSquareClick(squareId) {
         log(`Selected ${piece.symbol} at ${squareId}`, 'log-select');
 
     } else if (ui.selected !== null && isMoveTarget(squareId)) {
-        applyMove(ui.selected, squareId);
+        if (isPromotionMove(ui.selected, squareId)) {
+            showPromotionPicker(ui.selected, squareId);
+        } else {
+            applyMove(ui.selected, squareId);
+        }
         return; // applyMove 가 후속 처리
 
     } else {
@@ -389,11 +393,11 @@ function handleSquareClick(squareId) {
  * @param {import('./model/SquareId.js').SquareId} from
  * @param {import('./model/SquareId.js').SquareId} to
  */
-function applyMove(from, to) {
+function applyMove(from, to, promotionType = 'Q') {
     const piece    = gameState.getPiece(from);
     const captured = gameState.getPiece(to);
 
-    gameState = applyMoveRC(gameState, from, to);
+    gameState = applyMoveRC(gameState, from, to, promotionType);
     pushState(gameState);
     const movedAfter = gameState.getPiece(to);
     const promoted = piece.type === 'P' && movedAfter && movedAfter.type !== 'P';
@@ -518,6 +522,41 @@ function clearAllHighlights() {
 function highlightSquare(key, color) {
     const mesh = squareMeshes.get(key);
     if (mesh) mesh.material.emissive.setHex(color);
+}
+
+// ── Promotion picker ────────────────────────────────────────
+const PROMOTION_SYMBOLS = {
+    white: { Q: '♕', R: '♖', B: '♗', N: '♘' },
+    black: { Q: '♛', R: '♜', B: '♝', N: '♞' },
+};
+
+function isPromotionMove(from, to) {
+    const p = gameState.getPiece(from);
+    if (!p || p.type !== 'P') return false;
+    const abs = to.toAbs();
+    return (p.color === 'white' && abs.absRank >= 8) ||
+           (p.color === 'black' && abs.absRank <= 1);
+}
+
+function showPromotionPicker(from, to) {
+    const modal = document.getElementById('promotion-modal');
+    const color = gameState.turn;
+    const syms  = PROMOTION_SYMBOLS[color];
+    modal.querySelector('[data-sym-q]').textContent = syms.Q;
+    modal.querySelector('[data-sym-r]').textContent = syms.R;
+    modal.querySelector('[data-sym-b]').textContent = syms.B;
+    modal.querySelector('[data-sym-n]').textContent = syms.N;
+    modal.setAttribute('data-show', 'true');
+
+    const picks = modal.querySelectorAll('.pick');
+    const handler = (e) => {
+        const btn = e.currentTarget;
+        const type = btn.dataset.promote;
+        modal.setAttribute('data-show', 'false');
+        picks.forEach(b => b.removeEventListener('click', handler));
+        applyMove(from, to, type);
+    };
+    picks.forEach(b => b.addEventListener('click', handler));
 }
 
 // ── AI Assist (Hint) — top-3 추천 수 ─────────────────────────

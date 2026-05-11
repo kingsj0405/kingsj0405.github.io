@@ -28,6 +28,7 @@ export class GameState {
         rulesetId       = 'roth2012',
         capturedByWhite = [],
         capturedByBlack = [],
+        enPassant       = null,
     }) {
         if (!(pieces instanceof Map)) throw new Error('GameState: pieces must be Map');
         if (!TURNS.includes(turn))    throw new Error(`GameState: invalid turn "${turn}"`);
@@ -41,6 +42,7 @@ export class GameState {
         this.rulesetId       = rulesetId;
         this.capturedByWhite = Object.freeze([...capturedByWhite]);
         this.capturedByBlack = Object.freeze([...capturedByBlack]);
+        this.enPassant       = enPassant; // { target: SquareId, victim: SquareId, color } | null
         Object.freeze(this);
     }
 
@@ -53,6 +55,7 @@ export class GameState {
             rulesetId:       this.rulesetId,
             capturedByWhite: this.capturedByWhite,
             capturedByBlack: this.capturedByBlack,
+            enPassant:       this.enPassant,
             ...patch,
         });
     }
