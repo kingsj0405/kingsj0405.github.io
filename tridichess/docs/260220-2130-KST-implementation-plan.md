@@ -1099,6 +1099,12 @@ export const RULESETS = {
 
 ## 11. 3D 체스 보드 좌표계 명세
 
+> **수정 이력 (2026-05-11):** §11 의 "X/Z 동일, Y 높이만 다름" 기술은 부정확했음.
+> 정통 Star Trek Tri-D 는 메인 보드 사이에 **Z 후퇴 staircase** 가 있음.
+> 본 절 아래의 LEVEL_Y 표만 보지 말고 **CoordMapper.js 의 LEVEL_Z 표를 정본으로 참조**.
+> ADR-0004 참조.
+
+
 ### 보드 구성 요약
 
 ```
