@@ -108,7 +108,7 @@ export class Board2DPanel {
                 el.textContent = '';
                 el.classList.remove('white-piece', 'black-piece');
             }
-            el.classList.remove('selected', 'move', 'column', 'last-move',
+            el.classList.remove('selected', 'move', 'castle', 'column', 'last-move',
                                 'hint-1', 'hint-2', 'hint-3', 'in-check');
         }
 
@@ -128,8 +128,12 @@ export class Board2DPanel {
                 this._squareEls.get(c.toString())?.classList.add('column');
             }
         }
+        const castleSet = ui.castles instanceof Set ? ui.castles : new Set();
         for (const m of ui.moves) {
-            this._squareEls.get(m.toString())?.classList.add('move');
+            const key = m.toString();
+            const el  = this._squareEls.get(key);
+            if (!el) continue;
+            el.classList.add(castleSet.has(key) ? 'castle' : 'move');
         }
         if (ui.hints) {
             for (let i = 0; i < ui.hints.length && i < 3; i++) {
