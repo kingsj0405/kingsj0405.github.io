@@ -22,6 +22,7 @@ import { getCastleConfig } from './rules/castling.js';
 import { computeMaterial }                          from './rules/material.js';
 import { createMinimaxAI, topDistinctMoves }        from './ai/MinimaxAI.js';
 import { generateBoardMoves, applyBoardMove }       from './rules/attackBoard.js';
+import { serializeGameState, deserializeGameState } from './model/serialize.js';
 
 // ── 게임 상태 + 히스토리 ──────────────────────────────────────
 /** @type {import('./model/GameState.js').GameState} */
@@ -65,6 +66,7 @@ function jumpToHistory(idx) {
     evaluateAndAnnounce();
 
     refreshHighlights();
+    updateBoardPositions(gameState); debugOverlay.updatePositions(gameState);  // AB plate/mesh 위치 동기 (Undo 시 필수)
     pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
@@ -178,10 +180,14 @@ function init() {
         jumpToHistory(parseInt(item.dataset.idx, 10));
     });
 
-    // 2D 패널의 AB 라벨 클릭 → AB 이동 후보 표시 / 선택 / 적용
+    // Copy / Paste
+    document.getElementById('btn-hist-copy').onclick = copyStateJSON;
+    document.getElementById('btn-hist-paste').onclick = pasteStateJSON;
+
+    // 2D 패널의 AB 라벨 클릭 → AB 이동 후보 표시 / 적용
     document.querySelector('#panel-2d .panel-2d-grid').addEventListener('click', (e) => {
-        const label = e.target.closest('.ab-label');
-        if (label) handleABLabelClick(label.dataset.boardId);
+        const lbl = e.target.closest('.ab-label');
+        if (lbl) handleABLabelClick(lbl.dataset.boardId);
     });
 
     document.getElementById('ai-mode').onchange = (e) => {
@@ -453,6 +459,51 @@ function applyMove(from, to, promotionType = 'Q') {
     scheduleAIMove();
 }
 
+// ── State Copy / Paste (테스트/공유용) ───────────────────────
+async function copyStateJSON() {
+    try {
+        const text = JSON.stringify(serializeGameState(gameState));
+        await navigator.clipboard.writeText(text);
+        log(`📋 State JSON 클립보드 복사 (${text.length} chars)`, 'log-system');
+    } catch (err) {
+        console.error('copy failed:', err);
+        log('Copy 실패 — 콘솔 확인', 'log-capture');
+    }
+}
+
+function pasteStateJSON() {
+    const text = prompt('Paste GameState JSON:');
+    if (!text) return;
+    try {
+        const data = JSON.parse(text);
+        const newState = deserializeGameState(data);
+        cancelPendingAI();
+        hideGameOver();
+        gameState = newState;
+        history = [newState];
+        historyIdx = 0;
+        ui.selected = null;
+        ui.moves = [];
+        ui.castles = new Set();
+        ui.hints = [];
+        ui.lastMove = null;
+        ui.checkSquare = null;
+        clearAllHighlights();
+        updateBoardPositions(gameState); debugOverlay.updatePositions(gameState);
+        pieceRenderer.render(gameState.pieces, gameState);
+        board2D.render(gameState, ui);
+        renderTurnIndicator();
+        renderCapturesPanel();
+        renderHistoryPanel();
+        evaluateAndAnnounce();
+        log('📥 State 로드 완료', 'log-system');
+        scheduleAIMove();
+    } catch (err) {
+        console.error('paste failed:', err);
+        log(`Paste 실패: ${err.message}`, 'log-capture');
+    }
+}
+
 // ── 히스토리 패널 ────────────────────────────────────────────
 function renderHistoryPanel() {
     updateMoveCounter();
@@ -598,22 +649,35 @@ function showPromotionPicker(from, to) {
     picks.forEach(b => b.addEventListener('click', handler));
 }
 
-// ── Attack Board 이동 (M4 D-3) ────────────────────────────────
-let _selectedAB = null;  // 현재 선택된 AB id, null 또는 'QL1' 등
+// ── Attack Board 이동 (M4 D-3 + tray UX) ──────────────────────
+let _selectedAB = null;
+
+function closeABTrays() {
+    document.querySelectorAll('#panel-2d .ab-tray').forEach(t => { t.hidden = true; t.innerHTML = ''; });
+    document.querySelectorAll('#panel-2d .ab-label').forEach(el => el.classList.remove('ab-selected'));
+    _selectedAB = null;
+}
 
 function handleABLabelClick(boardId) {
     if (gameOver || isAIturn() || ai.thinking) return;
     const node = gameState.boards.get(boardId);
     if (!node) return;
+
+    // 토글: 같은 AB 다시 클릭 → 닫기
+    if (_selectedAB === boardId) {
+        closeABTrays();
+        return;
+    }
+    closeABTrays();
+
     if (node.owner !== gameState.turn) {
-        log(`${boardId} 은 ${node.owner} 소유 — 현재 턴 (${gameState.turn}) 아님`, 'log-info');
+        log(`${boardId}: ${node.owner} 소유 — 현재 ${gameState.turn} 턴이라 이동 불가`, 'log-info');
         return;
     }
 
-    // 이동 가능 여부 진단 (사용자에게 친절한 메시지)
     const piecesOnAB = [...gameState.pieces.values()].filter(p => p.position.level === boardId);
     if (piecesOnAB.length > 1) {
-        log(`${boardId}: 이동 불가 — ${piecesOnAB.length} piece 탑승. Roth: 빈 보드 또는 자기 폰 1개만 가능`, 'log-info');
+        log(`${boardId}: 이동 불가 — ${piecesOnAB.length} piece 탑승. Roth: 빈 보드 또는 자기 폰 1개만`, 'log-info');
         return;
     }
     if (piecesOnAB.length === 1) {
@@ -623,56 +687,54 @@ function handleABLabelClick(boardId) {
             return;
         }
         if (p.type !== 'P') {
-            log(`${boardId}: 이동 불가 — 폰 아닌 piece 탑승 (${p.symbol}). Roth: AB 는 빈 보드 또는 자기 폰 1개만 piloting 가능`, 'log-info');
+            log(`${boardId}: 이동 불가 — 폰 아닌 piece 탑승 (${p.symbol})`, 'log-info');
             return;
         }
     }
 
     const moves = generateBoardMoves(gameState, gameState.turn).filter(m => m.boardId === boardId);
     if (moves.length === 0) {
-        log(`${boardId}: 이동 가능한 anchor 없음 (충돌 또는 보드 경계)`, 'log-info');
+        log(`${boardId}: 이동 가능한 anchor 없음 (보드 경계 또는 충돌)`, 'log-info');
         return;
     }
-    // 한 번 더 같은 AB 클릭 → 첫 번째 이동 commit (MVP 간단 UX)
-    if (_selectedAB === boardId) {
-        commitABMove();
-        return;
-    }
+
     _selectedAB = boardId;
-    updateABSelection();
-    log(`${boardId} 선택. 가능한 이동:`, 'log-select');
-    moves.forEach((m, i) => {
-        const dir = m.newRankOffset > node.rankOffset ? 'fwd' : 'back';
-        log(`  ${i + 1}. ${m.boardId} ${node.rankOffset} → ${m.newRankOffset} (${dir}) ${i === 0 ? '← 같은 라벨 다시 클릭 시 적용' : ''}`, 'log-info');
-    });
+    showABTray(boardId, node, moves);
+    log(`${boardId} ${node.pin} → 이동 가능 핀: ${moves.map(m => m.newPin).join(', ')}`, 'log-select');
 }
 
-function updateABSelection() {
-    document.querySelectorAll('#panel-2d .ab-label').forEach(el => {
-        el.classList.toggle('ab-selected', el.dataset.boardId === _selectedAB);
-    });
+function showABTray(boardId, node, moves) {
+    const tray = document.querySelector(`#panel-2d .ab-tray[data-board-id="${boardId}"]`);
+    if (!tray) return;
+    tray.hidden = false;
+    tray.innerHTML = '';
+    const sorted = [...moves].sort((a, b) => a.newPin.localeCompare(b.newPin));
+    for (const m of sorted) {
+        const btn = document.createElement('button');
+        btn.className = 'ab-target-btn';
+        btn.textContent = m.newPin;
+        btn.title = `Move ${boardId} to pin ${m.newPin}`;
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            commitABMove(boardId, m.newPin);
+        });
+        tray.appendChild(btn);
+    }
+    document.querySelector(`#panel-2d .ab-label[data-board-id="${boardId}"]`)?.classList.add('ab-selected');
 }
 
-/**
- * 외부에서 호출: 이미 선택된 AB 가 있고 적용 트리거 시.
- * (MVP: 첫 번째 이동 자동 적용 — 후속에 picker)
- */
-function commitABMove() {
-    if (!_selectedAB) return;
-    const moves = generateBoardMoves(gameState, gameState.turn).filter(m => m.boardId === _selectedAB);
-    if (moves.length === 0) return;
-    const chosen = moves[0]; // MVP: first option
-    gameState = applyBoardMove(gameState, chosen);
+function commitABMove(boardId, newPin) {
+    const move = { boardId, newPin };
+    gameState = applyBoardMove(gameState, move);
     pushState(gameState);
-    log(`[${chosen.boardId} RO ${chosen.newRankOffset}]`, 'log-action');
-    _selectedAB = null;
-    updateABSelection();
+    log(`[${boardId} → ${newPin}]`, 'log-action');
+    closeABTrays();
     ui.selected = null;
     ui.moves = [];
     ui.castles = new Set();
     ui.hints = [];
     refreshHighlights();
-    updateBoardPositions(gameState);
+    updateBoardPositions(gameState); debugOverlay.updatePositions(gameState);
     pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
@@ -735,6 +797,7 @@ function resetGame() {
     ui.lastMove    = null;
     ui.checkSquare = null;
     clearAllHighlights();
+    updateBoardPositions(gameState); debugOverlay.updatePositions(gameState);
     pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();

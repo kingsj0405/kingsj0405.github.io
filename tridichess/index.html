@@ -107,6 +107,8 @@
 
         /* History panel */
         #history-panel { padding: 6px 8px; overflow-y: auto; background: var(--bg-0); }
+        #history-panel .hist-toolbar { display: flex; gap: 4px; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+        #history-panel .hist-toolbar button { font-size: 0.72em; padding: 3px 8px; }
         #history-list { list-style: none; margin: 0; padding: 0; }
         #history-list .hist-item { padding: 3px 8px; font-family: 'Cascadia Code', monospace; font-size: 0.78em; color: var(--text-dim); cursor: pointer; border-radius: 3px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
         #history-list .hist-item:hover { background: var(--bg-2); color: var(--text); }
@@ -136,7 +138,7 @@
         #log-panel .log-hint-2  { color: var(--hl-hint2); }
         #log-panel .log-hint-3  { color: var(--hl-hint3); }
 
-        /* 2D Control Panel — 자연 크기 고정 (잘리지 않게) */
+        /* 2D Control Panel — per-board separate (현재 사용) */
         #panel-2d { flex: 0 0 auto; padding: 12px; background: var(--bg-0); }
         #panel-2d .panel-2d-title { font-size: 0.75em; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
         #panel-2d .panel-2d-title::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); }
@@ -144,16 +146,23 @@
         #panel-2d .cell-empty { width: 1px; }
         #panel-2d .board-wrap { display: flex; flex-direction: column; align-items: center; }
         #panel-2d .board-label { font-size: 0.65em; color: var(--text-dim); margin-bottom: 3px; font-family: monospace; letter-spacing: 1px; }
-        #panel-2d .board-label.ab-label { cursor: pointer; padding: 1px 4px; border-radius: 3px; transition: all 0.15s; }
+        #panel-2d .board-label.ab-label { cursor: pointer; padding: 1px 6px; border-radius: 3px; transition: all 0.15s; display: inline-flex; gap: 4px; align-items: center; }
         #panel-2d .board-label.ab-label:hover { background: var(--hl-castle); color: #000; }
+        #panel-2d .board-label.ab-label .bl-name { color: var(--accent); font-weight: 600; }
+        #panel-2d .board-label.ab-label:hover .bl-name { color: #000; }
+        #panel-2d .board-label.ab-label .bl-ro { color: var(--text-dim); }
         #panel-2d .board-label.ab-selected { background: var(--hl-castle); color: #000; box-shadow: 0 0 6px var(--hl-castle); }
+        #panel-2d .ab-tray { display: flex; gap: 2px; margin: 3px 0; justify-content: center; flex-wrap: wrap; }
+        #panel-2d .ab-tray[hidden] { display: none; }
+        #panel-2d .ab-target-btn { background: transparent; color: var(--hl-castle); border: 1px solid var(--hl-castle); padding: 2px 6px; font-size: 0.7em; font-family: monospace; border-radius: 3px; cursor: pointer; transition: all 0.12s; }
+        #panel-2d .ab-target-btn:hover { background: var(--hl-castle); color: #000; box-shadow: 0 0 6px var(--hl-castle); }
         #panel-2d .board-grid { display: grid; gap: 1px; padding: 2px; background: var(--border); border-radius: 3px; box-shadow: 0 0 0 1px var(--border-bright); }
         #panel-2d .board-grid.attack { background: #4a2030; box-shadow: 0 0 0 1px #6a3050; }
         #panel-2d .sq { width: 22px; height: 22px; padding: 0; border: 0; font-size: 16px; line-height: 22px; cursor: pointer; font-family: 'Segoe UI Symbol', 'Apple Symbols', sans-serif; display: flex; align-items: center; justify-content: center; text-align: center; transition: transform 0.08s ease; }
         #panel-2d .sq.light { background: #d4d4d4; }
         #panel-2d .sq.dark  { background: #545458; }
         #panel-2d .sq.white-piece { color: var(--white-piece); text-shadow: 0 0 2px #000, 0 0 3px #000; }
-        #panel-2d .sq.black-piece { color: var(--black-piece); text-shadow: 0 0 2px #000; }
+        #panel-2d .sq.black-piece { color: var(--black-piece); }
         #panel-2d .sq:hover { outline: 1px solid var(--accent); transform: scale(1.08); z-index: 1; }
         #panel-2d .sq.last-move { box-shadow: inset 0 0 0 2px var(--hl-last); }
         #panel-2d .sq.column   { box-shadow: inset 0 0 0 2px var(--hl-column); }
@@ -164,6 +173,82 @@
         #panel-2d .sq.hint-3   { box-shadow: inset 0 0 0 3px var(--hl-hint3); }
         #panel-2d .sq.selected { box-shadow: inset 0 0 0 3px var(--hl-selected); }
         #panel-2d .sq.in-check { animation: pulse-check 1s infinite; }
+
+        /* (보존) abs panel CSS — 미사용이지만 향후 토글 옵션용 */
+
+        .abs-panel { display: flex; flex-direction: column; gap: 6px; }
+        .abs-panel .ab-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+        .abs-panel .ab-badge { padding: 4px 6px; background: var(--bg-2); color: var(--text-dim); border: 1px solid var(--border); border-radius: 3px; cursor: pointer; font-size: 0.72em; font-family: monospace; display: flex; flex-direction: column; align-items: center; gap: 1px; transition: all 0.15s; }
+        .abs-panel .ab-badge:hover { border-color: var(--hl-castle); color: var(--text); }
+        .abs-panel .ab-badge .ab-name { color: var(--accent); font-weight: 600; letter-spacing: 1px; }
+        .abs-panel .ab-badge .ab-ro   { font-size: 0.85em; color: var(--text-dim); }
+
+        .abs-panel .abs-grid {
+            display: grid;
+            grid-template-columns: 16px repeat(6, 1fr);
+            grid-template-rows: 14px repeat(10, 30px);
+            gap: 1px;
+            background: var(--border);
+            padding: 1px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px var(--border-bright);
+        }
+        .abs-panel .abs-corner, .abs-panel .abs-axis {
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dim); font-family: monospace; font-size: 0.7em;
+            background: var(--bg-1);
+        }
+        /* Cell wrapper — multi-level 시 상하 split 컨테이너 */
+        .abs-panel .abs-cell-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-2);
+            min-width: 0; min-height: 0;
+        }
+        .abs-panel .abs-cell-wrap.empty { background: transparent; }
+
+        .abs-panel .cell-sub {
+            position: relative;
+            padding: 0; border: 0; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Segoe UI Symbol', sans-serif;
+            transition: transform 0.08s ease;
+            min-width: 0; min-height: 0;
+            background: var(--bg-2);
+        }
+        .abs-panel .cell-sub.full  { flex: 1 1 0; font-size: 15px; }
+        .abs-panel .cell-sub.upper { flex: 1 1 0; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .abs-panel .cell-sub.lower { flex: 1 1 0; font-size: 12px; }
+        .abs-panel .cell-sub:hover { outline: 1px solid var(--accent); transform: scale(1.05); z-index: 2; }
+
+        /* Level color tints (sub 단위) */
+        .abs-panel .cell-sub.lv-W       { background: #1a3a5a; }
+        .abs-panel .cell-sub.lv-W.light { background: #284b6e; }
+        .abs-panel .cell-sub.lv-N       { background: #3a2a5a; }
+        .abs-panel .cell-sub.lv-N.light { background: #4a3a6a; }
+        .abs-panel .cell-sub.lv-B       { background: #5a1a3a; }
+        .abs-panel .cell-sub.lv-B.light { background: #6a2a4a; }
+        .abs-panel .cell-sub.lv-QL      { background: #5a4a1a; }
+        .abs-panel .cell-sub.lv-QL.light{ background: #6a5a2a; }
+        .abs-panel .cell-sub.lv-KL      { background: #5a3e1a; }
+        .abs-panel .cell-sub.lv-KL.light{ background: #6a4e2a; }
+
+        .abs-panel .piece.white-piece { color: var(--white-piece); text-shadow: 0 0 2px #000, 0 0 3px #000; }
+        .abs-panel .piece.black-piece { color: var(--black-piece); text-shadow: 0 0 2px #000; }
+
+        .abs-panel .level-tag { position: absolute; bottom: 0; right: 1px; font-size: 7px; color: rgba(255,255,255,0.5); font-family: monospace; letter-spacing: 0.5px; pointer-events: none; }
+
+        /* Highlights — sub 단위 */
+        .abs-panel .cell-sub.hl-last     { box-shadow: inset 0 0 0 2px var(--hl-last); }
+        .abs-panel .cell-sub.hl-column   { box-shadow: inset 0 0 0 2px var(--hl-column); }
+        .abs-panel .cell-sub.hl-move     { box-shadow: inset 0 0 0 2px var(--hl-move); }
+        .abs-panel .cell-sub.hl-castle   { box-shadow: inset 0 0 0 3px var(--hl-castle); }
+        .abs-panel .cell-sub.hl-hint-1   { box-shadow: inset 0 0 0 3px var(--hl-hint1); }
+        .abs-panel .cell-sub.hl-hint-2   { box-shadow: inset 0 0 0 3px var(--hl-hint2); }
+        .abs-panel .cell-sub.hl-hint-3   { box-shadow: inset 0 0 0 3px var(--hl-hint3); }
+        .abs-panel .cell-sub.hl-selected { box-shadow: inset 0 0 0 3px var(--hl-selected); }
+        .abs-panel .cell-sub.hl-check    { animation: pulse-check 1s infinite; }
         @keyframes pulse-check {
             0%, 100% { box-shadow: inset 0 0 0 3px var(--danger), 0 0 6px var(--danger); }
             50%      { box-shadow: inset 0 0 0 3px var(--danger), 0 0 14px var(--danger); }
@@ -287,6 +372,10 @@
         <div id="tab-content">
             <div data-tab-content="history" class="active">
                 <div id="history-panel">
+                    <div class="hist-toolbar">
+                        <button id="btn-hist-copy" title="Copy current state as JSON to clipboard">📋 Copy</button>
+                        <button id="btn-hist-paste" title="Paste JSON state to load">📥 Paste</button>
+                    </div>
                     <ol id="history-list"></ol>
                 </div>
             </div>
@@ -369,10 +458,13 @@
         <span class="key">플레이어가 도착 레벨을 선택</span>, 그 사이 경로는 룰이 자동 결정. 본 프로젝트는 multi-candidate 단순화 적용.
     </p>
 
-    <h4>Attack Board (M4 예정)</h4>
+    <h4>Attack Board 이동 (Pin 모델)</h4>
     <ul>
-        <li>턴에 piece 대신 자기 어택 보드 자체를 1~2 칸 이동 가능 (탑승 폰 없거나 자기 폰 단 하나).</li>
-        <li>반전(invert) 옵션. 마지막 piece 캡처 시 소유권 이전.</li>
+        <li>턴에 piece 대신 자기 AB 자체를 이동 가능 (탑승: 비었거나 자기 폰 1개).</li>
+        <li><span class="key">핀(Pin) 기반:</span> 각 메인 보드의 4 모서리 × 위/아래 = file 당 12 pins. AB 는 핀에 부착.</li>
+        <li><span class="key">이동 거리:</span> 현재 핀에서 rank 거리 ≤ 2 인 다른 핀으로. 핀 ID 예: <code style="color:#c77dff;">W-S-up</code>, <code style="color:#c77dff;">N-S-dn</code>.</li>
+        <li><span class="key">색깔 제약:</span> 회전 4개 중 2개만 합법 (180° flip).</li>
+        <li>반전·소유권 이전: 후속 sprint 예정.</li>
     </ul>
 
     <h4>특수 룰 (캐슬링·앙파상·프로모션)</h4>

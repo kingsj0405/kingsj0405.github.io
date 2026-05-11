@@ -54,7 +54,18 @@ export class DebugOverlay {
             labelObj.position.set(pos.x, pos.y + 4, pos.z);
 
             this._scene.add(labelObj);
-            this._labels.push({ object: labelObj, div });
+            this._labels.push({ object: labelObj, div, squareId: sq });
+        }
+    }
+
+    /**
+     * AB 가 이동했을 때 라벨 위치 동기화 (M4 D-3).
+     * @param {import('../model/GameState.js').GameState} state
+     */
+    updatePositions(state) {
+        for (const { object, squareId } of this._labels) {
+            const pos = squareToVector3(squareId, state);
+            object.position.set(pos.x, pos.y + 4, pos.z);
         }
     }
 
