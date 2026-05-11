@@ -5,6 +5,8 @@
  * Self-check 필터는 Sprint 3.5 에서 추가 예정 (현재 pseudo-legal == legal).
  */
 
+import { highestSquareAt, SquareId } from '../model/SquareId.js';
+import { getCastleConfig } from './castling.js';
 import * as knight from './pieceMovement/knight.js';
 import * as king   from './pieceMovement/king.js';
 import * as pawn   from './pieceMovement/pawn.js';
@@ -64,12 +66,37 @@ export function isInCheck(state, color) {
  * @param {import('../model/SquareId.js').SquareId}   from
  * @returns {import('../model/SquareId.js').SquareId[]}
  */
+function simulateMove(state, from, to) {
+    const piece = state.getPiece(from);
+    if (piece && piece.type === 'K') {
+        const cc = getCastleConfig(state, from, to);
+        if (cc) {
+            // K ↔ R 동시 이동 (swap 일 수 있어 movePiece chain 으로는 안 됨)
+            const rookFrom = SquareId.fromString(cc.rookFrom);
+            const rookTo   = SquareId.fromString(cc.rookTo);
+            const rook     = state.getPiece(rookFrom);
+            const pieces = new Map(state.pieces);
+            pieces.delete(from.toString());
+            pieces.delete(cc.rookFrom);
+            pieces.set(to.toString(),     piece.with({ position: to,     hasMoved: true }));
+            pieces.set(cc.rookTo,         rook.with({  position: rookTo, hasMoved: true }));
+            return state.with({ pieces });
+        }
+    }
+    return state.movePiece(from, to);
+}
+
 export function generateLegalMoves(state, from) {
     const piece = state.getPiece(from);
     if (!piece) return [];
     const pseudo = generatePseudoMoves(state, from);
     return pseudo.filter(to => {
-        const next = state.movePiece(from, to);
+        // 캐슬링: 현재 체크 중이면 금지
+        if (piece.type === 'K') {
+            const cc = getCastleConfig(state, from, to);
+            if (cc && isInCheck(state, piece.color)) return false;
+        }
+        const next = simulateMove(state, from, to);
         return !isInCheck(next, piece.color);
     });
 }
@@ -94,20 +121,53 @@ export function gameStatus(state) {
  * @param {import('../model/SquareId.js').SquareId}   to
  * @returns {import('../model/GameState.js').GameState}
  */
-export function applyMove(state, from, to) {
+const PROMOTION_VALID = new Set(['Q', 'R', 'B', 'N']);
+
+export function applyMove(state, from, to, promotionType = 'Q') {
     const piece = state.getPiece(from);
     if (!piece) throw new Error(`applyMove: no piece at ${from}`);
-    const captured = state.getPiece(to);
+    if (!PROMOTION_VALID.has(promotionType)) {
+        throw new Error(`applyMove: invalid promotionType "${promotionType}"`);
+    }
+    let captured = state.getPiece(to);
 
-    // Promotion 사전 검사 (Roth-2012, ADR-0011): 폰 도착 abs rank ≥8 (백) / ≤1 (흑)
+    // En passant 캡처 감지 — 폰이 비어있는 enPassant.target 으로 이동
+    let enPassantCapture = null;
+    if (piece.type === 'P' && !captured && state.enPassant &&
+        to.toString() === state.enPassant.target.toString() &&
+        state.enPassant.color !== piece.color) {
+        enPassantCapture = state.getPiece(state.enPassant.victim);
+        captured = enPassantCapture;
+    }
+
+    // 다음 턴 enPassant 계산 (지금 두는 수가 pawn 2-step 이면)
+    let newEnPassant = null;
+    if (piece.type === 'P') {
+        const fromAbs = from.toAbs();
+        const toAbs   = to.toAbs();
+        if (Math.abs(toAbs.absRank - fromAbs.absRank) === 2) {
+            const dir = (toAbs.absRank - fromAbs.absRank) > 0 ? 1 : -1;
+            const midSq = highestSquareAt(toAbs.absFile, fromAbs.absRank + dir);
+            if (midSq) {
+                newEnPassant = { target: midSq, victim: to, color: piece.color };
+            }
+        }
+    }
+
+    // Promotion 사전 검사 (Roth-2012, ADR-0011)
     let promoteTo = null;
     if (piece.type === 'P') {
         const abs = to.toAbs();
-        if (piece.color === 'white' && abs.absRank >= 8) promoteTo = 'Q';
-        else if (piece.color === 'black' && abs.absRank <= 1) promoteTo = 'Q';
+        if (piece.color === 'white' && abs.absRank >= 8) promoteTo = promotionType;
+        else if (piece.color === 'black' && abs.absRank <= 1) promoteTo = promotionType;
     }
 
-    const moveStr = `${piece.symbol} ${from}→${to}${captured ? `×${captured.symbol}` : ''}${promoteTo ? `=${promoteTo}` : ''}`;
+    const castleCfg = piece.type === 'K' ? getCastleConfig(state, from, to) : null;
+    // king-side: rookFrom 이 KL 보드. queen-side: rookFrom 이 QL 보드.
+    const isKingside  = castleCfg && (castleCfg.rookFrom.includes('KL'));
+    const moveStr = castleCfg
+        ? (isKingside ? 'O-O' : 'O-O-O')
+        : `${piece.symbol} ${from}→${to}${captured ? `×${captured.symbol}` : ''}${promoteTo ? `=${promoteTo}` : ''}`;
     const nextTurn = state.turn === 'white' ? 'black' : 'white';
 
     const patch = {
@@ -122,7 +182,28 @@ export function applyMove(state, from, to) {
         }
     }
 
-    let next = state.movePiece(from, to).with(patch);
+    let next;
+    if (castleCfg) {
+        // 캐슬링: K + R swap 형태 → Map 직접 조작
+        const rookFromSq = SquareId.fromString(castleCfg.rookFrom);
+        const rookToSq   = SquareId.fromString(castleCfg.rookTo);
+        const rook       = state.getPiece(rookFromSq);
+        const pieces = new Map(state.pieces);
+        pieces.delete(from.toString());
+        pieces.delete(castleCfg.rookFrom);
+        pieces.set(to.toString(),       piece.with({ position: to,       hasMoved: true }));
+        pieces.set(castleCfg.rookTo,    rook.with({  position: rookToSq, hasMoved: true }));
+        next = state.with({ pieces, ...patch });
+    } else {
+        next = state.movePiece(from, to).with(patch);
+    }
+
+    // En passant: 별도 빅팀 piece 제거
+    if (enPassantCapture) {
+        const pieces = new Map(next.pieces);
+        pieces.delete(state.enPassant.victim.toString());
+        next = next.with({ pieces });
+    }
 
     if (promoteTo) {
         const moved = next.getPiece(to);
@@ -131,6 +212,9 @@ export function applyMove(state, from, to) {
         pieces.set(to.toString(), promoted);
         next = next.with({ pieces });
     }
+
+    // 다음 턴 enPassant 적용 (이전 enPassant 자동 소멸)
+    next = next.with({ enPassant: newEnPassant });
 
     return next;
 }

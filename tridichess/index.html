@@ -166,6 +166,17 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
 
+        /* Promotion picker */
+        #promotion-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 250; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        #promotion-modal[data-show="true"] { display: flex; }
+        #promotion-modal .card { background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 8px; padding: 22px 28px; text-align: center; box-shadow: 0 0 60px rgba(0,210,255,0.3); }
+        #promotion-modal h3 { margin: 0 0 14px; color: var(--warn); font-size: 1.1em; letter-spacing: 1px; }
+        #promotion-modal .picks { display: flex; gap: 10px; }
+        #promotion-modal .pick { background: var(--bg-1); border: 1px solid var(--accent-dim); color: var(--text); width: 60px; height: 80px; cursor: pointer; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: all 0.15s; font-family: 'Segoe UI Symbol', sans-serif; }
+        #promotion-modal .pick:hover { background: var(--accent); color: #000; transform: translateY(-2px); }
+        #promotion-modal .pick .sym { font-size: 2em; line-height: 1; }
+        #promotion-modal .pick .lbl { font-size: 0.72em; letter-spacing: 1px; text-transform: uppercase; }
+
         /* Game Over overlay */
         #game-over-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
         #game-over-overlay[data-show="true"] { display: flex; }
@@ -296,6 +307,18 @@
         <div id="panel-2d">
             <div class="panel-2d-title">2D Control Panel</div>
             <div class="panel-2d-grid"></div>
+        </div>
+    </div>
+</div>
+
+<div id="promotion-modal">
+    <div class="card">
+        <h3>Promote pawn to:</h3>
+        <div class="picks" id="promo-picks">
+            <button class="pick" data-promote="Q"><span class="sym" data-sym-q></span><span class="lbl">Queen</span></button>
+            <button class="pick" data-promote="R"><span class="sym" data-sym-r></span><span class="lbl">Rook</span></button>
+            <button class="pick" data-promote="B"><span class="sym" data-sym-b></span><span class="lbl">Bishop</span></button>
+            <button class="pick" data-promote="N"><span class="sym" data-sym-n></span><span class="lbl">Knight</span></button>
         </div>
     </div>
 </div>
