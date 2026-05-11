@@ -63,16 +63,25 @@
         button:hover { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 12px rgba(0, 210, 255, 0.4); }
         button:active { transform: translateY(1px); }
 
-        /* Log */
-        #log-panel { flex: 0 0 25%; padding: 10px 14px; font-family: 'Cascadia Code', 'Consolas', monospace; color: var(--text-dim); overflow-y: auto; font-size: 0.8em; border-bottom: 1px solid var(--border); background: var(--bg-0); line-height: 1.5; }
+        /* Debug panel */
+        #debug-panel { padding: 8px 14px; background: var(--bg-2); border-bottom: 1px solid var(--border); font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 0.75em; color: var(--text-dim); }
+        #debug-panel[hidden] { display: none; }
+        #debug-panel .dbg-section { margin-bottom: 4px; }
+        #debug-panel .dbg-label { color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; margin-bottom: 2px; }
+        #debug-panel .dbg-row { display: flex; gap: 6px; line-height: 1.4; }
+        #debug-panel .dbg-row .k { color: var(--text-dim); min-width: 56px; }
+        #debug-panel .dbg-row .v { color: var(--text); }
+
+        /* Log — 남는 공간 차지, 스크롤 */
+        #log-panel { flex: 1 1 0; min-height: 60px; padding: 10px 14px; font-family: 'Cascadia Code', 'Consolas', monospace; color: var(--text-dim); overflow-y: auto; font-size: 0.8em; border-bottom: 1px solid var(--border); background: var(--bg-0); line-height: 1.5; }
         #log-panel > div { padding: 1px 0; }
         #log-panel .log-system  { color: var(--accent-dim); }
         #log-panel .log-action  { color: var(--text); }
         #log-panel .log-capture { color: var(--danger); }
         #log-panel .log-info    { color: var(--text-dim); }
 
-        /* 2D Control Panel */
-        #panel-2d { flex: 1; padding: 12px; overflow: auto; background: var(--bg-0); }
+        /* 2D Control Panel — 자연 크기 고정 (잘리지 않게) */
+        #panel-2d { flex: 0 0 auto; padding: 12px; background: var(--bg-0); }
         #panel-2d .panel-2d-title { font-size: 0.75em; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
         #panel-2d .panel-2d-title::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); }
         #panel-2d .panel-2d-grid { display: grid; grid-template-columns: auto auto auto; gap: 8px; align-items: center; justify-items: center; }
@@ -99,8 +108,16 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
 
         /* Rule Popup */
-        #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 540px; max-width: 90vw; background: linear-gradient(180deg, rgba(20, 22, 30, 0.98), rgba(10, 12, 18, 0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 24px; z-index: 100; box-shadow: 0 0 60px rgba(0, 210, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6); color: var(--text); }
+        #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px; max-width: 92vw; max-height: 86vh; overflow-y: auto; background: linear-gradient(180deg, rgba(20, 22, 30, 0.98), rgba(10, 12, 18, 0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 24px 28px; z-index: 100; box-shadow: 0 0 60px rgba(0, 210, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6); color: var(--text); line-height: 1.55; font-size: 0.92em; }
         #rule-modal h3 { color: var(--warn); border-bottom: 1px solid var(--border); margin-top: 0; padding-bottom: 10px; letter-spacing: 0.5px; }
+        #rule-modal h4 { color: var(--accent); margin-top: 18px; margin-bottom: 6px; font-size: 0.95em; letter-spacing: 0.3px; }
+        #rule-modal p, #rule-modal ul { margin: 8px 0; }
+        #rule-modal ul { padding-left: 20px; }
+        #rule-modal li { margin-bottom: 4px; color: var(--text); }
+        #rule-modal .key { color: var(--accent); font-weight: 600; }
+        #rule-modal .limit-note { background: rgba(255, 204, 0, 0.08); border-left: 3px solid var(--warn); padding: 8px 12px; margin: 12px 0; font-size: 0.88em; color: var(--text-dim); }
+        #rule-modal .cta { display: block; text-align: center; margin-top: 18px; padding: 10px; background: rgba(0, 210, 255, 0.1); border: 1px solid var(--accent); border-radius: 4px; color: var(--accent); font-weight: 600; }
+        #rule-modal .cta:hover { background: var(--accent); color: #000; }
         #rule-modal a { color: var(--accent); text-decoration: none; }
         #rule-modal a:hover { text-decoration: underline; }
         #rule-modal ul { padding-left: 20px; }
@@ -134,7 +151,21 @@
         <div class="control-group">
             <button id="btn-reset">Reset</button>
             <button id="btn-rules">Rules</button>
-            <button id="btn-debug">Coords</button>
+            <button id="btn-debug">Debug</button>
+        </div>
+        <div id="debug-panel" hidden>
+            <div class="dbg-section">
+                <div class="dbg-label">Camera</div>
+                <div class="dbg-row"><span class="k">pos</span><span class="v" id="dbg-cam-pos">—</span></div>
+                <div class="dbg-row"><span class="k">target</span><span class="v" id="dbg-cam-target">—</span></div>
+                <div class="dbg-row"><span class="k">dist</span><span class="v" id="dbg-cam-dist">—</span></div>
+            </div>
+            <div class="dbg-section">
+                <div class="dbg-label">Game</div>
+                <div class="dbg-row"><span class="k">selected</span><span class="v" id="dbg-selected">—</span></div>
+                <div class="dbg-row"><span class="k">moves</span><span class="v" id="dbg-moves">0</span></div>
+                <div class="dbg-row"><span class="k">last</span><span class="v" id="dbg-last-move">—</span></div>
+            </div>
         </div>
         <div id="log-panel">
             <div class="log-system">▸ Warp Core Online.</div>
@@ -149,13 +180,56 @@
 
 <div id="rule-modal">
     <button class="close-btn" onclick="document.getElementById('rule-modal').style.display='none'">&times;</button>
-    <h3>Structure & Rules</h3>
-    <p>This board faithfully reproduces the <b>overlapping staircase structure</b> seen in Star Trek.</p>
+    <h3>Tri-Dimensional Chess — 핵심 룰 요약</h3>
+
+    <h4>보드 구조</h4>
     <ul>
-        <li><b>Main Boards:</b> Three 4x4 boards stacked. The middle board overlaps the back half of the bottom board. The top board overlaps the back half of the middle board.</li>
-        <li><b>Attack Boards:</b> Attached to the exposed corners of the Main Boards.</li>
+        <li><span class="key">메인 보드 3장</span> (각 4×4): W (백 측, 가장 아래) → N (중립, 중간) → B (흑 측, 가장 위).
+            각 다음 보드가 이전 보드의 rank 3 위에서 시작 — 2 rank 씩 겹치는 staircase.</li>
+        <li><span class="key">어택 보드 4장</span> (각 2×2): QL1/KL1 은 W 의 좌·우 모서리에, QL3/KL3 는 B 의 모서리에 부착.
+            어택 보드의 한 칸과 부모 메인 보드의 한 칸이 같은 (x, z) 좌표 공유.</li>
+        <li>총 64 칸 — 표준 체스와 같지만 7 레벨에 분산.</li>
     </ul>
-    <p>Reference: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">The Andrew Bartmess Rules</a></p>
+
+    <h4>이동 규칙 (요약)</h4>
+    <ul>
+        <li><span class="key">Pawn</span>: 전진 1 (첫 이동 시 2), 대각 캡처. 보드 간 진출 시 abs rank 가 같은 다른 레벨로도 이동 가능 (플레이어 선택).</li>
+        <li><span class="key">Knight</span>: 3D L-shape — 8 종 (±2, ±1)/(±1, ±2) 점프. 경로의 장애물 무시.</li>
+        <li><span class="key">Bishop</span>: 대각 슬라이딩 (4 방향). 보드 간 이동 가능.</li>
+        <li><span class="key">Rook</span>: 직선 슬라이딩 (4 방향). 보드 간 이동 가능.</li>
+        <li><span class="key">Queen</span>: Rook + Bishop.</li>
+        <li><span class="key">King</span>: 인접 1 칸 + 같은 (x,z) 좌표의 다른 레벨로 수직 이동.</li>
+    </ul>
+
+    <h4>3D 핵심 — Highest Path</h4>
+    <p>
+        한 abs 좌표 cell 에 여러 레벨의 칸이 동시에 존재할 수 있음 (보드 겹침).
+        <span class="key">플레이어가 도착 레벨을 선택</span>, 그 사이 경로는 룰이 자동 결정. 본 프로젝트는 multi-candidate 단순화 적용.
+    </p>
+
+    <h4>Attack Board (M4 예정)</h4>
+    <ul>
+        <li>턴에 piece 대신 자기 어택 보드 자체를 1~2 칸 이동 가능 (탑승 폰 없거나 자기 폰 단 하나).</li>
+        <li>반전(invert) 옵션. 마지막 piece 캡처 시 소유권 이전.</li>
+    </ul>
+
+    <h4>특수 룰 (캐슬링·앙파상·프로모션)</h4>
+    <ul>
+        <li>3D 캐슬링: King-side 자리 교체, Queen-side teleport.</li>
+        <li>앙파상: 표준 체스 그대로, "use it or lose it".</li>
+        <li>프로모션: 백은 rank 8/9, 흑은 rank 1/0 도달 시.</li>
+    </ul>
+
+    <div class="limit-note">
+        <strong>본 구현의 한계 (MVP):</strong>
+        Attack Board 이동 미구현 (M4), 캐슬링 / 앙파상 / 프로모션 미구현 (M5), 자기 체크 차단 미구현 (Sprint 3.5).
+        Highest-path 도 정확한 path 검증 대신 multi-candidate 단순화 (ADR-0010).
+    </div>
+
+    <a class="cta" href="rules-ko.html" target="_blank">→ 정통 룰 전문 (한글 완역) 보기</a>
+    <p style="font-size: 0.82em; color: var(--text-dim); text-align: center; margin-top: 12px;">
+        원본: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">Roth-2012, FRS 5.0</a> · Andrew Bartmess
+    </p>
 </div>
 
 <script type="module" src="src/main.js"></script>

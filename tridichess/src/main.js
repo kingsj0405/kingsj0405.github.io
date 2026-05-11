@@ -15,8 +15,9 @@ import { setupPhysicalBoards, setupLogicalSquares } from './renderer/BoardRender
 import { PieceRenderer }                           from './renderer/PieceRenderer.js';
 import { DebugOverlay }                            from './ui/DebugOverlay.js';
 import { Board2DPanel }                            from './ui/Board2DPanel.js';
-import { getAllSquares, getVerticalColumn }         from './model/SquareId.js';
+import { getVerticalColumn }                       from './model/SquareId.js';
 import { createInitialState }                       from './model/initialState.js';
+import { generateLegalMoves }                       from './rules/RuleController.js';
 
 // ── 게임 상태 ──────────────────────────────────────────────────
 /** @type {import('./model/GameState.js').GameState} */
@@ -71,13 +72,41 @@ function init() {
         document.getElementById('rule-modal').style.display = 'block';
     };
     document.getElementById('btn-debug').onclick = () => {
+        const on = !debugOverlay.isVisible;
         debugOverlay.toggle();
-        const btn = document.getElementById('btn-debug');
-        btn.textContent = debugOverlay.isVisible ? 'Hide Coords' : 'Debug Coords';
+        document.getElementById('debug-panel').hidden = !on;
+        document.getElementById('btn-debug').textContent = on ? 'Hide Debug' : 'Debug';
+        if (on) updateDebugPanel();
     };
+
+    controls.addEventListener('change', () => {
+        if (!document.getElementById('debug-panel').hidden) updateDebugCamera();
+    });
 
     window.addEventListener('resize', onResize);
     animate();
+}
+
+// ── 디버그 패널 ──────────────────────────────────────────────────
+function fmtV3(v) {
+    return `(${v.x.toFixed(1)}, ${v.y.toFixed(1)}, ${v.z.toFixed(1)})`;
+}
+
+function updateDebugCamera() {
+    const pos    = camera.position;
+    const target = controls.target;
+    const dist   = pos.distanceTo(target);
+    document.getElementById('dbg-cam-pos').textContent    = fmtV3(pos);
+    document.getElementById('dbg-cam-target').textContent = fmtV3(target);
+    document.getElementById('dbg-cam-dist').textContent   = dist.toFixed(1);
+}
+
+function updateDebugPanel() {
+    updateDebugCamera();
+    document.getElementById('dbg-selected').textContent  = ui.selected ? ui.selected.toString() : '—';
+    document.getElementById('dbg-moves').textContent     = ui.moves.length;
+    const hist = gameState.moveHistory;
+    document.getElementById('dbg-last-move').textContent = hist.length > 0 ? String(hist[hist.length - 1]) : '—';
 }
 
 // ── 클릭 핸들러 ─────────────────────────────────────────────────
@@ -112,6 +141,7 @@ function handleSquareClick(squareId) {
     }
 
     board2D.render(gameState, ui);
+    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
 }
 
 // ── 이동 적용 ────────────────────────────────────────────────────
@@ -123,9 +153,13 @@ function applyMove(from, to) {
     const piece    = gameState.getPiece(from);
     const captured = gameState.getPiece(to);
 
+    const moveStr = `${piece.symbol} ${from}→${to}${captured ? `×${captured.symbol}` : ''}`;
     gameState = gameState
         .movePiece(from, to)
-        .with({ turn: gameState.turn === 'white' ? 'black' : 'white' });
+        .with({
+            turn: gameState.turn === 'white' ? 'black' : 'white',
+            moveHistory: [...gameState.moveHistory, moveStr],
+        });
 
     log(`${piece.symbol} ${from} → ${to}`, 'action');
     if (captured) log(`  ✕ Captured ${captured.symbol}`, 'capture');
@@ -137,25 +171,17 @@ function applyMove(from, to) {
     pieceRenderer.render(gameState.pieces);
     board2D.render(gameState, ui);
     renderTurnIndicator();
+    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
 }
 
-// ── 이동 가능 목록 (Sprint 3.1 데모용) ─────────────────────────
-// Sprint 3.5 에서 RuleController.generateLegalMoves() 로 교체.
+// ── 이동 가능 목록 — RuleController 위임 ────────────────────
+// Knight/King 은 정통 규칙. 나머지 piece 는 같은 레벨 데모 폴백 (Sprint 3.3~3.5 에서 교체).
 /**
  * @param {import('./model/SquareId.js').SquareId} squareId
  * @returns {import('./model/SquareId.js').SquareId[]}
  */
 function getMoves(squareId) {
-    const piece = gameState.getPiece(squareId);
-    if (!piece) return [];
-
-    return getAllSquares().filter(sq => {
-        if (sq.level !== squareId.level) return false;
-        if (sq.equals(squareId)) return false;
-        const occupant = gameState.getPiece(sq);
-        if (occupant && occupant.color === piece.color) return false;
-        return true;
-    });
+    return generateLegalMoves(gameState, squareId);
 }
 
 /** @param {import('./model/SquareId.js').SquareId} squareId */
@@ -182,6 +208,7 @@ function resetGame() {
     pieceRenderer.render(gameState.pieces);
     board2D.render(gameState, ui);
     renderTurnIndicator();
+    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
     log('▸ Game Reset', 'system');
 }
 
@@ -242,6 +269,25 @@ window.tridi = {
         };
         console.log(JSON.stringify(out, null, 2));
         return out;
+    },
+    /** 현 카메라 pose 콘솔에 출력 + 객체 반환 (복붙용) */
+    cam: () => {
+        const p = camera.position, t = controls.target;
+        const out = {
+            position: { x: +p.x.toFixed(2), y: +p.y.toFixed(2), z: +p.z.toFixed(2) },
+            target:   { x: +t.x.toFixed(2), y: +t.y.toFixed(2), z: +t.z.toFixed(2) },
+            distance: +p.distanceTo(t).toFixed(2),
+        };
+        console.log('camera.position.set(%s, %s, %s);  controls.target.set(%s, %s, %s);',
+            out.position.x, out.position.y, out.position.z,
+            out.target.x,   out.target.y,   out.target.z);
+        return out;
+    },
+    /** 카메라 즉시 적용. setCam(px,py,pz, tx?,ty?,tz?) */
+    setCam: (px, py, pz, tx, ty, tz) => {
+        camera.position.set(px, py, pz);
+        if (tx !== undefined) controls.target.set(tx, ty, tz);
+        controls.update();
     },
 };
 

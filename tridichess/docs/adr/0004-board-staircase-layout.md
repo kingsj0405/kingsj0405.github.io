@@ -1,6 +1,6 @@
 # ADR-0004 — 메인 보드 Z 후퇴 staircase 배치 복원
 
-- **상태:** Accepted
+- **상태:** Superseded by ADR-0007 (어택 보드까지 정확 overlap 적용)
 - **일자:** 2026-05-11
 - **관련:** `src/renderer/CoordMapper.js`, `src/renderer/BoardRenderer.js`
 - **Sprint:** 3.1 (QA BLOCKER 처리)
