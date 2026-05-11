@@ -17,11 +17,59 @@ import { DebugOverlay }                            from './ui/DebugOverlay.js';
 import { Board2DPanel }                            from './ui/Board2DPanel.js';
 import { getVerticalColumn }                       from './model/SquareId.js';
 import { createInitialState }                       from './model/initialState.js';
-import { generateLegalMoves }                       from './rules/RuleController.js';
+import { generateLegalMoves, applyMove as applyMoveRC, gameStatus, isInCheck } from './rules/RuleController.js';
+import { computeMaterial }                          from './rules/material.js';
+import { createMinimaxAI, topDistinctMoves }        from './ai/MinimaxAI.js';
 
-// ── 게임 상태 ──────────────────────────────────────────────────
+// ── 게임 상태 + 히스토리 ──────────────────────────────────────
 /** @type {import('./model/GameState.js').GameState} */
 let gameState = createInitialState();
+/** @type {Array<import('./model/GameState.js').GameState>} */
+let history    = [gameState];
+let historyIdx = 0;
+
+function pushState(newState) {
+    // 과거 시점에서 새 수 → 그 뒤 히스토리 truncate (branch 단순화)
+    if (historyIdx < history.length - 1) {
+        history = history.slice(0, historyIdx + 1);
+    }
+    history.push(newState);
+    historyIdx = history.length - 1;
+}
+
+function jumpToHistory(idx) {
+    if (idx < 0 || idx >= history.length) return;
+    historyIdx = idx;
+    gameState  = history[idx];
+
+    // UI 상태 초기화
+    ui.selected    = null;
+    ui.moves       = [];
+    ui.hints       = [];
+    ui.checkSquare = null;
+    // lastMove 는 해당 시점의 마지막 수로 추출
+    if (historyIdx > 0) {
+        const prev = history[historyIdx - 1];
+        // moveHistory 의 마지막 항목으로 from/to 알기 어려움 — 일단 last 만 표시 X
+        ui.lastMove = null;
+    } else {
+        ui.lastMove = null;
+    }
+
+    cancelPendingAI();
+    hideGameOver();
+    // 현 상태가 종료 상태일 수도 있으니 재평가
+    evaluateAndAnnounce();
+
+    refreshHighlights();
+    pieceRenderer.render(gameState.pieces);
+    board2D.render(gameState, ui);
+    renderTurnIndicator();
+    renderCapturesPanel();
+    renderHistoryPanel();
+    log(`▸ Jumped to move ${idx}`, 'log-system');
+    scheduleAIMove();
+}
 
 // ── UI 상태 (선택/이동 후보) — 게임 상태와 분리 ────────────────
 const ui = {
@@ -29,6 +77,23 @@ const ui = {
     selected: null,
     /** @type {import('./model/SquareId.js').SquareId[]} */
     moves: [],
+    /** @type {Array<{from, to, score: number}>} */
+    hints: [],
+    /** @type {{from, to} | null} */
+    lastMove: null,
+    /** @type {import('./model/SquareId.js').SquareId | null} — 체크 받은 King */
+    checkSquare: null,
+};
+
+let gameOver = false;
+
+// ── AI 설정 ────────────────────────────────────────────────────
+const ai = {
+    mode: 'hvh',       // 'hvh' | 'hva' (AI=black) | 'avh' (AI=white) | 'ava'
+    depth: 2,
+    auto: true,        // false 면 자동 진행 안 함 (Step 버튼으로만)
+    thinking: false,
+    pending: null,
 };
 
 // ── Three.js 참조 ──────────────────────────────────────────────
@@ -40,13 +105,16 @@ let debugOverlay;
 /** @type {Board2DPanel} */
 let board2D;
 
-// ── 하이라이트 색상 ────────────────────────────────────────────
+// ── 하이라이트 색상 (CSS variables 와 동기화) ──────────────────
 const COLOR = {
-    NONE:     0x000000,
-    SELECTED: 0x00ff00,
-    COLUMN:   0x004466,
-    MOVE:     0xffff00,
+    NONE:      0x000000,
+    SELECTED:  0x00ff7f,
+    COLUMN:    0x004466,
+    MOVE:      0xffe54a,
+    LAST_MOVE: 0xff8c40,
 };
+const HINT_COLORS = [0xff44cc, 0x2196f3, 0xffc107]; // top-1/2/3
+const HINT_LOG_CLASSES = ['log-hint-1', 'log-hint-2', 'log-hint-3'];
 
 // ── 초기화 ──────────────────────────────────────────────────────
 function init() {
@@ -66,25 +134,172 @@ function init() {
     pieceRenderer.render(gameState.pieces);
     board2D.render(gameState, ui);
     renderTurnIndicator();
+    renderCapturesPanel();
+    renderHistoryPanel();
 
     document.getElementById('btn-reset').onclick = resetGame;
     document.getElementById('btn-rules').onclick = () => {
         document.getElementById('rule-modal').style.display = 'block';
     };
     document.getElementById('btn-debug').onclick = () => {
-        const on = !debugOverlay.isVisible;
+        // 3D 좌표 라벨 토글 + Debug 탭으로 전환
         debugOverlay.toggle();
-        document.getElementById('debug-panel').hidden = !on;
-        document.getElementById('btn-debug').textContent = on ? 'Hide Debug' : 'Debug';
-        if (on) updateDebugPanel();
+        switchTab('debug');
+        updateDebugPanel();
+    };
+
+    document.getElementById('btn-hint').onclick = showHints;
+    document.getElementById('btn-step').onclick = () => scheduleAIMove(true);
+    document.getElementById('btn-undo').onclick = undoMove;
+    document.getElementById('tab-collapse').onclick = toggleTabContent;
+    document.getElementById('ai-auto').onchange = (e) => {
+        ai.auto = e.target.checked;
+        updateAIControlsVisibility();
+        if (ai.auto) scheduleAIMove();
+    };
+    updateAIControlsVisibility();
+    document.getElementById('go-replay').onclick = () => { hideGameOver(); resetGame(); };
+
+    // Tab 전환
+    document.querySelectorAll('#tab-bar .tab').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // History 항목 클릭 → 점프
+    document.getElementById('history-list').addEventListener('click', (e) => {
+        const item = e.target.closest('.hist-item');
+        if (!item) return;
+        jumpToHistory(parseInt(item.dataset.idx, 10));
+    });
+
+    document.getElementById('ai-mode').onchange = (e) => {
+        ai.mode = e.target.value;
+        log(`Mode: ${e.target.value}`, 'log-system');
+        cancelPendingAI();
+        updateAIControlsVisibility();
+        scheduleAIMove();
+    };
+    document.getElementById('ai-depth').onchange = (e) => {
+        ai.depth = parseInt(e.target.value, 10);
+        log(`AI depth: ${ai.depth}`, 'log-system');
+        cancelPendingAI();
+        scheduleAIMove();
     };
 
     controls.addEventListener('change', () => {
-        if (!document.getElementById('debug-panel').hidden) updateDebugCamera();
+        if (isDebugTabActive()) updateDebugCamera();
     });
 
     window.addEventListener('resize', onResize);
     animate();
+    scheduleAIMove();
+}
+
+// ── AI 차례 처리 ──────────────────────────────────────────────
+function aiColorForTurn() {
+    if (ai.mode === 'ava')              return gameState.turn;
+    if (ai.mode === 'hva' && gameState.turn === 'black') return 'black';
+    if (ai.mode === 'avh' && gameState.turn === 'white') return 'white';
+    return null;
+}
+function isAIturn() { return aiColorForTurn() !== null; }
+
+function setAIStatus(text) {
+    document.getElementById('ai-status').textContent = text;
+}
+
+function cancelPendingAI() {
+    if (ai.pending) { clearTimeout(ai.pending); ai.pending = null; }
+    ai.thinking = false;
+    setAIStatus('');
+}
+
+function scheduleAIMove(force = false) {
+    if (!force && !ai.auto) return;
+    if (!isAIturn() || ai.thinking || gameOver) return;
+    if (!gameState.findKing('white') || !gameState.findKing('black')) return;
+
+    ai.thinking = true;
+    setAIStatus(`AI thinking (depth ${ai.depth})…`);
+
+    ai.pending = setTimeout(() => {
+        try {
+            const agent = createMinimaxAI({ depth: ai.depth });
+            const move  = agent(gameState);
+            if (!move) {
+                log('AI: no legal moves', 'log-system');
+                ai.thinking = false;
+                setAIStatus('AI: stalemate');
+                return;
+            }
+            ai.thinking = false;
+            ai.pending  = null;
+            setAIStatus('');
+            applyMove(move.from, move.to);
+        } catch (err) {
+            console.error('AI error:', err);
+            ai.thinking = false;
+            setAIStatus('AI error (see console)');
+        }
+    }, 350);
+}
+
+// ── Undo / Move counter / 탭 collapse ────────────────────────
+function undoMove() {
+    if (historyIdx === 0) return;
+    let target = historyIdx - 1;
+    // vs-AI 모드에서 무른 결과가 AI 차례면 한 번 더 무름
+    if (target > 0) {
+        const turnAtTarget = history[target].turn;
+        if ((ai.mode === 'hva' && turnAtTarget === 'black') ||
+            (ai.mode === 'avh' && turnAtTarget === 'white')) {
+            target--;
+        }
+    }
+    jumpToHistory(target);
+}
+
+function updateMoveCounter() {
+    const el = document.getElementById('move-counter');
+    if (!el) return;
+    el.textContent = `#${historyIdx}/${history.length - 1}`;
+    const btnUndo = document.getElementById('btn-undo');
+    if (btnUndo) btnUndo.disabled = historyIdx === 0;
+}
+
+function toggleTabContent() {
+    const tc  = document.getElementById('tab-content');
+    const btn = document.getElementById('tab-collapse');
+    const collapsed = tc.classList.toggle('collapsed');
+    btn.textContent = collapsed ? '▴' : '▾';
+}
+
+// AI 모드/Auto 상태에 따라 Step 버튼 활성 여부.
+// Step 은 (AI 모드 켜져있고) + (Auto 꺼져있거나 AI vs AI) 때 의미 있음.
+function updateAIControlsVisibility() {
+    const stepBtn = document.getElementById('btn-step');
+    if (!stepBtn) return;
+    const hasAI = ai.mode !== 'hvh';
+    // Step 은 AI 모드 + Auto 꺼졌을 때 가장 유용. Auto 켜져 있으면 사실상 불필요하지만 disable 안 함.
+    stepBtn.disabled = !hasAI;
+    stepBtn.style.opacity = stepBtn.disabled ? '0.3' : '';
+}
+
+// ── 탭 전환 ─────────────────────────────────────────────────
+function switchTab(name) {
+    document.querySelectorAll('#tab-bar .tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === name);
+    });
+    document.querySelectorAll('#tab-content > [data-tab-content]').forEach(p => {
+        p.classList.toggle('active', p.dataset.tabContent === name);
+    });
+    if (name === 'debug') updateDebugPanel();
+    if (name === 'history') renderHistoryPanel();
+}
+
+function isDebugTabActive() {
+    const el = document.querySelector('#tab-content > [data-tab-content="debug"]');
+    return el && el.classList.contains('active');
 }
 
 // ── 디버그 패널 ──────────────────────────────────────────────────
@@ -109,42 +324,67 @@ function updateDebugPanel() {
     document.getElementById('dbg-last-move').textContent = hist.length > 0 ? String(hist[hist.length - 1]) : '—';
 }
 
+// ── 통합 하이라이트 리프레시 ─────────────────────────────────
+function refreshHighlights() {
+    clearAllHighlights();
+    // last move (지속, 가장 낮은 우선)
+    if (ui.lastMove) {
+        highlightSquare(ui.lastMove.from.toString(), COLOR.LAST_MOVE);
+        highlightSquare(ui.lastMove.to.toString(),   COLOR.LAST_MOVE);
+    }
+    // column for selected
+    if (ui.selected) {
+        for (const c of getVerticalColumn(ui.selected)) {
+            highlightSquare(c.toString(), COLOR.COLUMN);
+        }
+    }
+    // moves
+    for (const m of ui.moves) {
+        highlightSquare(m.toString(), COLOR.MOVE);
+    }
+    // hints (top-N 각각 unique color, from/to 같은 색)
+    for (let i = 0; i < ui.hints.length && i < HINT_COLORS.length; i++) {
+        const h = ui.hints[i];
+        const c = HINT_COLORS[i];
+        highlightSquare(h.from.toString(), c);
+        highlightSquare(h.to.toString(),   c);
+    }
+    // selected on top
+    if (ui.selected) {
+        highlightSquare(ui.selected.toString(), COLOR.SELECTED);
+    }
+}
+
 // ── 클릭 핸들러 ─────────────────────────────────────────────────
 /** @param {import('./model/SquareId.js').SquareId} squareId */
 function handleSquareClick(squareId) {
+    if (gameOver || isAIturn() || ai.thinking) return;
     const piece = gameState.getPiece(squareId);
     const isOwn = piece && piece.color === gameState.turn;
 
-    clearAllHighlights();
+    ui.hints = []; // 액션 시 hints 초기화
 
     if (isOwn) {
         ui.selected = squareId;
         ui.moves    = getMoves(squareId);
-
-        highlightSquare(squareId.toString(), COLOR.SELECTED);
-        for (const colSq of getVerticalColumn(squareId)) {
-            highlightSquare(colSq.toString(), COLOR.COLUMN);
-        }
-        for (const moveSq of ui.moves) {
-            highlightSquare(moveSq.toString(), COLOR.MOVE);
-        }
-
-        log(`Selected ${piece.symbol} at ${squareId}`, 'info');
+        log(`Selected ${piece.symbol} at ${squareId}`, 'log-select');
 
     } else if (ui.selected !== null && isMoveTarget(squareId)) {
         applyMove(ui.selected, squareId);
+        return; // applyMove 가 후속 처리
 
     } else {
         ui.selected = null;
         ui.moves    = [];
-        if (piece) log(`${squareId}: ${piece.color} ${piece.type}`, 'info');
+        if (piece) log(`${squareId}: ${piece.color} ${piece.type}`, 'log-info');
     }
 
+    refreshHighlights();
     board2D.render(gameState, ui);
-    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
+    if (isDebugTabActive()) updateDebugPanel();
 }
 
-// ── 이동 적용 ────────────────────────────────────────────────────
+// ── 이동 적용 — RuleController.applyMove 위임 ─────────────────
 /**
  * @param {import('./model/SquareId.js').SquareId} from
  * @param {import('./model/SquareId.js').SquareId} to
@@ -153,25 +393,106 @@ function applyMove(from, to) {
     const piece    = gameState.getPiece(from);
     const captured = gameState.getPiece(to);
 
-    const moveStr = `${piece.symbol} ${from}→${to}${captured ? `×${captured.symbol}` : ''}`;
-    gameState = gameState
-        .movePiece(from, to)
-        .with({
-            turn: gameState.turn === 'white' ? 'black' : 'white',
-            moveHistory: [...gameState.moveHistory, moveStr],
-        });
+    gameState = applyMoveRC(gameState, from, to);
+    pushState(gameState);
+    const movedAfter = gameState.getPiece(to);
+    const promoted = piece.type === 'P' && movedAfter && movedAfter.type !== 'P';
 
-    log(`${piece.symbol} ${from} → ${to}`, 'action');
-    if (captured) log(`  ✕ Captured ${captured.symbol}`, 'capture');
+    log(`${piece.symbol} ${from} → ${to}`, 'log-action');
+    if (captured) log(`  ✕ Captured ${captured.symbol}`, 'log-capture');
+    if (promoted) log(`  ↑ Promoted to ${movedAfter.symbol}`, 'log-system');
 
     ui.selected = null;
     ui.moves    = [];
+    ui.hints    = [];
+    ui.lastMove = { from, to };
 
-    clearAllHighlights();
+    refreshHighlights();
     pieceRenderer.render(gameState.pieces);
     board2D.render(gameState, ui);
     renderTurnIndicator();
-    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
+    renderCapturesPanel();
+    if (isDebugTabActive()) updateDebugPanel();
+
+    const ended = checkGameOver();
+    board2D.render(gameState, ui);
+    renderHistoryPanel();
+    if (ended) return;
+    scheduleAIMove();
+}
+
+// ── 히스토리 패널 ────────────────────────────────────────────
+function renderHistoryPanel() {
+    updateMoveCounter();
+    const list = document.getElementById('history-list');
+    if (!list) return;
+    list.innerHTML = '';
+    for (let i = 0; i < history.length; i++) {
+        const st  = history[i];
+        const li  = document.createElement('li');
+        li.className = 'hist-item' + (i === historyIdx ? ' current' : '');
+        li.dataset.idx = String(i);
+        if (i === 0) {
+            li.innerHTML = `<span class="hist-no">0</span> <span class="hist-move">Initial</span>`;
+        } else {
+            const last = st.moveHistory[st.moveHistory.length - 1] ?? '';
+            const turnAfter = st.turn === 'white' ? 'B' : 'W';
+            li.innerHTML = `<span class="hist-no">${i}</span> <span class="hist-move">${last}</span> <span class="hist-after">→ ${turnAfter}</span>`;
+        }
+        list.appendChild(li);
+    }
+    // 스크롤 현재 항목으로
+    const cur = list.querySelector('.hist-item.current');
+    if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+}
+
+// ── 게임 상태 평가 (체크/체크메이트/스테일메이트) ──────────────
+function evaluateAndAnnounce() {
+    ui.checkSquare = null;
+
+    // King 캡처 (안전망 — legal filter 가 있으면 정상적으로 발생 안 함)
+    const wK = gameState.findKing('white');
+    const bK = gameState.findKing('black');
+    if (!wK || !bK) {
+        const winner = !wK ? 'Black' : 'White';
+        return endGame(`Game Over`, `${winner} wins — King captured.`);
+    }
+
+    const st = gameStatus(gameState);
+    if (st === 'checkmate') {
+        const winner = gameState.turn === 'white' ? 'Black' : 'White';
+        ui.checkSquare = gameState.findKing(gameState.turn);
+        return endGame(`Checkmate`, `${winner} wins.`);
+    }
+    if (st === 'stalemate') {
+        return endGame(`Stalemate`, `Draw — no legal moves and not in check.`);
+    }
+    if (st === 'check') {
+        ui.checkSquare = gameState.findKing(gameState.turn);
+        const who = gameState.turn === 'white' ? 'White' : 'Black';
+        log(`▸ Check on ${who} King at ${ui.checkSquare}`, 'log-capture');
+    }
+    return false;
+}
+
+function endGame(title, msg) {
+    gameOver = true;
+    cancelPendingAI();
+    document.getElementById('go-title').textContent = title;
+    document.getElementById('go-msg').textContent   = msg;
+    document.getElementById('game-over-overlay').setAttribute('data-show', 'true');
+    log(`▸ ${title} — ${msg}`, 'log-capture');
+    return true;
+}
+
+// 기존 이름 호환 (applyMove 에서 호출)
+function checkGameOver() {
+    return evaluateAndAnnounce();
+}
+
+function hideGameOver() {
+    gameOver = false;
+    document.getElementById('game-over-overlay').setAttribute('data-show', 'false');
 }
 
 // ── 이동 가능 목록 — RuleController 위임 ────────────────────
@@ -199,40 +520,110 @@ function highlightSquare(key, color) {
     if (mesh) mesh.material.emissive.setHex(color);
 }
 
+// ── AI Assist (Hint) — top-3 추천 수 ─────────────────────────
+function showHints() {
+    if (gameOver) return;
+    if (isAIturn() || ai.thinking) {
+        log('Hint: AI 차례 중 사용 불가', 'log-system');
+        return;
+    }
+    setAIStatus(`Hint computing (depth ${ai.depth})…`);
+    // 동기 호출. setTimeout 으로 UI 응답 보장.
+    setTimeout(() => {
+        try {
+            const top = topDistinctMoves(gameState, ai.depth, 3);
+            if (top.length === 0) {
+                log('Hint: 합법 수 없음', 'log-system');
+                setAIStatus('');
+                return;
+            }
+            ui.hints    = top;
+            ui.selected = null;
+            ui.moves    = [];
+            refreshHighlights();
+            board2D.render(gameState, ui);
+            log(`Hints (depth ${ai.depth}):`, 'log-system');
+            top.forEach((h, i) => {
+                const p = gameState.getPiece(h.from);
+                const sym = p ? p.symbol : '?';
+                const s = h.score > 0 ? `+${h.score}` : `${h.score}`;
+                log(`  ${i + 1}. ${sym} ${h.from} → ${h.to} (${s})`, HINT_LOG_CLASSES[i] || 'log-info');
+            });
+            setAIStatus('');
+        } catch (err) {
+            console.error('Hint error:', err);
+            setAIStatus('Hint error (see console)');
+        }
+    }, 50);
+}
+
 // ── 리셋 ─────────────────────────────────────────────────────────
 function resetGame() {
-    gameState   = createInitialState();
-    ui.selected = null;
-    ui.moves    = [];
+    cancelPendingAI();
+    hideGameOver();
+    gameState    = createInitialState();
+    history      = [gameState];
+    historyIdx   = 0;
+    ui.selected    = null;
+    ui.moves       = [];
+    ui.hints       = [];
+    ui.lastMove    = null;
+    ui.checkSquare = null;
     clearAllHighlights();
     pieceRenderer.render(gameState.pieces);
     board2D.render(gameState, ui);
     renderTurnIndicator();
-    if (!document.getElementById('debug-panel').hidden) updateDebugPanel();
-    log('▸ Game Reset', 'system');
+    renderCapturesPanel();
+    renderHistoryPanel();
+    if (isDebugTabActive()) updateDebugPanel();
+    log('▸ Game Reset', 'log-system');
+    scheduleAIMove();
 }
 
 // ── 로그 ─────────────────────────────────────────────────────────
 /**
  * @param {string} msg
- * @param {'action'|'capture'|'info'|'system'} [kind='info']
+ * @param {string} [klass='log-info'] — CSS 클래스 (예: log-info, log-action, log-select, log-hint-1)
  */
-function log(msg, kind = 'info') {
+function log(msg, klass = 'log-info') {
     const panel = document.getElementById('log-panel');
     const div   = document.createElement('div');
-    div.className   = `log-${kind}`;
+    div.className   = klass;
     div.textContent = msg;
     panel.appendChild(div);
     panel.scrollTop = panel.scrollHeight;
 }
 
-// ── 턴 인디케이터 ────────────────────────────────────────────────
+// ── 상태바 (Turn + Material) ─────────────────────────────────
 function renderTurnIndicator() {
-    const el = document.getElementById('turn-indicator');
+    const el = document.getElementById('status-bar');
     const isWhite = gameState.turn === 'white';
     el.classList.toggle('white', isWhite);
     el.classList.toggle('black', !isWhite);
-    el.querySelector('.text').textContent = isWhite ? 'White' : 'Black';
+    el.querySelector('.turn-pill .text').textContent = isWhite ? 'White' : 'Black';
+
+    const mat = computeMaterial(gameState);
+    const mEl = document.getElementById('material-display');
+    if (mat.advantage > 0) {
+        mEl.textContent = `W +${mat.advantage}`;
+        mEl.className = 'material adv-white';
+    } else if (mat.advantage < 0) {
+        mEl.textContent = `B +${-mat.advantage}`;
+        mEl.className = 'material adv-black';
+    } else {
+        mEl.textContent = '±0';
+        mEl.className = 'material';
+    }
+}
+
+// ── 캡처된 piece 표시 (status bar 안) ──────────────────────────
+function renderCapturesPanel() {
+    const order = { Q: 0, R: 1, B: 2, N: 3, P: 4, K: -1 };
+    const fmt = (arr) => arr.length === 0
+        ? '—'
+        : [...arr].sort((a, b) => order[a.type] - order[b.type]).map(p => p.symbol).join('');
+    document.getElementById('capt-white').textContent = fmt(gameState.capturedByWhite);
+    document.getElementById('capt-black').textContent = fmt(gameState.capturedByBlack);
 }
 
 // ── 리사이즈 ─────────────────────────────────────────────────────
