@@ -82,11 +82,11 @@
         button:disabled { opacity: 0.4; cursor: not-allowed; }
         button:disabled:hover { background: transparent; color: var(--accent); box-shadow: none; }
 
-        /* AI mode controls — 줄바꿈 허용, mode select 가 줄 채우면 wrap */
-        #ai-controls { padding: 6px 10px; display: grid; grid-template-columns: auto 1fr auto auto auto auto; gap: 6px 8px; background: var(--bg-1); border-bottom: 1px solid var(--border); align-items: center; font-size: 0.78em; }
+        /* AI mode controls — Mode 는 항상 자기 줄, 나머지 (Depth/Auto/Step) 는 다음 줄 */
+        #ai-controls { padding: 6px 10px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 6px 8px; background: var(--bg-1); border-bottom: 1px solid var(--border); align-items: center; font-size: 0.78em; }
         #ai-controls label { color: var(--text-dim); font-size: 0.92em; text-transform: uppercase; letter-spacing: 1px; }
         #ai-controls select { background: transparent; color: var(--accent); border: 1px solid var(--accent-dim); border-radius: 3px; padding: 3px 6px; font-size: 0.95em; font-family: inherit; cursor: pointer; min-width: 0; max-width: 100%; }
-        #ai-controls #ai-mode { min-width: 0; }
+        #ai-controls #ai-mode { grid-column: 2 / -1; min-width: 0; }
         #ai-controls #ai-depth { width: 52px; }
         #ai-controls .ai-status { grid-column: 1 / -1; }
         #ai-controls select:focus { outline: none; border-color: var(--accent); }
@@ -98,8 +98,9 @@
         #tab-bar .tab { flex: 1; background: transparent; color: var(--text-dim); border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer; font-size: 0.78em; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.15s; }
         #tab-bar .tab:hover { color: var(--accent); }
         #tab-bar .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-        #tab-bar .tab-collapse { flex: 0 0 32px; color: var(--text-dim); background: transparent; border: 0; cursor: pointer; font-size: 0.85em; transition: all 0.15s; }
-        #tab-bar .tab-collapse:hover { color: var(--accent); }
+        body:not(.debug-on) #tab-bar .tab[data-tab="log"],
+        body:not(.debug-on) #tab-bar .tab[data-tab="debug"] { display: none; }
+        body:not(.debug-on) #tab-bar { border-bottom: 1px solid var(--border); }
         #tab-content { flex: 1 1 0; min-height: 60px; max-height: 200px; overflow: hidden; display: flex; flex-direction: column; border-bottom: 1px solid var(--border); transition: max-height 0.2s, min-height 0.2s; }
         #tab-content.collapsed { max-height: 0; min-height: 0; border-bottom-color: transparent; }
         #tab-content > [data-tab-content] { display: none; flex: 1 1 0; min-height: 0; }
@@ -367,7 +368,6 @@
             <button class="tab active" data-tab="history">History</button>
             <button class="tab" data-tab="log">Log</button>
             <button class="tab" data-tab="debug">Debug</button>
-            <button class="tab-collapse" id="tab-collapse" title="Toggle panel">▾</button>
         </div>
         <div id="tab-content">
             <div data-tab-content="history" class="active">
