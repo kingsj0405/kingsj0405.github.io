@@ -313,13 +313,81 @@
     </p>
 
     <!-- ===== 9. 캐슬링 ===== -->
-    <h2 id="castling">9. 캐슬링</h2>
+    <h2 id="castling">9. 캐슬링 (Roth-2012)</h2>
+    <p>
+        2D 체스와 달리 Tri-D 의 Rook 은 attack board 위에 배치되어 있다 (`a1(QL1)`, `b1(KL1)` for 백).
+        Roth 정통 룰은 <strong>"King 과 Rook 이 자리를 교체한다"</strong> — 보드 가로지르더라도.
+    </p>
+
+    <div class="quote">
+        "The King and the Rook in question may not have previously moved. The King must not
+        be in check on either square. King-side allows the King to 'switch places with its Rook.'
+        Queen-side permits the King to 'teleport' to the Queen's home square if the Queen has vacated it."
+    </div>
+
+    <h3>공통 조건</h3>
     <ul>
-        <li>King 과 해당 Rook 이 모두 한 번도 이동한 적 없어야 함.</li>
-        <li>King 이 시작/도착 칸 어디에서도 체크 받지 않아야 함.</li>
-        <li><strong>King-side:</strong> King 과 Rook 이 자리 교체 ("switch places").</li>
-        <li><strong>Queen-side:</strong> Queen 이 home 을 떠난 상태라면, King 이 Queen 의 home 으로 "teleport".</li>
+        <li>King 과 그쪽 Rook 모두 <strong>한 번도 이동 X</strong> (hasMoved=false).</li>
+        <li>King 이 <strong>현재 체크 받지 않음</strong>.</li>
+        <li>King 의 <strong>도착 칸이 공격 받지 않음</strong>.</li>
     </ul>
+
+    <h3>9-1. 백 King-side (O-O)</h3>
+    <table style="margin: 8px 0; border-collapse: collapse;">
+        <tr><th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">Before</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">After</th></tr>
+        <tr>
+            <td style="padding: 4px 12px;"><code>K c1(W)</code>, <code>R b1(KL1)</code></td>
+            <td style="padding: 4px 12px;"><code>R c1(W)</code>, <code>K b1(KL1)</code></td>
+        </tr>
+    </table>
+    <p style="font-size: 0.9em;">
+        예: 백 차례. Queen·Bishop·Knight 등을 모두 움직이지 않은 상태에서 K c1(W) 를 클릭 →
+        2D 패널과 3D 뷰에서 <strong style="color: #c77dff;">b1(KL1) 이 보라색</strong> 으로 표시되면 클릭.
+        King 은 KL1 (king-side attack board) 으로, Rook 은 K 가 있던 자리 (c1(W)) 로 교체된다.
+    </p>
+
+    <h3>9-2. 백 Queen-side (O-O-O)</h3>
+    <table style="margin: 8px 0; border-collapse: collapse;">
+        <tr><th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">Before</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">After</th></tr>
+        <tr>
+            <td style="padding: 4px 12px;"><code>K c1(W)</code>, <code>R a1(QL1)</code>, Queen home (<code>b1(W)</code>) 비어있음</td>
+            <td style="padding: 4px 12px;"><code>K b1(W)</code>, <code>R c1(W)</code></td>
+        </tr>
+    </table>
+    <p style="font-size: 0.9em;">
+        <strong>먼저 Queen 을 b1(W) 에서 다른 곳으로 옮겨야 함</strong> (전제 조건). 그 후 K c1(W)
+        클릭 → b1(W) 가 보라색으로 활성. 클릭 시 K 는 Queen 자리 (b1(W)) 로, Rook 은 K 가
+        있던 자리 (c1(W)) 로 이동.
+    </p>
+    <div class="note">
+        <strong>"King 이 한 칸만 움직이는데 이게 castle?":</strong>
+        Tri-D 보드의 메인 back rank 는 4 file 만 있어 King(c1) 과 Queen(b1) 이 바로 옆에 붙어 있다.
+        2D 체스 (K e1 → c1 = 2 file) 와 달리 Roth queen-side 는 K 가 Queen home 으로 "teleport" 하므로 1 file 만.
+        대신 <strong>Rook 이 attack board 에서 main 까지 크게 이동</strong> 한다 — castle 의 실질 효과
+        (R 활성화 + K 안전) 는 그대로.
+    </div>
+
+    <h3>9-3. 흑은 대칭</h3>
+    <ul>
+        <li>King-side: <code>K c4(B)</code> ↔ <code>R b2(KL3)</code></li>
+        <li>Queen-side: <code>K c4(B)</code> → <code>b4(B)</code>, <code>R a2(QL3)</code> → <code>c4(B)</code> (Q b4 비웠을 때)</li>
+    </ul>
+
+    <h3>9-4. UI 시각 가이드</h3>
+    <ul>
+        <li>일반 이동 후보: <strong style="color: #ffe54a;">노란색</strong></li>
+        <li>캐슬링 후보: <strong style="color: #c77dff;">보라색</strong> — 자리 교체임을 시각적으로 구분</li>
+        <li>로그 표기: <code>O-O</code> (king-side) / <code>O-O-O</code> (queen-side)</li>
+    </ul>
+
+    <div class="note">
+        <strong>구현 노트:</strong> 일반 King 의 1 칸 이동과 queen-side 캐슬링은 같은 목적 칸 (b1(W) 또는 b4(B))
+        을 공유한다. 우리 구현은 castle 전제조건 (Rook 있음, hasMoved=false, Q-home 비음 등) 이
+        모두 만족되면 그 클릭을 castle 로 해석한다.
+        Queen 이 아직 b1(W) 에 있다면 보라색 표시가 안 뜨고 일반 노란색 1-step 이동만 가능.
+    </div>
 
     <!-- ===== 10. 특수 폰 이동 ===== -->
     <h2 id="special-pawn">10. 특수 폰 이동 (앙파상 등)</h2>

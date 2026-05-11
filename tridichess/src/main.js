@@ -18,6 +18,7 @@ import { Board2DPanel }                            from './ui/Board2DPanel.js';
 import { getVerticalColumn }                       from './model/SquareId.js';
 import { createInitialState }                       from './model/initialState.js';
 import { generateLegalMoves, applyMove as applyMoveRC, gameStatus, isInCheck } from './rules/RuleController.js';
+import { getCastleConfig } from './rules/castling.js';
 import { computeMaterial }                          from './rules/material.js';
 import { createMinimaxAI, topDistinctMoves }        from './ai/MinimaxAI.js';
 
@@ -45,6 +46,7 @@ function jumpToHistory(idx) {
     // UI 상태 초기화
     ui.selected    = null;
     ui.moves       = [];
+    ui.castles     = new Set();
     ui.hints       = [];
     ui.checkSquare = null;
     // lastMove 는 해당 시점의 마지막 수로 추출
@@ -77,6 +79,8 @@ const ui = {
     selected: null,
     /** @type {import('./model/SquareId.js').SquareId[]} */
     moves: [],
+    /** @type {Set<string>} — castle 인 target sqKey 들 (moves 의 부분집합) */
+    castles: new Set(),
     /** @type {Array<{from, to, score: number}>} */
     hints: [],
     /** @type {{from, to} | null} */
@@ -89,9 +93,9 @@ let gameOver = false;
 
 // ── AI 설정 ────────────────────────────────────────────────────
 const ai = {
-    mode: 'hvh',       // 'hvh' | 'hva' (AI=black) | 'avh' (AI=white) | 'ava'
+    mode: 'hva',       // 기본: Me (White) vs AI (Black). 'hvh' | 'hva' | 'avh' | 'ava'
     depth: 2,
-    auto: true,        // false 면 자동 진행 안 함 (Step 버튼으로만)
+    auto: true,
     thinking: false,
     pending: null,
 };
@@ -112,6 +116,7 @@ const COLOR = {
     COLUMN:    0x004466,
     MOVE:      0xffe54a,
     LAST_MOVE: 0xff8c40,
+    CASTLE:    0xc77dff,
 };
 const HINT_COLORS = [0xff44cc, 0x2196f3, 0xffc107]; // top-1/2/3
 const HINT_LOG_CLASSES = ['log-hint-1', 'log-hint-2', 'log-hint-3'];
@@ -338,9 +343,11 @@ function refreshHighlights() {
             highlightSquare(c.toString(), COLOR.COLUMN);
         }
     }
-    // moves
+    // moves (castle 인 것은 보라색 우선)
     for (const m of ui.moves) {
-        highlightSquare(m.toString(), COLOR.MOVE);
+        const key = m.toString();
+        const col = ui.castles && ui.castles.has(key) ? COLOR.CASTLE : COLOR.MOVE;
+        highlightSquare(key, col);
     }
     // hints (top-N 각각 unique color, from/to 같은 색)
     for (let i = 0; i < ui.hints.length && i < HINT_COLORS.length; i++) {
@@ -364,22 +371,28 @@ function handleSquareClick(squareId) {
 
     ui.hints = []; // 액션 시 hints 초기화
 
-    if (isOwn) {
-        ui.selected = squareId;
-        ui.moves    = getMoves(squareId);
-        log(`Selected ${piece.symbol} at ${squareId}`, 'log-select');
-
-    } else if (ui.selected !== null && isMoveTarget(squareId)) {
+    // 1순위: 선택된 piece 의 합법 target 이면 무조건 그 이동 실행.
+    //         (castle target 이 own Rook 자리 위인 경우 등 처리)
+    if (ui.selected !== null && isMoveTarget(squareId)) {
         if (isPromotionMove(ui.selected, squareId)) {
             showPromotionPicker(ui.selected, squareId);
         } else {
             applyMove(ui.selected, squareId);
         }
-        return; // applyMove 가 후속 처리
+        return;
+    }
+
+    // 2순위: own piece → 새 선택
+    if (isOwn) {
+        ui.selected = squareId;
+        ui.moves    = getMoves(squareId);
+        ui.castles  = computeCastleTargets(squareId);
+        log(`Selected ${piece.symbol} at ${squareId}`, 'log-select');
 
     } else {
         ui.selected = null;
         ui.moves    = [];
+        ui.castles  = new Set();
         if (piece) log(`${squareId}: ${piece.color} ${piece.type}`, 'log-info');
     }
 
@@ -395,19 +408,27 @@ function handleSquareClick(squareId) {
  */
 function applyMove(from, to, promotionType = 'Q') {
     const piece    = gameState.getPiece(from);
-    const captured = gameState.getPiece(to);
+    // castle 시 to 위 piece 는 자기 Rook (캡처 아님)
+    const castle   = piece && piece.type === 'K' ? getCastleConfig(gameState, from, to) : null;
+    const captured = castle ? null : gameState.getPiece(to);
 
     gameState = applyMoveRC(gameState, from, to, promotionType);
     pushState(gameState);
     const movedAfter = gameState.getPiece(to);
     const promoted = piece.type === 'P' && movedAfter && movedAfter.type !== 'P';
 
-    log(`${piece.symbol} ${from} → ${to}`, 'log-action');
-    if (captured) log(`  ✕ Captured ${captured.symbol}`, 'log-capture');
+    if (castle) {
+        const tag = castle.rookFrom.includes('KL') ? 'O-O' : 'O-O-O';
+        log(`${tag} (${piece.color === 'white' ? 'White' : 'Black'})`, 'log-action');
+    } else {
+        log(`${piece.symbol} ${from} → ${to}`, 'log-action');
+        if (captured) log(`  ✕ Captured ${captured.symbol}`, 'log-capture');
+    }
     if (promoted) log(`  ↑ Promoted to ${movedAfter.symbol}`, 'log-system');
 
     ui.selected = null;
     ui.moves    = [];
+    ui.castles  = new Set();
     ui.hints    = [];
     ui.lastMove = { from, to };
 
@@ -509,6 +530,17 @@ function getMoves(squareId) {
     return generateLegalMoves(gameState, squareId);
 }
 
+/** 선택한 piece 의 target 중 castle 인 sqKey 들 */
+function computeCastleTargets(fromSq) {
+    const piece = gameState.getPiece(fromSq);
+    if (!piece || piece.type !== 'K') return new Set();
+    const out = new Set();
+    for (const to of ui.moves) {
+        if (getCastleConfig(gameState, fromSq, to)) out.add(to.toString());
+    }
+    return out;
+}
+
 /** @param {import('./model/SquareId.js').SquareId} squareId */
 function isMoveTarget(squareId) {
     return ui.moves.some(m => m.equals(squareId));
@@ -579,6 +611,7 @@ function showHints() {
             ui.hints    = top;
             ui.selected = null;
             ui.moves    = [];
+            ui.castles  = new Set();
             refreshHighlights();
             board2D.render(gameState, ui);
             log(`Hints (depth ${ai.depth}):`, 'log-system');
@@ -605,6 +638,7 @@ function resetGame() {
     historyIdx   = 0;
     ui.selected    = null;
     ui.moves       = [];
+    ui.castles     = new Set();
     ui.hints       = [];
     ui.lastMove    = null;
     ui.checkSquare = null;
@@ -661,8 +695,14 @@ function renderCapturesPanel() {
     const fmt = (arr) => arr.length === 0
         ? '—'
         : [...arr].sort((a, b) => order[a.type] - order[b.type]).map(p => p.symbol).join('');
-    document.getElementById('capt-white').textContent = fmt(gameState.capturedByWhite);
-    document.getElementById('capt-black').textContent = fmt(gameState.capturedByBlack);
+    const wEl = document.getElementById('capt-white');
+    const bEl = document.getElementById('capt-black');
+    const wt = fmt(gameState.capturedByWhite);
+    const bt = fmt(gameState.capturedByBlack);
+    wEl.textContent = wt;
+    bEl.textContent = bt;
+    wEl.title = `White took (${gameState.capturedByWhite.length}): ${wt}`;
+    bEl.title = `Black took (${gameState.capturedByBlack.length}): ${bt}`;
 }
 
 // ── 리사이즈 ─────────────────────────────────────────────────────
