@@ -1,94 +1,93 @@
 /**
- * CoordMapper.js — SquareId ↔ Three.js Vector3 변환.
+ * CoordMapper.js — SquareId ↔ Three.js Vector3 변환 (M4 D-3: state-aware).
  *
- * 좌표계 (ADR-0007, Bartmess 정통 staircase):
+ * 좌표계 (ADR-0007, Bartmess 정통):
+ *   - x = (abs_file - 2.5) * SQ
+ *   - z = (2.5 - abs_rank) * SQ
+ *   - y = 메인 (W=0, N=25, B=50) / AB (rankOffset 에 따라 12.5 / 37.5 / 62.5)
  *
- *   - 메인 보드는 다음 보드가 이전 보드의 rank 3 위에서 시작 (2 rank 씩 겹침).
- *     → N rank 1 = W rank 3, B rank 1 = N rank 3 (xy 동일).
- *   - 어택 보드 한 모서리는 메인 보드 모서리와 정확히 겹침.
- *     → QL1 b2 = W a1, KL1 a2 = W d1, QL3 b1 = B a4, KL3 a1 = B d4 (xy 동일).
+ *   abs_file = local_file_index + fileOffset
+ *   abs_rank = local_rank + rankOffset
  *
- *   메인 보드 Z 후퇴: W(0) → N(-2*SQ) → B(-4*SQ).
- *   어택 보드 Z:      QL1/KL1 = +SQ, QL3/KL3 = -7*SQ.
- *
- *   파일 좌표 통일 absolute file index 0..5 → x = (abs_file - 2.5) * SQ:
- *     - W/N/B files a-d = abs 1..4 → x = -1.5..+1.5 * SQ
- *     - QL* files a-b   = abs 0..1 → x = -2.5..-1.5 * SQ (AB_X_OFFSET = -1)
- *     - KL* files a-b   = abs 4..5 → x = +1.5..+2.5 * SQ (AB_X_OFFSET = +3)
- *
- *   ※ Sprint 3.1 의 hotfix 는 staircase 메인 보드만 복구하고 어택 보드는 부정확했음.
- *     본 fix 에서 어택 보드까지 정통 모서리 overlap 으로 보정 (ADR-0007).
+ * fileOffset / rankOffset: 메인은 고정, AB 는 state.boards 의 BoardNode 동적.
  */
 
 import * as THREE from 'three';
 import { SQ, LEVEL_H } from '../config/constants.js';
+import { FILE_INDEX } from '../model/SquareId.js';
 
-const LEVEL_Y = {
-    W:   0,
-    N:   LEVEL_H,
-    B:   2 * LEVEL_H,
-    QL1: LEVEL_H * 0.5,
-    KL1: LEVEL_H * 0.5,
-    QL3: LEVEL_H * 2.5,
-    KL3: LEVEL_H * 2.5,
+// 메인 보드는 고정. AB 도 default (state 없을 때) 동일.
+const DEFAULT_OFFSETS = {
+    W:   { fileOffset: 1, rankOffset: 0  },
+    QL1: { fileOffset: 0, rankOffset: -1 },
+    KL1: { fileOffset: 4, rankOffset: -1 },
+    N:   { fileOffset: 1, rankOffset: 2  },
+    B:   { fileOffset: 1, rankOffset: 4  },
+    QL3: { fileOffset: 0, rankOffset: 7  },
+    KL3: { fileOffset: 4, rankOffset: 7  },
 };
-
-// 보드별 z 원점 (z = LEVEL_Z[level] + (2.5 - rank) * SQ).
-// QL1 rank 2 = +SQ + 0.5*SQ = +1.5*SQ = +21 = W a1 z (overlap).
-// QL3 rank 1 = -7*SQ + 1.5*SQ = -5.5*SQ = -77 = B a4 z (overlap).
-const LEVEL_Z = {
-    W:   0,
-    N:  -2 * SQ,
-    B:  -4 * SQ,
-    QL1: +SQ,
-    KL1: +SQ,
-    QL3: -7 * SQ,
-    KL3: -7 * SQ,
-};
-
-const FILE_X = { a: -1.5, b: -0.5, c: 0.5, d: 1.5 };
-
-// 어택 보드 file → absolute file index 시프트 (× SQ).
-// QL: abs file 0..1 → file 'a'/'b' 의 W-system 인덱스 (-1.5/-0.5) 에 -1 더함.
-// KL: abs file 4..5 → +3 더함.
-const AB_X_OFFSET = { QL1: -1, KL1: 3, QL3: -1, KL3: 3 };
 
 const MAIN_LEVELS = new Set(['W', 'N', 'B']);
 
-/**
- * SquareId → Three.js Vector3 (월드 좌표)
- * @param {import('../model/SquareId.js').SquareId} squareId
- * @returns {THREE.Vector3}
- */
-export function squareToVector3(squareId) {
-    const { file, rank, level } = squareId;
-    const isAttack = !MAIN_LEVELS.has(level);
-
-    const y = LEVEL_Y[level];
-    let x = FILE_X[file] * SQ;
-    const z = LEVEL_Z[level] + (2.5 - rank) * SQ;
-
-    if (isAttack) {
-        x += AB_X_OFFSET[level] * SQ;
+function getOffsets(level, state) {
+    if (state && state.boards && state.boards.has(level)) {
+        const node = state.boards.get(level);
+        return { fileOffset: node.fileOffset, rankOffset: node.rankOffset };
     }
+    return DEFAULT_OFFSETS[level];
+}
 
+/**
+ * AB 의 y 위치 — rankOffset 에 따라 W/N/B 층에 부착 (Roth: "floating to appropriate level").
+ *   rankOffset ≤ 1  : W 층 (Y = 12.5, between W and N)
+ *   rankOffset 2-3 : N 층 (Y = 37.5, between N and B)
+ *   rankOffset ≥ 4 : B 층 (Y = 62.5, above B)
+ */
+function getABLevelY(rankOffset) {
+    if (rankOffset <= 1) return LEVEL_H * 0.5;
+    if (rankOffset <= 3) return LEVEL_H * 1.5;
+    return LEVEL_H * 2.5;
+}
+
+function getY(level, off) {
+    if (level === 'W') return 0;
+    if (level === 'N') return LEVEL_H;
+    if (level === 'B') return 2 * LEVEL_H;
+    return getABLevelY(off.rankOffset);
+}
+
+/**
+ * SquareId → Three.js Vector3.
+ * state 가 주어지면 AB 동적 anchor 반영.
+ */
+export function squareToVector3(squareId, state) {
+    const { file, rank, level } = squareId;
+    const off = getOffsets(level, state);
+    const absFile = FILE_INDEX[file] + off.fileOffset;
+    const absRank = rank + off.rankOffset;
+    const x = (absFile - 2.5) * SQ;
+    const z = (2.5 - absRank) * SQ;
+    const y = getY(level, off);
     return new THREE.Vector3(x, y + 0.5, z);
 }
 
 /**
- * 물리 보드 플레이트 중심 좌표 반환.
- * 메인: avg files a-d → x=0;  avg ranks 1-4 → z = LEVEL_Z (rank-formula 가 SQ*(-1.5..+1.5) 평균 0).
- * 어택: avg files a-b → x = (-1 + AB_X_OFFSET)*SQ;  avg ranks 1-2 → z = LEVEL_Z + SQ.
- * @param {string} level
- * @returns {{ x:number, y:number, z:number }}
+ * 보드 플레이트 중심 좌표.
+ * 메인 (4x4): avg abs file 2.5 → x=0; mid abs rank = 2.5 + rankOffset → z = -rankOffset * SQ
+ *             (rank 1..4 mid = 2.5 → abs mid = 2.5 + RO → z = (2.5 - (2.5+RO))*SQ = -RO*SQ)
+ * AB (2x2): mid abs file = 0.5 + fileOffset; mid abs rank = 1.5 + rankOffset
  */
-export function getBoardCenter(level) {
+export function getBoardCenter(level, state) {
+    const off = getOffsets(level, state);
     const isMain = MAIN_LEVELS.has(level);
-    const y = LEVEL_Y[level];
     if (isMain) {
-        return { x: 0, y, z: LEVEL_Z[level] };
+        return { x: 0, y: getY(level, off), z: -off.rankOffset * SQ };
     }
-    const x = (-1 + AB_X_OFFSET[level]) * SQ;
-    const z = LEVEL_Z[level] + SQ;
-    return { x, y, z };
+    const midAbsFile = 0.5 + off.fileOffset;
+    const midAbsRank = 1.5 + off.rankOffset;
+    return {
+        x: (midAbsFile - 2.5) * SQ,
+        y: getY(level, off),
+        z: (2.5 - midAbsRank) * SQ,
+    };
 }

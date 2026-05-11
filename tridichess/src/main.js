@@ -11,7 +11,7 @@
  */
 
 import { setupScene }                              from './renderer/SceneSetup.js';
-import { setupPhysicalBoards, setupLogicalSquares } from './renderer/BoardRenderer.js';
+import { setupPhysicalBoards, setupLogicalSquares, updateBoardPositions } from './renderer/BoardRenderer.js';
 import { PieceRenderer }                           from './renderer/PieceRenderer.js';
 import { DebugOverlay }                            from './ui/DebugOverlay.js';
 import { Board2DPanel }                            from './ui/Board2DPanel.js';
@@ -21,6 +21,7 @@ import { generateLegalMoves, applyMove as applyMoveRC, gameStatus, isInCheck } f
 import { getCastleConfig } from './rules/castling.js';
 import { computeMaterial }                          from './rules/material.js';
 import { createMinimaxAI, topDistinctMoves }        from './ai/MinimaxAI.js';
+import { generateBoardMoves, applyBoardMove }       from './rules/attackBoard.js';
 
 // ── 게임 상태 + 히스토리 ──────────────────────────────────────
 /** @type {import('./model/GameState.js').GameState} */
@@ -64,7 +65,7 @@ function jumpToHistory(idx) {
     evaluateAndAnnounce();
 
     refreshHighlights();
-    pieceRenderer.render(gameState.pieces);
+    pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
     renderCapturesPanel();
@@ -127,8 +128,8 @@ function init() {
 
     ({ scene, camera, renderer, controls } = setupScene(container));
 
-    setupPhysicalBoards(scene);
-    squareMeshes = setupLogicalSquares(scene, renderer, camera, handleSquareClick);
+    setupPhysicalBoards(scene, gameState);
+    squareMeshes = setupLogicalSquares(scene, renderer, camera, handleSquareClick, gameState);
 
     pieceRenderer = new PieceRenderer(scene);
     debugOverlay  = new DebugOverlay(container, scene);
@@ -136,7 +137,7 @@ function init() {
     const panel2DGrid = document.querySelector('#panel-2d .panel-2d-grid');
     board2D = new Board2DPanel(panel2DGrid, handleSquareClick);
 
-    pieceRenderer.render(gameState.pieces);
+    pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
     renderCapturesPanel();
@@ -175,6 +176,12 @@ function init() {
         const item = e.target.closest('.hist-item');
         if (!item) return;
         jumpToHistory(parseInt(item.dataset.idx, 10));
+    });
+
+    // 2D 패널의 AB 라벨 클릭 → AB 이동 후보 표시 / 선택 / 적용
+    document.querySelector('#panel-2d .panel-2d-grid').addEventListener('click', (e) => {
+        const label = e.target.closest('.ab-label');
+        if (label) handleABLabelClick(label.dataset.boardId);
     });
 
     document.getElementById('ai-mode').onchange = (e) => {
@@ -433,7 +440,7 @@ function applyMove(from, to, promotionType = 'Q') {
     ui.lastMove = { from, to };
 
     refreshHighlights();
-    pieceRenderer.render(gameState.pieces);
+    pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
     renderCapturesPanel();
@@ -591,6 +598,91 @@ function showPromotionPicker(from, to) {
     picks.forEach(b => b.addEventListener('click', handler));
 }
 
+// ── Attack Board 이동 (M4 D-3) ────────────────────────────────
+let _selectedAB = null;  // 현재 선택된 AB id, null 또는 'QL1' 등
+
+function handleABLabelClick(boardId) {
+    if (gameOver || isAIturn() || ai.thinking) return;
+    const node = gameState.boards.get(boardId);
+    if (!node) return;
+    if (node.owner !== gameState.turn) {
+        log(`${boardId} 은 ${node.owner} 소유 — 현재 턴 (${gameState.turn}) 아님`, 'log-info');
+        return;
+    }
+
+    // 이동 가능 여부 진단 (사용자에게 친절한 메시지)
+    const piecesOnAB = [...gameState.pieces.values()].filter(p => p.position.level === boardId);
+    if (piecesOnAB.length > 1) {
+        log(`${boardId}: 이동 불가 — ${piecesOnAB.length} piece 탑승. Roth: 빈 보드 또는 자기 폰 1개만 가능`, 'log-info');
+        return;
+    }
+    if (piecesOnAB.length === 1) {
+        const p = piecesOnAB[0];
+        if (p.color !== gameState.turn) {
+            log(`${boardId}: 이동 불가 — 상대 ${p.symbol} 탑승`, 'log-info');
+            return;
+        }
+        if (p.type !== 'P') {
+            log(`${boardId}: 이동 불가 — 폰 아닌 piece 탑승 (${p.symbol}). Roth: AB 는 빈 보드 또는 자기 폰 1개만 piloting 가능`, 'log-info');
+            return;
+        }
+    }
+
+    const moves = generateBoardMoves(gameState, gameState.turn).filter(m => m.boardId === boardId);
+    if (moves.length === 0) {
+        log(`${boardId}: 이동 가능한 anchor 없음 (충돌 또는 보드 경계)`, 'log-info');
+        return;
+    }
+    // 한 번 더 같은 AB 클릭 → 첫 번째 이동 commit (MVP 간단 UX)
+    if (_selectedAB === boardId) {
+        commitABMove();
+        return;
+    }
+    _selectedAB = boardId;
+    updateABSelection();
+    log(`${boardId} 선택. 가능한 이동:`, 'log-select');
+    moves.forEach((m, i) => {
+        const dir = m.newRankOffset > node.rankOffset ? 'fwd' : 'back';
+        log(`  ${i + 1}. ${m.boardId} ${node.rankOffset} → ${m.newRankOffset} (${dir}) ${i === 0 ? '← 같은 라벨 다시 클릭 시 적용' : ''}`, 'log-info');
+    });
+}
+
+function updateABSelection() {
+    document.querySelectorAll('#panel-2d .ab-label').forEach(el => {
+        el.classList.toggle('ab-selected', el.dataset.boardId === _selectedAB);
+    });
+}
+
+/**
+ * 외부에서 호출: 이미 선택된 AB 가 있고 적용 트리거 시.
+ * (MVP: 첫 번째 이동 자동 적용 — 후속에 picker)
+ */
+function commitABMove() {
+    if (!_selectedAB) return;
+    const moves = generateBoardMoves(gameState, gameState.turn).filter(m => m.boardId === _selectedAB);
+    if (moves.length === 0) return;
+    const chosen = moves[0]; // MVP: first option
+    gameState = applyBoardMove(gameState, chosen);
+    pushState(gameState);
+    log(`[${chosen.boardId} RO ${chosen.newRankOffset}]`, 'log-action');
+    _selectedAB = null;
+    updateABSelection();
+    ui.selected = null;
+    ui.moves = [];
+    ui.castles = new Set();
+    ui.hints = [];
+    refreshHighlights();
+    updateBoardPositions(gameState);
+    pieceRenderer.render(gameState.pieces, gameState);
+    board2D.render(gameState, ui);
+    renderTurnIndicator();
+    renderCapturesPanel();
+    renderHistoryPanel();
+    if (isDebugTabActive()) updateDebugPanel();
+    if (checkGameOver()) return;
+    scheduleAIMove();
+}
+
 // ── AI Assist (Hint) — top-3 추천 수 ─────────────────────────
 function showHints() {
     if (gameOver) return;
@@ -643,7 +735,7 @@ function resetGame() {
     ui.lastMove    = null;
     ui.checkSquare = null;
     clearAllHighlights();
-    pieceRenderer.render(gameState.pieces);
+    pieceRenderer.render(gameState.pieces, gameState);
     board2D.render(gameState, ui);
     renderTurnIndicator();
     renderCapturesPanel();

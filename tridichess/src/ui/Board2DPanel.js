@@ -68,6 +68,12 @@ export class Board2DPanel {
         const label = document.createElement('div');
         label.className   = 'board-label';
         label.textContent = level;
+        if (!isMain) {
+            // AB 라벨 클릭 시 board 선택 콜백 (M4)
+            label.classList.add('ab-label');
+            label.dataset.boardId = level;
+            label.title = `Click to move ${level}`;
+        }
         wrap.appendChild(label);
 
         const grid = document.createElement('div');
