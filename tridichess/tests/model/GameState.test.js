@@ -132,4 +132,23 @@ describe('createInitialState', () => {
     it('첫 turn 은 white', () => {
         expect(state.turn).toBe('white');
     });
+
+    it('boards: 4 AB BoardNode 초기값', () => {
+        expect(state.boards.size).toBe(4);
+        for (const id of ['QL1', 'KL1', 'QL3', 'KL3']) {
+            const node = state.boards.get(id);
+            expect(node).toBeDefined();
+            expect(node.boardId).toBe(id);
+            expect(['white', 'black']).toContain(node.owner);
+            expect(typeof node.fileOffset).toBe('number');
+            expect(typeof node.rankOffset).toBe('number');
+            expect(node.inverted).toBe(false);
+            expect(Object.isFrozen(node)).toBe(true);
+        }
+        // White owns L1, black owns L3
+        expect(state.boards.get('QL1').owner).toBe('white');
+        expect(state.boards.get('KL1').owner).toBe('white');
+        expect(state.boards.get('QL3').owner).toBe('black');
+        expect(state.boards.get('KL3').owner).toBe('black');
+    });
 });

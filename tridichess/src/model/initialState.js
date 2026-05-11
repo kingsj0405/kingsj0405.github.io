@@ -1,13 +1,24 @@
 /**
- * initialState.js — Tri-D 정통 초기 배치 (ADR-0005).
+ * initialState.js — Tri-D 정통 초기 배치 (ADR-0005) + AB BoardNodes (M4 D-1).
  *
  * 16 piece × 2 색. 메인 back rank 에는 B/K/Q 만, R/N 은 attack board 에 배치.
  * 백은 자기 쪽(z=+21, W rank 1)에, 흑은 자기 쪽(z=-77, B rank 4)에.
+ *
+ * boards: state.boards 에 4 AB BoardNode 초기값. 현재는 abs 좌표 system 의
+ *         default 와 동일하므로 행동 변화 X. M4 D-2 에서 abs threading 도입 시 활용.
  */
 
 import { GameState } from './GameState.js';
 import { Piece } from './Piece.js';
 import { SquareId } from './SquareId.js';
+
+/** AB 초기 anchor (현재 SquareId BOARD_INFO 와 일치). 후속 sprint 에서 동적화. */
+const INITIAL_BOARDS_RAW = [
+    { boardId: 'QL1', fileOffset: 0, rankOffset: -1, owner: 'white', inverted: false },
+    { boardId: 'KL1', fileOffset: 4, rankOffset: -1, owner: 'white', inverted: false },
+    { boardId: 'QL3', fileOffset: 0, rankOffset:  7, owner: 'black', inverted: false },
+    { boardId: 'KL3', fileOffset: 4, rankOffset:  7, owner: 'black', inverted: false },
+];
 
 const LAYOUT = [
     // ── White ────────────────────────────────────────────────
@@ -74,5 +85,10 @@ export function createInitialState({ rulesetId = 'roth2012' } = {}) {
         const position = SquareId.fromString(sqKey);
         pieces.set(sqKey, new Piece({ id, type, color, position }));
     }
-    return new GameState({ pieces, rulesetId });
+    const boards = new Map();
+    for (const raw of INITIAL_BOARDS_RAW) {
+        boards.set(raw.boardId, Object.freeze({ ...raw }));
+    }
+
+    return new GameState({ pieces, boards, rulesetId });
 }

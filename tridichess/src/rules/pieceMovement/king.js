@@ -14,18 +14,18 @@ const STEPS = [
 ];
 
 export function pseudoMoves(state, piece) {
-    const from = piece.position.toAbs();
+    const from = piece.position.toAbs(state);
     const out  = [];
 
     for (const [df, dr] of STEPS) {
-        for (const cand of allSquaresAt(from.absFile + df, from.absRank + dr)) {
+        for (const cand of allSquaresAt(from.absFile + df, from.absRank + dr, state)) {
             const occ = state.getPiece(cand);
             if (occ && occ.color === piece.color) continue;
             out.push(cand);
         }
     }
 
-    for (const sq of getVerticalColumn(piece.position)) {
+    for (const sq of getVerticalColumn(piece.position, state)) {
         const occ = state.getPiece(sq);
         if (occ && occ.color === piece.color) continue;
         out.push(sq);

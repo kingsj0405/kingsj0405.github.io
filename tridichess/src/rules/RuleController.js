@@ -143,11 +143,11 @@ export function applyMove(state, from, to, promotionType = 'Q') {
     // 다음 턴 enPassant 계산 (지금 두는 수가 pawn 2-step 이면)
     let newEnPassant = null;
     if (piece.type === 'P') {
-        const fromAbs = from.toAbs();
-        const toAbs   = to.toAbs();
+        const fromAbs = from.toAbs(state);
+        const toAbs   = to.toAbs(state);
         if (Math.abs(toAbs.absRank - fromAbs.absRank) === 2) {
             const dir = (toAbs.absRank - fromAbs.absRank) > 0 ? 1 : -1;
-            const midSq = highestSquareAt(toAbs.absFile, fromAbs.absRank + dir);
+            const midSq = highestSquareAt(toAbs.absFile, fromAbs.absRank + dir, state);
             if (midSq) {
                 newEnPassant = { target: midSq, victim: to, color: piece.color };
             }
@@ -157,13 +157,16 @@ export function applyMove(state, from, to, promotionType = 'Q') {
     // Promotion 사전 검사 (Roth-2012, ADR-0011)
     let promoteTo = null;
     if (piece.type === 'P') {
-        const abs = to.toAbs();
+        const abs = to.toAbs(state);
         if (piece.color === 'white' && abs.absRank >= 8) promoteTo = promotionType;
         else if (piece.color === 'black' && abs.absRank <= 1) promoteTo = promotionType;
     }
 
     const castleCfg = piece.type === 'K' ? getCastleConfig(state, from, to) : null;
-    // king-side: rookFrom 이 KL 보드. queen-side: rookFrom 이 QL 보드.
+    if (castleCfg) {
+        // castle 의 to 위 piece 는 자기 Rook — 캡처 대상 아님
+        captured = null;
+    }
     const isKingside  = castleCfg && (castleCfg.rookFrom.includes('KL'));
     const moveStr = castleCfg
         ? (isKingside ? 'O-O' : 'O-O-O')

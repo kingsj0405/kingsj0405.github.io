@@ -20,21 +20,53 @@ export const LEVELS = {
 };
 
 /**
- * 보드별 absolute 좌표 변환 정보 (ADR-0007/0009).
+ * 보드별 absolute 좌표 변환 정보 (ADR-0007/0009 + M4 D-2).
  *
- *   - fileOffset / rankOffset: SquareId local → abs 변환
- *   - minF/maxF/minR/maxR:     해당 보드가 점유하는 abs (file, rank) 범위
- *   - yIndex: Y 높이 인덱스 (highest-path 선정 우선순위)
+ *   - BOARD_INTRINSIC: file/rank 개수 + yIndex (변하지 않는 속성)
+ *   - DEFAULT_OFFSETS: state.boards 없을 때 fallback offset
+ *   - state.boards.get(level) 에 BoardNode 가 있으면 그 offset 우선 사용 → AB 이동 시 동적
  */
-const BOARD_INFO = {
-    W:   { fileOffset: 1, rankOffset: 0,  minF: 1, maxF: 4, minR: 1, maxR: 4, yIndex: 0 },
-    QL1: { fileOffset: 0, rankOffset: -1, minF: 0, maxF: 1, minR: 0, maxR: 1, yIndex: 1 },
-    KL1: { fileOffset: 4, rankOffset: -1, minF: 4, maxF: 5, minR: 0, maxR: 1, yIndex: 1 },
-    N:   { fileOffset: 1, rankOffset: 2,  minF: 1, maxF: 4, minR: 3, maxR: 6, yIndex: 2 },
-    B:   { fileOffset: 1, rankOffset: 4,  minF: 1, maxF: 4, minR: 5, maxR: 8, yIndex: 3 },
-    QL3: { fileOffset: 0, rankOffset: 7,  minF: 0, maxF: 1, minR: 8, maxR: 9, yIndex: 4 },
-    KL3: { fileOffset: 4, rankOffset: 7,  minF: 4, maxF: 5, minR: 8, maxR: 9, yIndex: 4 },
+const BOARD_INTRINSIC = {
+    W:   { fileCount: 4, rankCount: 4, yIndex: 0 },
+    QL1: { fileCount: 2, rankCount: 2, yIndex: 1 },
+    KL1: { fileCount: 2, rankCount: 2, yIndex: 1 },
+    N:   { fileCount: 4, rankCount: 4, yIndex: 2 },
+    B:   { fileCount: 4, rankCount: 4, yIndex: 3 },
+    QL3: { fileCount: 2, rankCount: 2, yIndex: 4 },
+    KL3: { fileCount: 2, rankCount: 2, yIndex: 4 },
 };
+
+const DEFAULT_OFFSETS = {
+    W:   { fileOffset: 1, rankOffset: 0  },
+    QL1: { fileOffset: 0, rankOffset: -1 },
+    KL1: { fileOffset: 4, rankOffset: -1 },
+    N:   { fileOffset: 1, rankOffset: 2  },
+    B:   { fileOffset: 1, rankOffset: 4  },
+    QL3: { fileOffset: 0, rankOffset: 7  },
+    KL3: { fileOffset: 4, rankOffset: 7  },
+};
+
+function _offsets(level, state) {
+    if (state && state.boards && state.boards.has(level)) {
+        const node = state.boards.get(level);
+        return { fileOffset: node.fileOffset, rankOffset: node.rankOffset };
+    }
+    return DEFAULT_OFFSETS[level];
+}
+
+function _info(level, state) {
+    const intr = BOARD_INTRINSIC[level];
+    const off  = _offsets(level, state);
+    return {
+        fileOffset: off.fileOffset,
+        rankOffset: off.rankOffset,
+        minF: off.fileOffset,
+        maxF: off.fileOffset + intr.fileCount - 1,
+        minR: 1 + off.rankOffset,
+        maxR: intr.rankCount + off.rankOffset,
+        yIndex: intr.yIndex,
+    };
+}
 
 // 높이 내림차순 (highest-path 우선순위)
 const LEVEL_Y_ORDER = ['QL3', 'KL3', 'B', 'N', 'QL1', 'KL1', 'W'];
@@ -73,12 +105,15 @@ export class SquareId {
         return false;
     }
 
-    /** local → absolute 좌표 (보드 위치 공통 그리드, ADR-0007). */
-    toAbs() {
-        const info = BOARD_INFO[this.level];
+    /**
+     * local → absolute 좌표.
+     * state 가 주어지면 AB 의 동적 anchor (state.boards) 적용, 아니면 default.
+     */
+    toAbs(state) {
+        const off = _offsets(this.level, state);
         return {
-            absFile: FILE_INDEX[this.file] + info.fileOffset,
-            absRank: this.rank + info.rankOffset,
+            absFile: FILE_INDEX[this.file] + off.fileOffset,
+            absRank: this.rank + off.rankOffset,
         };
     }
 }
@@ -109,12 +144,12 @@ export function getAllSquares() {
 
 /**
  * (absFile, absRank) 에 존재하는 모든 SquareId 반환 (0~2 개).
- * Y 내림차순 정렬 — 0 번째가 highest path 대상.
+ * Y 내림차순 정렬 — 0 번째가 highest path 대상. state 로 AB 동적 anchor 반영.
  */
-export function allSquaresAt(absFile, absRank) {
+export function allSquaresAt(absFile, absRank, state) {
     const out = [];
     for (const level of LEVEL_Y_ORDER) {
-        const info = BOARD_INFO[level];
+        const info = _info(level, state);
         if (absFile < info.minF || absFile > info.maxF) continue;
         if (absRank < info.minR || absRank > info.maxR) continue;
         const localFile = FILES[absFile - info.fileOffset];
@@ -125,9 +160,9 @@ export function allSquaresAt(absFile, absRank) {
 }
 
 /** (absFile, absRank) 의 highest 레벨 SquareId 반환, 없으면 null. */
-export function highestSquareAt(absFile, absRank) {
+export function highestSquareAt(absFile, absRank, state) {
     for (const level of LEVEL_Y_ORDER) {
-        const info = BOARD_INFO[level];
+        const info = _info(level, state);
         if (absFile < info.minF || absFile > info.maxF) continue;
         if (absRank < info.minR || absRank > info.maxR) continue;
         const localFile = FILES[absFile - info.fileOffset];
@@ -142,7 +177,7 @@ export function highestSquareAt(absFile, absRank) {
  * 즉 물리적으로 같은 (x, z) 위치의 다른 레벨 칸들.
  * 대부분 셀은 빈 배열, overlap 셀만 1~2 개 반환.
  */
-export function getVerticalColumn(squareId) {
-    const { absFile, absRank } = squareId.toAbs();
-    return allSquaresAt(absFile, absRank).filter(sq => !sq.equals(squareId));
+export function getVerticalColumn(squareId, state) {
+    const { absFile, absRank } = squareId.toAbs(state);
+    return allSquaresAt(absFile, absRank, state).filter(sq => !sq.equals(squareId));
 }
