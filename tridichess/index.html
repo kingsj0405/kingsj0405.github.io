@@ -13,26 +13,100 @@
     </script>
     <title>Star Trek 3D Chess: Perfect Structure</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #050505; color: #eee; font-family: 'Segoe UI', sans-serif; display: flex; }
+        :root {
+            --bg-0: #050508;
+            --bg-1: #0c0c10;
+            --bg-2: #14141a;
+            --bg-3: #1c1c24;
+            --border: #2a2a35;
+            --border-bright: #3a3a48;
+            --text: #e6e6ee;
+            --text-dim: #8a8a98;
+            --accent: #00d2ff;
+            --accent-dim: #007a99;
+            --warn: #ffcc00;
+            --danger: #ff4466;
+            --white-piece: #f5f5f5;
+            --black-piece: #ff5555;
+            --hl-selected: #00ff7f;
+            --hl-move: #ffe54a;
+            --hl-column: #00aacc;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; overflow: hidden; background-color: var(--bg-0); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; display: flex; }
         #game-container { display: flex; width: 100vw; height: 100vh; }
-        
-        #view-3d { width: 70%; height: 100%; position: relative; background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%); }
-        
-        #sidebar { width: 30%; height: 100%; background: #111; border-left: 2px solid #333; display: flex; flex-direction: column; }
-        .panel-header { padding: 15px; border-bottom: 1px solid #333; background: #151515; }
-        .panel-header h2 { margin: 0; color: #00d2ff; font-size: 1.2em; }
-        
-        .control-group { padding: 10px; display: flex; gap: 5px; justify-content: center; background: #1a1a1a; }
-        button { background: #333; color: #00d2ff; border: 1px solid #00d2ff; padding: 5px 12px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #00d2ff; color: #000; }
 
-        #log-panel { flex-grow: 1; padding: 10px; font-family: monospace; color: #888; overflow-y: auto; font-size: 0.9em; }
-        
+        /* 3D view */
+        #view-3d { width: 70%; height: 100%; position: relative; background: radial-gradient(ellipse at 50% 40%, #1a2030 0%, #060810 70%, #000000 100%); }
+
+        /* Sidebar */
+        #sidebar { width: 30%; height: 100%; background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+
+        .panel-header { padding: 14px 16px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 100%); position: relative; }
+        .panel-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
+        .panel-header h2 { margin: 0; color: var(--accent); font-size: 1.15em; font-weight: 600; letter-spacing: 0.5px; }
+        .panel-header .subtitle { font-size: 0.75em; color: var(--text-dim); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* Turn indicator */
+        #turn-indicator { padding: 8px 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; }
+        #turn-indicator .label { color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.75em; }
+        #turn-indicator .value { font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        #turn-indicator .dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+        #turn-indicator.white .value { color: var(--white-piece); }
+        #turn-indicator.white .dot   { background: var(--white-piece); }
+        #turn-indicator.black .value { color: var(--black-piece); }
+        #turn-indicator.black .dot   { background: var(--black-piece); }
+
+        /* Buttons */
+        .control-group { padding: 10px 12px; display: flex; gap: 6px; justify-content: center; background: var(--bg-1); border-bottom: 1px solid var(--border); }
+        button { background: transparent; color: var(--accent); border: 1px solid var(--accent-dim); padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 0.85em; font-family: inherit; letter-spacing: 0.5px; transition: all 0.15s ease; }
+        button:hover { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 12px rgba(0, 210, 255, 0.4); }
+        button:active { transform: translateY(1px); }
+
+        /* Log */
+        #log-panel { flex: 0 0 25%; padding: 10px 14px; font-family: 'Cascadia Code', 'Consolas', monospace; color: var(--text-dim); overflow-y: auto; font-size: 0.8em; border-bottom: 1px solid var(--border); background: var(--bg-0); line-height: 1.5; }
+        #log-panel > div { padding: 1px 0; }
+        #log-panel .log-system  { color: var(--accent-dim); }
+        #log-panel .log-action  { color: var(--text); }
+        #log-panel .log-capture { color: var(--danger); }
+        #log-panel .log-info    { color: var(--text-dim); }
+
+        /* 2D Control Panel */
+        #panel-2d { flex: 1; padding: 12px; overflow: auto; background: var(--bg-0); }
+        #panel-2d .panel-2d-title { font-size: 0.75em; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+        #panel-2d .panel-2d-title::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); }
+        #panel-2d .panel-2d-grid { display: grid; grid-template-columns: auto auto auto; gap: 8px; align-items: center; justify-items: center; }
+        #panel-2d .cell-empty { width: 1px; }
+        #panel-2d .board-wrap { display: flex; flex-direction: column; align-items: center; }
+        #panel-2d .board-label { font-size: 0.65em; color: var(--text-dim); margin-bottom: 3px; font-family: monospace; letter-spacing: 1px; }
+        #panel-2d .board-grid { display: grid; gap: 1px; padding: 2px; background: var(--border); border-radius: 3px; box-shadow: 0 0 0 1px var(--border-bright); }
+        #panel-2d .board-grid.attack { background: #4a2030; box-shadow: 0 0 0 1px #6a3050; }
+        #panel-2d .sq { width: 22px; height: 22px; padding: 0; border: 0; font-size: 16px; line-height: 22px; cursor: pointer; font-family: 'Segoe UI Symbol', 'Apple Symbols', sans-serif; display: flex; align-items: center; justify-content: center; text-align: center; transition: transform 0.08s ease; }
+        #panel-2d .sq.light { background: #d4d4d4; }
+        #panel-2d .sq.dark  { background: #545458; }
+        #panel-2d .sq.white-piece { color: var(--white-piece); text-shadow: 0 0 2px #000, 0 0 3px #000; }
+        #panel-2d .sq.black-piece { color: var(--black-piece); text-shadow: 0 0 2px #000; }
+        #panel-2d .sq:hover { outline: 1px solid var(--accent); transform: scale(1.08); z-index: 1; }
+        #panel-2d .sq.selected { box-shadow: inset 0 0 0 2px var(--hl-selected); }
+        #panel-2d .sq.move     { box-shadow: inset 0 0 0 2px var(--hl-move); }
+        #panel-2d .sq.column   { box-shadow: inset 0 0 0 2px var(--hl-column); }
+        #panel-2d .sq.selected.move { box-shadow: inset 0 0 0 2px var(--hl-selected), inset 0 0 0 4px var(--hl-move); }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-0); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
         /* Rule Popup */
-        #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: rgba(10, 10, 15, 0.95); border: 1px solid #00d2ff; padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
-        #rule-modal h3 { color: #ffcc00; border-bottom: 1px solid #444; margin-top: 0; padding-bottom: 10px; }
-        #rule-modal a { color: #00d2ff; }
-        .close-btn { position: absolute; top: 10px; right: 15px; border: none; background: none; color: #ff4444; font-size: 1.5em; cursor: pointer; }
+        #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 540px; max-width: 90vw; background: linear-gradient(180deg, rgba(20, 22, 30, 0.98), rgba(10, 12, 18, 0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 24px; z-index: 100; box-shadow: 0 0 60px rgba(0, 210, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6); color: var(--text); }
+        #rule-modal h3 { color: var(--warn); border-bottom: 1px solid var(--border); margin-top: 0; padding-bottom: 10px; letter-spacing: 0.5px; }
+        #rule-modal a { color: var(--accent); text-decoration: none; }
+        #rule-modal a:hover { text-decoration: underline; }
+        #rule-modal ul { padding-left: 20px; }
+        #rule-modal li { margin-bottom: 6px; }
+        .close-btn { position: absolute; top: 10px; right: 14px; border: none; background: none; color: var(--danger); font-size: 1.4em; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 3px; transition: background 0.15s; }
+        .close-btn:hover { background: rgba(255, 68, 102, 0.15); }
     </style>
     
     <script type="importmap">
@@ -51,16 +125,24 @@
     <div id="sidebar">
         <div class="panel-header">
             <h2>Tri-Dimensional Chess</h2>
-            <div style="font-size:0.8em; color:#aaa; margin-top:5px;">Franklin Mint Configuration</div>
+            <div class="subtitle">Franklin Mint Configuration</div>
+        </div>
+        <div id="turn-indicator" class="white">
+            <span class="label">Turn</span>
+            <span class="value"><span class="dot"></span><span class="text">White</span></span>
         </div>
         <div class="control-group">
-            <button id="btn-reset">Reset Game</button>
-            <button id="btn-rules">Rules & Info</button>
-            <button id="btn-debug">Debug Coords</button>
+            <button id="btn-reset">Reset</button>
+            <button id="btn-rules">Rules</button>
+            <button id="btn-debug">Coords</button>
         </div>
         <div id="log-panel">
-            <div>> Warp Core Online.</div>
-            <div>> Structural Integrity Field: Stable.</div>
+            <div class="log-system">▸ Warp Core Online.</div>
+            <div class="log-system">▸ Structural Integrity Field: Stable.</div>
+        </div>
+        <div id="panel-2d">
+            <div class="panel-2d-title">2D Control Panel</div>
+            <div class="panel-2d-grid"></div>
         </div>
     </div>
 </div>

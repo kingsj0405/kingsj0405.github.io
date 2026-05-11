@@ -1,29 +1,33 @@
 /**
- * main.js — 컨트롤러·렌더러 조립 및 게임 루프 (M2 버전)
+ * main.js — 컨트롤러·렌더러 조립 및 게임 루프 (Sprint 3.1 버전)
  *
- * M2 변경사항:
- *   - 게임 상태를 Array(64) → Map<squareIdString, piece>로 전환
- *   - handleSquareClick(squareId) — SquareId 기반
- *   - 같은 수직열(vertical column) 하이라이트 추가
- *   - DebugOverlay 연동 (좌표 라벨 토글)
- *   - 초기 배치: 3D 체스 대표 위치
+ * Sprint 3.1 변경사항:
+ *   - gameState 를 plain obj → 불변 GameState 인스턴스로 교체 (ADR-0002)
+ *   - createInitialState() 사용
+ *   - 이동: gameState = gameState.movePiece(from, to).with({ turn: ... })
+ *   - selected / moves 는 UI state 로 분리
+ *
+ * M3.5 까지 getMoves() 는 데모 (같은 레벨 이동 + 같은 색 차단). RuleController 가 교체.
  */
 
 import { setupScene }                              from './renderer/SceneSetup.js';
 import { setupPhysicalBoards, setupLogicalSquares } from './renderer/BoardRenderer.js';
 import { PieceRenderer }                           from './renderer/PieceRenderer.js';
 import { DebugOverlay }                            from './ui/DebugOverlay.js';
+import { Board2DPanel }                            from './ui/Board2DPanel.js';
 import { getAllSquares, getVerticalColumn }         from './model/SquareId.js';
+import { createInitialState }                       from './model/initialState.js';
 
 // ── 게임 상태 ──────────────────────────────────────────────────
-const gameState = {
-    /** @type {Map<string, {type:string, color:string}>} */
-    board:    new Map(),
-    turn:     'white',
+/** @type {import('./model/GameState.js').GameState} */
+let gameState = createInitialState();
+
+// ── UI 상태 (선택/이동 후보) — 게임 상태와 분리 ────────────────
+const ui = {
     /** @type {import('./model/SquareId.js').SquareId | null} */
     selected: null,
     /** @type {import('./model/SquareId.js').SquareId[]} */
-    moves:    [],
+    moves: [],
 };
 
 // ── Three.js 참조 ──────────────────────────────────────────────
@@ -32,13 +36,15 @@ let scene, camera, renderer, controls;
 let squareMeshes = new Map();
 let pieceRenderer;
 let debugOverlay;
+/** @type {Board2DPanel} */
+let board2D;
 
 // ── 하이라이트 색상 ────────────────────────────────────────────
 const COLOR = {
-    NONE:    0x000000,
-    SELECTED: 0x00ff00,  // 선택된 칸: 초록
-    COLUMN:  0x004466,   // 수직 열: 진한 청록 (emissive)
-    MOVE:    0xffff00,   // 이동 가능: 노랑
+    NONE:     0x000000,
+    SELECTED: 0x00ff00,
+    COLUMN:   0x004466,
+    MOVE:     0xffff00,
 };
 
 // ── 초기화 ──────────────────────────────────────────────────────
@@ -53,7 +59,12 @@ function init() {
     pieceRenderer = new PieceRenderer(scene);
     debugOverlay  = new DebugOverlay(container, scene);
 
-    setupPieces();
+    const panel2DGrid = document.querySelector('#panel-2d .panel-2d-grid');
+    board2D = new Board2DPanel(panel2DGrid, handleSquareClick);
+
+    pieceRenderer.render(gameState.pieces);
+    board2D.render(gameState, ui);
+    renderTurnIndicator();
 
     document.getElementById('btn-reset').onclick = resetGame;
     document.getElementById('btn-rules').onclick = () => {
@@ -69,94 +80,38 @@ function init() {
     animate();
 }
 
-// ── 피스 초기 배치 (3D 체스 대표 위치, M3에서 정식 규칙으로 교체) ──
-function setupPieces() {
-    const INITIAL = {
-        // White — W level
-        'a4(W)': { type: 'R', color: 'white' },
-        'b4(W)': { type: 'N', color: 'white' },
-        'c4(W)': { type: 'B', color: 'white' },
-        'd4(W)': { type: 'K', color: 'white' },
-        'a3(W)': { type: 'R', color: 'white' },
-        'b3(W)': { type: 'N', color: 'white' },
-        'c3(W)': { type: 'Q', color: 'white' },
-        'd3(W)': { type: 'B', color: 'white' },
-        // White pawns (W rank 2 + attack boards)
-        'a2(W)': { type: 'P', color: 'white' },
-        'b2(W)': { type: 'P', color: 'white' },
-        'c2(W)': { type: 'P', color: 'white' },
-        'd2(W)': { type: 'P', color: 'white' },
-        'a1(QL1)': { type: 'P', color: 'white' },
-        'b1(QL1)': { type: 'P', color: 'white' },
-        'a1(KL1)': { type: 'P', color: 'white' },
-        'b1(KL1)': { type: 'P', color: 'white' },
-        // Black — B level
-        'a1(B)': { type: 'R', color: 'black' },
-        'b1(B)': { type: 'N', color: 'black' },
-        'c1(B)': { type: 'B', color: 'black' },
-        'd1(B)': { type: 'K', color: 'black' },
-        'a2(B)': { type: 'R', color: 'black' },
-        'b2(B)': { type: 'N', color: 'black' },
-        'c2(B)': { type: 'Q', color: 'black' },
-        'd2(B)': { type: 'B', color: 'black' },
-        // Black pawns (B rank 3 + attack boards)
-        'a3(B)': { type: 'P', color: 'black' },
-        'b3(B)': { type: 'P', color: 'black' },
-        'c3(B)': { type: 'P', color: 'black' },
-        'd3(B)': { type: 'P', color: 'black' },
-        'a1(QL3)': { type: 'P', color: 'black' },
-        'b1(QL3)': { type: 'P', color: 'black' },
-        'a1(KL3)': { type: 'P', color: 'black' },
-        'b1(KL3)': { type: 'P', color: 'black' },
-    };
-
-    gameState.board.clear();
-    for (const [key, piece] of Object.entries(INITIAL)) {
-        gameState.board.set(key, piece);
-    }
-    pieceRenderer.render(gameState.board);
-}
-
 // ── 클릭 핸들러 ─────────────────────────────────────────────────
-/**
- * @param {import('./model/SquareId.js').SquareId} squareId
- */
+/** @param {import('./model/SquareId.js').SquareId} squareId */
 function handleSquareClick(squareId) {
-    const key   = squareId.toString();
-    const piece = gameState.board.get(key);
+    const piece = gameState.getPiece(squareId);
     const isOwn = piece && piece.color === gameState.turn;
 
     clearAllHighlights();
 
     if (isOwn) {
-        // 자신의 말 선택
-        gameState.selected = squareId;
-        gameState.moves    = getMoves(squareId);
+        ui.selected = squareId;
+        ui.moves    = getMoves(squareId);
 
-        highlightSquare(key, COLOR.SELECTED);
-
-        // 같은 수직열 하이라이트
+        highlightSquare(squareId.toString(), COLOR.SELECTED);
         for (const colSq of getVerticalColumn(squareId)) {
             highlightSquare(colSq.toString(), COLOR.COLUMN);
         }
-
-        // 이동 가능 칸 하이라이트
-        for (const moveSq of gameState.moves) {
+        for (const moveSq of ui.moves) {
             highlightSquare(moveSq.toString(), COLOR.MOVE);
         }
 
-        const sym = getPieceSymbol(piece);
-        log(`Selected ${sym} at ${key}`);
+        log(`Selected ${piece.symbol} at ${squareId}`, 'info');
 
-    } else if (gameState.selected !== null && isMoveTarget(squareId)) {
-        movePiece(gameState.selected, squareId);
+    } else if (ui.selected !== null && isMoveTarget(squareId)) {
+        applyMove(ui.selected, squareId);
 
     } else {
-        // 빈 칸 또는 상대 말 클릭 → 선택 해제
-        gameState.selected = null;
-        gameState.moves    = [];
-        if (piece) log(`${key}: ${piece.color} ${piece.type}`);
+        ui.selected = null;
+        ui.moves    = [];
+        if (piece) log(`${squareId}: ${piece.color} ${piece.type}`, 'info');
     }
+
+    board2D.render(gameState, ui);
 }
 
 // ── 이동 적용 ────────────────────────────────────────────────────
@@ -164,38 +119,40 @@ function handleSquareClick(squareId) {
  * @param {import('./model/SquareId.js').SquareId} from
  * @param {import('./model/SquareId.js').SquareId} to
  */
-function movePiece(from, to) {
-    const piece  = gameState.board.get(from.toString());
-    const target = gameState.board.get(to.toString());
+function applyMove(from, to) {
+    const piece    = gameState.getPiece(from);
+    const captured = gameState.getPiece(to);
 
-    gameState.board.delete(from.toString());
-    gameState.board.set(to.toString(), piece);
+    gameState = gameState
+        .movePiece(from, to)
+        .with({ turn: gameState.turn === 'white' ? 'black' : 'white' });
 
-    log(`${piece.type} ${from} → ${to}`);
-    if (target) log(`  Captured ${target.color} ${target.type}`);
+    log(`${piece.symbol} ${from} → ${to}`, 'action');
+    if (captured) log(`  ✕ Captured ${captured.symbol}`, 'capture');
 
-    gameState.turn     = gameState.turn === 'white' ? 'black' : 'white';
-    gameState.selected = null;
-    gameState.moves    = [];
+    ui.selected = null;
+    ui.moves    = [];
 
     clearAllHighlights();
-    pieceRenderer.render(gameState.board);
+    pieceRenderer.render(gameState.pieces);
+    board2D.render(gameState, ui);
+    renderTurnIndicator();
 }
 
-// ── 이동 가능 목록 (M2 데모용 — 같은 레벨 빈 칸/적 말) ──────────
-// M3에서 RuleController.generateLegalMoves()로 교체 예정
+// ── 이동 가능 목록 (Sprint 3.1 데모용) ─────────────────────────
+// Sprint 3.5 에서 RuleController.generateLegalMoves() 로 교체.
 /**
  * @param {import('./model/SquareId.js').SquareId} squareId
  * @returns {import('./model/SquareId.js').SquareId[]}
  */
 function getMoves(squareId) {
-    const piece = gameState.board.get(squareId.toString());
+    const piece = gameState.getPiece(squareId);
     if (!piece) return [];
 
     return getAllSquares().filter(sq => {
         if (sq.level !== squareId.level) return false;
         if (sq.equals(squareId)) return false;
-        const occupant = gameState.board.get(sq.toString());
+        const occupant = gameState.getPiece(sq);
         if (occupant && occupant.color === piece.color) return false;
         return true;
     });
@@ -203,7 +160,7 @@ function getMoves(squareId) {
 
 /** @param {import('./model/SquareId.js').SquareId} squareId */
 function isMoveTarget(squareId) {
-    return gameState.moves.some(m => m.equals(squareId));
+    return ui.moves.some(m => m.equals(squareId));
 }
 
 // ── 하이라이트 헬퍼 ─────────────────────────────────────────────
@@ -216,32 +173,39 @@ function highlightSquare(key, color) {
     if (mesh) mesh.material.emissive.setHex(color);
 }
 
-// ── 피스 심볼 ────────────────────────────────────────────────────
-function getPieceSymbol(piece) {
-    const syms = {
-        P: ['♙','♟'], R: ['♖','♜'], N: ['♘','♞'],
-        B: ['♗','♝'], Q: ['♕','♛'], K: ['♔','♚'],
-    };
-    const idx = piece.color === 'white' ? 0 : 1;
-    return syms[piece.type]?.[idx] ?? piece.type;
-}
-
 // ── 리셋 ─────────────────────────────────────────────────────────
 function resetGame() {
-    gameState.board.clear();
-    gameState.turn     = 'white';
-    gameState.selected = null;
-    gameState.moves    = [];
+    gameState   = createInitialState();
+    ui.selected = null;
+    ui.moves    = [];
     clearAllHighlights();
-    setupPieces();
-    log('--- Game Reset ---');
+    pieceRenderer.render(gameState.pieces);
+    board2D.render(gameState, ui);
+    renderTurnIndicator();
+    log('▸ Game Reset', 'system');
 }
 
 // ── 로그 ─────────────────────────────────────────────────────────
-function log(msg) {
+/**
+ * @param {string} msg
+ * @param {'action'|'capture'|'info'|'system'} [kind='info']
+ */
+function log(msg, kind = 'info') {
     const panel = document.getElementById('log-panel');
-    panel.innerHTML += `<div>${msg}</div>`;
+    const div   = document.createElement('div');
+    div.className   = `log-${kind}`;
+    div.textContent = msg;
+    panel.appendChild(div);
     panel.scrollTop = panel.scrollHeight;
+}
+
+// ── 턴 인디케이터 ────────────────────────────────────────────────
+function renderTurnIndicator() {
+    const el = document.getElementById('turn-indicator');
+    const isWhite = gameState.turn === 'white';
+    el.classList.toggle('white', isWhite);
+    el.classList.toggle('black', !isWhite);
+    el.querySelector('.text').textContent = isWhite ? 'White' : 'Black';
 }
 
 // ── 리사이즈 ─────────────────────────────────────────────────────
@@ -262,5 +226,23 @@ function animate() {
     renderer.render(scene, camera);
     debugOverlay.render(camera);
 }
+
+// ── 디버그 도구 (CLAUDE.md §7) ─────────────────────────────────
+window.tridi = {
+    getState: () => gameState,
+    dumpState: () => {
+        const out = {
+            turn: gameState.turn,
+            rulesetId: gameState.rulesetId,
+            pieces: Object.fromEntries(
+                [...gameState.pieces.entries()].map(([k, p]) => [k, {
+                    id: p.id, type: p.type, color: p.color, hasMoved: p.hasMoved,
+                }])
+            ),
+        };
+        console.log(JSON.stringify(out, null, 2));
+        return out;
+    },
+};
 
 init();

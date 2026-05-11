@@ -38,20 +38,20 @@ export function setupPhysicalBoards(scene) {
         mesh.add(edges);
     };
 
-    // ── 메인 보드 3장 (모두 같은 X/Z, 다른 Y) ──
-    createBoard(4, 4,  0,  0,            0, 0x003366); // W (Y=0)
-    createBoard(4, 4,  0,  LEVEL_H,      0, 0x003366); // N (Y=25)
-    createBoard(4, 4,  0,  2 * LEVEL_H,  0, 0x003366); // B (Y=50)
+    // ── 메인 보드 3장 (Y 상승 + Z 후퇴 staircase) ──
+    // CoordMapper.LEVEL_Z 와 일치해야 함.
+    createBoard(4, 4, 0,  0,            0,        0x003366); // W (z=0)
+    createBoard(4, 4, 0,  LEVEL_H,      -2 * SQ,  0x003366); // N (z=-28)
+    createBoard(4, 4, 0,  2 * LEVEL_H,  -4 * SQ,  0x003366); // B (z=-56)
 
-    // ── 어택 보드 4장 (CoordMapper와 일치하는 위치) ──
-    // QL1: a/b 칸 중심 = X(-49~-35), Z(21~35) → 판 중심 (-42, 12.5, 28)
-    createBoard(2, 2, -3 * SQ,  LEVEL_H * 0.5,  2 * SQ, 0x660000); // QL1
-    // KL1: a/b 칸 중심 = X(7~21), Z(21~35) → 판 중심 (14, 12.5, 28)
-    createBoard(2, 2,  SQ,      LEVEL_H * 0.5,  2 * SQ, 0x660000); // KL1
-    // QL3: a/b 칸 중심 = X(-49~-35), Z(-7~7) → 판 중심 (-42, 62.5, 0)
-    createBoard(2, 2, -3 * SQ,  LEVEL_H * 2.5,  0,      0x660000); // QL3
-    // KL3: a/b 칸 중심 = X(7~21), Z(-7~7) → 판 중심 (14, 62.5, 0)
-    createBoard(2, 2,  SQ,      LEVEL_H * 2.5,  0,      0x660000); // KL3
+    // ── 어택 보드 4장 (부모 메인 보드 옆에 부착) ──
+    // ranks 1-2 의 Z 중심 = LEVEL_Z + (2.5 - 1.5)*SQ = LEVEL_Z + SQ
+    // QL1/KL1: 부모 W → z_center = 0 + SQ = +14
+    createBoard(2, 2, -3 * SQ,  LEVEL_H * 0.5,    SQ,      0x660000); // QL1
+    createBoard(2, 2,  3 * SQ,  LEVEL_H * 0.5,    SQ,      0x660000); // KL1
+    // QL3/KL3: 부모 B → z_center = -6*SQ + SQ = -5*SQ = -70
+    createBoard(2, 2, -3 * SQ,  LEVEL_H * 2.5,   -5 * SQ,  0x660000); // QL3
+    createBoard(2, 2,  3 * SQ,  LEVEL_H * 2.5,   -5 * SQ,  0x660000); // KL3
 }
 
 /**
