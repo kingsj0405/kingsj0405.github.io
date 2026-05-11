@@ -144,6 +144,9 @@
         #panel-2d .cell-empty { width: 1px; }
         #panel-2d .board-wrap { display: flex; flex-direction: column; align-items: center; }
         #panel-2d .board-label { font-size: 0.65em; color: var(--text-dim); margin-bottom: 3px; font-family: monospace; letter-spacing: 1px; }
+        #panel-2d .board-label.ab-label { cursor: pointer; padding: 1px 4px; border-radius: 3px; transition: all 0.15s; }
+        #panel-2d .board-label.ab-label:hover { background: var(--hl-castle); color: #000; }
+        #panel-2d .board-label.ab-selected { background: var(--hl-castle); color: #000; box-shadow: 0 0 6px var(--hl-castle); }
         #panel-2d .board-grid { display: grid; gap: 1px; padding: 2px; background: var(--border); border-radius: 3px; box-shadow: 0 0 0 1px var(--border-bright); }
         #panel-2d .board-grid.attack { background: #4a2030; box-shadow: 0 0 0 1px #6a3050; }
         #panel-2d .sq { width: 22px; height: 22px; padding: 0; border: 0; font-size: 16px; line-height: 22px; cursor: pointer; font-family: 'Segoe UI Symbol', 'Apple Symbols', sans-serif; display: flex; align-items: center; justify-content: center; text-align: center; transition: transform 0.08s ease; }

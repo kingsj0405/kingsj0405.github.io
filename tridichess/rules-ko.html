@@ -287,19 +287,61 @@
     <!-- ===== 7. AB 이동 ===== -->
     <h2 id="move-ab">7. 어택 보드 자체의 이동</h2>
     <p>
-        턴에 piece 대신 자기 소유 어택 보드 하나를 이동시킬 수 있다. 단, 보드가 비어있거나 자기 폰 단 하나만 탑승한 상태여야 함.
-        가능한 옵션:
+        턴에 piece 대신 자기 소유 어택 보드 하나를 이동시킬 수 있다.
+    </p>
+
+    <h3>7-1. 이동 조건 (탑승 piece 제약)</h3>
+    <div class="quote">
+        "The attack board may be moved if it is empty or contains only one of their own pawns."
+    </div>
+    <p>
+        AB 가 다음 조건을 만족해야 이동 가능:
     </p>
     <ul>
-        <li><em>"The board may invert."</em> — 같은 위치에서 뒤집기 (반전).</li>
-        <li><em>"The board may move 1 or 2 squares along the same file, floating up or down to the appropriate level."</em>
-            — 같은 file 방향으로 1~2 칸 이동, 적절한 레벨로 떠오르거나 내려감.</li>
-        <li><em>"The board may move 1 or 2 squares along the same file, and invert."</em> — 위 둘 결합.</li>
+        <li><strong>비어있음</strong> (어떤 piece 도 없음), 또는</li>
+        <li><strong>자기 색 폰 단 1개만</strong> 탑승</li>
     </ul>
-    <p>
-        추가 룰: 어택 보드 이동이 가능하려면 <strong>적어도 폰 하나 이상이 보드에 남아 있어야</strong> 함 (FS5 명료화).
-        탑승 폰은 그 이동을 "자기 이동" 으로 간주 — 이후 첫 2칸 옵션 상실.
-    </p>
+    <div class="note">
+        <strong>예시:</strong> 초기 배치의 QL1 에는 R + N + 2P (4 piece) 가 탑승 — 이동 불가.
+        Rook/Knight/Bishop/Queen 이 한 개라도 있으면 AB 잠김.
+        먼저 그 piece 들을 이동시켜 보드를 비우거나 폰 1개만 남게 해야 AB 이동 가능.
+    </div>
+
+    <h3>7-2. 이동 방식</h3>
+    <div class="quote">
+        "The board may move 1 or 2 squares along the same file, floating up or down to the appropriate level.
+         An AB is always 'stuck' on its starting file, it can only move forwards or back."
+    </div>
+    <ul>
+        <li><strong>같은 file</strong>: AB 는 자기 시작 file 에 고정 (QL: 좌측 a-b, KL: 우측 e-f).
+            file 방향 이동 불가.</li>
+        <li><strong>1 또는 2 rank</strong>: 한 번 이동에 1 또는 2 rank 슬라이드.</li>
+        <li><strong>Floating to appropriate level</strong>: 새 위치에 따라 Y elevation 자동 변경.
+            예: QL1 이 백 쪽 (W 영역) 에 있으면 W 위, N 영역으로 슬라이드하면 N 위로 떠오름.</li>
+    </ul>
+
+    <h3>7-3. 반전 (Invert)</h3>
+    <ul>
+        <li><em>"The board may invert."</em> — 같은 위치에서 위-아래 뒤집기.</li>
+        <li><em>"The board may move 1 or 2 squares ... and invert."</em> — 이동 + 반전 결합.</li>
+    </ul>
+    <div class="note">
+        <strong>구현 노트:</strong> 본 프로젝트의 M4 D-3 시점에는 반전 미구현. D-4 sprint 에서 처리.
+    </div>
+
+    <h3>7-4. 보충 룰</h3>
+    <ul>
+        <li>탑승 폰은 그 이동을 "자기 이동" 으로 간주 — 이후 첫 2칸 옵션 상실.</li>
+        <li>적어도 폰 하나 이상이 보드에 남아 있어야 함 (FS5 명료화 — 무한 셔틀 무승부 방지).</li>
+    </ul>
+
+    <h3>7-5. 본 구현 (M4 D-3) 상세</h3>
+    <ul>
+        <li>각 AB 별 valid rankOffset: -1, 0, 1, 2, 3, 4, 5, 6, 7 (9 positions, file 따라 끝까지 슬라이드 가능)</li>
+        <li>한 번 이동: ±1 또는 ±2 (Roth 의 "1 or 2 squares")</li>
+        <li>충돌 회피: 같은 file 의 다른 AB 와 겹치는 rankOffset 불가 (예: QL1 이 QL3 자리 침범 X)</li>
+        <li>Y elevation: rankOffset ≤ 1 (W 영역) → Y=12.5 / 2-3 (N 영역) → Y=37.5 / ≥4 (B 영역) → Y=62.5</li>
+    </ul>
 
     <!-- ===== 8. AB 캡처 ===== -->
     <h2 id="capture-ab">8. 어택 보드 캡처</h2>

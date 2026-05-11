@@ -28,14 +28,14 @@ export class PieceRenderer {
      * 보드 Map 전체를 받아 피스 스프라이트를 (재)생성한다.
      * @param {Map<string, {type:string, color:string}>} boardMap
      */
-    render(boardMap) {
+    render(boardMap, state) {
         // 기존 스프라이트 제거
         this._meshMap.forEach(sprite => this._scene.remove(sprite));
         this._meshMap = new Map();
 
         for (const [sqKey, piece] of boardMap.entries()) {
             const squareId = SquareId.fromString(sqKey);
-            const pos = squareToVector3(squareId);
+            const pos = squareToVector3(squareId, state);
 
             const sprite = this._createSprite(piece);
             sprite.position.copy(pos);
