@@ -12,12 +12,17 @@ import { GameState } from './GameState.js';
 import { Piece } from './Piece.js';
 import { SquareId } from './SquareId.js';
 
-/** AB 초기 anchor (현재 SquareId BOARD_INFO 와 일치). 후속 sprint 에서 동적화. */
+/**
+ * AB 초기 핀 (Bartmess pin 모델).
+ *   QL1/KL1: W 보드 남쪽(가까운) 모서리, 위쪽 elevation → 'W-S-up' (level 3, RO=-1)
+ *   QL3/KL3: B 보드 북쪽(먼)   모서리, 위쪽 elevation → 'B-N-up' (level 7, RO= 7)
+ * rankOffset 은 pin 에서 derived (BoardNode 의 캐시).
+ */
 const INITIAL_BOARDS_RAW = [
-    { boardId: 'QL1', fileOffset: 0, rankOffset: -1, owner: 'white', inverted: false },
-    { boardId: 'KL1', fileOffset: 4, rankOffset: -1, owner: 'white', inverted: false },
-    { boardId: 'QL3', fileOffset: 0, rankOffset:  7, owner: 'black', inverted: false },
-    { boardId: 'KL3', fileOffset: 4, rankOffset:  7, owner: 'black', inverted: false },
+    { boardId: 'QL1', fileOffset: 0, pin: 'W-S-up', rankOffset: -1, owner: 'white', inverted: false },
+    { boardId: 'KL1', fileOffset: 4, pin: 'W-S-up', rankOffset: -1, owner: 'white', inverted: false },
+    { boardId: 'QL3', fileOffset: 0, pin: 'B-N-up', rankOffset:  7, owner: 'black', inverted: false },
+    { boardId: 'KL3', fileOffset: 4, pin: 'B-N-up', rankOffset:  7, owner: 'black', inverted: false },
 ];
 
 const LAYOUT = [

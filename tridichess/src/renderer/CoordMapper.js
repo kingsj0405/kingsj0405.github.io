@@ -15,16 +15,17 @@
 import * as THREE from 'three';
 import { SQ, LEVEL_H } from '../config/constants.js';
 import { FILE_INDEX } from '../model/SquareId.js';
+import { getPin } from '../rules/pins.js';
 
-// 메인 보드는 고정. AB 도 default (state 없을 때) 동일.
+// 메인 보드는 고정. AB default (state 없을 때) 는 초기 pin 위치.
 const DEFAULT_OFFSETS = {
-    W:   { fileOffset: 1, rankOffset: 0  },
-    QL1: { fileOffset: 0, rankOffset: -1 },
-    KL1: { fileOffset: 4, rankOffset: -1 },
-    N:   { fileOffset: 1, rankOffset: 2  },
-    B:   { fileOffset: 1, rankOffset: 4  },
-    QL3: { fileOffset: 0, rankOffset: 7  },
-    KL3: { fileOffset: 4, rankOffset: 7  },
+    W:   { fileOffset: 1, rankOffset: 0,  y: 0 },
+    QL1: { fileOffset: 0, rankOffset: -1, y: LEVEL_H * 0.5 },
+    KL1: { fileOffset: 4, rankOffset: -1, y: LEVEL_H * 0.5 },
+    N:   { fileOffset: 1, rankOffset: 2,  y: LEVEL_H },
+    B:   { fileOffset: 1, rankOffset: 4,  y: 2 * LEVEL_H },
+    QL3: { fileOffset: 0, rankOffset: 7,  y: LEVEL_H * 2.5 },
+    KL3: { fileOffset: 4, rankOffset: 7,  y: LEVEL_H * 2.5 },
 };
 
 const MAIN_LEVELS = new Set(['W', 'N', 'B']);
@@ -32,28 +33,21 @@ const MAIN_LEVELS = new Set(['W', 'N', 'B']);
 function getOffsets(level, state) {
     if (state && state.boards && state.boards.has(level)) {
         const node = state.boards.get(level);
-        return { fileOffset: node.fileOffset, rankOffset: node.rankOffset };
+        const pin = node.pin ? getPin(node.pin) : null;
+        return {
+            fileOffset: node.fileOffset,
+            rankOffset: pin ? pin.rankOffset : node.rankOffset,
+            y: pin ? pin.y : DEFAULT_OFFSETS[level].y,
+        };
     }
     return DEFAULT_OFFSETS[level];
-}
-
-/**
- * AB 의 y 위치 — rankOffset 에 따라 W/N/B 층에 부착 (Roth: "floating to appropriate level").
- *   rankOffset ≤ 1  : W 층 (Y = 12.5, between W and N)
- *   rankOffset 2-3 : N 층 (Y = 37.5, between N and B)
- *   rankOffset ≥ 4 : B 층 (Y = 62.5, above B)
- */
-function getABLevelY(rankOffset) {
-    if (rankOffset <= 1) return LEVEL_H * 0.5;
-    if (rankOffset <= 3) return LEVEL_H * 1.5;
-    return LEVEL_H * 2.5;
 }
 
 function getY(level, off) {
     if (level === 'W') return 0;
     if (level === 'N') return LEVEL_H;
     if (level === 'B') return 2 * LEVEL_H;
-    return getABLevelY(off.rankOffset);
+    return off.y;
 }
 
 /**

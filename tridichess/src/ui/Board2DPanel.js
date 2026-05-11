@@ -66,15 +66,24 @@ export class Board2DPanel {
         wrap.className = 'board-wrap';
 
         const label = document.createElement('div');
-        label.className   = 'board-label';
-        label.textContent = level;
+        label.className = 'board-label';
         if (!isMain) {
-            // AB 라벨 클릭 시 board 선택 콜백 (M4)
             label.classList.add('ab-label');
             label.dataset.boardId = level;
-            label.title = `Click to move ${level}`;
+            label.title = `Click to show move targets for ${level}`;
+            label.innerHTML = `<span class="bl-name">${level}</span> <span class="bl-ro" data-ro="${level}">@?</span>`;
+        } else {
+            label.textContent = level;
         }
         wrap.appendChild(label);
+
+        if (!isMain) {
+            const tray = document.createElement('div');
+            tray.className = 'ab-tray';
+            tray.dataset.boardId = level;
+            tray.hidden = true;
+            wrap.appendChild(tray);
+        }
 
         const grid = document.createElement('div');
         grid.className = 'board-grid' + (isMain ? '' : ' attack');
@@ -104,6 +113,15 @@ export class Board2DPanel {
      * @param {{ selected: SquareId|null, moves: SquareId[], hints?: Array<{from:SquareId,to:SquareId}>, lastMove?: {from:SquareId,to:SquareId}|null }} ui
      */
     render(state, ui) {
+        // AB 라벨의 @RO 갱신
+        if (state.boards) {
+            for (const id of ['QL1', 'KL1', 'QL3', 'KL3']) {
+                const node = state.boards.get(id);
+                const span = this._grid.querySelector(`[data-ro="${id}"]`);
+                if (span && node) span.textContent = node.pin || `@${node.rankOffset}`;
+            }
+        }
+
         for (const [sqKey, el] of this._squareEls) {
             const piece = state.pieces.get(sqKey);
             if (piece) {

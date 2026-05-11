@@ -307,41 +307,77 @@
         먼저 그 piece 들을 이동시켜 보드를 비우거나 폰 1개만 남게 해야 AB 이동 가능.
     </div>
 
-    <h3>7-2. 이동 방식</h3>
+    <h3>7-2. 이동 방식 — Pin 모델 (Bartmess 정통)</h3>
     <div class="quote">
-        "The board may move 1 or 2 squares along the same file, floating up or down to the appropriate level.
-         An AB is always 'stuck' on its starting file, it can only move forwards or back."
+        "An attack board, when containing a pawn or less, may be moved to
+         any other attack board pin within two squares."
     </div>
+    <p>
+        AB 의 위치는 연속적인 rank 가 아니라 <strong>이산적인 "핀(pin)"</strong> 으로 모델링된다.
+        각 메인 보드(W/N/B)의 네 모서리에는 AB 를 부착할 수 있는 핀이 있고, 핀마다 위(up)/아래(dn) 두 elevation 이 존재.
+    </p>
     <ul>
-        <li><strong>같은 file</strong>: AB 는 자기 시작 file 에 고정 (QL: 좌측 a-b, KL: 우측 e-f).
+        <li><strong>같은 file</strong>: AB 는 자기 시작 file 에 고정 (QL: a-b, KL: c-d 외곽).
             file 방향 이동 불가.</li>
-        <li><strong>1 또는 2 rank</strong>: 한 번 이동에 1 또는 2 rank 슬라이드.</li>
-        <li><strong>Floating to appropriate level</strong>: 새 위치에 따라 Y elevation 자동 변경.
-            예: QL1 이 백 쪽 (W 영역) 에 있으면 W 위, N 영역으로 슬라이드하면 N 위로 떠오름.</li>
+        <li><strong>총 12 pins / file</strong>: 3 main × 2 corner(S/N) × 2 elevation(up/dn).</li>
+        <li><strong>이동 거리</strong>: 현재 핀에서 abs rank 거리 ≤ 2 인 다른 핀으로 이동.
+            같은 모서리의 elevation 토글(up↔dn)도 합법 이동(Δ=0).</li>
+        <li><strong>색깔 제약</strong>: AB 의 (1,1) 칸 색이 메인 보드 모서리 색과 일치해야 함 — 회전 4가지 중 2개로 한정 (180° 반전만 허용, 90° 금지).</li>
+        <li><strong>충돌</strong>: 같은 file 의 다른 AB 가 점유한 핀으로는 이동 불가.</li>
     </ul>
 
-    <h3>7-3. 반전 (Invert)</h3>
+    <h3>7-3. 핀 ID 표기</h3>
+    <p>
+        본 구현은 핀 ID 를 <code>&lt;main&gt;-&lt;corner&gt;-&lt;elevation&gt;</code> 형식으로 표기.
+        예: <code>W-S-up</code> (W 보드 남쪽 모서리, 위쪽).
+    </p>
+    <table style="margin: 8px 0; border-collapse: collapse; font-size: 0.88em;">
+        <tr><th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">Pin</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">메인</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">Corner (rank center)</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">Level / Y</th>
+            <th style="text-align:left; padding: 4px 12px; border-bottom: 1px solid var(--border);">RO</th></tr>
+        <tr><td style="padding:3px 12px;"><code>W-S-dn</code></td><td>W</td><td>S (0.5)</td><td>1 / -12.5</td><td>-1</td></tr>
+        <tr><td style="padding:3px 12px;"><code>W-S-up</code> ★초기 QL1/KL1</td><td>W</td><td>S (0.5)</td><td>3 / 12.5</td><td>-1</td></tr>
+        <tr><td style="padding:3px 12px;"><code>W-N-dn</code></td><td>W</td><td>N (4.5)</td><td>1 / -12.5</td><td>3</td></tr>
+        <tr><td style="padding:3px 12px;"><code>W-N-up</code></td><td>W</td><td>N (4.5)</td><td>3 / 12.5</td><td>3</td></tr>
+        <tr><td style="padding:3px 12px;"><code>N-S-dn</code></td><td>N</td><td>S (2.5)</td><td>3 / 12.5</td><td>1</td></tr>
+        <tr><td style="padding:3px 12px;"><code>N-S-up</code></td><td>N</td><td>S (2.5)</td><td>5 / 37.5</td><td>1</td></tr>
+        <tr><td style="padding:3px 12px;"><code>N-N-dn</code></td><td>N</td><td>N (6.5)</td><td>3 / 12.5</td><td>5</td></tr>
+        <tr><td style="padding:3px 12px;"><code>N-N-up</code></td><td>N</td><td>N (6.5)</td><td>5 / 37.5</td><td>5</td></tr>
+        <tr><td style="padding:3px 12px;"><code>B-S-dn</code></td><td>B</td><td>S (4.5)</td><td>5 / 37.5</td><td>3</td></tr>
+        <tr><td style="padding:3px 12px;"><code>B-S-up</code></td><td>B</td><td>S (4.5)</td><td>7 / 62.5</td><td>3</td></tr>
+        <tr><td style="padding:3px 12px;"><code>B-N-dn</code></td><td>B</td><td>N (8.5)</td><td>5 / 37.5</td><td>7</td></tr>
+        <tr><td style="padding:3px 12px;"><code>B-N-up</code> ★초기 QL3/KL3</td><td>B</td><td>N (8.5)</td><td>7 / 62.5</td><td>7</td></tr>
+    </table>
+    <div class="note">
+        <strong>핵심 인사이트:</strong> "같은 RO 가 여러 level 에 매핑" — 예) RO=3 은 W-N (level 1/3) 에도, B-S (level 5/7) 에도 있다.
+        그러므로 AB 위치는 RO 하나로 결정되지 않고 <strong>핀이 canonical</strong>. Y elevation 은 핀에서 derived.
+    </div>
+
+    <h3>7-4. 반전 (Invert)</h3>
     <ul>
-        <li><em>"The board may invert."</em> — 같은 위치에서 위-아래 뒤집기.</li>
-        <li><em>"The board may move 1 or 2 squares ... and invert."</em> — 이동 + 반전 결합.</li>
+        <li><em>"The board may invert."</em> — 같은 핀에서 위-아래 뒤집기.</li>
+        <li><em>"The board may move ... and invert."</em> — 이동 + 반전 결합.</li>
     </ul>
     <div class="note">
-        <strong>구현 노트:</strong> 본 프로젝트의 M4 D-3 시점에는 반전 미구현. D-4 sprint 에서 처리.
+        <strong>구현 노트:</strong> 색깔 제약(7-2) 때문에 반전은 사실상 180° flip 만 합법.
+        본 프로젝트의 현 시점에는 반전 미구현, 후속 sprint 에서 처리.
     </div>
 
-    <h3>7-4. 보충 룰</h3>
+    <h3>7-5. 보충 룰</h3>
     <ul>
         <li>탑승 폰은 그 이동을 "자기 이동" 으로 간주 — 이후 첫 2칸 옵션 상실.</li>
         <li>적어도 폰 하나 이상이 보드에 남아 있어야 함 (FS5 명료화 — 무한 셔틀 무승부 방지).</li>
     </ul>
-
-    <h3>7-5. 본 구현 (M4 D-3) 상세</h3>
-    <ul>
-        <li>각 AB 별 valid rankOffset: -1, 0, 1, 2, 3, 4, 5, 6, 7 (9 positions, file 따라 끝까지 슬라이드 가능)</li>
-        <li>한 번 이동: ±1 또는 ±2 (Roth 의 "1 or 2 squares")</li>
-        <li>충돌 회피: 같은 file 의 다른 AB 와 겹치는 rankOffset 불가 (예: QL1 이 QL3 자리 침범 X)</li>
-        <li>Y elevation: rankOffset ≤ 1 (W 영역) → Y=12.5 / 2-3 (N 영역) → Y=37.5 / ≥4 (B 영역) → Y=62.5</li>
-    </ul>
+    <div class="note">
+        <strong>Path A / Path B 캡처 경로 룰</strong>: AB 가 메인 보드 사이에 있으면 piece 이동 시
+        "highest path" 외에 AB 를 통과하는 대안 경로가 생길 수 있다. Roth 가 풍부한 예시 페이지로 별도 정리.
+        <br>→ <a href="https://www.thedance.net/~roth/TECHBLOG/attackBoardExamples.html" target="_blank">
+        Roth Attack Board 예시 페이지 (영문, 18개 예시)</a>
+        <br><br>
+        본 프로젝트의 MVP 는 single highest path 단순화 (Path B 미구현). Path B 도입 시 후속 ADR.
+    </div>
 
     <!-- ===== 8. AB 캡처 ===== -->
     <h2 id="capture-ab">8. 어택 보드 캡처</h2>
