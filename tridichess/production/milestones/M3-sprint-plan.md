@@ -31,24 +31,26 @@ M2.5 인프라 완료 이후 시작 가능.
 
 ---
 
-## Sprint 3.2 — pathUtils + 비-슬라이딩 피스 (1.5일)
+## Sprint 3.2 — pathUtils + 비-슬라이딩 피스 (1.5일) — ✅ COMPLETED 2026-05-11
 
 ### 목표
 Knight, King 의 pseudo-legal 이동 생성. 슬라이딩 인프라 마련.
 
 ### 작업
-- [ ] `src/rules/pathUtils.js` — `slidingRay(state, from, dir): SquareId[]`
-  - dir = `{ dFile, dRank, dLevel }`. 충돌/적/보드 경계 처리.
-- [ ] `src/rules/pieceMovement/knight.js` — 3D 나이트 점프 (확정 변형: (2,1,0) 순열 + 부호)
-- [ ] `src/rules/pieceMovement/king.js` — 인접 1칸 (캐슬링 미포함)
-- [ ] **레벨 이동 정책 (잠정):** 같은 (file,rank) 의 다른 level 만 허용. 대각 레벨은 M3.3에서 결정.
-- [ ] `tests/rules/knight.test.js`, `tests/rules/king.test.js` — 빈 보드 기준 가능 이동 수
+- [x] `src/rules/pathUtils.js` — `slidingRay(state, from, dir, color): SquareId[]` (3.3 에서 활용)
+- [x] `src/rules/pieceMovement/knight.js` — 2D L-shape, 같은 레벨만 (ADR-0006)
+- [x] `src/rules/pieceMovement/king.js` — 인접 1칸 + 수직 인접 레벨
+- [x] **레벨 인접 그래프**: W↔N↔B, QL1/KL1↔W, QL3/KL3↔B (ADR-0006)
+- [x] `src/rules/RuleController.js` — generateLegalMoves dispatcher (데모 폴백 포함)
+- [x] `tests/rules/knight.test.js` (7), `tests/rules/king.test.js` (10)
+- [x] `SquareId.exists()` static + tests (3)
+- [x] main.js getMoves 가 RuleController 위임
 
 ### 종료 조건
-- 빈 보드 N(d4) Knight = 8칸 + 수직열 변형 (정확한 수는 테스트로 확정)
-- K(d4) = 인접 8칸 + 수직 변형
-- 화면에서 Knight/King 클릭 시 합법 이동만 노란색 표시
-- **QA 게이트:** BLOCKER 0
+- [x] 자동 테스트: 62/62 (이전 42 + 신규 20)
+- [x] Knight/King 클릭 시 정통 합법 이동만 표시
+- [x] 다른 piece 는 데모 폴백 유지
+- [ ] **QA 게이트:** BLOCKER 0 (사용자 확인 대기)
 
 ---
 

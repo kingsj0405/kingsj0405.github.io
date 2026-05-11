@@ -118,32 +118,83 @@ describe('getAllSquares()', () => {
     });
 });
 
-// ── getVerticalColumn() ─────────────────────────────────────────
-describe('getVerticalColumn()', () => {
-    it('메인 보드 칸의 수직열은 같은 file+rank를 가진 6개의 다른 칸이다', () => {
-        const sq = new SquareId('a', 1, 'W');
-        const col = getVerticalColumn(sq);
-        // 같은 file='a', rank=1인 칸: N, B, QL1, KL1, QL3, KL3 = 6개
-        // (QL1/KL1/QL3/KL3는 'a'파일과 rank 1을 가지므로 포함)
-        expect(col.length).toBeGreaterThanOrEqual(1);
-        for (const c of col) {
-            expect(c.file).toBe('a');
-            expect(c.rank).toBe(1);
-            expect(c.equals(sq)).toBe(false);
-        }
+// ── getVerticalColumn() — abs 기반 (ADR-0009) ────────────────
+describe('getVerticalColumn() — abs 좌표 기반', () => {
+    it('a1(W) 와 b2(QL1) 가 같은 abs(1,1) 에서 vertical pair', () => {
+        const a1W   = new SquareId('a', 1, 'W');
+        const b2QL1 = new SquareId('b', 2, 'QL1');
+        expect(getVerticalColumn(a1W).map(s => s.toString())).toEqual(['b2(QL1)']);
+        expect(getVerticalColumn(b2QL1).map(s => s.toString())).toEqual(['a1(W)']);
     });
 
-    it('자기 자신을 포함하지 않는다', () => {
-        const sq = new SquareId('d', 4, 'N');
+    it('a3(W) 와 a1(N) 이 abs(1,3) 에서 vertical pair', () => {
+        const a3W = new SquareId('a', 3, 'W');
+        expect(getVerticalColumn(a3W).map(s => s.toString())).toEqual(['a1(N)']);
+    });
+
+    it('a3(N) 과 a1(B) 가 abs(1,5) 에서 vertical pair', () => {
+        const a3N = new SquareId('a', 3, 'N');
+        expect(getVerticalColumn(a3N).map(s => s.toString())).toEqual(['a1(B)']);
+    });
+
+    it('a4(B) 와 b1(QL3) 가 abs(1,8) 에서 vertical pair', () => {
+        const a4B = new SquareId('a', 4, 'B');
+        expect(getVerticalColumn(a4B).map(s => s.toString())).toEqual(['b1(QL3)']);
+    });
+
+    it('overlap 없는 칸 (예: a2(W) abs(1,2)) 은 빈 배열', () => {
+        const a2W = new SquareId('a', 2, 'W');
+        expect(getVerticalColumn(a2W)).toEqual([]);
+    });
+
+    it('자기 자신은 포함 안 됨', () => {
+        const sq  = new SquareId('a', 3, 'W');
         const col = getVerticalColumn(sq);
         expect(col.some(c => c.equals(sq))).toBe(false);
     });
+});
 
-    it('반환된 모든 칸은 동일한 file과 rank를 가진다', () => {
-        const sq = new SquareId('b', 2, 'B');
-        for (const c of getVerticalColumn(sq)) {
-            expect(c.file).toBe(sq.file);
-            expect(c.rank).toBe(sq.rank);
+// ── toAbs / highestSquareAt ─────────────────────────────────
+describe('toAbs() / highestSquareAt()', () => {
+    it('W a1 abs = (1, 1)', () => {
+        expect(new SquareId('a', 1, 'W').toAbs()).toEqual({ absFile: 1, absRank: 1 });
+    });
+
+    it('QL1 b2 abs = (1, 1) (= W a1 abs)', () => {
+        expect(new SquareId('b', 2, 'QL1').toAbs()).toEqual({ absFile: 1, absRank: 1 });
+    });
+
+    it('B d4 abs = (4, 8)', () => {
+        expect(new SquareId('d', 4, 'B').toAbs()).toEqual({ absFile: 4, absRank: 8 });
+    });
+
+    it('KL3 a1 abs = (4, 8) (= B d4 abs)', () => {
+        expect(new SquareId('a', 1, 'KL3').toAbs()).toEqual({ absFile: 4, absRank: 8 });
+    });
+});
+
+describe('SquareId.exists', () => {
+    it('메인 보드: file a-d, rank 1-4 만 유효', () => {
+        for (const level of ['W', 'N', 'B']) {
+            expect(SquareId.exists('a', 1, level)).toBe(true);
+            expect(SquareId.exists('d', 4, level)).toBe(true);
+            expect(SquareId.exists('e', 1, level)).toBe(false);
+            expect(SquareId.exists('a', 5, level)).toBe(false);
+            expect(SquareId.exists('a', 0, level)).toBe(false);
         }
+    });
+
+    it('어택 보드: file a-b, rank 1-2 만 유효', () => {
+        for (const level of ['QL1', 'KL1', 'QL3', 'KL3']) {
+            expect(SquareId.exists('a', 1, level)).toBe(true);
+            expect(SquareId.exists('b', 2, level)).toBe(true);
+            expect(SquareId.exists('c', 1, level)).toBe(false);
+            expect(SquareId.exists('a', 3, level)).toBe(false);
+        }
+    });
+
+    it('알 수 없는 level 거부', () => {
+        expect(SquareId.exists('a', 1, 'X')).toBe(false);
+        expect(SquareId.exists('a', 1, 'QL2')).toBe(false);
     });
 });

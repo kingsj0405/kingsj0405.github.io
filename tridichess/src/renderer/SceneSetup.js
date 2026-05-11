@@ -23,8 +23,9 @@ export function setupScene(container) {
         0.1,
         1000
     );
-    camera.position.set(100, 80, 100);
-    camera.lookAt(0, 20, 0);
+    // 사용자 QA 에서 확정된 각도: 거의 정중앙 + 위에서 내려다보는 view.
+    camera.position.set(0, 150, 181);
+    camera.lookAt(0, 28, -28);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -33,6 +34,8 @@ export function setupScene(container) {
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
+    controls.target.set(0, 28, -28);
+    controls.update();
 
     // 조명
     scene.add(new THREE.AmbientLight(0xffffff, 0.4));

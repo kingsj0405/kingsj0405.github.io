@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Star Trek 3D Chess — 한글 룰북 (Roth 2012)</title>
+    <style>
+        :root {
+            --bg-0: #050508;
+            --bg-1: #0c0c10;
+            --bg-2: #14141a;
+            --bg-3: #1c1c24;
+            --border: #2a2a35;
+            --border-bright: #3a3a48;
+            --text: #e6e6ee;
+            --text-dim: #8a8a98;
+            --accent: #00d2ff;
+            --accent-dim: #007a99;
+            --warn: #ffcc00;
+            --danger: #ff4466;
+            --quote-bg: #0e1822;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg-0);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.65;
+            font-size: 16px;
+        }
+        .container { max-width: 880px; margin: 0 auto; padding: 36px 28px 80px; }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        header::after {
+            content: '';
+            position: absolute; left: 0; right: 0; bottom: -1px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        h1 { color: var(--accent); margin: 0 0 6px; font-size: 1.7em; letter-spacing: 0.5px; }
+        header .meta { color: var(--text-dim); font-size: 0.85em; }
+        header .meta a { color: var(--accent); text-decoration: none; }
+        header .meta a:hover { text-decoration: underline; }
+
+        nav.toc {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 14px 20px;
+            margin-bottom: 32px;
+        }
+        nav.toc .toc-title {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+        nav.toc ol { margin: 0; padding-left: 22px; color: var(--text-dim); }
+        nav.toc a { color: var(--text); text-decoration: none; }
+        nav.toc a:hover { color: var(--accent); }
+
+        h2 {
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+            margin-top: 44px;
+            font-size: 1.3em;
+            letter-spacing: 0.3px;
+        }
+        h3 { color: var(--warn); margin-top: 28px; font-size: 1.05em; }
+
+        p { margin: 12px 0; }
+        ul, ol { padding-left: 22px; }
+        li { margin-bottom: 4px; }
+
+        .quote {
+            background: var(--quote-bg);
+            border-left: 3px solid var(--accent-dim);
+            padding: 10px 14px;
+            margin: 14px 0;
+            font-style: italic;
+            color: var(--text-dim);
+            font-size: 0.92em;
+            line-height: 1.55;
+        }
+        .quote::before {
+            content: 'EN ';
+            font-style: normal;
+            color: var(--accent);
+            font-size: 0.7em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        code {
+            background: var(--bg-2);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.88em;
+            color: var(--accent);
+        }
+        .note {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 3px;
+            margin: 12px 0;
+            font-size: 0.92em;
+            color: var(--text-dim);
+        }
+        .note strong { color: var(--warn); }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.85em;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent-dim);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-0); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="index.html" class="back-link">← 게임으로 돌아가기</a>
+
+    <header>
+        <h1>Star Trek 3D Chess — 한글 룰북</h1>
+        <div class="meta">
+            원본 저자: <strong>Charles Roth</strong> ·
+            원 룰 제정: <strong>Andrew Bartmess</strong> ·
+            리비전: 2012-09-23 (Federation Revised Standard 5.0) ·
+            출처: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">thedance.net</a>
+            <br>
+            본 페이지는 학습/구현 참고용 비공식 한글 번역. 주요 항목에 영어 원문 인용 병기.
+        </div>
+    </header>
+
+    <nav class="toc">
+        <div class="toc-title">목차</div>
+        <ol>
+            <li><a href="#intro">서문</a></li>
+            <li><a href="#board">보드 구성</a></li>
+            <li><a href="#start">초기 배치</a></li>
+            <li><a href="#main-moves">메인 보드 이동</a></li>
+            <li><a href="#attack-moves">어택 보드 위에서의 이동 (Path A/B)</a></li>
+            <li><a href="#promotion">폰 프로모션</a></li>
+            <li><a href="#move-ab">어택 보드 자체의 이동</a></li>
+            <li><a href="#capture-ab">어택 보드 캡처</a></li>
+            <li><a href="#castling">캐슬링</a></li>
+            <li><a href="#special-pawn">특수 폰 이동 (앙파상 등)</a></li>
+            <li><a href="#rook-pawn">Rook Pawn 옵션</a></li>
+            <li><a href="#strategy">전략 노트</a></li>
+            <li><a href="#changes">FS5 대비 변경/명료화 사항</a></li>
+        </ol>
+    </nav>
+
+    <!-- ===== 1. 서문 ===== -->
+    <h2 id="intro">1. 서문</h2>
+    <div class="quote">
+        "In the summer of 2010, I bought the instructions for building your own Star Trek 3D chess board by Andrew Bartmess.
+        My 10-year-old daughter Emma and I proceeded to build it from scratch ... and then played several games."
+    </div>
+    <p>
+        2010년 여름, 저자는 Andrew Bartmess 의 Star Trek 3D 체스 보드 제작 안내서를 구입해 10살 딸 Emma 와 함께
+        직접 보드를 만들고 여러 판 두어 보았다. Bartmess 의 안내서는 보드 제작에는 훌륭했지만, 몇몇 룰이 모호했고
+        해당 영역에서 일관성 있는 룰셋을 새로 정리한 결과가 본 문서이다 — Bartmess 의 <em>"Federation Standard 5.0"</em>
+        을 토대로 친구들의 검토를 거쳐 도출.
+    </p>
+
+    <!-- ===== 2. 보드 ===== -->
+    <h2 id="board">2. 보드 구성</h2>
+    <p>
+        보드는 <strong>고정 메인 보드 3장 (각 4×4)</strong> + <strong>이동 가능 어택 보드 4장 (각 2×2)</strong> 으로 구성.
+        총 칸 수는 표준 체스와 같다. 좌표는 <code>(파일, 랭크, 레벨)</code> 트리플로 표기 — 파일 a-f, 랭크 0-9, 레벨 1-7.
+    </p>
+    <div class="quote">
+        "The main boards are, starting from the bottom, at elevations 2, 4, and 6.
+        The attack boards in their starting position are at elevation 3 and 7."
+    </div>
+    <p>
+        메인 보드는 아래에서부터 레벨 2, 4, 6 에 위치. 어택 보드는 시작 시 레벨 3, 7 에 위치.
+    </p>
+    <div class="note">
+        <strong>구현 노트:</strong> 본 프로젝트의 SquareId 시스템은 4파일(a-d) × 보드별 4랭크(1-4) × 7 레벨(W/N/B/QL1/KL1/QL3/KL3) 로
+        매핑. Bartmess 의 통합 6×10 좌표계와 등가지만 보드별 local 좌표를 우선 사용 (자세한 매핑은 ADR-0007 참조).
+    </div>
+
+    <!-- ===== 3. 초기 배치 ===== -->
+    <h2 id="start">3. 초기 배치</h2>
+    <div class="quote">
+        "The white Bishops and Knights are at elevation 2 on the low main board,
+        and the King, Queen, and Rooks are at elevation 3 on the attack boards.
+        Note that the King and Queen pawns are directly over the Knights."
+    </div>
+    <p>
+        백의 비숍·나이트는 메인 보드 레벨 2 위에, <strong>King·Queen·Rook 은 레벨 3 어택 보드</strong> 위에 배치.
+        주의: K-pawn, Q-pawn 은 Knight 바로 위 (수직 정렬). 흑은 상위 보드들에서 대칭.
+        퀸은 표준 체스처럼 "자기 색 칸" 에 위치.
+    </p>
+
+    <!-- ===== 4. 메인 이동 ===== -->
+    <h2 id="main-moves">4. 메인 보드 이동</h2>
+    <div class="quote">
+        "Moving across the main boards is like normal chess, but with an option to change levels.
+        Look 'down' at, and 'through' the stack of boards, and imagine that you are moving a piece
+        in its normal style across the board(s)."
+    </div>
+    <p>
+        메인 보드 간 이동은 표준 체스와 동일하나 <strong>레벨 변경이 가능</strong>. 위에서 보드 스택을 내려다보며
+        평평한 면 위 일반 이동을 상상하면 된다. 이동 시작/끝 칸의 레벨이 달라도 OK.
+    </p>
+
+    <h3>Highest Path 룰</h3>
+    <p>
+        이동 경로 결정은 <strong>"가장 높은 경로(highest path)"</strong> 원칙을 따른다:
+    </p>
+    <ol>
+        <li>시작 칸과 도착 칸 중 더 높은 레벨을 식별.</li>
+        <li>그보다 위의 모든 보드는 무시 (마치 없는 것처럼).</li>
+        <li>남은 보드들에서 사용 가능한 가장 높은 단일 경로를 따라 이동.</li>
+    </ol>
+    <p>
+        즉 플레이어가 시작·도착 칸을 직접 선택하면, 그 사이의 경로는 룰에 의해 자동 결정. 경로 위 임의의 칸에
+        다른 piece 가 있으면 이동 불가 (Knight 제외).
+    </p>
+    <div class="note">
+        <strong>본 구현의 단순화 (ADR-0010):</strong> 정확한 highest-path 경로 검증 대신 abs 좌표 step 마다
+        <strong>모든 후보 SquareId</strong> 를 target 으로 제공. 플레이어 클릭으로 레벨 선택.
+        Knight 외 piece 는 한 abs cell 에서 어떤 후보든 점유되면 거기서 sliding 정지. (정확 룰 구현은 후속 ADR.)
+    </div>
+
+    <!-- ===== 5. Path A/B ===== -->
+    <h2 id="attack-moves">5. 어택 보드 위에서의 이동 (Path A/B)</h2>
+    <div class="quote">
+        "if the 'higher board' is a main board, and there is an attack board immediately above it,
+        then treat that attack board as the 'higher board.'"
+    </div>
+    <p>
+        어택 보드가 메인 보드의 직접 위에 떠 있는 경우, 두 가지 경로 옵션이 발생한다:
+    </p>
+    <ul>
+        <li><strong>Path A:</strong> 통상 highest-path 룰 따라 계산된 경로.</li>
+        <li><strong>Path B:</strong> 메인 보드 위 어택 보드가 있으면, 그 어택 보드를 "higher board" 로 간주해 다시 계산한 경로.</li>
+    </ul>
+    <p>플레이어는 두 경로 중 가능한 것을 선택할 수 있다. 캡처 결과나 통과 가능성이 두 경로에서 달라질 수 있음.</p>
+
+    <!-- ===== 6. 프로모션 ===== -->
+    <h2 id="promotion">6. 폰 프로모션</h2>
+    <div class="quote">
+        "White Pawns promote (normally) whenever they reach rank 8 or rank 9.
+        Similarly, black Pawns promote whenever they reach rank 1 or rank 0."
+    </div>
+    <p>
+        백 폰: 랭크 8 또는 9 도달 시 프로모션. 흑 폰: 랭크 1 또는 0 도달 시 프로모션.
+    </p>
+    <div class="quote">
+        "A Pawn promotes if it moves by itself to the appropriate rank...
+        or if the attack board it is on moves to place the Pawn on that rank."
+    </div>
+    <p>
+        폰 자체가 이동해서 프로모션 랭크에 도달하거나, 폰이 탑승한 어택 보드가 이동해서 그 랭크에 놓이는 경우도 프로모션 발생.
+    </p>
+
+    <!-- ===== 7. AB 이동 ===== -->
+    <h2 id="move-ab">7. 어택 보드 자체의 이동</h2>
+    <p>
+        턴에 piece 대신 자기 소유 어택 보드 하나를 이동시킬 수 있다. 단, 보드가 비어있거나 자기 폰 단 하나만 탑승한 상태여야 함.
+        가능한 옵션:
+    </p>
+    <ul>
+        <li><em>"The board may invert."</em> — 같은 위치에서 뒤집기 (반전).</li>
+        <li><em>"The board may move 1 or 2 squares along the same file, floating up or down to the appropriate level."</em>
+            — 같은 file 방향으로 1~2 칸 이동, 적절한 레벨로 떠오르거나 내려감.</li>
+        <li><em>"The board may move 1 or 2 squares along the same file, and invert."</em> — 위 둘 결합.</li>
+    </ul>
+    <p>
+        추가 룰: 어택 보드 이동이 가능하려면 <strong>적어도 폰 하나 이상이 보드에 남아 있어야</strong> 함 (FS5 명료화).
+        탑승 폰은 그 이동을 "자기 이동" 으로 간주 — 이후 첫 2칸 옵션 상실.
+    </p>
+
+    <!-- ===== 8. AB 캡처 ===== -->
+    <h2 id="capture-ab">8. 어택 보드 캡처</h2>
+    <div class="quote">
+        "If the black player captures the last (only) white piece on one of white's attack boards,
+        that board now belongs to black. ... A board with no pieces on it is safe and cannot be captured."
+    </div>
+    <p>
+        한 색이 상대 어택 보드 위의 마지막 piece 를 캡처하면, 그 어택 보드의 소유권이 캡처한 쪽으로 이전됨.
+        빈 어택 보드는 캡처 대상 아님 (안전).
+    </p>
+
+    <!-- ===== 9. 캐슬링 ===== -->
+    <h2 id="castling">9. 캐슬링</h2>
+    <ul>
+        <li>King 과 해당 Rook 이 모두 한 번도 이동한 적 없어야 함.</li>
+        <li>King 이 시작/도착 칸 어디에서도 체크 받지 않아야 함.</li>
+        <li><strong>King-side:</strong> King 과 Rook 이 자리 교체 ("switch places").</li>
+        <li><strong>Queen-side:</strong> Queen 이 home 을 떠난 상태라면, King 이 Queen 의 home 으로 "teleport".</li>
+    </ul>
+
+    <!-- ===== 10. 특수 폰 이동 ===== -->
+    <h2 id="special-pawn">10. 특수 폰 이동 (앙파상 등)</h2>
+
+    <h3>첫 이동 2칸</h3>
+    <div class="quote">
+        "On a pawn's first move, it has the option to move forward 2 squares. ...
+        a pawn that started at b1(3) and moved to b2(2) cannot then move directly to b4(2),
+        since it has already taken its first move."
+    </div>
+    <p>
+        폰의 첫 이동에 2칸 옵션 있음. 단, 한 번이라도 이동했으면 (예: b1(3)→b2(2)) 그 후 다시 2칸 이동 불가.
+    </p>
+
+    <h3>어택 보드 탑승 시</h3>
+    <div class="quote">
+        "If a pawn is on an attack board, and the attack board moves, the pawn has effectively 'moved',
+        and no longer has the option to move two squares forward instead of one."
+    </div>
+    <p>
+        폰이 탄 어택 보드가 이동하면 그 폰도 "이동" 한 것으로 간주 — 이후 2칸 옵션 상실.
+    </p>
+
+    <h3>앙파상 (en passant)</h3>
+    <div class="quote">
+        "'En passant' captures also work. But the capturing pawn moves to the square where the captured pawn
+        would have been (had it only moved one square), along the 'highest path' that the pawn did travel.
+        Remember that en passant captures are only good immediately after a pawn moves 2 squares —
+        'use it or lose it'."
+    </div>
+    <p>
+        앙파상 캡처 동작 그대로. 단, 캡처 폰의 도착 칸은 캡처된 폰이 "1칸만 이동했을 경우 도달했을 칸",
+        해당 폰이 실제로 따라간 highest path 상에 위치. 캡처는 상대 폰이 2칸 이동한 직후 한 턴에만 가능.
+    </p>
+
+    <!-- ===== 11. Rook Pawn 옵션 ===== -->
+    <h2 id="rook-pawn">11. Rook Pawn 옵션 (선택 룰)</h2>
+    <p>
+        a 또는 f 파일의 폰 (이른바 "rook pawn") 은 어택 보드 시작 위치 때문에 갇히기 쉽다. 본 옵션 룰은 이런 폰에
+        한해 다음을 허용:
+    </p>
+    <ul>
+        <li>안쪽 방향으로 1 또는 2 칸 (첫 이동) 측면 이동.</li>
+        <li>안쪽 방향으로 대각 캡처.</li>
+        <li>b~e 파일에 도달하면 그때부터는 일반 폰처럼 동작.</li>
+    </ul>
+    <p>저자는 이 룰을 선호하지 않으나 "공식 룰" 의 일부라 명시.</p>
+
+    <!-- ===== 12. 전략 ===== -->
+    <h2 id="strategy">12. 전략 노트</h2>
+    <ul>
+        <li>보드를 바닥에 놓고 <strong>위에서 내려다보면서 두는 것</strong> 이 가장 편함 — 수직 정렬이 보임.</li>
+        <li>같은 색 칸은 항상 위/아래 같은 색 칸과 수직 정렬됨.</li>
+        <li>Bishop 은 표준 체스보다 약하고, Rook 과 Queen 은 더 강한 경향.</li>
+        <li>중앙 통제보다 <strong>긴 file 을 여는 전술</strong> 이 더 중요.</li>
+        <li>폰이 "조종" 하는 어택 보드의 빠른 프로모션 위협을 경계.</li>
+    </ul>
+    <div class="quote">
+        "Have fun, and forgive your opponent's easy/obvious mistakes while you're both learning.
+        Live long and prosper!"
+    </div>
+
+    <!-- ===== 13. 변경 사항 ===== -->
+    <h2 id="changes">13. FS5 대비 변경/명료화 사항</h2>
+    <ol>
+        <li><strong>Path A / Path B:</strong> 어택 보드 위 piece 가 하나의 경로만 제공하는지, 메인+어택 둘 다인지 FS5 는 모호. Path A/B 접근법으로 일관성 확보.</li>
+        <li><strong>어택 보드 이동 범위:</strong> FS5 의 "가장 가까운 post" 표현이 명확치 않음 (검은 AB 가 영원히 b5↔b4 사이만 왕복). 1 또는 2칸으로 재해석.</li>
+        <li><strong>폰 잔존 요구:</strong> 폰이 없는 상태에서 AB 만 셔틀해 무한 무승부가 되지 않도록 보드 이동 시 최소 한 폰 잔존 요구.</li>
+        <li><strong>앙파상 도착 칸 명료화:</strong> "1칸만 이동했을 경우의 위치 + 실제 폰의 highest path".</li>
+        <li><strong>탑승 폰 이동 처리:</strong> AB 이동도 폰의 "이동" 으로 간주 (이후 2칸 옵션 상실).</li>
+        <li><strong>Rook Pawn 옵션 명시:</strong> 공식 룰의 일부이나 저자 선호 안함을 명시.</li>
+    </ol>
+
+    <footer>
+        <p>
+            원문: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">https://www.thedance.net/~roth/TECHBLOG/chess.html</a>
+            (Roth-2012, Federation Revised Standard 5.0)
+        </p>
+        <p>
+            본 페이지는 학습/구현 참고용 비공식 한글 번역.
+            저작권은 원 저자 Charles Roth / Andrew Bartmess 에 있음. 인용 부분은 원문 그대로 (영어 quote 블록).
+        </p>
+        <p>
+            번역/편집: <a href="https://yangspace.co.kr/tridichess/">yangspace.co.kr/tridichess</a> 프로젝트.
+            본 프로젝트의 구현은 정통 룰의 일부 단순화 (예: <code>ADR-0010</code> multi-candidate target,
+            <code>ADR-0007</code> Bartmess overlap geometry) 를 거침 — 자세한 사항은 프로젝트 docs/adr/ 폴더 참조.
+        </p>
+    </footer>
+</div>
+</body>
+</html>
