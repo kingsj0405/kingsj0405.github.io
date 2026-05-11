@@ -18,12 +18,12 @@ import { allSquaresAt } from '../model/SquareId.js';
  * @returns {import('../model/SquareId.js').SquareId[]}
  */
 export function slidingRay(state, from, dir, color) {
-    const fromAbs = from.toAbs();
+    const fromAbs = from.toAbs(state);
     const moves = [];
     let af = fromAbs.absFile + dir.dFile;
     let ar = fromAbs.absRank + dir.dRank;
     while (true) {
-        const candidates = allSquaresAt(af, ar);
+        const candidates = allSquaresAt(af, ar, state);
         if (candidates.length === 0) break;
         let blocked = false;
         for (const cand of candidates) {

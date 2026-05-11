@@ -339,7 +339,7 @@ function refreshHighlights() {
     }
     // column for selected
     if (ui.selected) {
-        for (const c of getVerticalColumn(ui.selected)) {
+        for (const c of getVerticalColumn(ui.selected, gameState)) {
             highlightSquare(c.toString(), COLOR.COLUMN);
         }
     }
@@ -565,7 +565,7 @@ const PROMOTION_SYMBOLS = {
 function isPromotionMove(from, to) {
     const p = gameState.getPiece(from);
     if (!p || p.type !== 'P') return false;
-    const abs = to.toAbs();
+    const abs = to.toAbs(gameState);
     return (p.color === 'white' && abs.absRank >= 8) ||
            (p.color === 'black' && abs.absRank <= 1);
 }

@@ -11,11 +11,11 @@
 import { allSquaresAt } from '../../model/SquareId.js';
 
 export function pseudoMoves(state, piece) {
-    const from = piece.position.toAbs();
+    const from = piece.position.toAbs(state);
     const dir  = piece.color === 'white' ? +1 : -1;
     const out  = [];
 
-    const fwd1Cands  = allSquaresAt(from.absFile, from.absRank + dir);
+    const fwd1Cands  = allSquaresAt(from.absFile, from.absRank + dir, state);
     let allFwd1Empty = fwd1Cands.length > 0;
     for (const cand of fwd1Cands) {
         if (state.getPiece(cand)) {
@@ -25,13 +25,13 @@ export function pseudoMoves(state, piece) {
         }
     }
     if (!piece.hasMoved && allFwd1Empty) {
-        for (const cand of allSquaresAt(from.absFile, from.absRank + 2 * dir)) {
+        for (const cand of allSquaresAt(from.absFile, from.absRank + 2 * dir, state)) {
             if (!state.getPiece(cand)) out.push(cand);
         }
     }
 
     for (const df of [-1, +1]) {
-        for (const cap of allSquaresAt(from.absFile + df, from.absRank + dir)) {
+        for (const cap of allSquaresAt(from.absFile + df, from.absRank + dir, state)) {
             const occ = state.getPiece(cap);
             if (occ) {
                 if (occ.color !== piece.color) out.push(cap);
