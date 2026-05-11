@@ -95,10 +95,9 @@ export class Board2DPanel {
 
     /**
      * @param {import('../model/GameState.js').GameState} state
-     * @param {{ selected: SquareId|null, moves: SquareId[] }} ui
+     * @param {{ selected: SquareId|null, moves: SquareId[], hints?: Array<{from:SquareId,to:SquareId}>, lastMove?: {from:SquareId,to:SquareId}|null }} ui
      */
     render(state, ui) {
-        // pieces + clear highlights
         for (const [sqKey, el] of this._squareEls) {
             const piece = state.pieces.get(sqKey);
             if (piece) {
@@ -109,18 +108,39 @@ export class Board2DPanel {
                 el.textContent = '';
                 el.classList.remove('white-piece', 'black-piece');
             }
-            el.classList.remove('selected', 'move', 'column');
+            el.classList.remove('selected', 'move', 'column', 'last-move',
+                                'hint-1', 'hint-2', 'hint-3', 'in-check');
         }
 
-        // highlights
+        // in-check King 표시
+        if (ui.checkSquare) {
+            this._squareEls.get(ui.checkSquare.toString())?.classList.add('in-check');
+        }
+
+        // last move (지속 표시, 가장 낮은 우선순위)
+        if (ui.lastMove) {
+            this._squareEls.get(ui.lastMove.from.toString())?.classList.add('last-move');
+            this._squareEls.get(ui.lastMove.to.toString())?.classList.add('last-move');
+        }
+
         if (ui.selected) {
-            this._squareEls.get(ui.selected.toString())?.classList.add('selected');
             for (const c of getVerticalColumn(ui.selected)) {
                 this._squareEls.get(c.toString())?.classList.add('column');
             }
         }
         for (const m of ui.moves) {
             this._squareEls.get(m.toString())?.classList.add('move');
+        }
+        if (ui.hints) {
+            for (let i = 0; i < ui.hints.length && i < 3; i++) {
+                const cls = `hint-${i + 1}`;
+                const h = ui.hints[i];
+                this._squareEls.get(h.from.toString())?.classList.add(cls);
+                this._squareEls.get(h.to.toString())?.classList.add(cls);
+            }
+        }
+        if (ui.selected) {
+            this._squareEls.get(ui.selected.toString())?.classList.add('selected');
         }
     }
 }

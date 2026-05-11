@@ -22,31 +22,37 @@ export class GameState {
      */
     constructor({
         pieces,
-        boards      = new Map(),
-        turn        = 'white',
-        moveHistory = [],
-        rulesetId   = 'roth2012',
+        boards          = new Map(),
+        turn            = 'white',
+        moveHistory     = [],
+        rulesetId       = 'roth2012',
+        capturedByWhite = [],
+        capturedByBlack = [],
     }) {
         if (!(pieces instanceof Map)) throw new Error('GameState: pieces must be Map');
         if (!TURNS.includes(turn))    throw new Error(`GameState: invalid turn "${turn}"`);
         if (!RULESETS.includes(rulesetId)) {
             throw new Error(`GameState: invalid rulesetId "${rulesetId}"`);
         }
-        this.pieces      = pieces;
-        this.boards      = boards;
-        this.turn        = turn;
-        this.moveHistory = Object.freeze([...moveHistory]);
-        this.rulesetId   = rulesetId;
+        this.pieces          = pieces;
+        this.boards          = boards;
+        this.turn            = turn;
+        this.moveHistory     = Object.freeze([...moveHistory]);
+        this.rulesetId       = rulesetId;
+        this.capturedByWhite = Object.freeze([...capturedByWhite]);
+        this.capturedByBlack = Object.freeze([...capturedByBlack]);
         Object.freeze(this);
     }
 
     with(patch) {
         return new GameState({
-            pieces:      this.pieces,
-            boards:      this.boards,
-            turn:        this.turn,
-            moveHistory: this.moveHistory,
-            rulesetId:   this.rulesetId,
+            pieces:          this.pieces,
+            boards:          this.boards,
+            turn:            this.turn,
+            moveHistory:     this.moveHistory,
+            rulesetId:       this.rulesetId,
+            capturedByWhite: this.capturedByWhite,
+            capturedByBlack: this.capturedByBlack,
             ...patch,
         });
     }

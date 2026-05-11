@@ -31,6 +31,10 @@
             --hl-selected: #00ff7f;
             --hl-move: #ffe54a;
             --hl-column: #00aacc;
+            --hl-last:   #ff8c40;
+            --hl-hint1:  #ff44cc;
+            --hl-hint2:  #2196f3;
+            --hl-hint3:  #ffc107;
         }
         * { box-sizing: border-box; }
         body { margin: 0; overflow: hidden; background-color: var(--bg-0); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; display: flex; }
@@ -42,29 +46,72 @@
         /* Sidebar */
         #sidebar { width: 30%; height: 100%; background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
 
-        .panel-header { padding: 14px 16px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 100%); position: relative; }
+        .panel-header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 100%); position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .panel-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5; }
-        .panel-header h2 { margin: 0; color: var(--accent); font-size: 1.15em; font-weight: 600; letter-spacing: 0.5px; }
-        .panel-header .subtitle { font-size: 0.75em; color: var(--text-dim); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+        .panel-header .title-block { flex: 1; min-width: 0; }
+        .panel-header h2 { margin: 0; color: var(--accent); font-size: 1.1em; font-weight: 600; letter-spacing: 0.5px; }
+        .panel-header .subtitle { font-size: 0.7em; color: var(--text-dim); margin-top: 2px; letter-spacing: 1px; text-transform: uppercase; }
+        .panel-header .header-icons { display: flex; gap: 4px; }
+        .panel-header .icon-btn { width: 32px; height: 32px; padding: 0; font-size: 1em; background: transparent; border: 1px solid var(--accent-dim); border-radius: 4px; color: var(--accent); cursor: pointer; transition: all 0.15s; }
+        .panel-header .icon-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 12px rgba(0, 210, 255, 0.4); }
 
-        /* Turn indicator */
-        #turn-indicator { padding: 8px 16px; background: var(--bg-2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: 0.85em; }
-        #turn-indicator .label { color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.75em; }
-        #turn-indicator .value { font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        #turn-indicator .dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
-        #turn-indicator.white .value { color: var(--white-piece); }
-        #turn-indicator.white .dot   { background: var(--white-piece); }
-        #turn-indicator.black .value { color: var(--black-piece); }
-        #turn-indicator.black .dot   { background: var(--black-piece); }
+        /* Status bar — turn + material + move counter + captures */
+        #status-bar { padding: 8px 14px; background: var(--bg-2); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: auto auto auto 1fr; gap: 8px; align-items: center; font-size: 0.82em; }
+        #status-bar .move-counter { font-family: 'Cascadia Code', monospace; font-size: 0.78em; color: var(--accent-dim); }
+        #status-bar .turn-pill { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+        #status-bar .turn-pill .dot { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+        #status-bar.white .turn-pill { color: var(--white-piece); }
+        #status-bar.white .turn-pill .dot { background: var(--white-piece); }
+        #status-bar.black .turn-pill { color: var(--black-piece); }
+        #status-bar.black .turn-pill .dot { background: var(--black-piece); }
+        #status-bar .material { font-family: 'Cascadia Code', monospace; font-size: 0.85em; color: var(--text-dim); }
+        #status-bar .material.adv-white { color: var(--white-piece); }
+        #status-bar .material.adv-black { color: var(--black-piece); }
+        #status-bar .captures { display: flex; gap: 6px; align-items: center; justify-content: flex-end; font-family: 'Segoe UI Symbol', sans-serif; font-size: 0.95em; }
+        #status-bar .capt-white { color: var(--white-piece); text-shadow: 0 0 2px #000; min-width: 14px; }
+        #status-bar .capt-black { color: var(--black-piece); min-width: 14px; }
+        #status-bar .capt-sep   { color: var(--text-dim); font-family: monospace; }
 
         /* Buttons */
         .control-group { padding: 10px 12px; display: flex; gap: 6px; justify-content: center; background: var(--bg-1); border-bottom: 1px solid var(--border); }
         button { background: transparent; color: var(--accent); border: 1px solid var(--accent-dim); padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 0.85em; font-family: inherit; letter-spacing: 0.5px; transition: all 0.15s ease; }
         button:hover { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 12px rgba(0, 210, 255, 0.4); }
         button:active { transform: translateY(1px); }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        button:disabled:hover { background: transparent; color: var(--accent); box-shadow: none; }
+
+        /* AI mode controls — 한 줄 */
+        #ai-controls { padding: 6px 10px; display: flex; gap: 8px; justify-content: center; background: var(--bg-1); border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap; font-size: 0.78em; }
+        #ai-controls label { color: var(--text-dim); font-size: 0.92em; text-transform: uppercase; letter-spacing: 1px; }
+        #ai-controls select { background: transparent; color: var(--accent); border: 1px solid var(--accent-dim); border-radius: 3px; padding: 3px 6px; font-size: 0.95em; font-family: inherit; cursor: pointer; }
+        #ai-controls select:focus { outline: none; border-color: var(--accent); }
+        #ai-controls .auto-lbl { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        #ai-controls .ai-status { font-size: 0.92em; color: var(--warn); min-height: 1em; flex-basis: 100%; text-align: center; }
+
+        /* Tab bar */
+        #tab-bar { display: flex; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+        #tab-bar .tab { flex: 1; background: transparent; color: var(--text-dim); border: 0; border-bottom: 2px solid transparent; padding: 6px 0; cursor: pointer; font-size: 0.78em; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.15s; }
+        #tab-bar .tab:hover { color: var(--accent); }
+        #tab-bar .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        #tab-bar .tab-collapse { flex: 0 0 32px; color: var(--text-dim); background: transparent; border: 0; cursor: pointer; font-size: 0.85em; transition: all 0.15s; }
+        #tab-bar .tab-collapse:hover { color: var(--accent); }
+        #tab-content { flex: 1 1 0; min-height: 60px; max-height: 200px; overflow: hidden; display: flex; flex-direction: column; border-bottom: 1px solid var(--border); transition: max-height 0.2s, min-height 0.2s; }
+        #tab-content.collapsed { max-height: 0; min-height: 0; border-bottom-color: transparent; }
+        #tab-content > [data-tab-content] { display: none; flex: 1 1 0; min-height: 0; }
+        #tab-content > [data-tab-content].active { display: flex; flex-direction: column; }
+
+        /* History panel */
+        #history-panel { padding: 6px 8px; overflow-y: auto; background: var(--bg-0); }
+        #history-list { list-style: none; margin: 0; padding: 0; }
+        #history-list .hist-item { padding: 3px 8px; font-family: 'Cascadia Code', monospace; font-size: 0.78em; color: var(--text-dim); cursor: pointer; border-radius: 3px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
+        #history-list .hist-item:hover { background: var(--bg-2); color: var(--text); }
+        #history-list .hist-item.current { background: rgba(0, 210, 255, 0.12); color: var(--accent); border-left: 3px solid var(--accent); padding-left: 5px; }
+        #history-list .hist-no { color: var(--text-dim); min-width: 26px; text-align: right; }
+        #history-list .hist-move { flex: 1; }
+        #history-list .hist-after { color: var(--text-dim); font-size: 0.85em; }
 
         /* Debug panel */
-        #debug-panel { padding: 8px 14px; background: var(--bg-2); border-bottom: 1px solid var(--border); font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 0.75em; color: var(--text-dim); }
+        #debug-panel { padding: 8px 14px; background: var(--bg-0); font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 0.75em; color: var(--text-dim); overflow-y: auto; }
         #debug-panel[hidden] { display: none; }
         #debug-panel .dbg-section { margin-bottom: 4px; }
         #debug-panel .dbg-label { color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; margin-bottom: 2px; }
@@ -72,13 +119,17 @@
         #debug-panel .dbg-row .k { color: var(--text-dim); min-width: 56px; }
         #debug-panel .dbg-row .v { color: var(--text); }
 
-        /* Log — 남는 공간 차지, 스크롤 */
-        #log-panel { flex: 1 1 0; min-height: 60px; padding: 10px 14px; font-family: 'Cascadia Code', 'Consolas', monospace; color: var(--text-dim); overflow-y: auto; font-size: 0.8em; border-bottom: 1px solid var(--border); background: var(--bg-0); line-height: 1.5; }
+        /* Log */
+        #log-panel { padding: 10px 14px; font-family: 'Cascadia Code', 'Consolas', monospace; color: var(--text-dim); overflow-y: auto; font-size: 0.8em; background: var(--bg-0); line-height: 1.5; }
         #log-panel > div { padding: 1px 0; }
         #log-panel .log-system  { color: var(--accent-dim); }
-        #log-panel .log-action  { color: var(--text); }
+        #log-panel .log-action  { color: var(--hl-last); }
         #log-panel .log-capture { color: var(--danger); }
         #log-panel .log-info    { color: var(--text-dim); }
+        #log-panel .log-select  { color: var(--hl-selected); }
+        #log-panel .log-hint-1  { color: var(--hl-hint1); }
+        #log-panel .log-hint-2  { color: var(--hl-hint2); }
+        #log-panel .log-hint-3  { color: var(--hl-hint3); }
 
         /* 2D Control Panel — 자연 크기 고정 (잘리지 않게) */
         #panel-2d { flex: 0 0 auto; padding: 12px; background: var(--bg-0); }
@@ -96,16 +147,33 @@
         #panel-2d .sq.white-piece { color: var(--white-piece); text-shadow: 0 0 2px #000, 0 0 3px #000; }
         #panel-2d .sq.black-piece { color: var(--black-piece); text-shadow: 0 0 2px #000; }
         #panel-2d .sq:hover { outline: 1px solid var(--accent); transform: scale(1.08); z-index: 1; }
-        #panel-2d .sq.selected { box-shadow: inset 0 0 0 2px var(--hl-selected); }
-        #panel-2d .sq.move     { box-shadow: inset 0 0 0 2px var(--hl-move); }
+        #panel-2d .sq.last-move { box-shadow: inset 0 0 0 2px var(--hl-last); }
         #panel-2d .sq.column   { box-shadow: inset 0 0 0 2px var(--hl-column); }
-        #panel-2d .sq.selected.move { box-shadow: inset 0 0 0 2px var(--hl-selected), inset 0 0 0 4px var(--hl-move); }
+        #panel-2d .sq.move     { box-shadow: inset 0 0 0 2px var(--hl-move); }
+        #panel-2d .sq.hint-1   { box-shadow: inset 0 0 0 3px var(--hl-hint1); }
+        #panel-2d .sq.hint-2   { box-shadow: inset 0 0 0 3px var(--hl-hint2); }
+        #panel-2d .sq.hint-3   { box-shadow: inset 0 0 0 3px var(--hl-hint3); }
+        #panel-2d .sq.selected { box-shadow: inset 0 0 0 3px var(--hl-selected); }
+        #panel-2d .sq.in-check { animation: pulse-check 1s infinite; }
+        @keyframes pulse-check {
+            0%, 100% { box-shadow: inset 0 0 0 3px var(--danger), 0 0 6px var(--danger); }
+            50%      { box-shadow: inset 0 0 0 3px var(--danger), 0 0 14px var(--danger); }
+        }
 
         /* Scrollbars */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-0); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
+        /* Game Over overlay */
+        #game-over-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        #game-over-overlay[data-show="true"] { display: flex; }
+        #game-over-overlay .card { background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 8px; padding: 36px 48px; text-align: center; box-shadow: 0 0 80px rgba(0,210,255,0.3); min-width: 320px; }
+        #game-over-overlay h2 { color: var(--warn); margin: 0 0 12px; font-size: 1.8em; letter-spacing: 1px; }
+        #game-over-overlay p { color: var(--text); margin: 0 0 20px; font-size: 1.15em; }
+        #game-over-overlay button { background: var(--accent); color: #000; border: 0; padding: 10px 24px; font-size: 0.95em; font-weight: 600; cursor: pointer; border-radius: 4px; }
+        #game-over-overlay button:hover { background: var(--text); box-shadow: 0 0 16px var(--accent); }
 
         /* Rule Popup */
         #rule-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 640px; max-width: 92vw; max-height: 86vh; overflow-y: auto; background: linear-gradient(180deg, rgba(20, 22, 30, 0.98), rgba(10, 12, 18, 0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 24px 28px; z-index: 100; box-shadow: 0 0 60px rgba(0, 210, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6); color: var(--text); line-height: 1.55; font-size: 0.92em; }
@@ -118,6 +186,11 @@
         #rule-modal .limit-note { background: rgba(255, 204, 0, 0.08); border-left: 3px solid var(--warn); padding: 8px 12px; margin: 12px 0; font-size: 0.88em; color: var(--text-dim); }
         #rule-modal .cta { display: block; text-align: center; margin-top: 18px; padding: 10px; background: rgba(0, 210, 255, 0.1); border: 1px solid var(--accent); border-radius: 4px; color: var(--accent); font-weight: 600; }
         #rule-modal .cta:hover { background: var(--accent); color: #000; }
+        #rule-modal .about-card { margin-top: 20px; padding: 14px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 4px; display: flex; gap: 14px; align-items: flex-start; }
+        #rule-modal .about-card img { width: 140px; height: auto; border-radius: 3px; flex: 0 0 auto; object-fit: cover; }
+        #rule-modal .about-card .about-text { font-size: 0.88em; color: var(--text-dim); line-height: 1.55; }
+        #rule-modal .about-card h4 { margin: 0 0 6px; color: var(--warn); }
+        #rule-modal .about-card .disclaimer { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 0.85em; }
         #rule-modal a { color: var(--accent); text-decoration: none; }
         #rule-modal a:hover { text-decoration: underline; }
         #rule-modal ul { padding-left: 20px; }
@@ -141,40 +214,97 @@
     <div id="view-3d"></div>
     <div id="sidebar">
         <div class="panel-header">
-            <h2>Tri-Dimensional Chess</h2>
-            <div class="subtitle">Franklin Mint Configuration</div>
+            <div class="title-block">
+                <h2>Tri-Dimensional Chess</h2>
+                <div class="subtitle">Franklin Mint Configuration</div>
+            </div>
+            <div class="header-icons">
+                <button id="btn-rules" class="icon-btn" title="Rules &amp; about">📖</button>
+                <button id="btn-debug" class="icon-btn" title="Toggle debug overlay">🔧</button>
+            </div>
         </div>
-        <div id="turn-indicator" class="white">
-            <span class="label">Turn</span>
-            <span class="value"><span class="dot"></span><span class="text">White</span></span>
+        <div id="status-bar" class="white">
+            <span class="turn-pill"><span class="dot"></span><span class="text">White</span></span>
+            <span class="material" id="material-display">±0</span>
+            <span class="move-counter" id="move-counter">#0/0</span>
+            <span class="captures">
+                <span class="capt-white" id="capt-white">—</span>
+                <span class="capt-sep">·</span>
+                <span class="capt-black" id="capt-black">—</span>
+            </span>
         </div>
         <div class="control-group">
-            <button id="btn-reset">Reset</button>
-            <button id="btn-rules">Rules</button>
-            <button id="btn-debug">Debug</button>
+            <button id="btn-reset" title="Reset game">↺ Reset</button>
+            <button id="btn-undo"  title="Undo last move (vs-AI: 2 steps)">↶ Undo</button>
+            <button id="btn-hint"  title="Show top 3 recommended moves">💡 Hint</button>
         </div>
-        <div id="debug-panel" hidden>
-            <div class="dbg-section">
-                <div class="dbg-label">Camera</div>
-                <div class="dbg-row"><span class="k">pos</span><span class="v" id="dbg-cam-pos">—</span></div>
-                <div class="dbg-row"><span class="k">target</span><span class="v" id="dbg-cam-target">—</span></div>
-                <div class="dbg-row"><span class="k">dist</span><span class="v" id="dbg-cam-dist">—</span></div>
-            </div>
-            <div class="dbg-section">
-                <div class="dbg-label">Game</div>
-                <div class="dbg-row"><span class="k">selected</span><span class="v" id="dbg-selected">—</span></div>
-                <div class="dbg-row"><span class="k">moves</span><span class="v" id="dbg-moves">0</span></div>
-                <div class="dbg-row"><span class="k">last</span><span class="v" id="dbg-last-move">—</span></div>
-            </div>
+        <div id="ai-controls">
+            <label>Mode</label>
+            <select id="ai-mode">
+                <option value="hvh">H vs H</option>
+                <option value="hva">vs AI ●</option>
+                <option value="avh">AI ○ vs me</option>
+                <option value="ava">AI vs AI</option>
+            </select>
+            <label>Depth</label>
+            <select id="ai-depth">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+            </select>
+            <label class="auto-lbl">
+                <input type="checkbox" id="ai-auto" checked style="accent-color: var(--accent);"> Auto
+            </label>
+            <button id="btn-step" title="Advance one AI move">⏭ Step</button>
+            <span class="ai-status" id="ai-status"></span>
         </div>
-        <div id="log-panel">
-            <div class="log-system">▸ Warp Core Online.</div>
-            <div class="log-system">▸ Structural Integrity Field: Stable.</div>
+        <div id="tab-bar">
+            <button class="tab active" data-tab="history">History</button>
+            <button class="tab" data-tab="log">Log</button>
+            <button class="tab" data-tab="debug">Debug</button>
+            <button class="tab-collapse" id="tab-collapse" title="Toggle panel">▾</button>
+        </div>
+        <div id="tab-content">
+            <div data-tab-content="history" class="active">
+                <div id="history-panel">
+                    <ol id="history-list"></ol>
+                </div>
+            </div>
+            <div data-tab-content="log">
+                <div id="log-panel">
+                    <div class="log-system">▸ Warp Core Online.</div>
+                    <div class="log-system">▸ Structural Integrity Field: Stable.</div>
+                </div>
+            </div>
+            <div data-tab-content="debug">
+                <div id="debug-panel">
+                    <div class="dbg-section">
+                        <div class="dbg-label">Camera</div>
+                        <div class="dbg-row"><span class="k">pos</span><span class="v" id="dbg-cam-pos">—</span></div>
+                        <div class="dbg-row"><span class="k">target</span><span class="v" id="dbg-cam-target">—</span></div>
+                        <div class="dbg-row"><span class="k">dist</span><span class="v" id="dbg-cam-dist">—</span></div>
+                    </div>
+                    <div class="dbg-section">
+                        <div class="dbg-label">Game</div>
+                        <div class="dbg-row"><span class="k">selected</span><span class="v" id="dbg-selected">—</span></div>
+                        <div class="dbg-row"><span class="k">moves</span><span class="v" id="dbg-moves">0</span></div>
+                        <div class="dbg-row"><span class="k">last</span><span class="v" id="dbg-last-move">—</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="panel-2d">
             <div class="panel-2d-title">2D Control Panel</div>
             <div class="panel-2d-grid"></div>
         </div>
+    </div>
+</div>
+
+<div id="game-over-overlay">
+    <div class="card">
+        <h2 id="go-title">Game Over</h2>
+        <p id="go-msg"></p>
+        <button id="go-replay">Play Again</button>
     </div>
 </div>
 
@@ -230,6 +360,22 @@
     <p style="font-size: 0.82em; color: var(--text-dim); text-align: center; margin-top: 12px;">
         원본: <a href="https://www.thedance.net/~roth/TECHBLOG/chess.html" target="_blank">Roth-2012, FRS 5.0</a> · Andrew Bartmess
     </p>
+
+    <div class="about-card">
+        <img src="assets/startrek_3dchess.jpg" alt="실제 보유 중인 Star Trek Tri-D 체스 세트">
+        <div class="about-text">
+            <h4>이 프로젝트를 만든 이유</h4>
+            <p>
+                왼쪽 사진은 제가 오프라인으로 약 <strong>$250 (당시 30 만원)</strong> 주고 산 Star Trek
+                Tri-Dimensional 체스 세트입니다. 막상 사 두니 같이 둘 사람이 없어서…
+                혼자라도 두려고 온라인 버전을 만들기 시작했습니다.
+            </p>
+            <p class="disclaimer">
+                ※ Star Trek 은 CBS/Paramount 의 상표이며, 룰셋은 Andrew Bartmess / Charles Roth 의 저작입니다.
+                본 프로젝트는 학습/취미용 비영리 구현이며 상표권·저작권 문제가 제기될 경우 즉시 내리겠습니다.
+            </p>
+        </div>
+    </div>
 </div>
 
 <script type="module" src="src/main.js"></script>
