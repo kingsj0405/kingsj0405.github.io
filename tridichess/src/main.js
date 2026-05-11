@@ -150,16 +150,20 @@ function init() {
         document.getElementById('rule-modal').style.display = 'block';
     };
     document.getElementById('btn-debug').onclick = () => {
-        // 3D 좌표 라벨 토글 + Debug 탭으로 전환
+        // 3D 좌표 라벨 토글 + Log/Debug 탭 노출 + Debug 탭으로 전환
         debugOverlay.toggle();
-        switchTab('debug');
-        updateDebugPanel();
+        const on = document.body.classList.toggle('debug-on');
+        if (on) {
+            switchTab('debug');
+            updateDebugPanel();
+        } else {
+            switchTab('history');
+        }
     };
 
     document.getElementById('btn-hint').onclick = showHints;
     document.getElementById('btn-step').onclick = () => scheduleAIMove(true);
     document.getElementById('btn-undo').onclick = undoMove;
-    document.getElementById('tab-collapse').onclick = toggleTabContent;
     document.getElementById('ai-auto').onchange = (e) => {
         ai.auto = e.target.checked;
         updateAIControlsVisibility();
@@ -283,13 +287,6 @@ function updateMoveCounter() {
     el.textContent = `#${historyIdx}/${history.length - 1}`;
     const btnUndo = document.getElementById('btn-undo');
     if (btnUndo) btnUndo.disabled = historyIdx === 0;
-}
-
-function toggleTabContent() {
-    const tc  = document.getElementById('tab-content');
-    const btn = document.getElementById('tab-collapse');
-    const collapsed = tc.classList.toggle('collapsed');
-    btn.textContent = collapsed ? '▴' : '▾';
 }
 
 // AI 모드/Auto 상태에 따라 Step 버튼 활성 여부.
