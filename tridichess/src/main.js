@@ -184,11 +184,11 @@ function init() {
             this.refreshAll();
             scheduleAIMove();
         },
-        /** Tutorial 전용 초기 상태로 swap (Step 3). AI auto 자동 off. */
-        loadTutorialState() {
+        /** Tutorial 전용 초기 상태로 swap. AI auto 자동 off. customState 주면 그걸로. */
+        loadTutorialState(customState) {
             cancelPendingAI();
             ai.auto    = false;
-            gameState  = createInitialState();
+            gameState  = customState || createInitialState();
             history    = [gameState];
             historyIdx = 0;
             ui.selected = null; ui.moves = []; ui.castles = new Set();
