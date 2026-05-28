@@ -23,6 +23,7 @@ import { computeMaterial }                          from './rules/material.js';
 import { createMinimaxAI, topDistinctMoves }        from './ai/MinimaxAI.js';
 import { generateBoardMoves, applyBoardMove }       from './rules/attackBoard.js';
 import { serializeGameState, deserializeGameState } from './model/serialize.js';
+import { TutorialController }                       from './tutorial/TutorialController.js';
 
 // ── 게임 상태 + 히스토리 ──────────────────────────────────────
 /** @type {import('./model/GameState.js').GameState} */
@@ -149,6 +150,10 @@ function init() {
     document.getElementById('btn-rules').onclick = () => {
         document.getElementById('rule-modal').style.display = 'block';
     };
+
+    const tutorial = new TutorialController();
+    document.getElementById('btn-tutorial').onclick = () => tutorial.restart();
+    tutorial.maybeAutoLaunch();
     document.getElementById('btn-debug').onclick = () => {
         // 3D 좌표 라벨 토글 + Log/Debug 탭 노출 + Debug 탭으로 전환
         debugOverlay.toggle();
