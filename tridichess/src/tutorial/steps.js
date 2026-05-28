@@ -140,7 +140,7 @@ export const STEPS = [
             <p class="hint">⚠ 튜토리얼 중 두는 수는 격리된 상태에서 진행돼 진행 중인
             실제 게임에는 영향을 주지 않습니다.</p>
         `,
-        placement: 'bottom-right',
+        placement: 'bottom-left',
         autoAdvance: true,
         onEnter({ api, controller }) {
             // 분리 GameState 인스턴스 — 튜토리얼 종료 시 복원 (controller.end → restoreTutorialSnapshot).
@@ -184,7 +184,7 @@ export const STEPS = [
             <p>2D 패널의 <code>QL1/KL1/QL3/KL3</code> 라벨 클릭으로 핀 이동을
             시도할 수 있습니다 (룰북 §7 참조).</p>
         `,
-        placement: 'bottom-right',
+        placement: 'bottom-left',
     },
 
     // ── Step 5: Path A/B (stub) ─────────────────────────────────
@@ -195,6 +195,6 @@ export const STEPS = [
             <p>한 piece 가 어택 보드 경유 시 두 경로 시각화 — 다음 sprint.</p>
             <p>"마치기" 를 누르면 일반 게임으로 진입합니다. 즐겨주세요! 🖖</p>
         `,
-        placement: 'bottom-right',
+        placement: 'bottom-left',
     },
 ];
