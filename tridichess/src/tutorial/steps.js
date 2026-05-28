@@ -12,6 +12,8 @@
  */
 import { TutorialBoardLabels } from './TutorialBoardLabels.js';
 import { TutorialArrows } from './TutorialArrows.js';
+import { createInitialState } from '../model/initialState.js';
+import { SquareId } from '../model/SquareId.js';
 
 export const TUTORIAL_SEEN_KEY = 'tridichess.tutorial.seen';
 
@@ -217,18 +219,47 @@ export const STEPS = [
             <p>표준 체스와의 가장 큰 차이 — <strong>어택 보드 자체</strong> 를
             한 턴 행동으로 옮길 수 있습니다 (piece 이동 대신).</p>
             <p>조건 (Roth §7): 어택 보드가 <strong>비어 있거나 자기 색 폰 1개만</strong>
-            탑승. 그 외 piece 가 있으면 잠김.</p>
+            탑승. 그 외 piece 가 있으면 잠김. 기본 배치의 QL1 은 R+N+2P 라
+            잠겨 있어서, 시연을 위해 <strong>QL1 의 R/N 과 a-pawn 을 비운 상태</strong>
+            로 세팅했습니다 (b-pawn 1개만 잔존).</p>
             <p class="hint">📋 강조된 <strong>2D Control Panel</strong> 의
-            <code>QL1 / KL1 / QL3 / KL3</code> 라벨 중 하나를 클릭하면 이동 가능한
-            핀(pin) 목록이 트레이로 펼쳐집니다. 핀 ID 를 누르면 보드가 이동.</p>
-            <p class="hint">💡 처음엔 자기 색 (현재 턴) AB 만 반응합니다. 핀 거리
-            ≤ 2 + 보드 회전 색 제약이 적용됩니다. 자세한 룰은 룰북 §7 참조.</p>
+            <code>QL1</code> 라벨 (빨간 ▼) 을 클릭 → 이동 가능한 핀 목록 트레이가
+            펼쳐집니다 → 핀 ID 하나를 클릭하면 보드가 이동합니다.</p>
+            <p class="hint">💡 핀 거리 ≤ 2 + 색 제약 (보드 회전 180° 만 허용) 이
+            적용됩니다. 한 번 옮기면 자동으로 다음 step.</p>
         `,
         placement: 'bottom-left',
         spotlight: '#panel-2d',
-        onEnter({ api }) {
-            // 핀 이동을 시연 가능한 초기 상태로 (Step 4 commit 후 black turn 이면 자기 AB 비활성)
-            api.loadTutorialState();
+        onEnter({ api, controller }) {
+            if (!_step3Snapshot) _step3Snapshot = api.snapshot();
+
+            // QL1 위에서 R/N/a-pawn 제거 → 자기 색 폰 b2(QL1) 1 개만 잔존 → 이동 가능
+            let s = createInitialState();
+            for (const sqKey of ['a1(QL1)', 'b1(QL1)', 'a2(QL1)']) {
+                s = s.setPiece(SquareId.fromString(sqKey), null);
+            }
+            api.loadTutorialState(s);
+            this._initialQL1Pin = api.gameState.boards.get('QL1')?.pin;
+
+            // 2D 패널의 QL1 라벨에 빨간 화살표 강조
+            const lbl = document.querySelector('#panel-2d .ab-label[data-board-id="QL1"]');
+            if (lbl) lbl.classList.add('tut-ab-arrow');
+            this._lbl = lbl;
+
+            // 실제 AB 이동 감지 → 다음 step (250ms 폴링).
+            // 사용자가 클릭으로 commitABMove → state.boards.get('QL1').pin 가 바뀌면 트리거.
+            this._poll = setInterval(() => {
+                const curPin = api.gameState.boards.get('QL1')?.pin;
+                if (curPin && curPin !== this._initialQL1Pin) {
+                    clearInterval(this._poll); this._poll = null;
+                    controller.next();
+                }
+            }, 250);
+        },
+        onExit() {
+            if (this._poll) { clearInterval(this._poll); this._poll = null; }
+            if (this._lbl)  { this._lbl.classList.remove('tut-ab-arrow'); this._lbl = null; }
+            this._initialQL1Pin = null;
         },
     },
 
