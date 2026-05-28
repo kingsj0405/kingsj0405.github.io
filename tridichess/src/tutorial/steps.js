@@ -16,6 +16,16 @@ export const TUTORIAL_SEEN_KEY = 'tridichess.tutorial.seen';
 
 // 모듈 스코프 리소스 — Step 간 cleanup 보장.
 let _boardLabels = null;
+// Step 3 가 분리 GameState 로 진입할 때 캡처. 튜토리얼 완전 종료 시 복원.
+let _step3Snapshot = null;
+
+/** Controller.end() 가 호출. Step 3 이후 남은 격리 state 복원. */
+export function restoreTutorialSnapshot(api) {
+    if (_step3Snapshot) {
+        api.restore(_step3Snapshot);
+        _step3Snapshot = null;
+    }
+}
 
 const PIECE_KO = {
     P: '폰 (Pawn)',
@@ -38,6 +48,9 @@ export const STEPS = [
             piece 가 위·아래로도 움직입니다.</p>
             <p class="hint">💡 카메라가 자동으로 회전하며 보드 구조를 보여줍니다.
             보드 위 라벨로 각 plate 의 위치를 확인하세요.</p>
+            <p class="hint">📋 오른쪽 <strong>2D Control Panel</strong> 은 위에서
+            내려다본 평면도입니다. 3D 뷰가 어렵다면 이쪽이 더 직관적이고,
+            piece 선택·이동·AB 라벨 클릭 모두 동일하게 동작합니다.</p>
         `,
         placement: 'bottom-right',
         onEnter({ api }) {
@@ -64,8 +77,10 @@ export const STEPS = [
             <p>보드 위 piece 를 <strong>마우스로 호버</strong> 하면 이름과
             합법 이동 칸이 노란색으로 강조됩니다.</p>
             <p class="tut-hover-info" data-hover-info>호버한 piece 의 이름이 여기에 표시됩니다.</p>
-            <p class="hint">💡 nighy/king 등 piece 별 이동 패턴을 비교해 보세요.
-            준비되면 "다음" 을 클릭.</p>
+            <p class="hint">💡 piece 별 이동 패턴을 비교해 보세요 — 같은 색
+            piece 도 위치에 따라 합법 칸이 다릅니다. 준비되면 "다음" 을 클릭.</p>
+            <p class="hint">📋 2D Control Panel 의 격자에서도 같은 위치를
+            확인할 수 있습니다 (호버는 3D 뷰에서만 동작).</p>
         `,
         placement: 'bottom-right',
         onEnter({ api, bubble }) {
@@ -115,34 +130,32 @@ export const STEPS = [
         id: 'first-move',
         title: 'Step 3 / 5 — 첫 수 두기',
         body: `
-            <p>이제 직접 한 수 둬 봅니다. <strong>b1(W) 의 백 폰</strong> 이
+            <p>이제 직접 한 수 둬 봅니다. <strong>백 폰</strong> 한 개가
             자동 선택돼 있고 합법 이동 칸이 <span style="color:#ffe54a">노란색</span> 으로
             표시됩니다.</p>
             <p class="hint">💡 노란 칸 중 하나를 클릭해 폰을 이동시키세요.
-            이동 후 자동으로 다음 step 으로 넘어갑니다.</p>
+            (3D 보드의 칸 또는 <strong>오른쪽 2D Control Panel</strong> 의 해당 칸을
+            클릭해도 동일하게 동작합니다.) 이동 후 자동으로 다음 step 으로 넘어갑니다.</p>
+            <p class="hint">⚠ 튜토리얼 중 두는 수는 격리된 상태에서 진행돼 진행 중인
+            실제 게임에는 영향을 주지 않습니다.</p>
         `,
         placement: 'bottom-right',
         autoAdvance: true,
         onEnter({ api, controller }) {
-            // 분리 GameState 인스턴스 — 종료 시 복원
-            this._snap = api.snapshot();
+            // 분리 GameState 인스턴스 — 튜토리얼 종료 시 복원 (controller.end → restoreTutorialSnapshot).
+            // Step 4/5 에서도 학습 결과를 계속 볼 수 있도록 onExit 에선 복원하지 않는다.
+            if (!_step3Snapshot) _step3Snapshot = api.snapshot();
             api.loadTutorialState();
 
-            // b1(W) White Pawn 선택
-            const allSquares = [...api.gameState.pieces.values()];
-            const wPawnB1 = allSquares.find(p =>
+            // 백 폰 선택 — Roth 초기 배치에서 백 폰은 W rank 2 + 어택 보드 rank 2.
+            // 가장 시연이 명료한 b2(W) (메인 보드 폰) 선택.
+            const allPieces = [...api.gameState.pieces.values()];
+            const targetPawn = allPieces.find(p =>
                 p.color === 'white' && p.type === 'P' &&
-                p.position.file === 'b' && p.position.rank === 1 &&
+                p.position.file === 'b' && p.position.rank === 2 &&
                 p.position.level === 'W'
-            );
-            const fromSq = wPawnB1 ? wPawnB1.position : null;
-            if (!fromSq) {
-                // 안전망 — 못 찾으면 첫 white pawn 으로 폴백
-                const anyP = allSquares.find(p => p.color === 'white' && p.type === 'P');
-                if (anyP) api.selectSquare(anyP.position);
-            } else {
-                api.selectSquare(fromSq);
-            }
+            ) || allPieces.find(p => p.color === 'white' && p.type === 'P');
+            if (targetPawn) api.selectSquare(targetPawn.position);
 
             this._from = api.ui.selected;
             api.setClickHandler((sq) => {
@@ -150,13 +163,13 @@ export const STEPS = [
                 const ok = api.ui.moves.some(m => m.equals(sq));
                 if (!ok) return; // 비합법 칸 클릭 무시
                 api.commitMove(this._from, sq);
-                // 한 수 두면 다음 step 으로
+                this._from = null;
                 controller.next();
             });
         },
         onExit({ api }) {
+            // snapshot 복원은 튜토리얼 완전 종료 시 (restoreTutorialSnapshot).
             api.setClickHandler(null);
-            if (this._snap) { api.restore(this._snap); this._snap = null; }
             this._from = null;
         },
     },
