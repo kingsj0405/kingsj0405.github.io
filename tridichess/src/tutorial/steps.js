@@ -42,7 +42,7 @@ export const STEPS = [
     // ── Step 1: Welcome & Board ─────────────────────────────────
     {
         id: 'welcome-board',
-        title: 'Step 1 / 5 — 보드 인지',
+        title: 'Step 1 / 6 — 보드 인지',
         body: `
             <p>Tri-Dimensional Chess 는 <strong>메인 보드 3장</strong> (낮은 W · 중간 N · 높은 B)
             과 <strong>어택 보드 4장</strong> (QL1·KL1·QL3·KL3) 으로 구성됩니다.</p>
@@ -71,10 +71,29 @@ export const STEPS = [
         },
     },
 
-    // ── Step 2: Piece 호버 ──────────────────────────────────────
+    // ── Step 2: Camera 조작 ─────────────────────────────────────
+    {
+        id: 'camera-controls',
+        title: 'Step 2 / 6 — 카메라 조작',
+        body: `
+            <p>3D 보드를 자유롭게 살펴볼 수 있는 카메라 컨트롤입니다.
+            강조된 <strong>Main View</strong> 안에서 다음 조작을 시도해 보세요:</p>
+            <ul style="margin: 6px 0 6px 16px; padding: 0;">
+                <li><strong>좌 클릭 + 드래그</strong> — 보드 주위를 회전 (rotate)</li>
+                <li><strong>우 클릭 + 드래그</strong> 또는 <strong>두 손가락 드래그</strong> — 시점 이동 (pan)</li>
+                <li><strong>휠 스크롤</strong> 또는 <strong>두 손가락 핀치</strong> — 확대 / 축소 (zoom)</li>
+            </ul>
+            <p class="hint">💡 보드 사이의 수직 정렬이 보이는 각도로 맞춰 두면 piece
+            이동을 추적하기 쉽습니다. 답답하면 새로고침으로 기본 시점 복귀.</p>
+        `,
+        placement: 'bottom-left',
+        spotlight: '#view-3d',
+    },
+
+    // ── Step 3: Piece 호버 ──────────────────────────────────────
     {
         id: 'pieces-hover',
-        title: 'Step 2 / 5 — Piece 식별',
+        title: 'Step 3 / 6 — Piece 식별',
         body: `
             <p>👉 강조된 <strong>3D 보드</strong> 위 piece 를 마우스로 호버하면
             이름과 합법 이동 칸이 노란색으로 표시됩니다.</p>
@@ -131,7 +150,7 @@ export const STEPS = [
     // ── Step 3: 첫 수 강제 (분리 GameState) ─────────────────────
     {
         id: 'first-move',
-        title: 'Step 3 / 5 — 첫 수 두기',
+        title: 'Step 4 / 6 — 첫 수 두기',
         body: `
             <p>이제 직접 한 수 둬 봅니다. <strong>백 폰</strong> 한 개가
             자동 선택돼 있고 합법 이동 칸이 <span style="color:#ffe54a">노란색</span> 으로
@@ -190,25 +209,44 @@ export const STEPS = [
         },
     },
 
-    // ── Step 4: Attack Board (stub) ─────────────────────────────
+    // ── Step 5: Attack Board ────────────────────────────────────
     {
         id: 'attack-board',
-        title: 'Step 4 / 5 — Attack Board (예고)',
+        title: 'Step 5 / 6 — Attack Board 이동',
         body: `
-            <p>다음 sprint 에서 추가 예정 — 어택 보드 자체를 옮기는 데모.</p>
-            <p>2D 패널의 <code>QL1/KL1/QL3/KL3</code> 라벨 클릭으로 핀 이동을
-            시도할 수 있습니다 (룰북 §7 참조).</p>
+            <p>표준 체스와의 가장 큰 차이 — <strong>어택 보드 자체</strong> 를
+            한 턴 행동으로 옮길 수 있습니다 (piece 이동 대신).</p>
+            <p>조건 (Roth §7): 어택 보드가 <strong>비어 있거나 자기 색 폰 1개만</strong>
+            탑승. 그 외 piece 가 있으면 잠김.</p>
+            <p class="hint">📋 강조된 <strong>2D Control Panel</strong> 의
+            <code>QL1 / KL1 / QL3 / KL3</code> 라벨 중 하나를 클릭하면 이동 가능한
+            핀(pin) 목록이 트레이로 펼쳐집니다. 핀 ID 를 누르면 보드가 이동.</p>
+            <p class="hint">💡 처음엔 자기 색 (현재 턴) AB 만 반응합니다. 핀 거리
+            ≤ 2 + 보드 회전 색 제약이 적용됩니다. 자세한 룰은 룰북 §7 참조.</p>
         `,
         placement: 'bottom-left',
+        spotlight: '#panel-2d',
+        onEnter({ api }) {
+            // 핀 이동을 시연 가능한 초기 상태로 (Step 4 commit 후 black turn 이면 자기 AB 비활성)
+            api.loadTutorialState();
+        },
     },
 
-    // ── Step 5: Path A/B (stub) ─────────────────────────────────
+    // ── Step 6: Path A/B ────────────────────────────────────────
     {
         id: 'path-ab',
-        title: 'Step 5 / 5 — Path A / B (예고)',
+        title: 'Step 6 / 6 — Path A / B & 마무리',
         body: `
-            <p>한 piece 가 어택 보드 경유 시 두 경로 시각화 — 다음 sprint.</p>
-            <p>"마치기" 를 누르면 일반 게임으로 진입합니다. 즐겨주세요! 🖖</p>
+            <p>어택 보드가 메인 보드 위에 떠 있을 때, piece 는 두 가지 경로를 가질 수
+            있습니다 — <strong>Path A</strong> (메인 보드 통과) 와 <strong>Path B</strong>
+            (어택 보드 경유). 캡처 가능성과 차단 여부가 두 경로에서 다를 수 있어
+            전술적으로 중요합니다.</p>
+            <p class="hint">⚠ 현 구현은 <code>ADR-0010</code> 단순화로 highest-path 단일
+            경로만 지원합니다. Path B 시각화는 후속 sprint 에서 추가 예정 — 룰북 §5 참조.</p>
+            <p>여기까지가 기본 튜토리얼입니다. <strong>"마치기"</strong> 를 누르면 원래
+            게임으로 돌아갑니다. 즐거운 한 판 되세요! 🖖</p>
+            <p class="hint">📖 더 자세한 룰: 사이드바 상단 <strong>📖</strong> 버튼 →
+            한글 룰북.</p>
         `,
         placement: 'bottom-left',
     },
