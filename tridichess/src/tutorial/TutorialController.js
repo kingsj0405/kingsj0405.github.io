@@ -16,6 +16,7 @@ export class TutorialController {
         this.overlay = new TutorialOverlay({
             onNext: () => this.next(),
             onSkip: () => this.end(),
+            onBack: () => this.back(),
         });
         this.welcome = null;
     }
@@ -40,6 +41,13 @@ export class TutorialController {
         this._exitCurrent();
         if (this.index >= this.steps.length - 1) { this.end(true); return; }
         this.index += 1;
+        this._enterCurrent();
+    }
+
+    back() {
+        if (this.index <= 0) return;
+        this._exitCurrent();
+        this.index -= 1;
         this._enterCurrent();
     }
 

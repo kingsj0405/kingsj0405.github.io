@@ -45,6 +45,7 @@ export const STEPS = [
     {
         id: 'welcome-board',
         title: 'Step 1 / 6 — 보드 인지',
+        placement: 'bottom-left',
         body: `
             <p>Tri-Dimensional Chess 는 <strong>메인 보드 3장</strong> (낮은 W · 중간 N · 높은 B)
             과 <strong>어택 보드 4장</strong> (QL1·KL1·QL3·KL3) 으로 구성됩니다.</p>
@@ -56,7 +57,6 @@ export const STEPS = [
             내려다본 평면도입니다. 3D 뷰가 어렵다면 이쪽이 더 직관적이고,
             piece 선택·이동·AB 라벨 클릭 모두 동일하게 동작합니다.</p>
         `,
-        placement: 'bottom-right',
         onEnter({ api }) {
             api.controls.autoRotate = true;
             api.controls.autoRotateSpeed = 1.2;
@@ -183,15 +183,14 @@ export const STEPS = [
 
             this._from = api.ui.selected;
 
-            // 합법 칸 위로 빨간 화살표 (3D 뷰 + 2D 패널). 최대 2개만 (혼잡 방지).
+            // 합법 칸 전부에 빨간 화살표 (3D 뷰 + 2D 패널). 첫 번째만 강조 라벨.
             _arrows = new TutorialArrows({
                 camera: api.camera,
                 renderer: api.renderer,
                 squareMeshes: api.squareMeshes,
             });
-            const targets = api.ui.moves.slice(0, 2);
-            targets.forEach((sq, i) => {
-                _arrows.point(sq.toString(), { label: i === 0 ? `여기 클릭! (${sq})` : `또는 ${sq}` });
+            api.ui.moves.forEach((sq, i) => {
+                _arrows.point(sq.toString(), { label: i === 0 ? `여기 클릭! (${sq})` : `${sq}` });
             });
 
             api.setClickHandler((sq) => {
@@ -233,7 +232,8 @@ export const STEPS = [
         onEnter({ api, controller }) {
             if (!_step3Snapshot) _step3Snapshot = api.snapshot();
 
-            // QL1 위에서 R/N/a-pawn 제거 → 자기 색 폰 b2(QL1) 1 개만 잔존 → 이동 가능
+            // QL1 위에서 R/N/a-pawn 제거 → 자기 색 폰 b2(QL1) 1 개만 잔존 → 이동 가능.
+            // setPiece(SquareId, null) 은 키 삭제 후 새 GameState 반환 (불변).
             let s = createInitialState();
             for (const sqKey of ['a1(QL1)', 'b1(QL1)', 'a2(QL1)']) {
                 s = s.setPiece(SquareId.fromString(sqKey), null);
@@ -241,13 +241,31 @@ export const STEPS = [
             api.loadTutorialState(s);
             this._initialQL1Pin = api.gameState.boards.get('QL1')?.pin;
 
-            // 2D 패널의 QL1 라벨에 빨간 화살표 강조
+            // QL1 라벨에 빨간 ▼ 강조 (TutorialArrows pointDOM).
+            _arrows = new TutorialArrows({
+                camera: api.camera,
+                renderer: api.renderer,
+                squareMeshes: api.squareMeshes,
+            });
             const lbl = document.querySelector('#panel-2d .ab-label[data-board-id="QL1"]');
-            if (lbl) lbl.classList.add('tut-ab-arrow');
-            this._lbl = lbl;
+            _arrows.pointDOM(lbl, { label: 'QL1 클릭!' });
+
+            // 트레이 펼침 감지 → 펼쳐진 핀 버튼 전부에 강조 클래스.
+            const tray = document.querySelector('#panel-2d .ab-tray[data-board-id="QL1"]');
+            this._trayObs = null;
+            if (tray) {
+                const decorateTray = () => {
+                    if (tray.hidden) return;
+                    tray.querySelectorAll('.ab-target-btn').forEach(btn => {
+                        btn.classList.add('tut-arrow-2d');
+                    });
+                };
+                this._trayObs = new MutationObserver(decorateTray);
+                this._trayObs.observe(tray, { attributes: true, childList: true, subtree: false, attributeFilter: ['hidden'] });
+                decorateTray();
+            }
 
             // 실제 AB 이동 감지 → 다음 step (250ms 폴링).
-            // 사용자가 클릭으로 commitABMove → state.boards.get('QL1').pin 가 바뀌면 트리거.
             this._poll = setInterval(() => {
                 const curPin = api.gameState.boards.get('QL1')?.pin;
                 if (curPin && curPin !== this._initialQL1Pin) {
@@ -258,7 +276,8 @@ export const STEPS = [
         },
         onExit() {
             if (this._poll) { clearInterval(this._poll); this._poll = null; }
-            if (this._lbl)  { this._lbl.classList.remove('tut-ab-arrow'); this._lbl = null; }
+            if (this._trayObs) { this._trayObs.disconnect(); this._trayObs = null; }
+            if (_arrows) { _arrows.destroy(); _arrows = null; }
             this._initialQL1Pin = null;
         },
     },

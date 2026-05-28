@@ -326,6 +326,12 @@
         #tutorial-overlay[data-placement="bottom-right"] { right: 24px; bottom: 24px; }
         #tutorial-overlay[data-placement="bottom-left"]  { left: 24px;  bottom: 24px; }
         #tutorial-overlay[data-placement="center"] { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+        #tutorial-overlay[data-placement="free"] { /* inline style 사용 */ }
+        #tutorial-overlay .tut-header[data-drag-handle] { cursor: grab; user-select: none; }
+        #tutorial-overlay .tut-header[data-drag-handle]:active { cursor: grabbing; }
+        #tutorial-overlay .tut-back { background: transparent; border: 1px solid var(--accent-dim); color: var(--accent); border-radius: 3px; padding: 4px 10px; font-size: 0.78em; cursor: pointer; transition: all 0.15s; }
+        #tutorial-overlay .tut-back:hover { background: var(--accent-dim); color: var(--text); }
+        #tutorial-overlay .tut-left-actions { display: flex; gap: 4px; }
         #tutorial-overlay .tut-bubble { pointer-events: auto; width: 360px; max-width: 92vw; background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 16px 18px; color: var(--text); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(0,210,255,0.15); }
         #tutorial-overlay .tut-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
         #tutorial-overlay .tut-title { color: var(--warn); font-size: 0.9em; letter-spacing: 0.5px; font-weight: 600; }
@@ -367,9 +373,9 @@
         #panel-2d .sq.tut-arrow-2d::after { content: '▼'; position: absolute; left: 50%; top: -16px; transform: translateX(-50%); color: #ff4466; font-size: 1.1em; font-weight: 900; text-shadow: 0 0 6px rgba(255,68,102,0.9); animation: tut-arrow-bob 0.9s ease-in-out infinite; pointer-events: none; }
         @keyframes tut-2d-pulse { 0%,100% { box-shadow: inset 0 0 0 3px #ff4466, 0 0 8px rgba(255,68,102,0.5); } 50% { box-shadow: inset 0 0 0 3px #ff4466, 0 0 18px rgba(255,68,102,0.9); } }
 
-        /* Step 5: AB label arrow (2D panel) */
-        #panel-2d .ab-label.tut-ab-arrow { box-shadow: 0 0 0 2px #ff4466, 0 0 14px rgba(255,68,102,0.8); position: relative; animation: tut-2d-pulse 1.2s ease-in-out infinite; }
-        #panel-2d .ab-label.tut-ab-arrow::after { content: '▼'; position: absolute; left: 50%; top: -18px; transform: translateX(-50%); color: #ff4466; font-size: 1.3em; font-weight: 900; text-shadow: 0 0 6px rgba(255,68,102,0.9); animation: tut-arrow-bob 0.9s ease-in-out infinite; pointer-events: none; }
+        /* tut-arrow-2d 를 AB 라벨 / 트레이 버튼에도 동일하게 적용 */
+        #panel-2d .ab-label.tut-arrow-2d, #panel-2d .ab-target-btn.tut-arrow-2d { box-shadow: 0 0 0 2px #ff4466, 0 0 14px rgba(255,68,102,0.8); position: relative; animation: tut-2d-pulse 1.2s ease-in-out infinite; }
+        #panel-2d .ab-label.tut-arrow-2d::after, #panel-2d .ab-target-btn.tut-arrow-2d::after { content: '▼'; position: absolute; left: 50%; top: -16px; transform: translateX(-50%); color: #ff4466; font-size: 1.2em; font-weight: 900; text-shadow: 0 0 6px rgba(255,68,102,0.9); animation: tut-arrow-bob 0.9s ease-in-out infinite; pointer-events: none; }
     </style>
     
     <script type="importmap">

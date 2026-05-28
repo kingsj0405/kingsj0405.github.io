@@ -33,6 +33,15 @@ export class TutorialArrows {
         this.root = root;
     }
 
+    /** 임의 DOM 요소 위에 빨간 ▼ 라벨 부착. 요소 자체에는 .tut-arrow-2d 클래스도 추가. */
+    pointDOM(el, { label = '여기 클릭!' } = {}) {
+        if (!el) return;
+        el.classList.add(PANEL_CLASS);
+        // 떠다니는 라벨은 라이프사이클상 trigger 가 까다로워 셀 강조만으로 충분.
+        this.items.push({ sqKey: null, label, arrowEl: null, panelCells: [el] });
+        return el;
+    }
+
     point(sqKey, { label = '여기 클릭!' } = {}) {
         const arrowEl = document.createElement('div');
         arrowEl.className = 'tut-arrow';
@@ -48,7 +57,7 @@ export class TutorialArrows {
 
     clear() {
         for (const it of this.items) {
-            it.arrowEl.remove();
+            if (it.arrowEl) it.arrowEl.remove();
             it.panelCells.forEach(c => c.classList.remove(PANEL_CLASS));
         }
         this.items = [];
@@ -71,6 +80,7 @@ export class TutorialArrows {
         const rect = canvas.getBoundingClientRect();
         const v = new THREE.Vector3();
         for (const it of this.items) {
+            if (!it.arrowEl || !it.sqKey) continue; // pointDOM 모드
             const mesh = this.squareMeshes.get(it.sqKey);
             if (!mesh) { it.arrowEl.style.opacity = '0'; continue; }
             v.copy(mesh.position);
