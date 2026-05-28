@@ -324,6 +324,7 @@
         #tutorial-overlay { display: none; position: fixed; z-index: 250; pointer-events: none; }
         #tutorial-overlay[data-show="true"] { display: block; }
         #tutorial-overlay[data-placement="bottom-right"] { right: 24px; bottom: 24px; }
+        #tutorial-overlay[data-placement="bottom-left"]  { left: 24px;  bottom: 24px; }
         #tutorial-overlay[data-placement="center"] { left: 50%; top: 50%; transform: translate(-50%, -50%); }
         #tutorial-overlay .tut-bubble { pointer-events: auto; width: 360px; max-width: 92vw; background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 16px 18px; color: var(--text); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(0,210,255,0.15); }
         #tutorial-overlay .tut-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -348,6 +349,11 @@
         #tutorial-board-labels .tut-board-label { position: absolute; transform: translate(-50%, -50%); padding: 3px 8px; border-radius: 3px; font-size: 0.78em; letter-spacing: 0.5px; font-weight: 600; white-space: nowrap; transition: opacity 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
         #tutorial-board-labels .tut-board-label.main { background: rgba(0, 51, 102, 0.92); color: var(--accent); border: 1px solid var(--accent); }
         #tutorial-board-labels .tut-board-label.ab   { background: rgba(102, 0, 0, 0.92); color: #ffb0b0; border: 1px solid #cc4444; }
+
+        /* ── Tutorial: spotlight target glow ───────────────── */
+        .tut-spotlight { position: relative; }
+        .tut-spotlight::after { content: ''; position: absolute; inset: 0; border: 2px solid var(--accent); border-radius: 4px; pointer-events: none; box-shadow: 0 0 24px rgba(0,210,255,0.6), inset 0 0 24px rgba(0,210,255,0.2); animation: tut-spotlight-pulse 1.6s ease-in-out infinite; z-index: 220; }
+        @keyframes tut-spotlight-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
     </style>
     
     <script type="importmap">

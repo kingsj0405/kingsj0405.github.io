@@ -60,6 +60,10 @@ export class TutorialController {
         const step = this.steps[this.index];
         if (!step) return;
         this.overlay.show(step, this.index, this.steps.length, { autoAdvance: !!step.autoAdvance });
+        if (step.spotlight) {
+            this._spotlightEl = document.querySelector(step.spotlight);
+            if (this._spotlightEl) this._spotlightEl.classList.add('tut-spotlight');
+        }
         if (typeof step.onEnter === 'function') {
             try {
                 step.onEnter.call(step, { api: this.api, controller: this, bubble: this.overlay.bubbleEl() });
@@ -75,6 +79,10 @@ export class TutorialController {
         if (typeof step.onExit === 'function') {
             try { step.onExit.call(step, { api: this.api, controller: this }); }
             catch (err) { console.error('Tutorial step onExit error:', err); }
+        }
+        if (this._spotlightEl) {
+            this._spotlightEl.classList.remove('tut-spotlight');
+            this._spotlightEl = null;
         }
     }
 }
