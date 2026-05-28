@@ -11,11 +11,13 @@
  *  - autoAdvance : true 면 'Next' 버튼 노출 X (Step 3 처럼 사용자 액션이 advance 트리거)
  */
 import { TutorialBoardLabels } from './TutorialBoardLabels.js';
+import { TutorialArrows } from './TutorialArrows.js';
 
 export const TUTORIAL_SEEN_KEY = 'tridichess.tutorial.seen';
 
 // 모듈 스코프 리소스 — Step 간 cleanup 보장.
 let _boardLabels = null;
+let _arrows = null;
 // Step 3 가 분리 GameState 로 진입할 때 캡처. 튜토리얼 완전 종료 시 복원.
 let _step3Snapshot = null;
 
@@ -159,6 +161,18 @@ export const STEPS = [
             if (targetPawn) api.selectSquare(targetPawn.position);
 
             this._from = api.ui.selected;
+
+            // 합법 칸 위로 빨간 화살표 (3D 뷰 + 2D 패널). 최대 2개만 (혼잡 방지).
+            _arrows = new TutorialArrows({
+                camera: api.camera,
+                renderer: api.renderer,
+                squareMeshes: api.squareMeshes,
+            });
+            const targets = api.ui.moves.slice(0, 2);
+            targets.forEach((sq, i) => {
+                _arrows.point(sq.toString(), { label: i === 0 ? `여기 클릭! (${sq})` : `또는 ${sq}` });
+            });
+
             api.setClickHandler((sq) => {
                 if (!this._from) return;
                 const ok = api.ui.moves.some(m => m.equals(sq));
@@ -172,6 +186,7 @@ export const STEPS = [
             // snapshot 복원은 튜토리얼 완전 종료 시 (restoreTutorialSnapshot).
             api.setClickHandler(null);
             this._from = null;
+            if (_arrows) { _arrows.destroy(); _arrows = null; }
         },
     },
 
