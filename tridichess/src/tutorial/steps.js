@@ -282,7 +282,7 @@ export const STEPS = [
         },
     },
 
-    // ── Step 6: Path A/B ────────────────────────────────────────
+    // ── Step 6: Path A/B & 마무리 ───────────────────────────────
     {
         id: 'path-ab',
         title: 'Step 6 / 6 — Path A / B & 마무리',
@@ -292,12 +292,25 @@ export const STEPS = [
             (어택 보드 경유). 캡처 가능성과 차단 여부가 두 경로에서 다를 수 있어
             전술적으로 중요합니다.</p>
             <p class="hint">⚠ 현 구현은 <code>ADR-0010</code> 단순화로 highest-path 단일
-            경로만 지원합니다. Path B 시각화는 후속 sprint 에서 추가 예정 — 룰북 §5 참조.</p>
+            경로만 지원합니다. Path B 시각화는 후속 sprint 에서 추가 — 룰북 §5 참조.</p>
             <p>여기까지가 기본 튜토리얼입니다. <strong>"마치기"</strong> 를 누르면 원래
             게임으로 돌아갑니다. 즐거운 한 판 되세요! 🖖</p>
-            <p class="hint">📖 더 자세한 룰: 사이드바 상단 <strong>📖</strong> 버튼 →
-            한글 룰북.</p>
+            <p class="hint">사이드바 우측 상단의 강조된 아이콘 두 개를 기억해 두세요:
+            <strong>📖</strong> 는 한글 룰북, <strong>❓</strong> 는 이 튜토리얼을
+            다시 보고 싶을 때 누릅니다.</p>
         `,
         placement: 'bottom-left',
+        onEnter({ api }) {
+            _arrows = new TutorialArrows({
+                camera: api.camera,
+                renderer: api.renderer,
+                squareMeshes: api.squareMeshes,
+            });
+            _arrows.pointDOM(document.getElementById('btn-rules'),    { label: '📖 룰북' });
+            _arrows.pointDOM(document.getElementById('btn-tutorial'), { label: '❓ 튜토리얼' });
+        },
+        onExit() {
+            if (_arrows) { _arrows.destroy(); _arrows = null; }
+        },
     },
 ];
