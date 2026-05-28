@@ -4,7 +4,7 @@
  *
  * api: 호스트 (main.js) 가 제공하는 hook 묶음 (ADR-0012).
  */
-import { STEPS, TUTORIAL_SEEN_KEY } from './steps.js';
+import { STEPS, TUTORIAL_SEEN_KEY, restoreTutorialSnapshot } from './steps.js';
 import { TutorialOverlay } from './TutorialOverlay.js';
 import { WelcomeModal, isFirstVisit } from './WelcomeModal.js';
 
@@ -47,6 +47,7 @@ export class TutorialController {
         if (this.index >= 0) this._exitCurrent();
         this.index = -1;
         this.overlay.hide();
+        restoreTutorialSnapshot(this.api);
         try { localStorage.setItem(TUTORIAL_SEEN_KEY, '1'); } catch (_) { /* 무시 */ }
     }
 
