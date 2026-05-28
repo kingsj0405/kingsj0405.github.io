@@ -10,6 +10,7 @@
  * M3.5 까지 getMoves() 는 데모 (같은 레벨 이동 + 같은 색 차단). RuleController 가 교체.
  */
 
+import * as THREE                                   from 'three';
 import { setupScene }                              from './renderer/SceneSetup.js';
 import { setupPhysicalBoards, setupLogicalSquares, updateBoardPositions } from './renderer/BoardRenderer.js';
 import { PieceRenderer }                           from './renderer/PieceRenderer.js';
@@ -106,6 +107,13 @@ const ai = {
 
 // ── Three.js 참조 ──────────────────────────────────────────────
 let scene, camera, renderer, controls;
+
+// ── Tutorial 훅 (ADR-0012) ─────────────────────────────────────
+// 활성 시 모든 클릭이 tutorialClickHandler 로 라우팅. main 게임 click 무시.
+/** @type {((sq:any)=>void) | null} */
+let tutorialClickHandler = null;
+/** @type {((sq:any|null)=>void) | null} */
+let tutorialHoverHandler = null;
 /** @type {Map<string, THREE.Mesh>} */
 let squareMeshes = new Map();
 let pieceRenderer;
@@ -151,7 +159,78 @@ function init() {
         document.getElementById('rule-modal').style.display = 'block';
     };
 
-    const tutorial = new TutorialController();
+    // Tutorial 호스트 API (ADR-0012) — 분리된 GameState 인스턴스로 step 3 진행 가능.
+    const tutorialApi = {
+        scene, camera, renderer, controls,
+        get squareMeshes() { return squareMeshes; },
+        get gameState() { return gameState; },
+        get ui() { return ui; },
+        setClickHandler(fn) { tutorialClickHandler = fn || null; },
+        setHoverHandler(fn) { tutorialHoverHandler = fn || null; },
+        getLegalMoves(sq)  { return generateLegalMoves(gameState, sq); },
+        highlightSquare, clearAllHighlights, COLOR,
+        /** 게임 상태 스냅샷 (tutorial 종료 시 복원용). */
+        snapshot() {
+            return { gameState, history: history.slice(), historyIdx, ui: { ...ui }, aiAuto: ai.auto };
+        },
+        /** snapshot 복원. */
+        restore(snap) {
+            cancelPendingAI();
+            gameState  = snap.gameState;
+            history    = snap.history;
+            historyIdx = snap.historyIdx;
+            Object.assign(ui, snap.ui);
+            ai.auto    = snap.aiAuto;
+            this.refreshAll();
+            scheduleAIMove();
+        },
+        /** Tutorial 전용 초기 상태로 swap (Step 3). AI auto 자동 off. */
+        loadTutorialState() {
+            cancelPendingAI();
+            ai.auto    = false;
+            gameState  = createInitialState();
+            history    = [gameState];
+            historyIdx = 0;
+            ui.selected = null; ui.moves = []; ui.castles = new Set();
+            ui.hints = []; ui.lastMove = null; ui.checkSquare = null;
+            this.refreshAll();
+        },
+        /** ui.selected/ui.moves 세팅 + 렌더 (Step 3 pre-select). */
+        selectSquare(sq) {
+            ui.selected = sq;
+            ui.moves    = sq ? generateLegalMoves(gameState, sq) : [];
+            ui.castles  = new Set();
+            refreshHighlights();
+            board2D.render(gameState, ui);
+        },
+        /** 사용자 클릭 → applyMove. tutorial 외부에서 호출. */
+        commitMove(from, to) { applyMove(from, to); },
+        refreshAll() {
+            clearAllHighlights();
+            refreshHighlights();
+            updateBoardPositions(gameState); debugOverlay.updatePositions(gameState);
+            pieceRenderer.render(gameState.pieces, gameState);
+            board2D.render(gameState, ui);
+            renderTurnIndicator();
+            renderCapturesPanel();
+            renderHistoryPanel();
+        },
+    };
+
+    // Hover (pointermove) raycaster — tutorialHoverHandler 가 set 됐을 때만 동작.
+    const _hoverRay = new THREE.Raycaster();
+    const _hoverPt  = new THREE.Vector2();
+    renderer.domElement.addEventListener('pointermove', (e) => {
+        if (!tutorialHoverHandler) return;
+        const rect = renderer.domElement.getBoundingClientRect();
+        _hoverPt.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+        _hoverPt.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+        _hoverRay.setFromCamera(_hoverPt, camera);
+        const hits = _hoverRay.intersectObjects([...squareMeshes.values()]);
+        tutorialHoverHandler(hits.length > 0 ? hits[0].object.userData.squareId : null);
+    });
+
+    const tutorial = new TutorialController({ api: tutorialApi });
     document.getElementById('btn-tutorial').onclick = () => tutorial.restart();
     tutorial.maybeAutoLaunch();
     document.getElementById('btn-debug').onclick = () => {
@@ -380,6 +459,7 @@ function refreshHighlights() {
 // ── 클릭 핸들러 ─────────────────────────────────────────────────
 /** @param {import('./model/SquareId.js').SquareId} squareId */
 function handleSquareClick(squareId) {
+    if (tutorialClickHandler) { tutorialClickHandler(squareId); return; }
     if (gameOver || isAIturn() || ai.thinking) return;
     const piece = gameState.getPiece(squareId);
     const isOwn = piece && piece.color === gameState.turn;
