@@ -37,7 +37,7 @@ export class TutorialOverlay {
         this.root = root;
     }
 
-    show(step, index, total) {
+    show(step, index, total, opts = {}) {
         const titleEl = this.root.querySelector('.tut-title');
         const bodyEl  = this.root.querySelector('.tut-body');
         const dotsEl  = this.root.querySelector('.tut-dots');
@@ -52,9 +52,12 @@ export class TutorialOverlay {
             dotsEl.appendChild(dot);
         }
         nextEl.textContent = (index === total - 1) ? '마치기 ✓' : '다음 →';
+        nextEl.style.display = opts.autoAdvance ? 'none' : '';
         this.root.dataset.show = 'true';
         this.root.dataset.placement = step.placement || 'bottom-right';
     }
+
+    bubbleEl() { return this.root.querySelector('.tut-bubble'); }
 
     hide() {
         this.root.dataset.show = 'false';
