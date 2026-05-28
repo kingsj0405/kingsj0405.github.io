@@ -20,7 +20,7 @@ export class WelcomeModal {
             <div class="tw-card">
                 <h3>처음 오셨나요?</h3>
                 <p>Tri-Dimensional Chess 는 평면 체스와 다른 <strong>3D 보드 구조</strong> 를 사용합니다.
-                5단계 짧은 튜토리얼로 보드 인지부터 첫 수까지 안내합니다 (약 2분).</p>
+                6단계 짧은 튜토리얼로 보드 인지·카메라 조작·첫 수까지 안내합니다 (약 2~3분).</p>
                 <div class="tw-actions">
                     <button type="button" class="tw-start">튜토리얼 시작</button>
                     <button type="button" class="tw-skip">건너뛰기</button>
