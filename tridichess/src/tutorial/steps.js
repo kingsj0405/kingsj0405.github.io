@@ -74,15 +74,16 @@ export const STEPS = [
         id: 'pieces-hover',
         title: 'Step 2 / 5 — Piece 식별',
         body: `
-            <p>보드 위 piece 를 <strong>마우스로 호버</strong> 하면 이름과
-            합법 이동 칸이 노란색으로 강조됩니다.</p>
+            <p>👉 강조된 <strong>3D 보드</strong> 위 piece 를 마우스로 호버하면
+            이름과 합법 이동 칸이 노란색으로 표시됩니다.</p>
             <p class="tut-hover-info" data-hover-info>호버한 piece 의 이름이 여기에 표시됩니다.</p>
             <p class="hint">💡 piece 별 이동 패턴을 비교해 보세요 — 같은 색
             piece 도 위치에 따라 합법 칸이 다릅니다. 준비되면 "다음" 을 클릭.</p>
-            <p class="hint">📋 2D Control Panel 의 격자에서도 같은 위치를
+            <p class="hint">📋 오른쪽 2D Control Panel 의 격자에서도 같은 위치를
             확인할 수 있습니다 (호버는 3D 뷰에서만 동작).</p>
         `,
-        placement: 'bottom-right',
+        placement: 'bottom-left',
+        spotlight: '#view-3d',
         onEnter({ api, bubble }) {
             const info = bubble.querySelector('[data-hover-info]');
             api.setHoverHandler((sq) => {
