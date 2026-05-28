@@ -303,6 +303,43 @@
         #rule-modal li { margin-bottom: 6px; }
         .close-btn { position: absolute; top: 10px; right: 14px; border: none; background: none; color: var(--danger); font-size: 1.4em; cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 3px; transition: background 0.15s; }
         .close-btn:hover { background: rgba(255, 68, 102, 0.15); }
+
+        /* ── Tutorial: welcome modal ───────────────────────── */
+        #tutorial-welcome { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        #tutorial-welcome[data-show="true"] { display: flex; }
+        #tutorial-welcome .tw-card { background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 8px; padding: 26px 30px; max-width: 460px; box-shadow: 0 0 60px rgba(0,210,255,0.3); color: var(--text); }
+        #tutorial-welcome h3 { margin: 0 0 12px; color: var(--warn); font-size: 1.15em; letter-spacing: 0.5px; }
+        #tutorial-welcome p { margin: 8px 0 18px; line-height: 1.6; color: var(--text-dim); font-size: 0.95em; }
+        #tutorial-welcome p strong { color: var(--text); }
+        #tutorial-welcome .tw-actions { display: flex; gap: 10px; margin-bottom: 14px; }
+        #tutorial-welcome .tw-start, #tutorial-welcome .tw-skip { flex: 1; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-size: 0.95em; transition: all 0.15s; }
+        #tutorial-welcome .tw-start { background: var(--accent); color: #000; border: 1px solid var(--accent); font-weight: 600; }
+        #tutorial-welcome .tw-start:hover { box-shadow: 0 0 16px rgba(0,210,255,0.5); }
+        #tutorial-welcome .tw-skip { background: transparent; color: var(--text-dim); border: 1px solid var(--border-bright); }
+        #tutorial-welcome .tw-skip:hover { color: var(--text); border-color: var(--accent-dim); }
+        #tutorial-welcome .tw-never { display: flex; align-items: center; gap: 6px; font-size: 0.82em; color: var(--text-dim); cursor: pointer; }
+        #tutorial-welcome .tw-never input { cursor: pointer; }
+
+        /* ── Tutorial: step overlay bubble ─────────────────── */
+        #tutorial-overlay { display: none; position: fixed; z-index: 250; pointer-events: none; }
+        #tutorial-overlay[data-show="true"] { display: block; }
+        #tutorial-overlay[data-placement="bottom-right"] { right: 24px; bottom: 24px; }
+        #tutorial-overlay[data-placement="center"] { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+        #tutorial-overlay .tut-bubble { pointer-events: auto; width: 360px; max-width: 92vw; background: linear-gradient(180deg, rgba(20,22,30,0.98), rgba(10,12,18,0.98)); border: 1px solid var(--accent); border-radius: 6px; padding: 16px 18px; color: var(--text); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(0,210,255,0.15); }
+        #tutorial-overlay .tut-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        #tutorial-overlay .tut-title { color: var(--warn); font-size: 0.9em; letter-spacing: 0.5px; font-weight: 600; }
+        #tutorial-overlay .tut-skip { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 1em; padding: 2px 6px; border-radius: 3px; }
+        #tutorial-overlay .tut-skip:hover { color: var(--danger); background: rgba(255,68,102,0.1); }
+        #tutorial-overlay .tut-body { font-size: 0.88em; line-height: 1.55; color: var(--text-dim); }
+        #tutorial-overlay .tut-body p { margin: 6px 0; }
+        #tutorial-overlay .tut-body p strong { color: var(--text); }
+        #tutorial-overlay .tut-body .hint { color: var(--accent); font-style: italic; font-size: 0.85em; }
+        #tutorial-overlay .tut-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+        #tutorial-overlay .tut-dots { display: flex; gap: 5px; }
+        #tutorial-overlay .tut-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-bright); }
+        #tutorial-overlay .tut-dot.active { background: var(--accent); box-shadow: 0 0 6px rgba(0,210,255,0.6); }
+        #tutorial-overlay .tut-next { background: var(--accent); color: #000; border: none; border-radius: 3px; padding: 6px 14px; font-size: 0.85em; cursor: pointer; font-weight: 600; transition: box-shadow 0.15s; }
+        #tutorial-overlay .tut-next:hover { box-shadow: 0 0 12px rgba(0,210,255,0.5); }
     </style>
     
     <script type="importmap">
@@ -326,6 +363,7 @@
             </div>
             <div class="header-icons">
                 <button id="btn-rules" class="icon-btn" title="Rules &amp; about">📖</button>
+                <button id="btn-tutorial" class="icon-btn" title="Tutorial (다시 보기)">❓</button>
                 <button id="btn-debug" class="icon-btn" title="Toggle debug overlay">🔧</button>
             </div>
         </div>
