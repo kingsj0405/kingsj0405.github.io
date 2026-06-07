@@ -15,9 +15,10 @@
 
 ## 0. 현황 & 다음 액션 (TL;DR — 여기부터 읽어라)
 
-**현황 (2026-06-07):** ✅ **M1 부팅 성공.** TeaVM AOT(`unciv.js` ~61MB, 7590 classes)로 브라우저에서
-**메인 메뉴까지 렌더**된다(배경 맵 생성·강·산·자원 포함). 작업 베이스 = `~/Projects/src/unciv-web-yosef`
-브랜치 `sejong_pin_web_1.5.6` (YosefLm fork + 우리 픽스). 아직 미커밋.
+**현황 (2026-06-07):** ✅ **M1 부팅 + M3 배포 완료. 라이브: https://yangspace.co.kr/unciv/**
+TeaVM AOT(`unciv.js` ~61MB, 7590 classes)로 브라우저에서 **메뉴 → New Game → 월드 스크린(유닛/타일맵/턴)까지
+완전 플레이**된다. 작업 베이스 = `~/Projects/src/unciv-web-yosef` 브랜치 `sejong_pin_web_1.5.6`,
+**`kingsj0405/Unciv-for-web`(remote `web`)에 푸시 완료.** dist는 이 폴더로 복사·배포됨(`unciv.js`/`assets`/`scripts`/`index.html`).
 
 **부팅까지 해결한 핵심 4건 (모두 영구 픽스):**
 1. **deps 핀** — `-SNAPSHOT`(해석불가 orphan) → `backend-web:1.5.6` + `gdx-freetype-teavm:1.5.6` (Maven Central). 빌더 API 3파일(`BuildWebCommon`/`WebLauncher`) 1.5.6로 이관.
@@ -25,11 +26,15 @@
 3. **easter egg off** (`WebGame.kt`) — 장식 기능, web에서 비활성.
 4. **★ThreadLocalRandom transformer** (`web/.../teavm/`) — TeaVM `ThreadLocalRandom.setSeed`가 throw→`current()` null→**Kotlin `Random.Default`/`Collection.random()` 게임 전체 깨짐**. TeaVM `ClassHolderTransformer`로 `setSeed` no-op化(plugin SPI 자동등록). **가장 중요·재발 주의**.
 
-**다음 액션 (순서대로):**
-- [ ] **A. New Game 실제 플레이 QA** — Quickstart/Start new game → 맵 진입 → 1턴. 새 java.time/`.random()` 류 갭이 더 나올 수 있음(같은 방식으로 잡기). 자율 검증 = `/tmp/unciv_pin/smoke.js` (Playwright headless+swiftshader, 스크린샷+콘솔).
-- [ ] **B. 우리 fork로 정리** — 동작 확정 후 `sejong_pin_web_1.5.6`를 `kingsj0405/Unciv-for-web`(remote `web`)에 push.
-- [ ] **C. M2 agentic 캡처 레이어** — `window.unciv` getState/dispatch/captureFrame (task 25 본 목적).
-- [ ] **D. M3 배포** — dist → 이 폴더(`kingsj0405.github.io/unciv/`) → `yangspace.co.kr/unciv/`.
+**다음 액션:**
+- [x] **A. New Game 실제 플레이 QA** — 월드 스크린(에티오피아/Settler+Warrior/턴) 진입 확인(자율 클릭). 자율 검증 = `/tmp/unciv_pin/smoke.js`.
+- [x] **B. fork push** — `sejong_pin_web_1.5.6` → `kingsj0405/Unciv-for-web` 완료.
+- [x] **D. M3 배포** — dist → 이 폴더 → 라이브 https://yangspace.co.kr/unciv/ (서브패스 부팅 검증 완료).
+- [ ] **C. M2 agentic 캡처 레이어** — `window.unciv` getState/dispatch/captureFrame + Playwright PoC (task 25 본 목적). ← **다음**
+- [ ] **E. 잔여 플레이 경로 QA** — 실제 턴 진행 다회/Load/Map editor 등에서 추가 TeaVM 갭 가능(같은 방식 대응).
+- [ ] **F. unciv.js 축소(선택)** — 61MB(>GitHub 권장 50MB 경고). obfuscate/minify 또는 git-lfs 검토. 기능 무관.
+
+**배포 방법(M3 확정):** `web/build/dist/`에서 `index.html unciv.js jszip.min.js favicon.ico scripts assets`를 이 폴더로 rsync(`.map`/`.teavmdbg`/`WEB-INF`/`webtest`/`src` 제외) → github.io push → Pages 자동 배포(~1-2분). 서브패스 상대경로 OK. (런타임이 `assets/webapp/WEB-INF/web.xml` 404 탐색하나 무해.)
 
 **빠른 명령:**
 ```bash
