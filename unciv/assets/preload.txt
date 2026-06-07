@@ -1,0 +1,206 @@
+i:b:/Icons.atlas:27040:1
+i:b:/jsons/Civ V - Vanilla/TileImprovements.json:10877:1
+i:b:/jsons/Civ V - Vanilla/Buildings.json:31136:1
+i:b:/jsons/Civ V - Vanilla/Difficulties.json:7408:1
+i:b:/jsons/Civ V - Vanilla/UnitPromotions.json:17798:1
+i:b:/jsons/Civ V - Vanilla/CityStateTypes.json:2054:1
+i:b:/jsons/Civ V - Vanilla/Quests.json:6026:1
+i:b:/jsons/Civ V - Vanilla/Techs.json:20297:1
+i:b:/jsons/Civ V - Vanilla/Policies.json:22205:1
+i:b:/jsons/Civ V - Vanilla/Nations.json:73053:1
+i:b:/jsons/Civ V - Vanilla/Specialists.json:444:1
+i:b:/jsons/Civ V - Vanilla/UnitTypes.json:2877:1
+i:b:/jsons/Civ V - Vanilla/Units.json:38551:1
+i:b:/jsons/Civ V - Vanilla/GlobalUniques.json:1274:1
+i:b:/jsons/Civ V - Vanilla/ModOptions.json:67:1
+i:b:/jsons/Civ V - Vanilla/TileResources.json:18616:1
+i:b:/jsons/Civ V - Vanilla/Ruins.json:2667:1
+i:b:/jsons/Civ V - Vanilla/Speeds.json:4121:1
+i:b:/jsons/Civ V - Vanilla/Terrains.json:21441:1
+i:b:/jsons/Civ V - Vanilla/VictoryTypes.json:3469:1
+i:b:/jsons/Civ V - Vanilla/Eras.json:8678:1
+i:b:/jsons/ModCategories.json:1067:1
+i:b:/jsons/Tutorials.json:65131:1
+i:b:/jsons/Civ V - Gods & Kings/TileImprovements.json:11218:1
+i:b:/jsons/Civ V - Gods & Kings/Buildings.json:40149:1
+i:b:/jsons/Civ V - Gods & Kings/Difficulties.json:7413:1
+i:b:/jsons/Civ V - Gods & Kings/UnitPromotions.json:22291:1
+i:b:/jsons/Civ V - Gods & Kings/CityStateTypes.json:2055:1
+i:b:/jsons/Civ V - Gods & Kings/Quests.json:5524:1
+i:b:/jsons/Civ V - Gods & Kings/Techs.json:25291:1
+i:b:/jsons/Civ V - Gods & Kings/Policies.json:24544:1
+i:b:/jsons/Civ V - Gods & Kings/Events.json:8067:1
+i:b:/jsons/Civ V - Gods & Kings/Nations.json:105344:1
+i:b:/jsons/Civ V - Gods & Kings/Specialists.json:444:1
+i:b:/jsons/Civ V - Gods & Kings/UnitNameGroups.json:7077:1
+i:b:/jsons/Civ V - Gods & Kings/UnitTypes.json:2877:1
+i:b:/jsons/Civ V - Gods & Kings/Units.json:49062:1
+i:b:/jsons/Civ V - Gods & Kings/GlobalUniques.json:1347:1
+i:b:/jsons/Civ V - Gods & Kings/Religions.json:184:1
+i:b:/jsons/Civ V - Gods & Kings/ModOptions.json:30:1
+i:b:/jsons/Civ V - Gods & Kings/TileResources.json:21862:1
+i:b:/jsons/Civ V - Gods & Kings/Personalities.json:24998:1
+i:b:/jsons/Civ V - Gods & Kings/Ruins.json:3953:1
+i:b:/jsons/Civ V - Gods & Kings/Speeds.json:5154:1
+i:b:/jsons/Civ V - Gods & Kings/Terrains.json:23557:1
+i:b:/jsons/Civ V - Gods & Kings/Beliefs.json:10643:1
+i:b:/jsons/Civ V - Gods & Kings/VictoryTypes.json:3469:1
+i:b:/jsons/Civ V - Gods & Kings/Eras.json:11135:1
+i:b:/jsons/WesnothImportMappings.json:3309:1
+i:b:/jsons/TileSets/Minimal.json:435:1
+i:b:/jsons/TileSets/HexaRealm.json:62626:1
+i:b:/jsons/TileSets/FantasyHex.json:6560:1
+i:b:/jsons/translations/completionPercentages.properties:696:1
+i:b:/jsons/translations/Korean.properties:483093:1
+i:b:/jsons/translations/Brazilian_Portuguese.properties:523185:1
+i:b:/jsons/translations/Swedish.properties:438192:1
+i:b:/jsons/translations/Traditional_Chinese.properties:491112:1
+i:b:/jsons/translations/Czech.properties:445153:1
+i:b:/jsons/translations/Turkish.properties:498665:1
+i:b:/jsons/translations/Indonesian.properties:523689:1
+i:b:/jsons/translations/Bosnian.properties:395749:1
+i:b:/jsons/translations/Spanish.properties:520472:1
+i:b:/jsons/translations/Bangla.properties:443731:1
+i:b:/jsons/translations/Dutch.properties:514391:1
+i:b:/jsons/translations/Zulu.properties:396798:1
+i:b:/jsons/translations/Vietnamese.properties:597500:1
+i:b:/jsons/translations/Croatian instructions.md:16366:1
+i:b:/jsons/translations/Rusyn.properties:438952:1
+i:b:/jsons/translations/Catalan.properties:528608:1
+i:b:/jsons/translations/Greek.properties:399631:1
+i:b:/jsons/translations/German.properties:539436:1
+i:b:/jsons/translations/Galician.properties:515108:1
+i:b:/jsons/translations/Malay.properties:392799:1
+i:b:/jsons/translations/Latin.properties:449632:1
+i:b:/jsons/translations/Thai.properties:414115:1
+i:b:/jsons/translations/Italian.properties:528661:1
+i:b:/jsons/translations/Belarusian.properties:415050:1
+i:b:/jsons/translations/Lithuanian.properties:442853:1
+i:b:/jsons/translations/Simplified_Chinese.properties:494448:1
+i:b:/jsons/translations/Maltese.properties:523526:1
+i:b:/jsons/translations/Portuguese.properties:519190:1
+i:b:/jsons/translations/Russian.properties:686773:1
+i:b:/jsons/translations/Hindi.properties:409021:1
+i:b:/jsons/translations/Romanian.properties:430994:1
+i:b:/jsons/translations/French.properties:540065:1
+i:b:/jsons/translations/Persian instructions.txt:2622:1
+i:b:/jsons/translations/Persian_(Pinglish-DIN).properties:398513:1
+i:b:/jsons/translations/Ukrainian.properties:673576:1
+i:b:/jsons/translations/Japanese.properties:522860:1
+i:b:/jsons/translations/Filipino.properties:455651:1
+i:b:/jsons/translations/Afrikaans.properties:396221:1
+i:b:/jsons/translations/template.properties:64109:1
+i:b:/jsons/translations/Norwegian.properties:403548:1
+i:b:/jsons/translations/Croatian.properties:506977:1
+i:b:/jsons/translations/Polish.properties:519558:1
+i:b:/jsons/translations/Persian_(Pinglish-UN).properties:399022:1
+i:b:/jsons/translations/Finnish.properties:399257:1
+i:b:/jsons/translations/Bulgarian.properties:462290:1
+i:b:/jsons/translations/Hungarian.properties:477738:1
+i:b:/jsons/translations/English.properties:393654:1
+i:b:/UnitPromotionIcons.png:55627:1
+i:b:/EasterEggs.png:175142:1
+i:b:/Flags.atlas:5220:1
+i:b:/UnitActionIcons.atlas:3617:1
+i:b:/ConstructionIcons.png:925943:1
+i:b:/ReligionIcons.atlas:2145:1
+i:b:/Tech.atlas:9607:1
+i:b:/EasterEggs.atlas:5996:1
+i:b:/Tilesets.png:976061:1
+i:b:/Skin.json:10704:1
+i:b:/AbsoluteUnits.png:480453:1
+i:b:/sounds/construction.mp3:7083:1
+i:b:/sounds/cityInformation.ogg:138114:1
+i:b:/sounds/whoosh.mp3:4632:1
+i:b:/sounds/cityRenaissance.ogg:176251:1
+i:b:/sounds/wagon.mp3:30093:1
+i:b:/sounds/shipguns.mp3:13224:1
+i:b:/sounds/coin.mp3:15792:1
+i:b:/sounds/tankshot.mp3:13752:1
+i:b:/sounds/bombard.mp3:36447:1
+i:b:/sounds/cityClassical.ogg:103654:1
+i:b:/sounds/artillery.mp3:21024:1
+i:b:/sounds/click.mp3:2763:1
+i:b:/sounds/swap.mp3:3816:1
+i:b:/sounds/bombing.mp3:22416:1
+i:b:/sounds/upgrade.mp3:8621:1
+i:b:/sounds/jetgun.mp3:19464:1
+i:b:/sounds/notification1.mp3:8949:1
+i:b:/sounds/cityModern.ogg:159677:1
+i:b:/sounds/setup.mp3:5328:1
+i:b:/sounds/WLTK.ogg:34496:1
+i:b:/sounds/cannon.mp3:14736:1
+i:b:/sounds/notification2.mp3:6504:1
+i:b:/sounds/nonmetalhit.mp3:3168:1
+i:b:/sounds/chimes.mp3:108696:1
+i:b:/sounds/shipCannonVolley.mp3:103704:1
+i:b:/sounds/shot.mp3:3600:1
+i:b:/sounds/throw.mp3:3912:1
+i:b:/sounds/crossbow.mp3:8904:1
+i:b:/sounds/nuke_long.mp3:308769:1
+i:b:/sounds/promote.mp3:7272:1
+i:b:/sounds/choir.mp3:27288:1
+i:b:/sounds/cityAtomic.ogg:146521:1
+i:b:/sounds/arrow.mp3:6768:1
+i:b:/sounds/cityMedieval.ogg:176251:1
+i:b:/sounds/fortify.mp3:22536:1
+i:b:/sounds/horse.mp3:10008:1
+i:b:/sounds/slider.mp3:2996:1
+i:b:/sounds/metalhit.mp3:4992:1
+i:b:/sounds/paper.mp3:5499:1
+i:b:/sounds/machinegun.mp3:7680:1
+i:b:/sounds/cavalry.mp3:13824:1
+i:b:/sounds/elephant.mp3:6048:1
+i:b:/sounds/cityAncient.ogg:169030:1
+i:b:/sounds/gdrAttack.mp3:18834:1
+i:b:/sounds/policy.mp3:9720:1
+i:b:/sounds/nuke.mp3:84234:1
+i:b:/sounds/fire.mp3:149277:1
+i:b:/sounds/torpedo.mp3:19554:1
+i:b:/sounds/missile.mp3:26946:1
+i:b:/sounds/cityIndustrial.ogg:162433:1
+i:b:/sounds/cityFuture.ogg:132824:1
+i:b:/ExtraImages/banner.png:133064:1
+i:b:/ExtraImages/World_Screen.png:3431256:1
+i:b:/ExtraImages/Icons/Unciv32.png:16724:1
+i:b:/ExtraImages/Icons/Unciv128.png:16724:1
+i:b:/ExtraImages/Tutorials/Found city.png:9976:1
+i:b:/ExtraImages/Tutorials/Pick construction.png:10366:1
+i:b:/ExtraImages/Tutorials/Create a trade route.png:38279:1
+i:b:/ExtraImages/Tutorials/Reassign worked tiles.png:30800:1
+i:b:/ExtraImages/Tutorials/Conquer a city.png:25418:1
+i:b:/ExtraImages/Tutorials/Construct an improvement.png:31525:1
+i:b:/ExtraImages/Tutorials/Enter city screen.png:43562:1
+i:b:/ExtraImages/Tutorials/Move an air unit.png:50207:1
+i:b:/ExtraImages/Tutorials/Move unit.png:6814:1
+i:b:/ExtraImages/Tutorials/Pick technology.png:20252:1
+i:b:/ExtraImages/Tutorials/Meet another civilization.jpg:26512:1
+i:b:/ExtraImages/Tutorials/Open the options table.png:12634:1
+i:b:/ExtraImages/Tutorials/Pass a turn.png:24578:1
+i:b:/ExtraImages/Tutorials/See your stats breakdown.png:16293:1
+i:b:/PolicyIcons.png:85805:1
+i:b:/ReligionIcons.png:58315:1
+i:b:/Icons.png:602283:1
+i:b:/NationIcons.png:205494:1
+i:b:/UnitPromotionIcons.atlas:6074:1
+i:b:/PolicyIcons.atlas:6929:1
+i:b:/Skin.png:5795:1
+i:b:/Tilesets.atlas:134113:1
+i:b:/Skin.atlas:1753:1
+i:b:/Flags.png:268311:1
+i:b:/effects/fireworks.p:31708:1
+i:b:/ConstructionIcons.atlas:39019:1
+i:b:/NationIcons.atlas:5769:1
+i:b:/AbsoluteUnits.atlas:62730:1
+i:b:/Atlases.json:132:1
+i:b:/Tech.png:210775:1
+i:b:/mods/test-mod.zip:698:1
+c:b:/webapp/WEB-INF/web.xml:283:1
+c:b:/com/badlogic/gdx/utils/lsans-15.png:10270:1
+c:b:/com/badlogic/gdx/utils/lsans-15.fnt:17711:1
+c:b:/com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:820:1
+c:b:/com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:2886:1
+c:b:/com/badlogic/gdx/graphics/g3d/shaders/depth.vertex.glsl:2931:1
+c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:9096:1
+c:b:/com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl:869:1
+c:b:/com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5874:1

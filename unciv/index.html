@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="data:,">
+        <title>Unciv</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #000;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            #canvas {
+                border: none;
+            }
+        </style>
+    </head>
+    <body oncontextmenu="return false">
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <script>
+            (function () {
+                function boot() {
+                    if (window.__uncivBootStarted) return;
+                    if (typeof window.main !== 'function') {
+                        setTimeout(boot, 25);
+                        return;
+                    }
+                    window.__uncivBootStarted = true;
+                    window.main();
+                }
+                if (document.readyState === 'complete') {
+                    setTimeout(boot, 0);
+                } else {
+                    window.addEventListener('load', boot, { once: true });
+                }
+            })();
+        </script>
+        <script type="text/javascript" charset="utf-8" src="unciv.js"></script>
+    </body>
+</html>
