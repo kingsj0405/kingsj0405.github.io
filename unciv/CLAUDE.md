@@ -15,16 +15,18 @@
 
 ## 0. 현황 & 다음 액션 (TL;DR — 여기부터 읽어라)
 
-**현황 (2026-06-07):** ✅ **M1 부팅 + M3 배포 완료. 라이브: https://yangspace.co.kr/unciv/**
-TeaVM AOT(`unciv.js` ~61MB, 7590 classes)로 브라우저에서 **메뉴 → New Game → 월드 스크린(유닛/타일맵/턴)까지
-완전 플레이**된다. 작업 베이스 = `~/Projects/src/unciv-web-yosef` 브랜치 `sejong_pin_web_1.5.6`,
+**현황 (2026-06-08):** ✅ **M1 부팅 + M3 배포 완료 + 플레이 중 발견 버그 2종 수정. 라이브: https://yangspace.co.kr/unciv/**
+TeaVM AOT(`unciv.js` ~61MB)로 브라우저에서 **메뉴 → New Game → 월드 스크린(유닛/타일맵/턴)까지
+완전 플레이** + **Options 전 탭 동작 + 설정(언어 등) 같은 브라우저에서 영속**된다. 작업 베이스 = `~/Projects/src/unciv-web-yosef` 브랜치 `sejong_pin_web_1.5.6`,
 **`kingsj0405/Unciv-for-web`(remote `web`)에 푸시 완료.** dist는 이 폴더로 복사·배포됨(`unciv.js`/`assets`/`scripts`/`index.html`).
 
-**부팅까지 해결한 핵심 4건 (모두 영구 픽스):**
+**해결한 핵심 TeaVM 갭 (모두 영구 픽스):**
 1. **deps 핀** — `-SNAPSHOT`(해석불가 orphan) → `backend-web:1.5.6` + `gdx-freetype-teavm:1.5.6` (Maven Central). 빌더 API 3파일(`BuildWebCommon`/`WebLauncher`) 1.5.6로 이관.
 2. **java.time 가드** (`HolidayDates.kt`) — `LocalDate.now()`(TeaVM `ZoneId.systemDefault()` 미지원) → epoch-UTC 폴백.
 3. **easter egg off** (`WebGame.kt`) — 장식 기능, web에서 비활성.
 4. **★ThreadLocalRandom transformer** (`web/.../teavm/`) — TeaVM `ThreadLocalRandom.setSeed`가 throw→`current()` null→**Kotlin `Random.Default`/`Collection.random()` 게임 전체 깨짐**. TeaVM `ClassHolderTransformer`로 `setSeed` no-op化(plugin SPI 자동등록). **가장 중요·재발 주의**.
+5. **Display 탭 크래시** (`WebDisplay.kt`) — `getScreenModes()` emptyMap → DisplayTab `modes.values.first()` NoSuchElementException. 고정 "Windowed" 모드 1개 반환. **교훈: web 스텁이 빈 컬렉션 반환 금지(소비 UI가 깨짐)→≥1 sane 원소.**
+6. **★설정 영속화** — (a) `GameSettings`가 리플렉션 미보존이라 libGDX Json이 `{}`만 생성=**web 설정 직렬화 통째로 깨짐**. `BuildWebCommon` preserve에 GameSettings+중첩+FontFamilyData+GameSetupInfo 추가. (b) gdx-teavm local FS=인메모리(비영속)→`WebSettingsStore`(@JSBody localStorage)로 부팅 복원·pagehide 미러. **★범용 교훈: libGDX Json round-trip하는 모든 클래스는 BuildWebCommon 리플렉션-preserve 목록에 넣어야 함**(마커 인터페이스 없으면 자동 안 됨).
 
 **다음 액션:**
 - [x] **A. New Game 실제 플레이 QA** — 월드 스크린(에티오피아/Settler+Warrior/턴) 진입 확인(자율 클릭). 자율 검증 = `/tmp/unciv_pin/smoke.js`.
