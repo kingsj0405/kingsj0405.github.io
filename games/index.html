@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3WVFM8R4D"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-P3WVFM8R4D');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta id="meta-og-title" name="title" property="og:title" content="Games — Sejong Yang (YangSpace)">
+    <meta name="type" property="og:type" content="website">
+    <meta name="image" property="og:image" content="https://avatars.githubusercontent.com/u/13496612?v=4">
+    <meta id="meta-description" name="description" property="og:description"
+        content="Simple open-source browser games with a uniform agent bridge for computer-use simulation data.">
+    <meta name="author" content="Sejong Yang">
+    <meta name="url" property="og:url" content="https://yangspace.co.kr/games/">
+    <link rel="shortcut icon"
+        href="https://scholar.googleusercontent.com/citations?view_op=view_photo&user=qnIiorsAAAAJ&citpid=2">
+    <title>Games — Sejong Yang</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <style>
+        .games-intro {
+            margin: 22px 0 8px;
+            color: #5e564a;
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 18px;
+        }
+        .game-tile {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            border: 1px solid #ddd3c3;
+            border-radius: 18px;
+            background: #fbf8f1;
+            overflow: hidden;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+        }
+        .game-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 26px rgba(82, 69, 52, 0.16);
+            border-color: #c9bca6;
+        }
+        .game-thumb {
+            height: 96px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            color: #fff8ef;
+            letter-spacing: 0.04em;
+        }
+        .game-meta { padding: 14px 16px 16px; }
+        .game-name { font-size: 1.05rem; font-weight: 600; color: #26221c; margin: 0 0 4px; }
+        .game-desc { font-size: 0.86rem; color: #6a6258; margin: 0; line-height: 1.5; }
+        .game-flag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #58744f;
+            font-weight: 700;
+        }
+        .games-note {
+            margin-top: 34px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: #f3eee4;
+            border: 1px solid #ddd3c3;
+            font-size: 0.9rem;
+            color: #5e564a;
+            line-height: 1.65;
+        }
+        .games-note code {
+            background: #efe7d7;
+            border: 1px solid #ddd3c3;
+            border-radius: 5px;
+            padding: 1px 6px;
+            font-size: 0.85em;
+        }
+    </style>
+    <script src="/assets/js/i18n.js" defer></script>
+</head>
+
+<body data-page="games">
+    <div class="topnav">
+        <a href="/" data-i18n="common.nav.home" data-localized-link="true">Home</a>
+        <a href="/pubs" data-i18n="common.nav.publications" data-localized-link="true">Publications</a>
+        <a href="/projects" data-i18n="common.nav.projects" data-localized-link="true">Projects</a>
+        <a class="active" href="/games/" data-i18n="common.nav.games" data-localized-link="true">Games</a>
+        <a href="/tridichess/" title="Tridichess" data-i18n="common.nav.tridichess">Tridichess</a>
+        <a href="https://blog.yangspace.co.kr/" title="Blog" data-i18n="common.nav.blog">Blog</a>
+        <div class="lang-switcher" aria-label="Language switcher">
+            <button type="button" data-lang-switch="ko">KO</button>
+            <span>|</span>
+            <button type="button" data-lang-switch="en">EN</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ctitle">Games</div>
+        <p class="games-intro">
+            Simple, open-source-inspired browser games — playable on desktop &amp; mobile, no install.
+            Each one ships a uniform <b>agent bridge</b> (<code>window.Agent</code>) so a headless harness can
+            read state, enumerate legal actions, and drive the game deterministically — built for generating
+            computer-use agent simulation data.
+        </p>
+
+        <div class="games-grid">
+            <a class="game-tile" href="/games/2048/">
+                <div class="game-thumb" style="background:#3a4641;">2048</div>
+                <div class="game-meta">
+                    <p class="game-name">2048</p>
+                    <p class="game-desc">Slide & merge tiles to 2048. Four actions, fully deterministic.</p>
+                    <span class="game-flag">Turn-based</span>
+                </div>
+            </a>
+
+            <a class="game-tile" href="/games/sokoban/">
+                <div class="game-thumb" style="background:#3a443e;">📦</div>
+                <div class="game-meta">
+                    <p class="game-name">Sokoban</p>
+                    <p class="game-desc">Push every box onto a target. Spatial planning, undo supported.</p>
+                    <span class="game-flag">Turn-based</span>
+                </div>
+            </a>
+
+            <a class="game-tile" href="/games/minesweeper/">
+                <div class="game-thumb" style="background:#2b332f;">💣</div>
+                <div class="game-meta">
+                    <p class="game-name">Minesweeper</p>
+                    <p class="game-desc">Reveal & flag a 9×9 board. First click always safe; logical deduction.</p>
+                    <span class="game-flag">Turn-based</span>
+                </div>
+            </a>
+
+            <a class="game-tile" href="/games/pixel_dungeon/">
+                <div class="game-thumb" style="background:#28302b;">⚔️</div>
+                <div class="game-meta">
+                    <p class="game-name">Mini Dungeon</p>
+                    <p class="game-desc">A tiny turn-based roguelike (Pixel Dungeon inspired): explore, fight, descend.</p>
+                    <span class="game-flag">Turn-based · roguelike</span>
+                </div>
+            </a>
+
+            <a class="game-tile" href="/unciv/">
+                <div class="game-thumb" style="background:#2c3a44;">🏛️</div>
+                <div class="game-meta">
+                    <p class="game-name">Unciv</p>
+                    <p class="game-desc">Open-source Civ V remake, ported to the browser (TeaVM). The heavyweight track.</p>
+                    <span class="game-flag">Turn-based · strategy</span>
+                </div>
+            </a>
+
+            <a class="game-tile" href="/tridichess/">
+                <div class="game-thumb" style="background:#3a2c44;">♟️</div>
+                <div class="game-meta">
+                    <p class="game-name">Tridichess</p>
+                    <p class="game-desc">3-player hexagonal chess variant. Hand-written from scratch.</p>
+                    <span class="game-flag">Turn-based · chess</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="games-note">
+            <b>For agents / data generation.</b> Open any game and use its <code>window.Agent</code> API:
+            <code>getState()</code>, <code>getActions()</code>, <code>dispatch(action)</code>,
+            <code>reset(seed)</code>, <code>isTerminal()</code>, <code>getScore()</code>, <code>captureFrame()</code>.
+            Every <code>dispatch</code> emits an <code>agent:step</code> event on <code>window</code>.
+            Turn-based by design — VLM agents aren't penalized by latency, and seeded RNG makes trajectories reproducible.
+        </div>
+    </div>
+
+    <br><br><br><br><br><br>
+
+    <footer>
+        <div>
+            &copy; Copyright <span id="cr_from"></span>-<span id="cr_end"></span> <span id="cr_title"></span>.
+            <span data-i18n="common.footer.hostedBy">Hosted by</span>
+            <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+            <br>
+            <div id="last_update"> </div>
+        </div>
+    </footer>
+</body>
+
+</html>
