@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>2048 — YangSpace Games</title>
+  <meta name="description" content="Canvas 2048 with an agent bridge for computer-use simulation data.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/games/games.css">
+</head>
+<body>
+  <div class="game-shell">
+    <header class="game-bar">
+      <a class="game-back" href="/games/">← Games</a>
+      <h1 class="game-title">2048</h1>
+      <div class="game-spacer"></div>
+      <div class="game-status">
+        <span class="game-chip">Score <b id="score">0</b></span>
+        <span class="game-chip">Best <b id="best">0</b></span>
+      </div>
+      <button id="new" class="game-btn">New</button>
+    </header>
+    <main class="game-stage"><canvas id="board"></canvas></main>
+    <p class="game-hint">
+      <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ·
+      swipe on touch · merge tiles to reach <b>2048</b>.
+    </p>
+  </div>
+
+  <div class="game-banner" id="banner">
+    <div class="card">
+      <h2 id="banner-title">Game Over</h2>
+      <p id="banner-sub"></p>
+      <button class="game-btn" id="banner-new">New game</button>
+    </div>
+  </div>
+
+  <script src="/games/agent.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const N = 4;
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const bestEl = document.getElementById('best');
+    const banner = document.getElementById('banner');
+
+    const DIRS = ['up', 'down', 'left', 'right'];
+    const COLORS = {
+      0: '#252e2a', 2: '#3a4641', 4: '#46564f', 8: '#b96b28', 16: '#c47a36',
+      32: '#cf8a45', 64: '#d99a55', 128: '#e0a85f', 256: '#e6b56b', 512: '#ecc178',
+      1024: '#f1cd86', 2048: '#f5c98a'
+    };
+
+    let grid, score, best = +(localStorage.getItem('g2048_best') || 0), seed, rand, over, won;
+
+    function newGame(s) {
+      seed = (s === undefined || s === null) ? (Date.now() >>> 0) : AgentKit.hashSeed(s);
+      rand = AgentKit.rng(seed);
+      grid = Array.from({ length: N }, () => new Array(N).fill(0));
+      score = 0; over = false; won = false;
+      spawn(); spawn();
+      render();
+    }
+
+    function emptyCells() {
+      const out = [];
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (grid[r][c] === 0) out.push([r, c]);
+      return out;
+    }
+
+    function spawn() {
+      const cells = emptyCells();
+      if (!cells.length) return false;
+      const [r, c] = cells[Math.floor(rand() * cells.length)];
+      grid[r][c] = rand() < 0.9 ? 2 : 4;
+      return true;
+    }
+
+    // Slide+merge one row toward index 0. Pure: no outer-state side effects.
+    function collapse(row) {
+      const vals = row.filter(v => v !== 0);
+      let gained = 0, made2048 = false;
+      for (let i = 0; i < vals.length - 1; i++) {
+        if (vals[i] === vals[i + 1]) {
+          vals[i] *= 2; gained += vals[i];
+          if (vals[i] === 2048) made2048 = true;
+          vals.splice(i + 1, 1);
+        }
+      }
+      while (vals.length < N) vals.push(0);
+      const moved = vals.some((v, i) => v !== row[i]);
+      return { row: vals, gained, moved, made2048 };
+    }
+
+    function getLine(dir, i) {
+      const line = [];
+      for (let j = 0; j < N; j++) {
+        if (dir === 'left') line.push(grid[i][j]);
+        else if (dir === 'right') line.push(grid[i][N - 1 - j]);
+        else if (dir === 'up') line.push(grid[j][i]);
+        else line.push(grid[N - 1 - j][i]); // down
+      }
+      return line;
+    }
+    function setLine(dir, i, line) {
+      for (let j = 0; j < N; j++) {
+        if (dir === 'left') grid[i][j] = line[j];
+        else if (dir === 'right') grid[i][N - 1 - j] = line[j];
+        else if (dir === 'up') grid[j][i] = line[j];
+        else grid[N - 1 - j][i] = line[j];
+      }
+    }
+
+    // Apply move in place, mutating only `grid`. Returns {moved, gained, made2048}.
+    function applyMove(dir) {
+      let moved = false, gained = 0, made2048 = false;
+      for (let i = 0; i < N; i++) {
+        const res = collapse(getLine(dir, i));
+        if (res.moved) { setLine(dir, i, res.row); moved = true; gained += res.gained; if (res.made2048) made2048 = true; }
+      }
+      return { moved, gained, made2048 };
+    }
+
+    // Would `dir` change the board? Snapshot/restore so score & grid are untouched.
+    function moveChanges(dir) {
+      const snapshot = grid.map(r => r.slice());
+      const res = applyMove(dir);
+      grid = snapshot;
+      return res.moved;
+    }
+    function canMove() { return DIRS.some(moveChanges); }
+
+    function move(dir) {
+      if (over) return false;
+      const res = applyMove(dir);
+      if (!res.moved) return false;
+      score += res.gained;
+      if (res.made2048) won = true;
+      spawn();
+      if (won && !over) { over = true; showBanner('You win! 🎉', 'Reached 2048 — keep going with New.'); }
+      else if (!canMove()) { over = true; showBanner('Game Over', 'No moves left. Score ' + score + '.'); }
+      if (score > best) { best = score; localStorage.setItem('g2048_best', best); }
+      render();
+      return true;
+    }
+
+    // ---- rendering ----
+    let layout = { size: 0, cell: 0, gap: 0, pad: 0 };
+    function resize() {
+      const maxW = Math.min(window.innerWidth - 36, 460);
+      const maxH = window.innerHeight - 170;
+      const size = Math.max(220, Math.min(maxW, maxH));
+      const pad = Math.round(size * 0.03);
+      const gap = Math.round(size * 0.025);
+      const cell = (size - pad * 2 - gap * (N - 1)) / N;
+      layout = { size, cell, gap, pad };
+      AgentKit.fitCanvas(canvas, size, size);
+      render();
+    }
+
+    function render() {
+      const { size, cell, gap, pad } = layout;
+      ctx.clearRect(0, 0, size, size);
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          const v = grid[r][c];
+          const x = pad + c * (cell + gap);
+          const y = pad + r * (cell + gap);
+          roundRect(x, y, cell, cell, 8);
+          ctx.fillStyle = COLORS[v] || '#f5c98a';
+          ctx.fill();
+          if (v) {
+            ctx.fillStyle = v <= 4 ? '#ede7dc' : '#1b1f1d';
+            const fs = v < 100 ? cell * 0.42 : v < 1000 ? cell * 0.34 : cell * 0.27;
+            ctx.font = '600 ' + fs + 'px -apple-system, system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(String(v), x + cell / 2, y + cell / 2 + 1);
+          }
+        }
+      }
+      scoreEl.textContent = score;
+      bestEl.textContent = best;
+    }
+    function roundRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function showBanner(title, sub) {
+      document.getElementById('banner-title').textContent = title;
+      document.getElementById('banner-sub').textContent = sub;
+      banner.classList.add('show');
+    }
+    function hideBanner() { banner.classList.remove('show'); }
+
+    // ---- input ----
+    const KEYMAP = {
+      ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+      w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right'
+    };
+    window.addEventListener('keydown', e => {
+      const dir = KEYMAP[e.key];
+      if (dir) { e.preventDefault(); move(dir); }
+    });
+
+    let touchStart = null;
+    canvas.addEventListener('pointerdown', e => { touchStart = { x: e.clientX, y: e.clientY }; });
+    canvas.addEventListener('pointerup', e => {
+      if (!touchStart) return;
+      const dx = e.clientX - touchStart.x, dy = e.clientY - touchStart.y;
+      touchStart = null;
+      if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+      if (Math.abs(dx) > Math.abs(dy)) move(dx > 0 ? 'right' : 'left');
+      else move(dy > 0 ? 'down' : 'up');
+    });
+
+    document.getElementById('new').addEventListener('click', () => { hideBanner(); newGame(); });
+    document.getElementById('banner-new').addEventListener('click', () => { hideBanner(); newGame(); });
+    window.addEventListener('resize', resize);
+
+    // ---- agent bridge ----
+    AgentKit.register({
+      game: '2048',
+      canvas: canvas,
+      getState: () => ({ grid: grid.map(r => r.slice()), score, seed, over, won, size: N }),
+      getActions: () => DIRS.filter(moveChanges),
+      dispatch: (action) => {
+        const dir = typeof action === 'string' ? action : (action && (action.dir || action.action));
+        if (!DIRS.includes(dir)) return false;
+        return move(dir);
+      },
+      reset: (s) => { hideBanner(); newGame(s); },
+      isTerminal: () => over,
+      getScore: () => score
+    });
+
+    newGame();
+    resize();
+  })();
+  </script>
+</body>
+</html>
