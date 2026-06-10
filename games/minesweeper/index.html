@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Minesweeper — YangSpace Games</title>
+  <meta name="description" content="Canvas Minesweeper with an agent bridge for computer-use simulation data.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/games/games.css">
+</head>
+<body>
+  <div class="game-shell">
+    <header class="game-bar">
+      <a class="game-back" href="/games/">← Games</a>
+      <h1 class="game-title">Minesweeper</h1>
+      <div class="game-spacer"></div>
+      <div class="game-status">
+        <span class="game-chip">Mines <b id="mines">0</b></span>
+        <span class="game-chip">⏱ <b id="time">0</b></span>
+      </div>
+      <button id="mode" class="game-btn ghost" title="Toggle reveal/flag for touch">🚩 Flag: off</button>
+      <button id="new" class="game-btn">New</button>
+    </header>
+    <main class="game-stage"><canvas id="board"></canvas></main>
+    <p class="game-hint">
+      Left-click / tap to reveal · right-click or <b>Flag</b> mode to mark · first click is always safe.
+    </p>
+  </div>
+
+  <div class="game-banner" id="banner">
+    <div class="card">
+      <h2 id="banner-title"></h2>
+      <p id="banner-sub"></p>
+      <button class="game-btn" id="banner-new">New game</button>
+    </div>
+  </div>
+
+  <script src="/games/agent.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const ROWS = 9, COLS = 9, MINES = 10;
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const minesEl = document.getElementById('mines');
+    const timeEl = document.getElementById('time');
+    const banner = document.getElementById('banner');
+    const NUM_COLORS = ['', '#6ea8ff', '#6fcf97', '#eb5757', '#bb6bd9', '#f2994a', '#56ccf2', '#e0e0e0', '#bdbdbd'];
+
+    let cells, seed, rand, started, over, win, flagMode = false;
+    let startTime = 0, elapsed = 0, timer = null;
+
+    function blankCell() { return { mine: false, revealed: false, flagged: false, adj: 0 }; }
+
+    function newGame(s) {
+      seed = (s === undefined || s === null) ? (Date.now() >>> 0) : AgentKit.hashSeed(s);
+      rand = AgentKit.rng(seed);
+      cells = Array.from({ length: ROWS }, () => Array.from({ length: COLS }, blankCell));
+      started = false; over = false; win = false; elapsed = 0;
+      stopTimer();
+      hideBanner();
+      render();
+    }
+
+    // Place mines after first reveal so (r,c) and its neighbors are safe.
+    function placeMines(safeR, safeC) {
+      const forbidden = new Set();
+      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+        forbidden.add((safeR + dr) + ',' + (safeC + dc));
+      }
+      const spots = [];
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+        if (!forbidden.has(r + ',' + c)) spots.push([r, c]);
+      }
+      // Fisher–Yates with seeded rand.
+      for (let i = spots.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        const t = spots[i]; spots[i] = spots[j]; spots[j] = t;
+      }
+      for (let i = 0; i < MINES && i < spots.length; i++) {
+        const [r, c] = spots[i];
+        cells[r][c].mine = true;
+      }
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+        if (cells[r][c].mine) continue;
+        let n = 0;
+        forEachNeighbor(r, c, (nr, nc) => { if (cells[nr][nc].mine) n++; });
+        cells[r][c].adj = n;
+      }
+    }
+
+    function forEachNeighbor(r, c, fn) {
+      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+        if (dr === 0 && dc === 0) continue;
+        const nr = r + dr, nc = c + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) fn(nr, nc);
+      }
+    }
+
+    function reveal(r, c) {
+      if (over || cells[r][c].revealed || cells[r][c].flagged) return false;
+      if (!started) { placeMines(r, c); started = true; startTimer(); }
+      const cell = cells[r][c];
+      cell.revealed = true;
+      if (cell.mine) { lose(); return true; }
+      if (cell.adj === 0) floodFill(r, c);
+      checkWin();
+      render();
+      return true;
+    }
+
+    function floodFill(r, c) {
+      const stack = [[r, c]];
+      while (stack.length) {
+        const [cr, cc] = stack.pop();
+        forEachNeighbor(cr, cc, (nr, nc) => {
+          const n = cells[nr][nc];
+          if (n.revealed || n.flagged || n.mine) return;
+          n.revealed = true;
+          if (n.adj === 0) stack.push([nr, nc]);
+        });
+      }
+    }
+
+    function flag(r, c) {
+      if (over || cells[r][c].revealed) return false;
+      cells[r][c].flagged = !cells[r][c].flagged;
+      render();
+      return true;
+    }
+
+    function flagsUsed() {
+      let n = 0;
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (cells[r][c].flagged) n++;
+      return n;
+    }
+
+    function checkWin() {
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+        const cell = cells[r][c];
+        if (!cell.mine && !cell.revealed) return;
+      }
+      win = true; over = true; stopTimer();
+      showBanner('Cleared! 🎉', 'Solved in ' + elapsed + 's.');
+      render();
+    }
+
+    function lose() {
+      over = true; stopTimer();
+      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (cells[r][c].mine) cells[r][c].revealed = true;
+      showBanner('Boom 💥', 'Hit a mine. Try again.');
+      render();
+    }
+
+    function startTimer() {
+      startTime = Date.now();
+      timer = setInterval(() => { elapsed = Math.floor((Date.now() - startTime) / 1000); timeEl.textContent = elapsed; }, 250);
+    }
+    function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+    // ---- rendering ----
+    let layout = { cell: 0, pad: 8 };
+    function resize() {
+      const pad = 10;
+      const maxW = Math.min(window.innerWidth - 36, 520);
+      const maxH = window.innerHeight - 170;
+      const cell = Math.max(22, Math.floor((Math.min(maxW, maxH * COLS / ROWS) - pad * 2) / COLS));
+      layout = { cell, pad };
+      AgentKit.fitCanvas(canvas, cell * COLS + pad * 2, cell * ROWS + pad * 2);
+      render();
+    }
+
+    function render() {
+      const { cell, pad } = layout;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cellObj = cells[r][c];
+          const x = pad + c * cell, y = pad + r * cell;
+          ctx.fillStyle = cellObj.revealed ? (cellObj.mine ? '#7a2f2f' : '#2b332f') : '#3c463f';
+          rrect(x + 1, y + 1, cell - 2, cell - 2, 4); ctx.fill();
+          if (cellObj.revealed) {
+            if (cellObj.mine) drawGlyph('●', x, y, cell, '#ffd2d2');
+            else if (cellObj.adj > 0) drawGlyph(String(cellObj.adj), x, y, cell, NUM_COLORS[cellObj.adj]);
+          } else if (cellObj.flagged) {
+            drawGlyph('🚩', x, y, cell, '#fff');
+          }
+        }
+      }
+      minesEl.textContent = Math.max(0, MINES - flagsUsed());
+    }
+    function drawGlyph(s, x, y, cell, color) {
+      ctx.fillStyle = color;
+      ctx.font = '600 ' + Math.floor(cell * 0.5) + 'px -apple-system, system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(s, x + cell / 2, y + cell / 2 + 1);
+    }
+    function rrect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function cellFromEvent(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left - layout.pad;
+      const y = e.clientY - rect.top - layout.pad;
+      const c = Math.floor(x / layout.cell), r = Math.floor(y / layout.cell);
+      if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return null;
+      return { r, c };
+    }
+
+    function showBanner(title, sub) {
+      document.getElementById('banner-title').textContent = title;
+      document.getElementById('banner-sub').textContent = sub;
+      banner.classList.add('show');
+    }
+    function hideBanner() { banner.classList.remove('show'); }
+
+    // ---- input ----
+    canvas.addEventListener('click', e => {
+      const hit = cellFromEvent(e); if (!hit) return;
+      if (flagMode) flag(hit.r, hit.c); else reveal(hit.r, hit.c);
+    });
+    canvas.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      const hit = cellFromEvent(e); if (hit) flag(hit.r, hit.c);
+    });
+    const modeBtn = document.getElementById('mode');
+    modeBtn.addEventListener('click', () => {
+      flagMode = !flagMode;
+      modeBtn.textContent = '🚩 Flag: ' + (flagMode ? 'on' : 'off');
+      modeBtn.classList.toggle('ghost', !flagMode);
+    });
+    document.getElementById('new').addEventListener('click', () => newGame());
+    document.getElementById('banner-new').addEventListener('click', () => newGame());
+    window.addEventListener('resize', resize);
+
+    // ---- agent bridge ----
+    function publicGrid() {
+      return cells.map(row => row.map(cell => {
+        if (cell.revealed) return cell.mine ? '*' : String(cell.adj);
+        return cell.flagged ? 'F' : '?';
+      }));
+    }
+    AgentKit.register({
+      game: 'minesweeper',
+      canvas: canvas,
+      getState: () => ({ rows: ROWS, cols: COLS, mines: MINES, seed, started, over, win,
+                         flags: flagsUsed(), elapsed, board: publicGrid() }),
+      getActions: () => {
+        const acts = [];
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+          const cell = cells[r][c];
+          if (cell.revealed) continue;
+          if (!cell.flagged) acts.push({ type: 'reveal', r, c });
+          acts.push({ type: 'flag', r, c });
+        }
+        return acts;
+      },
+      dispatch: (a) => {
+        if (!a || typeof a !== 'object') return false;
+        if (a.type === 'reveal') return reveal(a.r, a.c);
+        if (a.type === 'flag') return flag(a.r, a.c);
+        return false;
+      },
+      reset: (s) => newGame(s),
+      isTerminal: () => over,
+      getScore: () => { let n = 0; for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (cells[r][c].revealed && !cells[r][c].mine) n++; return n; }
+    });
+
+    newGame();
+    resize();
+  })();
+  </script>
+</body>
+</html>

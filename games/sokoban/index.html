@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Sokoban — YangSpace Games</title>
+  <meta name="description" content="Canvas Sokoban with an agent bridge for computer-use simulation data.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/games/games.css">
+</head>
+<body>
+  <div class="game-shell">
+    <header class="game-bar">
+      <a class="game-back" href="/games/">← Games</a>
+      <h1 class="game-title">Sokoban</h1>
+      <div class="game-spacer"></div>
+      <div class="game-status">
+        <span class="game-chip">Level <b id="level">1</b></span>
+        <span class="game-chip">Moves <b id="moves">0</b></span>
+      </div>
+      <button id="undo" class="game-btn ghost">Undo</button>
+      <button id="reset" class="game-btn ghost">Reset</button>
+    </header>
+    <main class="game-stage"><canvas id="board"></canvas></main>
+    <p class="game-hint">
+      <kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> or <kbd>WASD</kbd> / swipe to move · push every
+      <b>box</b> onto a <b>target</b>.
+    </p>
+  </div>
+
+  <div class="game-banner" id="banner">
+    <div class="card">
+      <h2 id="banner-title">Solved! 🎉</h2>
+      <p id="banner-sub"></p>
+      <button class="game-btn" id="banner-next">Next level</button>
+    </div>
+  </div>
+
+  <script src="/games/agent.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    // Legend: # wall, space floor, . target, $ box, * box-on-target, @ player, + player-on-target
+    const LEVELS = [
+      [
+        "  #####",
+        "###   #",
+        "#.@$  #",
+        "### $.#",
+        "#.##$ #",
+        "# # . ##",
+        "#$ *$$.#",
+        "#   .  #",
+        "########"
+      ],
+      [
+        "########",
+        "#  .   #",
+        "# $$ . #",
+        "# $@   #",
+        "# .  $ #",
+        "#   .  #",
+        "########"
+      ],
+      [
+        "  ####",
+        "###  ####",
+        "#     $ #",
+        "# #  #$ #",
+        "# . .#@ #",
+        "###  #  #",
+        "  #  ####",
+        "  ####"
+      ],
+      [
+        "#######",
+        "#     #",
+        "# .$. #",
+        "# $@$ #",
+        "# .$. #",
+        "#     #",
+        "#######"
+      ]
+    ];
+
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const levelEl = document.getElementById('level');
+    const movesEl = document.getElementById('moves');
+    const banner = document.getElementById('banner');
+    const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
+
+    let levelIdx = 0, grid, targets, player, moves, history, won;
+
+    function loadLevel(idx) {
+      levelIdx = ((idx % LEVELS.length) + LEVELS.length) % LEVELS.length;
+      const raw = LEVELS[levelIdx];
+      const W = Math.max(...raw.map(r => r.length));
+      grid = []; targets = []; moves = 0; history = []; won = false;
+      for (let r = 0; r < raw.length; r++) {
+        const row = [];
+        for (let c = 0; c < W; c++) {
+          const ch = raw[r][c] || ' ';
+          let tile = 'floor', box = false, isTarget = false, isPlayer = false;
+          if (ch === '#') tile = 'wall';
+          else if (ch === '.') isTarget = true;
+          else if (ch === '$') box = true;
+          else if (ch === '*') { box = true; isTarget = true; }
+          else if (ch === '@') isPlayer = true;
+          else if (ch === '+') { isPlayer = true; isTarget = true; }
+          if (isTarget) targets.push([r, c]);
+          if (isPlayer) player = { r, c };
+          row.push({ wall: tile === 'wall', box, target: isTarget });
+        }
+        grid.push(row);
+      }
+      hideBanner();
+      resize();
+    }
+
+    function at(r, c) { return (r >= 0 && r < grid.length && c >= 0 && c < grid[r].length) ? grid[r][c] : { wall: true }; }
+
+    function snapshot() {
+      return { boxes: grid.map(row => row.map(cell => cell.box)), player: { r: player.r, c: player.c }, moves };
+    }
+    function restore(snap) {
+      for (let r = 0; r < grid.length; r++) for (let c = 0; c < grid[r].length; c++) grid[r][c].box = snap.boxes[r][c];
+      player = { r: snap.player.r, c: snap.player.c };
+      moves = snap.moves;
+    }
+
+    function move(dir) {
+      if (won || !DIRS[dir]) return false;
+      const [dr, dc] = DIRS[dir];
+      const nr = player.r + dr, nc = player.c + dc;
+      const next = at(nr, nc);
+      if (next.wall) return false;
+      const before = snapshot();
+      if (next.box) {
+        const br = nr + dr, bc = nc + dc;
+        const beyond = at(br, bc);
+        if (beyond.wall || beyond.box) return false; // blocked push
+        next.box = false;
+        grid[br][bc].box = true;
+      }
+      player = { r: nr, c: nc };
+      moves++;
+      history.push(before);
+      checkWin();
+      render();
+      return true;
+    }
+
+    function undo() {
+      if (!history.length) return false;
+      restore(history.pop());
+      won = false; hideBanner();
+      render();
+      return true;
+    }
+
+    function checkWin() {
+      const solved = targets.every(([r, c]) => grid[r][c].box);
+      if (solved) {
+        won = true;
+        showBanner(levelIdx + 1 >= LEVELS.length ? 'All levels done! 🎉' : 'Solved! 🎉',
+                   'Level ' + (levelIdx + 1) + ' in ' + moves + ' moves.');
+      }
+    }
+
+    // ---- rendering ----
+    let cell = 40, ox = 0, oy = 0;
+    function resize() {
+      const W = grid[0].length, H = grid.length;
+      const maxW = Math.min(window.innerWidth - 36, 560);
+      const maxH = window.innerHeight - 170;
+      cell = Math.max(20, Math.floor(Math.min(maxW / W, maxH / H)));
+      const pad = 10;
+      AgentKit.fitCanvas(canvas, cell * W + pad * 2, cell * H + pad * 2);
+      ox = pad; oy = pad;
+      render();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[r].length; c++) {
+          const t = grid[r][c];
+          const x = ox + c * cell, y = oy + r * cell;
+          if (t.wall) { ctx.fillStyle = '#3a443e'; fillRect(x, y, '#2c342f'); continue; }
+          ctx.fillStyle = '#222a26'; ctx.fillRect(x, y, cell, cell);
+          if (t.target) {
+            ctx.fillStyle = '#b96b28';
+            ctx.beginPath(); ctx.arc(x + cell / 2, y + cell / 2, cell * 0.13, 0, Math.PI * 2); ctx.fill();
+          }
+          if (t.box) {
+            const onT = t.target;
+            ctx.fillStyle = onT ? '#6fcf97' : '#caa472';
+            rrect(x + cell * 0.14, y + cell * 0.14, cell * 0.72, cell * 0.72, 6); ctx.fill();
+            ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 2; ctx.stroke();
+          }
+        }
+      }
+      // player
+      const px = ox + player.c * cell, py = oy + player.r * cell;
+      ctx.fillStyle = '#f5c98a';
+      ctx.beginPath(); ctx.arc(px + cell / 2, py + cell / 2, cell * 0.3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#1b1f1d';
+      ctx.beginPath(); ctx.arc(px + cell / 2, py + cell / 2, cell * 0.12, 0, Math.PI * 2); ctx.fill();
+
+      levelEl.textContent = levelIdx + 1;
+      movesEl.textContent = moves;
+    }
+    function fillRect(x, y, border) { ctx.fillStyle = border; ctx.fillRect(x, y, cell, cell); ctx.fillStyle = '#414b44'; ctx.fillRect(x + 2, y + 2, cell - 4, cell - 4); }
+    function rrect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function showBanner(title, sub) {
+      document.getElementById('banner-title').textContent = title;
+      document.getElementById('banner-sub').textContent = sub;
+      banner.classList.add('show');
+    }
+    function hideBanner() { banner.classList.remove('show'); }
+
+    // ---- input ----
+    const KEYMAP = {
+      ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+      w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right'
+    };
+    window.addEventListener('keydown', e => {
+      if (e.key === 'z' || e.key === 'Z') { e.preventDefault(); undo(); return; }
+      const dir = KEYMAP[e.key];
+      if (dir) { e.preventDefault(); move(dir); }
+    });
+    let ts = null;
+    canvas.addEventListener('pointerdown', e => { ts = { x: e.clientX, y: e.clientY }; });
+    canvas.addEventListener('pointerup', e => {
+      if (!ts) return;
+      const dx = e.clientX - ts.x, dy = e.clientY - ts.y; ts = null;
+      if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+      if (Math.abs(dx) > Math.abs(dy)) move(dx > 0 ? 'right' : 'left');
+      else move(dy > 0 ? 'down' : 'up');
+    });
+    document.getElementById('undo').addEventListener('click', undo);
+    document.getElementById('reset').addEventListener('click', () => loadLevel(levelIdx));
+    document.getElementById('banner-next').addEventListener('click', () => loadLevel(levelIdx + 1));
+    window.addEventListener('resize', resize);
+
+    // ---- agent bridge ----
+    function asciiBoard() {
+      return grid.map((row, r) => row.map((t, c) => {
+        const isP = player.r === r && player.c === c;
+        if (t.wall) return '#';
+        if (isP) return t.target ? '+' : '@';
+        if (t.box) return t.target ? '*' : '$';
+        return t.target ? '.' : ' ';
+      }).join(''));
+    }
+    AgentKit.register({
+      game: 'sokoban',
+      canvas: canvas,
+      getState: () => ({ level: levelIdx + 1, moves, won, player: { r: player.r, c: player.c },
+                         rows: grid.length, cols: grid[0].length, board: asciiBoard() }),
+      getActions: () => ['up', 'down', 'left', 'right', 'undo', 'reset'],
+      dispatch: (a) => {
+        const act = typeof a === 'string' ? a : (a && (a.dir || a.action));
+        if (act === 'undo') return undo();
+        if (act === 'reset') { loadLevel(levelIdx); return true; }
+        if (act === 'next') { loadLevel(levelIdx + 1); return true; }
+        return move(act);
+      },
+      reset: (s) => {
+        if (s === undefined || s === null) loadLevel(levelIdx);
+        else loadLevel((AgentKit.hashSeed(s)) % LEVELS.length);
+      },
+      isTerminal: () => won,
+      getScore: () => (won ? Math.max(1, 1000 - moves) : 0)
+    });
+
+    loadLevel(0);
+  })();
+  </script>
+</body>
+</html>
