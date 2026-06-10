@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Mini Dungeon — YangSpace Games</title>
+  <meta name="description" content="A simple turn-based roguelike (Pixel Dungeon inspired) with an agent bridge for computer-use simulation data.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/games/games.css">
+</head>
+<body>
+  <div class="game-shell">
+    <header class="game-bar">
+      <a class="game-back" href="/games/">← Games</a>
+      <h1 class="game-title">Mini Dungeon</h1>
+      <div class="game-spacer"></div>
+      <div class="game-status">
+        <span class="game-chip">Depth <b id="depth">1</b></span>
+        <span class="game-chip">HP <b id="hp">20</b></span>
+        <span class="game-chip">🧪 <b id="potions">0</b></span>
+        <span class="game-chip">$ <b id="gold">0</b></span>
+      </div>
+      <button id="wait" class="game-btn ghost">Wait</button>
+      <button id="quaff" class="game-btn ghost">Potion</button>
+      <button id="new" class="game-btn">New</button>
+    </header>
+    <main class="game-stage"><canvas id="board"></canvas></main>
+    <p class="game-hint">
+      <kbd>←↑→↓</kbd>/<kbd>WASD</kbd> move &amp; bump-attack · tap a tile to step · <kbd>Space</kbd> wait ·
+      <kbd>Q</kbd> quaff potion · step on <b>&gt;</b> to descend.
+    </p>
+  </div>
+
+  <div class="game-banner" id="banner">
+    <div class="card">
+      <h2 id="banner-title">You died</h2>
+      <p id="banner-sub"></p>
+      <button class="game-btn" id="banner-new">New run</button>
+    </div>
+  </div>
+
+  <script src="/games/agent.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const W = 28, H = 18, FOV = 6;
+    const WALL = 0, FLOOR = 1, STAIRS = 2;
+    const ENEMY_KINDS = [
+      { g: 'r', name: 'rat',     col: '#caa472', minD: 1 },
+      { g: 's', name: 'snake',   col: '#6fcf97', minD: 2 },
+      { g: 'k', name: 'kobold',  col: '#eb8f5e', minD: 3 },
+      { g: 'g', name: 'gnoll',   col: '#bb6bd9', minD: 5 },
+      { g: 'O', name: 'ogre',    col: '#eb5757', minD: 7 }
+    ];
+
+    const canvas = document.getElementById('board');
+    const ctx = canvas.getContext('2d');
+    const banner = document.getElementById('banner');
+    const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+    let map, seen, visible, rooms, player, enemies, items, seed, rand, depth, over, msg;
+
+    // ---- seeded helpers ----
+    function ri(a, b) { return a + Math.floor(rand() * (b - a + 1)); }
+    function choice(a) { return a[Math.floor(rand() * a.length)]; }
+
+    function newGame(s) {
+      seed = (s === undefined || s === null) ? (Date.now() >>> 0) : AgentKit.hashSeed(s);
+      rand = AgentKit.rng(seed);
+      depth = 1; over = false; msg = 'Welcome to the dungeon.';
+      player = { x: 0, y: 0, hp: 24, maxHp: 24, atk: 4, gold: 0, potions: 1, kills: 0 };
+      genLevel();
+      hideBanner();
+      resize();
+    }
+
+    function genLevel() {
+      map = Array.from({ length: H }, () => new Array(W).fill(WALL));
+      seen = Array.from({ length: H }, () => new Array(W).fill(false));
+      visible = Array.from({ length: H }, () => new Array(W).fill(false));
+      rooms = [];
+      const tries = 60, maxRooms = 8;
+      for (let t = 0; t < tries && rooms.length < maxRooms; t++) {
+        const rw = ri(4, 7), rh = ri(3, 5);
+        const rx = ri(1, W - rw - 1), ry = ri(1, H - rh - 1);
+        const room = { x: rx, y: ry, w: rw, h: rh };
+        if (rooms.some(o => overlap(room, o))) continue;
+        carveRoom(room);
+        if (rooms.length > 0) carveCorridor(center(rooms[rooms.length - 1]), center(room));
+        rooms.push(room);
+      }
+      const c0 = center(rooms[0]);
+      player.x = c0.x; player.y = c0.y;
+      const last = center(rooms[rooms.length - 1]);
+      map[last.y][last.x] = STAIRS;
+
+      enemies = [];
+      const kinds = ENEMY_KINDS.filter(k => k.minD <= depth);
+      const nEnemies = 3 + Math.floor(depth * 1.3);
+      for (let i = 0; i < nEnemies; i++) {
+        const spot = randFloor(true);
+        if (!spot) break;
+        const kind = choice(kinds);
+        enemies.push({
+          x: spot.x, y: spot.y, kind: kind,
+          hp: 3 + Math.round(depth * 1.4) + ENEMY_KINDS.indexOf(kind),
+          atk: 1 + Math.floor(depth / 2) + Math.floor(ENEMY_KINDS.indexOf(kind) / 2)
+        });
+      }
+      items = [];
+      for (let i = 0; i < ri(1, 2); i++) { const p = randFloor(true); if (p) items.push({ x: p.x, y: p.y, type: 'potion' }); }
+      for (let i = 0; i < ri(2, 4); i++) { const p = randFloor(true); if (p) items.push({ x: p.x, y: p.y, type: 'gold', amount: ri(2, 9) }); }
+
+      computeFOV();
+    }
+
+    function overlap(a, b) {
+      return a.x <= b.x + b.w + 1 && a.x + a.w + 1 >= b.x && a.y <= b.y + b.h + 1 && a.y + a.h + 1 >= b.y;
+    }
+    function center(r) { return { x: Math.floor(r.x + r.w / 2), y: Math.floor(r.y + r.h / 2) }; }
+    function carveRoom(r) { for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.w; x++) map[y][x] = FLOOR; }
+    function carveCorridor(a, b) {
+      let x = a.x, y = a.y;
+      while (x !== b.x) { map[y][x] = map[y][x] === WALL ? FLOOR : map[y][x]; x += x < b.x ? 1 : -1; }
+      while (y !== b.y) { map[y][x] = map[y][x] === WALL ? FLOOR : map[y][x]; y += y < b.y ? 1 : -1; }
+    }
+    function isFloor(x, y) { return x >= 0 && x < W && y >= 0 && y < H && map[y][x] !== WALL; }
+    function occupied(x, y) {
+      if (player.x === x && player.y === y) return true;
+      return enemies.some(e => e.x === x && e.y === y);
+    }
+    function randFloor(free) {
+      for (let t = 0; t < 200; t++) {
+        const x = ri(1, W - 2), y = ri(1, H - 2);
+        if (!isFloor(x, y)) continue;
+        if (map[y][x] === STAIRS) continue;
+        if (free && occupied(x, y)) continue;
+        if (free && Math.abs(x - player.x) + Math.abs(y - player.y) < 4) continue;
+        return { x, y };
+      }
+      return null;
+    }
+
+    // ---- field of view (Bresenham LOS within radius) ----
+    function computeFOV() {
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) visible[y][x] = false;
+      visible[player.y][player.x] = true; seen[player.y][player.x] = true;
+      for (let y = player.y - FOV; y <= player.y + FOV; y++) {
+        for (let x = player.x - FOV; x <= player.x + FOV; x++) {
+          if (x < 0 || x >= W || y < 0 || y >= H) continue;
+          const dx = x - player.x, dy = y - player.y;
+          if (dx * dx + dy * dy > FOV * FOV) continue;
+          if (los(player.x, player.y, x, y)) { visible[y][x] = true; seen[y][x] = true; }
+        }
+      }
+    }
+    function los(x0, y0, x1, y1) {
+      let dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
+      let sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+      let err = dx - dy, x = x0, y = y0;
+      while (true) {
+        if (x === x1 && y === y1) return true;
+        if (!(x === x0 && y === y0) && map[y][x] === WALL) return false;
+        const e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x += sx; }
+        if (e2 < dx) { err += dx; y += sy; }
+      }
+    }
+
+    // ---- turn logic ----
+    function playerStep(dir) {
+      if (over || !DIRS[dir]) return false;
+      const [dx, dy] = DIRS[dir];
+      const nx = player.x + dx, ny = player.y + dy;
+      const foe = enemies.find(e => e.x === nx && e.y === ny);
+      if (foe) { attack(player, foe, true); endTurn(); return true; }
+      if (!isFloor(nx, ny)) return false;
+      player.x = nx; player.y = ny;
+      pickup();
+      if (map[ny][nx] === STAIRS) { descend(); return true; }
+      endTurn();
+      return true;
+    }
+
+    function wait() { if (over) return false; endTurn(); return true; }
+
+    function attack(attacker, target, byPlayer) {
+      const dmg = byPlayer ? ri(player.atk - 1, player.atk + 1) : ri(Math.max(1, attacker.atk - 1), attacker.atk + 1);
+      target.hp -= dmg;
+      if (byPlayer) {
+        msg = 'You hit the ' + target.kind.name + ' (' + dmg + ').';
+        if (target.hp <= 0) {
+          enemies = enemies.filter(e => e !== target);
+          player.kills++;
+          msg = 'You slay the ' + target.kind.name + '!';
+          if (rand() < 0.35) items.push({ x: target.x, y: target.y, type: 'gold', amount: ri(1, 6) });
+        }
+      } else {
+        msg = 'The ' + attacker.kind.name + ' hits you (' + dmg + ').';
+        if (player.hp <= 0) die();
+      }
+    }
+
+    function pickup() {
+      const idx = items.findIndex(it => it.x === player.x && it.y === player.y);
+      if (idx < 0) return;
+      const it = items[idx];
+      if (it.type === 'potion') { player.potions++; msg = 'Picked up a potion.'; }
+      else { player.gold += it.amount; msg = 'Found ' + it.amount + ' gold.'; }
+      items.splice(idx, 1);
+    }
+
+    function quaff() {
+      if (over || player.potions <= 0) return false;
+      player.potions--;
+      const heal = ri(8, 14);
+      player.hp = Math.min(player.maxHp, player.hp + heal);
+      msg = 'You quaff a potion (+' + heal + ' HP).';
+      endTurn();
+      return true;
+    }
+
+    function descend() {
+      depth++;
+      player.maxHp += 2; player.hp = Math.min(player.maxHp, player.hp + 4); player.atk += 0.0;
+      if (depth % 3 === 0) player.atk += 1;
+      msg = 'You descend to depth ' + depth + '.';
+      genLevel();
+      render();
+    }
+
+    function enemyTurns() {
+      for (const e of enemies) {
+        if (!visible[e.y][e.x]) continue; // dormant when unseen
+        const adj = Math.abs(e.x - player.x) + Math.abs(e.y - player.y) === 1;
+        if (adj) { attack(e, player, false); if (over) return; continue; }
+        // greedy step toward player
+        const sx = Math.sign(player.x - e.x), sy = Math.sign(player.y - e.y);
+        const cands = [];
+        if (Math.abs(player.x - e.x) >= Math.abs(player.y - e.y)) { if (sx) cands.push([sx, 0]); if (sy) cands.push([0, sy]); }
+        else { if (sy) cands.push([0, sy]); if (sx) cands.push([sx, 0]); }
+        for (const [mx, my] of cands) {
+          const tx = e.x + mx, ty = e.y + my;
+          if (isFloor(tx, ty) && !occupied(tx, ty)) { e.x = tx; e.y = ty; break; }
+        }
+      }
+    }
+
+    function endTurn() {
+      enemyTurns();
+      computeFOV();
+      render();
+    }
+
+    function die() {
+      over = true;
+      msg = 'You died on depth ' + depth + '.';
+      showBanner('You died ☠', 'Depth ' + depth + ' · ' + player.kills + ' kills · ' + player.gold + ' gold.');
+    }
+
+    // ---- rendering ----
+    let cell = 24, ox = 10, oy = 10;
+    function resize() {
+      const maxW = Math.min(window.innerWidth - 36, 760);
+      const maxH = window.innerHeight - 170;
+      cell = Math.max(14, Math.floor(Math.min(maxW / W, maxH / H)));
+      AgentKit.fitCanvas(canvas, cell * W + 20, cell * H + 20);
+      render();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          if (!seen[y][x]) continue;
+          const vis = visible[y][x];
+          const px = ox + x * cell, py = oy + y * cell;
+          const t = map[y][x];
+          ctx.fillStyle = t === WALL ? (vis ? '#39433d' : '#222824') : (vis ? '#28302b' : '#1c211e');
+          ctx.fillRect(px, py, cell - 1, cell - 1);
+          if (t === STAIRS) glyph('>', px, py, vis ? '#f5c98a' : '#7c6a4a');
+        }
+      }
+      // items
+      for (const it of items) {
+        if (!seen[it.y][it.x]) continue;
+        const vis = visible[it.y][it.x];
+        glyph(it.type === 'potion' ? '!' : '$', ox + it.x * cell, oy + it.y * cell,
+              it.type === 'potion' ? (vis ? '#6fa8ff' : '#3c5680') : (vis ? '#f2c94c' : '#7c6a2a'));
+      }
+      // enemies (only when visible)
+      for (const e of enemies) {
+        if (!visible[e.y][e.x]) continue;
+        glyph(e.kind.g, ox + e.x * cell, oy + e.y * cell, e.kind.col);
+      }
+      // player
+      glyph('@', ox + player.x * cell, oy + player.y * cell, '#ffe6b0');
+
+      document.getElementById('depth').textContent = depth;
+      document.getElementById('hp').textContent = Math.max(0, Math.ceil(player.hp)) + '/' + player.maxHp;
+      document.getElementById('potions').textContent = player.potions;
+      document.getElementById('gold').textContent = player.gold;
+    }
+    function glyph(s, px, py, color) {
+      ctx.fillStyle = color;
+      ctx.font = '700 ' + Math.floor(cell * 0.8) + 'px ui-monospace, Menlo, Consolas, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(s, px + (cell - 1) / 2, py + (cell - 1) / 2 + 1);
+    }
+
+    function showBanner(title, sub) {
+      document.getElementById('banner-title').textContent = title;
+      document.getElementById('banner-sub').textContent = sub;
+      banner.classList.add('show');
+    }
+    function hideBanner() { banner.classList.remove('show'); }
+
+    // ---- input ----
+    const KEYMAP = {
+      ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+      w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right'
+    };
+    window.addEventListener('keydown', e => {
+      if (e.key === ' ') { e.preventDefault(); wait(); return; }
+      if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); quaff(); return; }
+      const dir = KEYMAP[e.key];
+      if (dir) { e.preventDefault(); playerStep(dir); }
+    });
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left - ox) / cell);
+      const y = Math.floor((e.clientY - rect.top - oy) / cell);
+      if (x === player.x && y === player.y) { wait(); return; }
+      const dx = Math.sign(x - player.x), dy = Math.sign(y - player.y);
+      if (Math.abs(x - player.x) >= Math.abs(y - player.y)) playerStep(dx > 0 ? 'right' : 'left');
+      else playerStep(dy > 0 ? 'down' : 'up');
+    });
+    document.getElementById('wait').addEventListener('click', wait);
+    document.getElementById('quaff').addEventListener('click', quaff);
+    document.getElementById('new').addEventListener('click', () => newGame());
+    document.getElementById('banner-new').addEventListener('click', () => newGame());
+    window.addEventListener('resize', resize);
+
+    // ---- agent bridge ----
+    function visibleEnemies() {
+      return enemies.filter(e => visible[e.y][e.x]).map(e => ({ x: e.x, y: e.y, kind: e.kind.name, hp: e.hp, atk: e.atk }));
+    }
+    function visibleItems() {
+      return items.filter(it => visible[it.y][it.x]).map(it => ({ x: it.x, y: it.y, type: it.type, amount: it.amount || null }));
+    }
+    AgentKit.register({
+      game: 'pixel_dungeon',
+      canvas: canvas,
+      getState: () => ({
+        seed, depth, over,
+        player: { x: player.x, y: player.y, hp: Math.ceil(player.hp), maxHp: player.maxHp,
+                  atk: player.atk, gold: player.gold, potions: player.potions, kills: player.kills },
+        enemies: visibleEnemies(), items: visibleItems(),
+        onStairs: map[player.y][player.x] === STAIRS, message: msg,
+        width: W, height: H
+      }),
+      getActions: () => {
+        const acts = ['wait'];
+        for (const d of ['up', 'down', 'left', 'right']) {
+          const [dx, dy] = DIRS[d];
+          const nx = player.x + dx, ny = player.y + dy;
+          if (enemies.some(e => e.x === nx && e.y === ny) || isFloor(nx, ny)) acts.push(d);
+        }
+        if (player.potions > 0) acts.push('quaff');
+        return acts;
+      },
+      dispatch: (a) => {
+        const act = typeof a === 'string' ? a : (a && (a.dir || a.action));
+        if (act === 'wait') return wait();
+        if (act === 'quaff') return quaff();
+        if (DIRS[act]) return playerStep(act);
+        return false;
+      },
+      reset: (s) => newGame(s),
+      isTerminal: () => over,
+      getScore: () => depth * 100 + player.kills * 10 + player.gold
+    });
+
+    newGame();
+  })();
+  </script>
+</body>
+</html>
