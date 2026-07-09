@@ -163,6 +163,12 @@
       "title": "Publications"
     },
     "items": {
+      "exaone45": {
+        "links": "[<a href=\"https://arxiv.org/abs/2604.08644\">paper</a>]"
+      },
+      "kexaone": {
+        "links": "[<a href=\"https://arxiv.org/abs/2601.01739\">paper</a>]"
+      },
       "ifmdm": {
         "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">paper</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">supplementary videos</a>]"
       },
