@@ -91,7 +91,10 @@
     "misc": {
       "games": "I enjoy <b>buying</b> many kinds of Steam games.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" />",
       "books": "I enjoy reading books across many genres.",
-      "piano": "I enjoy playing the piano across many genres of music."
+      "piano": "I enjoy playing the piano across many genres of music.",
+      "sheepGalleryTitle": "Sheep Three Bell Logo Gallery",
+      "sheepGalleryIntro": "A small flock of logo ideas made by me and drawn by friends and colleagues.",
+      "sheepGalleryHint": "Click an image to view the original."
     }
   },
   "projects": {
