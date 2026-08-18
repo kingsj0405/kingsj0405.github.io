@@ -448,6 +448,30 @@ h3 {
 
 .sheep-gallery {
     margin: 34px 0 56px;
+    scroll-margin-top: 24px;
+}
+
+.section-permalink {
+    color: inherit;
+    text-decoration: none;
+}
+
+.anchor-mark {
+    opacity: 0;
+    color: #9f8d76;
+    transition: opacity 160ms ease;
+}
+
+.section-permalink:hover,
+.section-permalink:focus-visible {
+    color: inherit;
+    outline: none;
+}
+
+.section-permalink:hover .anchor-mark,
+.section-permalink:focus-visible .anchor-mark,
+.sheep-gallery:target .anchor-mark {
+    opacity: 0.65;
 }
 
 .sheep-gallery-heading {

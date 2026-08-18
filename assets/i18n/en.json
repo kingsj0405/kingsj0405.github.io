@@ -6,6 +6,7 @@
       "publications": "Publications",
       "projects": "Projects",
       "games": "Games",
+      "sheepGallery": "Sheep Three Bell",
       "blog": "Blog"
     },
     "footer": {
@@ -89,7 +90,7 @@
       }
     },
     "misc": {
-      "games": "I enjoy <b>buying</b> many kinds of Steam games.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" />",
+      "games": "I enjoy <b>buying</b> many kinds of Steam games.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" width=\"1280\" height=\"720\" alt=\"Gabe Newell as the patron saint of Steam sales\" />",
       "books": "I enjoy reading books across many genres.",
       "piano": "I enjoy playing the piano across many genres of music.",
       "sheepGalleryTitle": "Sheep Three Bell Logo Gallery",
