@@ -85,6 +85,25 @@
         updateFooter(dictionary);
         updateLanguageSwitcher(dictionary.lang || "en");
         updateLocalizedLinks(dictionary.lang || "en");
+        restoreHashPosition();
+    }
+
+    function restoreHashPosition() {
+        if (!window.location.hash) {
+            return;
+        }
+
+        var targetId = decodeURIComponent(window.location.hash.slice(1));
+        var target = document.getElementById(targetId);
+        if (!target) {
+            return;
+        }
+
+        window.requestAnimationFrame(function () {
+            window.requestAnimationFrame(function () {
+                target.scrollIntoView({ block: "start" });
+            });
+        });
     }
 
     function updateLanguageSwitcher(activeLanguage) {
