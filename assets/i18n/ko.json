@@ -6,6 +6,7 @@
       "publications": "논문",
       "projects": "프로젝트",
       "games": "게임",
+      "sheepGallery": "Sheep Three Bell",
       "blog": "블로그"
     },
     "footer": {
@@ -89,7 +90,7 @@
       }
     },
     "misc": {
-      "games": "여러 종류의 Steam 게임을 <b>사는 것</b>을 좋아합니다.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" />",
+      "games": "여러 종류의 Steam 게임을 <b>사는 것</b>을 좋아합니다.<br><img src=\"assets/gabe_logal_newell.jpg\" class=\"pub-image\" width=\"1280\" height=\"720\" alt=\"Steam 할인의 수호성인으로 표현한 Gabe Newell\" />",
       "books": "여러 장르의 책을 읽는 것을 좋아합니다.",
       "piano": "여러 장르의 음악을 피아노로 연주하는 것을 좋아합니다.",
       "sheepGalleryTitle": "Sheep Three Bell 로고 갤러리",
