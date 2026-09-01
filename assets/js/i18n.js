@@ -247,5 +247,6 @@
         window.localStorage.setItem(STORAGE_KEY, language);
         updateLanguageUrl(language);
         boot(language);
+        window.addEventListener("load", restoreHashPosition, { once: true });
     });
 }());
