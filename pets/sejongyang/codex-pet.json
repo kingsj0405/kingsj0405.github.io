@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "codex-pet-distribution",
+  "id": "sejongyang",
+  "displayName": "세종양",
+  "description": "세종대왕의 익선관과 붉은 곤룡포를 입은 명랑하고 지혜로운 흰 양 스티커 마스코트.",
+  "spriteVersionNumber": 2,
+  "homepage": "https://yangspace.co.kr/pets/sejongyang/",
+  "readme": "https://yangspace.co.kr/pets/sejongyang/README.md",
+  "install": {
+    "destinationRelativeToCodexHome": "pets/sejongyang",
+    "requiresExecutableCode": false,
+    "steps": [
+      "Download only pet.json and spritesheet.webp from the URLs in files.",
+      "Verify each file against its SHA-256 digest before installation.",
+      "Place both files together in <Codex home>/pets/sejongyang.",
+      "Refresh the Codex pet picker, select 세종양, and wake the pet."
+    ]
+  },
+  "files": [
+    {
+      "name": "pet.json",
+      "url": "https://yangspace.co.kr/pets/sejongyang/pet.json",
+      "bytes": 258,
+      "sha256": "30df6f4fde68f305766920d4d67107d88710311a84525324da7d57a6858b11f7"
+    },
+    {
+      "name": "spritesheet.webp",
+      "url": "https://yangspace.co.kr/pets/sejongyang/spritesheet.webp",
+      "bytes": 2103028,
+      "sha256": "6707f8527a389fbca3828ab42512abef16161e05dcde28a165df554c10ee9769",
+      "mediaType": "image/webp",
+      "width": 1536,
+      "height": 2288
+    }
+  ],
+  "bundle": {
+    "url": "https://yangspace.co.kr/pets/sejongyang/sejongyang-v2-pet.zip",
+    "bytes": 2103863,
+    "sha256": "886f3ec751fe65d16576e9c15fb4b7a849f9cd16b751ce0a61619efd7e9927b6"
+  }
+}
