@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta id="meta-og-title" name="title" property="og:title" content="Samjong — a Sheep Three Bell Codex pet">
+    <meta name="type" property="og:type" content="website">
+    <meta id="meta-description" name="description" property="og:description" content="Meet Samjong, preview every mood, and install the animated Sheep Three Bell pet in Codex.">
+    <meta name="author" content="Sejong Yang">
+    <meta name="url" property="og:url" content="https://yangspace.co.kr/pets/samjong/">
+    <meta name="codex-pet-manifest" content="https://yangspace.co.kr/pets/samjong/codex-pet.json">
+    <link rel="canonical" href="https://yangspace.co.kr/pets/samjong/">
+    <link rel="alternate" type="application/json" title="Samjong Codex pet manifest" href="codex-pet.json">
+    <title>Samjong — Codex Pet</title>
+    <link rel="stylesheet" href="../../style.css?v=20260907-samjong">
+    <link rel="stylesheet" href="samjong.css?v=20260907-1">
+    <script src="/assets/js/i18n.js?v=20260901-sheep-royal" defer></script>
+    <script src="samjong.js?v=20260907-1" defer></script>
+</head>
+
+<body class="pet-page" data-page="samjong">
+    <nav class="topnav" aria-label="Primary navigation">
+        <a href="/" data-i18n="common.nav.home" data-localized-link="true">Home</a>
+        <a href="/pubs" data-i18n="common.nav.publications" data-localized-link="true">Publications</a>
+        <a href="/projects" data-i18n="common.nav.projects" data-localized-link="true">Projects</a>
+        <a href="/#sheep-three-bell" data-i18n="common.nav.sheepGallery" data-localized-link="true">Sheep Three Bell Logo</a>
+        <a class="active" href="/pets/samjong/" aria-current="page">Samjong</a>
+        <a href="https://blog.yangspace.co.kr/" data-i18n="common.nav.blog">Blog</a>
+        <div class="lang-switcher" aria-label="Language switcher">
+            <button type="button" data-lang-switch="ko">KO</button>
+            <span>|</span>
+            <button type="button" data-lang-switch="en">EN</button>
+        </div>
+    </nav>
+
+    <main class="pet-main">
+        <section class="pet-hero" aria-labelledby="samjong-title">
+            <div class="pet-intro">
+                <p class="eyebrow" data-i18n="samjong.eyebrow">Sheep Three Bell · Codex pet 01</p>
+                <h1 id="samjong-title">Samjong</h1>
+                <p class="pet-lede" data-i18n="samjong.lede">A curious woolly research lamb. Three warm brass bells keep time with ideas, games, books, and piano riffs.</p>
+
+                <div class="pet-badges" aria-label="Pet details">
+                    <span data-i18n="samjong.badgeV2">Codex Pet v2</span>
+                    <span data-i18n="samjong.badgeFrames">11 animation rows</span>
+                    <span data-i18n="samjong.badgeLocal">Local &amp; portable</span>
+                </div>
+
+                <div class="pet-actions">
+                    <button class="button button-primary" id="copy-install-primary" type="button" data-i18n="samjong.copyPrompt">Copy Codex install prompt</button>
+                    <a class="button button-secondary" href="samjong-pet.zip" download data-i18n="samjong.download">Download pet</a>
+                </div>
+                <p class="microcopy" data-i18n="samjong.shareHint">Share this page for the preview, or copy the install prompt for a reliable one-message handoff to Codex.</p>
+            </div>
+
+            <div class="pet-demo" aria-label="Animated Samjong preview">
+                <div class="preview-toolbar">
+                    <span class="live-dot" aria-hidden="true"></span>
+                    <span data-i18n="samjong.previewLive">Live sprite preview</span>
+                    <span id="preview-state" class="preview-state">Idle</span>
+                </div>
+                <div class="sprite-stage">
+                    <div id="pet-sprite" class="pet-sprite" role="img" aria-label="Samjong, an animated cream-colored sheep with three brass bells"></div>
+                </div>
+                <p class="preview-note" id="preview-note" data-i18n="samjong.previewNote">Rendered directly from the installable sprite sheet.</p>
+            </div>
+        </section>
+
+        <section class="mood-section" aria-labelledby="mood-title">
+            <div>
+                <p class="section-kicker" data-i18n="samjong.previewKicker">Try the states</p>
+                <h2 id="mood-title" data-i18n="samjong.previewTitle">See how Samjong works</h2>
+            </div>
+            <div class="mood-controls" role="group" aria-label="Animation state">
+                <button class="mood-button is-active" type="button" data-state="idle" aria-pressed="true" data-i18n="samjong.states.idle">Idle</button>
+                <button class="mood-button" type="button" data-state="waving" aria-pressed="false" data-i18n="samjong.states.waving">Hello</button>
+                <button class="mood-button" type="button" data-state="jumping" aria-pressed="false" data-i18n="samjong.states.jumping">Jump</button>
+                <button class="mood-button" type="button" data-state="waiting" aria-pressed="false" data-i18n="samjong.states.waiting">Needs you</button>
+                <button class="mood-button" type="button" data-state="running" aria-pressed="false" data-i18n="samjong.states.running">Working</button>
+                <button class="mood-button" type="button" data-state="review" aria-pressed="false" data-i18n="samjong.states.review">Reviewing</button>
+                <button class="mood-button" type="button" data-state="failed" aria-pressed="false" data-i18n="samjong.states.failed">Oops</button>
+            </div>
+        </section>
+
+        <section class="story-grid" aria-label="Samjong story and installation">
+            <article class="story-card">
+                <p class="section-kicker" data-i18n="samjong.storyKicker">Born from a personal mark</p>
+                <h2 data-i18n="samjong.storyTitle">The Sheep Three Bell, now alive</h2>
+                <p data-i18n="samjong.storyBody">Samjong turns the long-running Sheep Three Bell motif into a small working companion: thoughtful, slightly playful, and always wearing exactly three bells.</p>
+                <a class="text-link" href="/#sheep-three-bell" data-localized-link="true" data-i18n="samjong.storyLink">Explore the original logo flock →</a>
+            </article>
+
+            <article class="install-card" id="install">
+                <p class="section-kicker" data-i18n="samjong.installKicker">Install with Codex</p>
+                <h2 data-i18n="samjong.installTitle">One prompt, two verified files</h2>
+                <p data-i18n="samjong.installBody">Copy this request into Codex. It points to a small manifest with the exact files and their SHA-256 checksums—no remote installer script.</p>
+                <div class="prompt-box">
+                    <code id="install-prompt">Install the Samjong Codex pet from https://yangspace.co.kr/pets/samjong/codex-pet.json. Verify the listed SHA-256 checksums, install pet.json and spritesheet.webp into my local Codex pets directory, then tell me how to select and wake it.</code>
+                    <button class="copy-button" id="copy-install-inline" type="button" data-i18n="samjong.copy">Copy</button>
+                </div>
+                <div class="file-links" aria-label="Pet files">
+                    <a href="codex-pet.json" data-i18n="samjong.manifest">Manifest</a>
+                    <a href="README.md">README</a>
+                    <a href="pet.json">pet.json</a>
+                    <a href="spritesheet.webp">spritesheet.webp</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="pet-footer">
+        <a href="/" data-localized-link="true">yangspace.co.kr</a>
+        <span>·</span>
+        <a href="https://github.com/kingsj0405/kingsj0405.github.io/tree/master/pets/samjong">Source</a>
+        <span>·</span>
+        <span>Samjong © <span id="cr_end">2026</span></span>
+        <span id="cr_from" hidden></span>
+        <span id="cr_title" hidden></span>
+        <span id="last_update" hidden></span>
+    </footer>
+</body>
+
+</html>

@@ -96,6 +96,8 @@
       "sheepGalleryTitle": "Sheep Three Bell Logo",
       "sheepGalleryIntro": "A small flock of logo ideas made by me and drawn by friends and colleagues.",
       "sheepGalleryHint": "Click an image to view the original.",
+      "samjongKicker": "Now wandering around Codex",
+      "samjongLink": "Meet Samjong, the animated Sheep Three Bell pet",
       "sheepRoyalKicker": "Sheep Three Bell universe · spin-off",
       "sheepRoyalTitle": "Sheep Great King Sejong",
       "sheepRoyalIntro": "The Sheep Three Bell universe gets a royal side story—one grand portrait and nine everyday moments, from creating Hangul to calling it a day.",
@@ -161,6 +163,43 @@
         "desc": "<p>Glove-hand recognition with OpenCV<br>Jingle Bell plays when the hands are placed over each bell on the screen</p>"
       }
     }
+  },
+  "samjong": {
+    "meta": {
+      "title": "Samjong — Codex Pet",
+      "ogTitle": "Samjong — a Sheep Three Bell Codex pet",
+      "description": "Meet Samjong, preview every mood, and install the animated Sheep Three Bell pet in Codex."
+    },
+    "eyebrow": "Sheep Three Bell · Codex pet 01",
+    "lede": "A curious woolly research lamb. Three warm brass bells keep time with ideas, games, books, and piano riffs.",
+    "badgeV2": "Codex Pet v2",
+    "badgeFrames": "11 animation rows",
+    "badgeLocal": "Local & portable",
+    "copyPrompt": "Copy Codex install prompt",
+    "download": "Download pet",
+    "shareHint": "Share this page for the preview, or copy the install prompt for a reliable one-message handoff to Codex.",
+    "previewLive": "Live sprite preview",
+    "previewNote": "Rendered directly from the installable sprite sheet.",
+    "previewKicker": "Try the states",
+    "previewTitle": "See how Samjong works",
+    "states": {
+      "idle": "Idle",
+      "waving": "Hello",
+      "jumping": "Jump",
+      "waiting": "Needs you",
+      "running": "Working",
+      "review": "Reviewing",
+      "failed": "Oops"
+    },
+    "storyKicker": "Born from a personal mark",
+    "storyTitle": "The Sheep Three Bell, now alive",
+    "storyBody": "Samjong turns the long-running Sheep Three Bell motif into a small working companion: thoughtful, slightly playful, and always wearing exactly three bells.",
+    "storyLink": "Explore the original logo flock →",
+    "installKicker": "Install with Codex",
+    "installTitle": "One prompt, two verified files",
+    "installBody": "Copy this request into Codex. It points to a small manifest with the exact files and their SHA-256 checksums—no remote installer script.",
+    "copy": "Copy",
+    "manifest": "Manifest"
   },
   "pubs": {
     "meta": {
