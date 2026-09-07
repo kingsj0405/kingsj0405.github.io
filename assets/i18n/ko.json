@@ -96,6 +96,8 @@
       "sheepGalleryTitle": "양세종 로고",
       "sheepGalleryIntro": "제가 만들거나 지인과 동료가 그려준 로고 아이디어를 한데 모았습니다.",
       "sheepGalleryHint": "이미지를 누르면 원본으로 볼 수 있습니다.",
+      "samjongKicker": "이제 Codex를 돌아다니는 중",
+      "samjongLink": "움직이는 양세종 펫, Samjong 만나기",
       "sheepRoyalKicker": "양세종 세계관 · 외전",
       "sheepRoyalTitle": "양 세종대왕",
       "sheepRoyalIntro": "양세종 로고 세계관에 왕실 외전이 열렸습니다. 훈민정음을 펼친 초상과 아홉 가지 일상을 함께 모았습니다.",
@@ -161,6 +163,43 @@
         "desc": "<p>OpenCV 기반 장갑 손 인식<br>화면의 각 종 위치에 손이 올라가면 징글벨이 연주되는 AR 프로젝트</p>"
       }
     }
+  },
+  "samjong": {
+    "meta": {
+      "title": "Samjong — Codex 펫",
+      "ogTitle": "Samjong — 양세종 세계관의 Codex 펫",
+      "description": "Samjong의 동작을 미리 보고 양세종 세계관의 애니메이션 펫을 Codex에 설치하세요."
+    },
+    "eyebrow": "양세종 세계관 · Codex 펫 01",
+    "lede": "호기심 많은 복슬복슬 연구 양입니다. 아이디어와 게임, 책, 피아노 선율에 맞춰 세 개의 황동 종이 울립니다.",
+    "badgeV2": "Codex Pet v2",
+    "badgeFrames": "애니메이션 11행",
+    "badgeLocal": "로컬 설치 · 휴대 가능",
+    "copyPrompt": "Codex 설치 프롬프트 복사",
+    "download": "펫 다운로드",
+    "shareHint": "미리보기는 이 페이지를 공유하고, 설치는 프롬프트를 복사해 Codex에 한 번에 전달하세요.",
+    "previewLive": "실시간 스프라이트 미리보기",
+    "previewNote": "실제 설치용 스프라이트 시트를 그대로 재생합니다.",
+    "previewKicker": "상태 눌러보기",
+    "previewTitle": "Samjong은 이렇게 움직여요",
+    "states": {
+      "idle": "쉬는 중",
+      "waving": "안녕",
+      "jumping": "점프",
+      "waiting": "도움 필요",
+      "running": "작업 중",
+      "review": "검토 중",
+      "failed": "앗"
+    },
+    "storyKicker": "오래된 개인 로고에서 태어난",
+    "storyTitle": "살아 움직이는 양세종 로고",
+    "storyBody": "Samjong은 오래 이어온 양세종 로고를 작은 작업 동반자로 옮겼습니다. 사려 깊고 살짝 장난스러우며, 언제나 정확히 세 개의 종을 달고 있습니다.",
+    "storyLink": "원래 양세종 로고 무리 둘러보기 →",
+    "installKicker": "Codex로 설치",
+    "installTitle": "프롬프트 하나, 검증된 파일 두 개",
+    "installBody": "이 요청을 Codex에 복사하세요. 정확한 파일과 SHA-256 체크섬이 담긴 작은 매니페스트를 사용하며 원격 설치 스크립트는 실행하지 않습니다.",
+    "copy": "복사",
+    "manifest": "매니페스트"
   },
   "pubs": {
     "meta": {

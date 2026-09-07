@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "codex-pet-distribution",
+  "id": "samjong",
+  "displayName": "Samjong",
+  "description": "A curious woolly research lamb whose three warm brass bells keep time with ideas, games, books, and piano riffs.",
+  "spriteVersionNumber": 2,
+  "homepage": "https://yangspace.co.kr/pets/samjong/",
+  "readme": "https://yangspace.co.kr/pets/samjong/README.md",
+  "install": {
+    "destinationRelativeToCodexHome": "pets/samjong",
+    "requiresExecutableCode": false,
+    "steps": [
+      "Download only pet.json and spritesheet.webp from the URLs in files.",
+      "Verify each file against its SHA-256 digest before installation.",
+      "Place both files together in <Codex home>/pets/samjong.",
+      "Refresh the Codex pet picker, select Samjong, and wake the pet."
+    ]
+  },
+  "files": [
+    {
+      "name": "pet.json",
+      "url": "https://yangspace.co.kr/pets/samjong/pet.json",
+      "bytes": 252,
+      "sha256": "7faa802c8b612fac5c72ff07c1d7ac8a548595961220b8dff3c3cb80a20ea7d8"
+    },
+    {
+      "name": "spritesheet.webp",
+      "url": "https://yangspace.co.kr/pets/samjong/spritesheet.webp",
+      "bytes": 2562332,
+      "sha256": "2fd74155a9fbba9ebd367b767db56518ac878bf47c0315922a39e344effc170e",
+      "mediaType": "image/webp",
+      "width": 1536,
+      "height": 2288
+    }
+  ],
+  "bundle": {
+    "url": "https://yangspace.co.kr/pets/samjong/samjong-pet.zip",
+    "bytes": 2564601,
+    "sha256": "d3cd39bba35425ab221ba57da8a27324b805a846fd8962c5469ed58bf7520e51"
+  }
+}
