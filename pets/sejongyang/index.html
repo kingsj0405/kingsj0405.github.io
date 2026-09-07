@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>세종양 · Codex Pet</title>
+    <meta name="description" content="세종대왕의 익선관과 붉은 곤룡포를 입은 움직이는 Codex 펫, 세종양을 만나보세요.">
+    <meta name="author" content="Sejong Yang">
+    <meta name="theme-color" content="#531d1d">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="YangSpace">
+    <meta property="og:title" content="세종양 · Codex Pet">
+    <meta property="og:description" content="익선관과 붉은 곤룡포를 입은 명랑하고 지혜로운 움직이는 흰 양.">
+    <meta property="og:url" content="https://yangspace.co.kr/pets/sejongyang/">
+    <meta property="og:image" content="https://yangspace.co.kr/pets/sejongyang/og.png">
+    <meta property="og:image:secure_url" content="https://yangspace.co.kr/pets/sejongyang/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="붉은 곤룡포와 익선관을 착용한 흰 양 캐릭터 세종양">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="세종양 · Codex Pet">
+    <meta name="twitter:description" content="익선관과 붉은 곤룡포를 입은 움직이는 Codex 펫.">
+    <meta name="twitter:image" content="https://yangspace.co.kr/pets/sejongyang/og.png">
+
+    <meta name="codex-pet-manifest" content="https://yangspace.co.kr/pets/sejongyang/codex-pet.json">
+    <link rel="canonical" href="https://yangspace.co.kr/pets/sejongyang/">
+    <link rel="alternate" type="application/json" title="세종양 Codex pet manifest" href="codex-pet.json">
+    <link rel="stylesheet" href="../../style.css?v=20260907-sejongyang">
+    <link rel="stylesheet" href="sejongyang.css?v=20260907-1">
+    <script src="sejongyang.js?v=20260907-1" defer></script>
+</head>
+
+<body class="sejongyang-page">
+    <nav class="topnav" aria-label="주요 탐색">
+        <a href="/">Home</a>
+        <a href="/pubs">Publications</a>
+        <a href="/projects">Projects</a>
+        <a href="/#sheep-three-bell">Sheep Three Bell Logo</a>
+        <a class="active" href="/pets/sejongyang/" aria-current="page">세종양</a>
+        <a href="https://blog.yangspace.co.kr/">Blog</a>
+    </nav>
+
+    <main class="pet-main">
+        <section class="hero" aria-labelledby="page-title">
+            <div class="hero-copy">
+                <p class="eyebrow">YANGSPACE · CODEX PET 02</p>
+                <h1 id="page-title">세종양</h1>
+                <p class="lede">익선관과 붉은 곤룡포를 입은, 명랑하고 지혜로운 흰 양. 일할 때도 쉴 때도 Codex 곁을 지킵니다.</p>
+
+                <ul class="badges" aria-label="펫 정보">
+                    <li>Codex Pet v2</li>
+                    <li>9 standard animations</li>
+                    <li>16 look directions</li>
+                </ul>
+
+                <div class="actions">
+                    <a class="button button-primary" href="sejongyang-v2-pet.zip" download>세종양 받기</a>
+                    <button class="button button-secondary" id="copy-link" type="button">공유 링크 복사</button>
+                </div>
+                <p class="microcopy">이 페이지 링크 하나를 카카오톡이나 Slack에 보내면 세종양 카드와 설치 파일을 함께 공유할 수 있습니다.</p>
+            </div>
+
+            <div class="pet-demo" aria-label="움직이는 세종양 미리보기">
+                <div class="preview-toolbar">
+                    <span class="live-dot" aria-hidden="true"></span>
+                    <span>LIVE SPRITE</span>
+                    <span id="preview-state" class="preview-state">idle</span>
+                </div>
+                <div class="sprite-stage">
+                    <div id="pet-sprite" class="pet-sprite" role="img" aria-label="익선관과 붉은 곤룡포를 입은 움직이는 흰 양 세종양"></div>
+                </div>
+                <p class="preview-note">실제 설치되는 spritesheet.webp에서 재생 중</p>
+            </div>
+        </section>
+
+        <section class="mood-section" aria-labelledby="mood-title">
+            <div>
+                <p class="section-kicker">여러 모습 둘러보기</p>
+                <h2 id="mood-title">세종양의 일상</h2>
+            </div>
+            <div class="mood-controls" role="group" aria-label="애니메이션 상태">
+                <button class="mood-button is-active" type="button" data-state="idle" aria-pressed="true">기본</button>
+                <button class="mood-button" type="button" data-state="waving" aria-pressed="false">인사</button>
+                <button class="mood-button" type="button" data-state="jumping" aria-pressed="false">도약</button>
+                <button class="mood-button" type="button" data-state="waiting" aria-pressed="false">기다림</button>
+                <button class="mood-button" type="button" data-state="running" aria-pressed="false">작업</button>
+                <button class="mood-button" type="button" data-state="review" aria-pressed="false">검토</button>
+                <button class="mood-button" type="button" data-state="failed" aria-pressed="false">실패</button>
+            </div>
+        </section>
+
+        <section class="details" aria-label="세종양 소개와 설치">
+            <article class="story-card">
+                <p class="section-kicker">스티커에서 살아난 캐릭터</p>
+                <h2>창제부터 퇴근까지</h2>
+                <p>사용자가 준 아홉 장면의 스티커 감성을 바탕으로, 작은 화면에서도 표정과 곤룡포 문양이 또렷한 Codex 펫으로 다시 만들었습니다.</p>
+                <a class="text-link" href="contact-sheet.png">전체 동작표 보기 →</a>
+            </article>
+
+            <article class="install-card" id="install">
+                <p class="section-kicker">Codex에 설치하기</p>
+                <h2>한 문장으로 안전하게</h2>
+                <p>아래 문장을 Codex에 보내면 manifest의 SHA-256을 확인한 뒤 두 파일만 설치합니다. 실행 스크립트는 없습니다.</p>
+                <div class="prompt-box">
+                    <code id="install-prompt">https://yangspace.co.kr/pets/sejongyang/codex-pet.json 에서 세종양 Codex 펫을 설치해줘. manifest에 적힌 SHA-256을 확인하고 pet.json과 spritesheet.webp를 로컬 Codex pets 디렉터리에 설치한 뒤, 선택하고 깨우는 방법을 알려줘.</code>
+                    <button class="copy-button" id="copy-prompt" type="button">문장 복사</button>
+                </div>
+                <div class="file-links" aria-label="배포 파일">
+                    <a href="codex-pet.json">manifest</a>
+                    <a href="README.md">README</a>
+                    <a href="pet.json">pet.json</a>
+                    <a href="spritesheet.webp">spritesheet.webp</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="pet-footer">
+        <a href="/">yangspace.co.kr</a>
+        <span>·</span>
+        <a href="https://github.com/kingsj0405/kingsj0405.github.io/tree/master/pets/sejongyang">Source</a>
+        <span>·</span>
+        <span>세종양 © 2026</span>
+    </footer>
+</body>
+</html>
