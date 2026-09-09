@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>조빱 비둘기 · Codex Pet</title>
+  <meta name="description" content="흰 볏, 멍한 눈, 뒤뚱거리는 발걸음. 조빱 비둘기를 Codex 곁에 데려오세요.">
+  <meta name="theme-color" content="#e9ebed">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="YangSpace">
+  <meta property="og:title" content="조빱 비둘기 · Codex Pet">
+  <meta property="og:description" content="흰 볏, 멍한 눈, 뒤뚱거리는 발걸음. 작은 비둘기 한 마리를 데려가세요.">
+  <meta property="og:url" content="https://yangspace.co.kr/pets/jobbap-pigeon/">
+  <meta property="og:image" content="https://yangspace.co.kr/pets/jobbap-pigeon/preview.png">
+  <meta property="og:image:alt" content="흰 볏과 푸른 회색 목을 가진 조빱 비둘기">
+  <meta name="twitter:card" content="summary">
+  <meta name="codex-pet-manifest" content="https://yangspace.co.kr/pets/jobbap-pigeon/codex-pet.json">
+  <link rel="canonical" href="https://yangspace.co.kr/pets/jobbap-pigeon/">
+  <link rel="alternate" type="application/json" title="조빱 비둘기 설치 manifest" href="codex-pet.json">
+  <link rel="stylesheet" href="pigeon.css">
+  <script src="pigeon.js" defer></script>
+</head>
+<body>
+  <header><a href="/">YANGSPACE</a><span>PET RELEASE / 03</span></header>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="intro">
+        <p class="eyebrow">오늘부터 같이 일해용</p>
+        <h1 id="title">조빱<br>비둘기<span class="period">.</span></h1>
+        <p class="lede">흰 볏, 멍한 눈, 뒤뚱거리는 발걸음.<br>뭘 하는지 몰라도 일단 곁에 있는 비둘기.</p>
+        <div class="actions"><a class="button primary" href="jobbap-pigeon-v2-pet.zip" download>비둘기 데려가기 <span aria-hidden="true">↗</span></a><button id="copy-link" class="button" type="button">링크 복사</button></div>
+        <p class="caption">Codex Pet v2 · 9가지 동작 · 16방향 시선</p>
+      </div>
+      <div class="preview">
+        <div class="preview-bar"><span>조빱 비둘기 관찰 중</span><output id="preview-state" aria-live="off">기본</output></div>
+        <div id="sprite-stage" class="sprite-stage">
+          <div id="pet-sprite" class="pet-sprite" role="img" aria-label="움직이는 조빱 비둘기"></div>
+        </div>
+        <p class="preview-note">동작을 골라보거나, 시선 모드에서 마우스를 움직여보세요.</p>
+      </div>
+    </section>
+    <section class="controls-section" aria-labelledby="controls-title">
+      <h2 id="controls-title">지금 뭐 해용?</h2>
+      <div class="controls" role="group" aria-label="비둘기 동작">
+        <button data-state="idle" aria-pressed="true" class="active">멍</button>
+        <button data-state="waving" aria-pressed="false">인사</button>
+        <button data-state="jumping" aria-pressed="false">폴짝</button>
+        <button data-state="running-right" aria-pressed="false">오른쪽</button>
+        <button data-state="running-left" aria-pressed="false">왼쪽</button>
+        <button data-state="waiting" aria-pressed="false">기다림</button>
+        <button data-state="running" aria-pressed="false">일하는 중</button>
+        <button data-state="review" aria-pressed="false">살펴보기</button>
+        <button data-state="failed" aria-pressed="false">시무룩</button>
+        <button data-state="look" aria-pressed="false">시선 따라가기</button>
+      </div>
+      <div id="gaze-controls" hidden><label for="gaze">시선 방향 <output id="gaze-label">위</output></label><input id="gaze" type="range" min="0" max="15" step="1" value="0" aria-label="16방향 시선"><p class="caption">슬라이더로도 16방향을 볼 수 있어요. 키보드는 방향키를 사용하세요.</p></div>
+      <button id="pause" class="text-button" type="button" aria-pressed="false">애니메이션 멈추기</button>
+    </section>
+    <section class="details">
+      <article>
+        <p class="eyebrow">작은 화면 속 비둘기</p>
+        <h2>그 표정 그대로.</h2>
+        <p>보내주신 그림의 긴 목과 둥근 배, 뾰족한 꼬리를 살렸습니다. 눈을 깜빡이고, 고개를 갸웃하고, 짧은 다리로 뒤뚱거립니다.</p>
+        <p class="source-note">짤툰의 비둘기 캐릭터 그림을 바탕으로 만든 비공식 팬 펫입니다. 원작 캐릭터의 권리는 원작자에게 있습니다.</p>
+        <div class="links"><a href="contact-sheet.png">전체 동작표 ↗</a><a href="https://www.youtube.com/watch?v=uzlGXdFO5zo">짤툰 공식 영상 ↗</a></div>
+      </article>
+      <article class="install">
+        <p class="eyebrow">CODEX에 데려오기</p>
+        <h2>한 문장으로 설치.</h2>
+        <p>아래 문장을 복사해서 Codex에 보내주세요.</p>
+        <div class="prompt-box"><code id="install-prompt">https://yangspace.co.kr/pets/jobbap-pigeon/codex-pet.json 에서 조빱 비둘기 Codex 펫을 설치해줘. 파일의 SHA-256을 확인하고 pet.json과 spritesheet.webp를 Codex pets 폴더에 함께 설치해줘.</code><button id="copy-prompt" class="button" type="button">설치 문장 복사</button></div>
+        <div class="links"><a href="README.md">설치 안내</a><a href="codex-pet.json">배포 정보</a><a href="pet.json">pet.json</a><a href="spritesheet.webp">spritesheet.webp</a></div>
+      </article>
+    </section>
+    <p id="copy-status" class="caption" role="status"></p>
+  </main>
+  <footer><a href="/">yangspace.co.kr</a><span>조빱 비둘기 · Unofficial fan pet</span><a href="https://github.com/kingsj0405/kingsj0405.github.io/tree/master/pets/jobbap-pigeon">Source ↗</a></footer>
+</body>
+</html>
