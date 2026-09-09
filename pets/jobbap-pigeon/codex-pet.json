@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "codex-pet-distribution",
+  "id": "jobbap-pigeon",
+  "displayName": "조빱 비둘기",
+  "description": "흰 볏과 멍한 눈으로 고개를 갸웃하는 조빱 비둘기.",
+  "spriteVersionNumber": 2,
+  "homepage": "https://yangspace.co.kr/pets/jobbap-pigeon/",
+  "readme": "https://yangspace.co.kr/pets/jobbap-pigeon/README.md",
+  "install": {
+    "destinationRelativeToCodexHome": "pets/jobbap-pigeon",
+    "requiresExecutableCode": false,
+    "steps": [
+      "Download only pet.json and spritesheet.webp from the URLs in files.",
+      "Verify each file against its SHA-256 digest before installation.",
+      "Place both files together in <Codex home>/pets/jobbap-pigeon.",
+      "Refresh the Codex pet picker and select 조빱 비둘기."
+    ]
+  },
+  "files": [
+    {
+      "name": "pet.json",
+      "url": "https://yangspace.co.kr/pets/jobbap-pigeon/pet.json",
+      "bytes": 223,
+      "sha256": "ffef57cdb30c5abcc5387ad097b0a7683cd708c4e989f4a60275099baca8afd6"
+    },
+    {
+      "name": "spritesheet.webp",
+      "url": "https://yangspace.co.kr/pets/jobbap-pigeon/spritesheet.webp",
+      "bytes": 1168186,
+      "sha256": "7c93f9be476f086d20c6cdaf95b4fb031b934a35ef58cab347ae0af874fefe17",
+      "mediaType": "image/webp",
+      "width": 1536,
+      "height": 2288
+    }
+  ],
+  "bundle": {
+    "url": "https://yangspace.co.kr/pets/jobbap-pigeon/jobbap-pigeon-v2-pet.zip",
+    "bytes": 1168704,
+    "sha256": "735cb710847621ac4c2706f1eb53afcdacc68d3e78a69547489e2a9b925e7fa9"
+  }
+}
