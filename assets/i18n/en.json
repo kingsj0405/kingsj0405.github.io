@@ -34,7 +34,7 @@
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>present",
-        "desc": "I am currently an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), working on multimodal foundation models and a long-horizon coding agent. My work spans image, video, and document understanding for EXAONE 5.0 and K-EXAONE 3, as well as agent data, post-training, and reproducible evaluation on Terminal-Bench 2.1. I previously contributed to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a>, a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model."
+        "desc": "I am currently an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), working on multimodal foundation models and a long-horizon coding agent. My work spans image, video, and document understanding for EXAONE 5.0 and K-EXAONE 3, as well as agent data, post-training, and reproducible evaluation on Terminal-Bench 2.1. I was a Core Contributor to <a href=\"https://arxiv.org/abs/2608.04505\">K-EXAONE 2.0</a> and <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a>."
       },
       "yonsei_phd": {
         "desc": "I received my Ph.D. in Computer Science from <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a> (Sep 2019 – Feb 2026), supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. Thesis: <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>. My research focused on face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."
@@ -76,6 +76,9 @@
       "misc": "Miscellanies"
     },
     "selected": {
+      "kexaone2": {
+        "links": "[<a href=\"https://arxiv.org/abs/2608.04505\">paper</a>]"
+      },
       "ifmdm": {
         "links": "[<a href=\"https://arxiv.org/abs/2412.04000\">paper</a>] [<a href=\"https://bit.ly/ifmdm_supplementary\">supplementary videos</a>]"
       },
@@ -214,6 +217,9 @@
       "title": "Publications"
     },
     "items": {
+      "kexaone2": {
+        "links": "[<a href=\"https://arxiv.org/abs/2608.04505\">paper</a>]"
+      },
       "exaone45": {
         "links": "[<a href=\"https://arxiv.org/abs/2604.08644\">paper</a>]"
       },
