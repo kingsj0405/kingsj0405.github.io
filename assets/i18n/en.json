@@ -18,23 +18,23 @@
     "meta": {
       "title": "Sejong Yang",
       "ogTitle": "Sejong Yang's Homepage (YangSpace)",
-      "description": "Sejong Yang is an AI Scientist working on multimodal foundation models and long-horizon agents."
+      "description": "Sejong Yang is an AI Scientist working on multimodal foundation models and a long-horizon coding agent."
     },
     "hero": {
-      "subtitle": "AI Scientist working on Multimodal Foundation Models and Long-Horizon Agents",
+      "subtitle": "AI Scientist working on Multimodal Foundation Models and Long-Horizon Coding Agent",
       "showEmail": "Show Email",
       "hideEmail": "Hide Email"
     },
     "blog": {
-      "kicker": "From the Blog",
-      "title": "A personal blog with notes, side thoughts, and unnecessary posts",
-      "intro": "I use the blog for loose notes, build logs, small retrospectives, and whatever else felt worth writing down that day.",
-      "cta": "Visit the blog"
+      "kicker": "Recent writing",
+      "title": "Notes on what stays with me",
+      "intro": "I write about ideas that linger as I move through research, technology, work, and life.",
+      "cta": "Read more on the blog"
     },
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>present",
-        "desc": "I am currently an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), working on multimodal foundation models and long-horizon agents. My work spans image, video, and document understanding for EXAONE 5.0 and K-EXAONE 3, as well as agent data, post-training, and reproducible evaluation on Terminal-Bench 2.1. I previously contributed to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a>, a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model."
+        "desc": "I am currently an AI Scientist at <a href=\"https://www.lgresearch.ai/\">LG AI Research</a> (EXAONE Lab), working on multimodal foundation models and a long-horizon coding agent. My work spans image, video, and document understanding for EXAONE 5.0 and K-EXAONE 3, as well as agent data, post-training, and reproducible evaluation on Terminal-Bench 2.1. I previously contributed to <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a>, a hybrid VLM that unifies reasoning and non-reasoning capabilities in a single vision-language model."
       },
       "yonsei_phd": {
         "desc": "I received my Ph.D. in Computer Science from <a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">Yonsei University</a> (Sep 2019 – Feb 2026), supervised by Prof. <a href=\"https://sites.google.com/site/seonjookim/\">Seon Joo Kim</a>. Thesis: <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>. My research focused on face modeling with generative models (VAE, GAN, Normalizing Flows, Diffusion Models), 3D models (3DMM, Neural Renderer, NeRF), and multi-modal representation (visual-audio, visual-text)."

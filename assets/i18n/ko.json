@@ -18,23 +18,23 @@
     "meta": {
       "title": "양세종",
       "ogTitle": "양세종 홈페이지 (YangSpace)",
-      "description": "멀티모달 파운데이션 모델과 장기 에이전트를 연구하는 AI Scientist 양세종의 홈페이지."
+      "description": "멀티모달 파운데이션 모델과 장기 코딩 에이전트를 연구하는 AI Scientist 양세종의 홈페이지."
     },
     "hero": {
-      "subtitle": "멀티모달 파운데이션 모델과 장기 에이전트를 연구합니다",
+      "subtitle": "멀티모달 파운데이션 모델과 장기 코딩 에이전트를 연구합니다",
       "showEmail": "이메일 보기",
       "hideEmail": "이메일 숨기기"
     },
     "blog": {
-      "kicker": "블로그 홍보",
-      "title": "메모, 잡생각, 그리고 굳이 안 써도 되는 글들이 올라오는 개인 블로그",
-      "intro": "블로그에는 가벼운 메모, 작업 기록, 짧은 회고, 그리고 그날 그냥 적어두고 싶었던 것들을 올립니다.",
-      "cta": "블로그 보러 가기"
+      "kicker": "요즘 쓰는 것",
+      "title": "오래 남은 생각을 적습니다",
+      "intro": "연구와 기술, 일과 삶을 지나며 오래 붙잡고 있던 생각을 적습니다.",
+      "cta": "블로그에서 더 읽기"
     },
     "timeline": {
       "lgai_current": {
         "timespan": "2026.03<br>-<br>현재",
-        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 일하며, 멀티모달 파운데이션 모델과 장기 에이전트를 연구합니다. EXAONE 5.0과 K-EXAONE 3의 이미지·비디오·문서 이해를 다루고 있으며, Terminal-Bench 2.1을 중심으로 에이전트 데이터·후속 학습·재현 가능한 평가도 함께 연구합니다. 이전에는 reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> 개발에 참여했습니다."
+        "desc": "<a href=\"https://www.lgresearch.ai/\">LG AI Research</a> EXAONE Lab에서 AI Scientist로 일하며, 멀티모달 파운데이션 모델과 장기 코딩 에이전트를 연구합니다. EXAONE 5.0과 K-EXAONE 3의 이미지·비디오·문서 이해를 다루고 있으며, Terminal-Bench 2.1을 중심으로 에이전트 데이터·후속 학습·재현 가능한 평가도 함께 연구합니다. 이전에는 reasoning·non-reasoning을 하나의 모델에 통합한 하이브리드 VLM <a href=\"https://arxiv.org/abs/2604.08644\">EXAONE 4.5</a> 개발에 참여했습니다."
       },
       "yonsei_phd": {
         "desc": "<a href=\"https://www.yonsei.ac.kr/en_sc/index.do\">연세대학교</a>에서 컴퓨터과학 박사 학위를 취득했습니다 (2019.09 – 2026.02). <a href=\"https://sites.google.com/site/seonjookim/\">김선주 교수님</a> 지도 아래 <a href=\"https://drive.google.com/file/d/1I7QxHE5qz2zAHguJrCT3-z7Buz-w1IUN/view\"><em>Multi-Prior Alignment for Efficient Generative Vision Tasks</em></a>를 주제로 졸업 논문을 완성했습니다. 박사과정 동안 생성모델(VAE, GAN, Normalizing Flow, Diffusion)을 활용한 얼굴 모델링, 3D 모델(3DMM, Neural Renderer, NeRF), 그리고 시각-오디오 및 시각-텍스트 기반 멀티모달 표현 학습을 중심으로 연구했습니다."
