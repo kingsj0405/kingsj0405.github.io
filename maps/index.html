@@ -16,11 +16,14 @@
     <label class="country-label">국가 이동 <select id="country" aria-label="비교할 국가"><option value="">국가 선택…</option></select></label>
   </section>
   <div class="map-meta"><span><span class="linked">↔</span> 위치 · 확대 동기화</span><span>드래그로 이동 · 스크롤로 확대 · 클릭으로 측정 위치 고정</span><label><input type="checkbox" id="circles" checked> 지구에서 같은 크기의 원</label></div>
+  <div class="mobile-tools" aria-label="모바일 지도 설정"><div class="layout-switch" role="group" aria-label="지도 배치"><button id="stacked" aria-pressed="true">위아래 비교</button><button id="side-by-side" aria-pressed="false">좌우 비교</button></div><button id="move-map" aria-pressed="false">지도 이동 켜기</button></div>
+  <p class="touch-help" id="touch-help">위아래로 스크롤 · 지점을 탭해 측정 · + / −로 확대</p>
+  <div class="zoom-bar"><span id="load-status" role="status">지도 데이터를 불러오는 중…</span><div class="zoom-controls"><button id="minus" aria-label="축소">−</button><label for="zoom">확대</label><input id="zoom" type="range" min="0" max="4" step="0.01" value="0"><output id="zoom-value">1.00×</output><button id="plus" aria-label="확대">+</button><button id="reset">초기화 ↺</button></div></div>
   <section class="maps" aria-label="세계지도 비교">
     <article class="panel mercator"><div class="panel-head"><div><span class="number">01</span><h2>Mercator <small>메르카토르</small></h2></div><span class="tag">국소 각도 보존</span></div><div class="map" id="mercator" role="img" aria-label="메르카토르 지도"></div><div class="panel-foot"><span>고위도로 갈수록 면적이 커집니다</span><span class="key orange">면적 왜곡</span></div></article>
     <article class="panel equal"><div class="panel-head"><div><span class="number">02</span><h2>Equal Earth <small>이퀄 어스</small></h2></div><span class="tag">상대 면적 보존</span></div><div class="map" id="equal" role="img" aria-label="Equal Earth 지도"></div><div class="panel-foot"><span>면적을 보존하며 모양은 달라집니다</span><span class="key teal">면적 보존</span></div></article>
   </section>
-  <div class="zoom-bar"><span id="load-status" role="status">지도 데이터를 불러오는 중…</span><div class="zoom-controls"><button id="minus" aria-label="축소">−</button><label for="zoom">확대</label><input id="zoom" type="range" min="0" max="4" step="0.01" value="0"><output id="zoom-value">1.00×</output><button id="plus" aria-label="확대">+</button><button id="reset">초기화 ↺</button></div></div>
+
   <section class="readout" aria-label="선택한 위치의 왜곡 수치" aria-live="polite">
     <div class="location"><div class="eyebrow">POINT INSPECTOR</div><h3 id="point-name">서울 부근</h3><p id="coordinates"></p><span id="point-mode">고정한 위치 · 지도 위에 마우스를 올려 비교</span></div>
     <div class="metric orange-text"><span>메르카토르 · 국소 면적 배율</span><strong id="merc-area">—</strong><p id="merc-detail"></p></div>

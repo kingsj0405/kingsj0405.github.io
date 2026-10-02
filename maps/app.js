@@ -34,7 +34,7 @@ function metrics() {
   const values = rawProjections.map(p => distortion(p, point));
   $('point-name').textContent = state.hover?.name || state.name;
   $('coordinates').textContent = `${Math.abs(point[1]).toFixed(2)}° ${point[1] >= 0 ? 'N' : 'S'} / ${Math.abs(point[0]).toFixed(2)}° ${point[0] >= 0 ? 'E' : 'W'}`;
-  $('point-mode').textContent = state.hover ? '탐색 중 · 클릭하면 이 위치를 고정합니다' : '고정한 위치 · 지도 위에 마우스를 올려 비교';
+  $('point-mode').textContent = state.hover ? '탐색 중 · 클릭하면 이 위치를 고정합니다' : '고정한 위치 · 다른 지점을 탭하거나 클릭해 비교';
   ['merc', 'equal'].forEach((key, i) => {
     $(key + '-area').textContent = values[i].area.toFixed(2) + '×';
     $(key + '-angle').textContent = values[i].angle.toFixed(1) + '°';
@@ -106,6 +106,7 @@ function createPanel(id, projection) {
     const xy = location(event);
     if (drag) {
       if (event.pointerId !== drag.id) return;
+      if (event.pointerType === 'touch' && matchMedia('(max-width: 650px)').matches && !document.body.classList.contains('map-moving')) return;
       if (Math.hypot(xy[0] - drag.start[0], xy[1] - drag.start[1]) > 4) drag.moved = true;
       if (drag.moved) {
         // Re-render synchronously so successive deltas use the latest projection.
@@ -150,6 +151,17 @@ $('minus').addEventListener('click', () => setZoom(state.zoom / 1.5));
 $('plus').addEventListener('click', () => setZoom(state.zoom * 1.5));
 $('reset').addEventListener('click', () => document.querySelector('[data-place="world"]').click());
 $('circles').addEventListener('change', e => { state.circles = e.target.checked; schedule(); });
+['stacked', 'side-by-side'].forEach(id => $(id).addEventListener('click', () => {
+  document.body.classList.toggle('side-by-side', id === 'side-by-side');
+  ['stacked', 'side-by-side'].forEach(key => $(key).setAttribute('aria-pressed', String(key === id)));
+  schedule();
+}));
+$('move-map').addEventListener('click', () => {
+  const moving = document.body.classList.toggle('map-moving');
+  $('move-map').setAttribute('aria-pressed', String(moving));
+  $('move-map').textContent = moving ? '지도 이동 끄기' : '지도 이동 켜기';
+  $('touch-help').textContent = moving ? '지도 위를 드래그해 이동 · 페이지 스크롤은 지도 이동을 끄세요' : '위아래로 스크롤 · 지점을 탭해 측정 · + / −로 확대';
+});
 $('country').addEventListener('change', e => {
   const country = countries.find(f => f.key === e.target.value);
   if (!country) return;
