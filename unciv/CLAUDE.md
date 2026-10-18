@@ -36,7 +36,16 @@ TeaVM AOT(`unciv.js` ~61MB)로 브라우저에서 **메뉴 → New Game → 월�
 - [ ] **E. 잔여 플레이 경로 QA** — 실제 턴 진행 다회/Load/Map editor 등에서 추가 TeaVM 갭 가능(같은 방식 대응).
 - [ ] **F. unciv.js 축소(선택)** — 61MB(>GitHub 권장 50MB 경고). obfuscate/minify 또는 git-lfs 검토. 기능 무관.
 
-**배포 방법(M3 확정):** `web/build/dist/`에서 `index.html unciv.js jszip.min.js favicon.ico scripts assets`를 이 폴더로 rsync(`.map`/`.teavmdbg`/`WEB-INF`/`webtest`/`src` 제외) → github.io push → Pages 자동 배포(~1-2분). 서브패스 상대경로 OK. (런타임이 `assets/webapp/WEB-INF/web.xml` 404 탐색하나 무해.)
+**셸 개선 (2026-10-18, 재빌드 없이 `index.html`·`sw.js`만):**
+- viewport meta + `100dvh` + `touch-action:none` — 없으면 모바일이 980px 폭으로 그려 UI가 작아짐(세로 뷰).
+- `preload.txt` 필터 — XHR `open`을 가로채 번역 파일 48개(~21MB) 중 저장된 언어(없으면 `navigator.language`)+English+completionPercentages만 받는다. 미리 받는 양 33MB→~13MB. `?fullpreload`로 끔.
+  한계: 게임 안에서 안 받은 언어로 바꾸면 새로고침 전까지 English로 보인다(설정은 pagehide 때 저장되므로 새로고침하면 그 언어를 받는다).
+- `sw.js` — unciv.js·assets cache-first, `index.html`·`preload.txt`만 network-first. 재방문 시 네트워크 0. `?nosw`로 끔.
+- **★배포 때 dist의 `index.html`로 덮어쓰지 말 것**(이 폴더 것이 정본). 새 빌드를 올리면 `sw.js`의 `BUILD`를 반드시 올린다(안 올리면 옛 unciv.js가 계속 나감).
+
+**재빌드가 필요한 다음 후보:** (1) TeaVM `obfuscated=true`/minify — unciv.js 61MB(gzip 6MB)가 이름 그대로라 파싱 비용이 큼. (2) 모바일 touch — Playwright 터치 에뮬레이션(CDP touchStart/End)에 메뉴가 반응하지 않았다(마우스는 정상). 실기기 확인 필요. (3) 번역 lazy-load — 언어 변경 시 그 파일만 async로 받기. (4) 월드 스크린 세로 배치(하단 유닛 패널·미니맵이 작음).
+
+**배포 방법(M3 확정):** `web/build/dist/`에서 `unciv.js jszip.min.js favicon.ico scripts assets`를 이 폴더로 rsync(`.map`/`.teavmdbg`/`WEB-INF`/`webtest`/`src` 제외) → github.io push → Pages 자동 배포(~1-2분). 서브패스 상대경로 OK. (런타임이 `assets/webapp/WEB-INF/web.xml` 404 탐색하나 무해.)
 
 **빠른 명령:**
 ```bash
