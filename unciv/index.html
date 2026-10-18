@@ -4,6 +4,8 @@
         <link rel="icon" href="data:,">
         <title>Unciv</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <!-- web-port: viewport 가 없으면 모바일이 980px 데스크톱 폭으로 그려 UI 가 작아진다 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <style>
             body {
                 display: flex;
@@ -11,12 +13,14 @@
                 align-items: center;
                 background: #000;
                 height: 100vh;
+                height: 100dvh;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
             }
             #canvas {
                 border: none;
+                touch-action: none;
             }
         </style>
     </head>
@@ -26,6 +30,35 @@
         </div>
         <script>
             (function () {
+                // web-port: preload.txt 의 번역 파일 48개(~21MB) 중 쓰는 것만 받는다.
+                // ponytail: 게임 안에서 안 받은 언어로 바꾸면 새로고침 전까지 English 로 보인다.
+                var keep = { English: 1, Korean: 1, completionPercentages: 1 };
+                try {
+                    var m = (localStorage.getItem('unciv.settings') || '').match(/"language":"([^"]+)"/);
+                    if (m) keep[m[1]] = 1;
+                } catch (e) {}
+
+                var preloadUrl = null;
+                var preloadReady = location.search.indexOf('fullpreload') >= 0 ? Promise.resolve() :
+                    fetch('assets/preload.txt', { cache: 'no-cache' })
+                        .then(function (r) { return r.text(); })
+                        .then(function (text) {
+                            var lines = text.split('\n').filter(function (line) {
+                                var t = line.match(/\/jsons\/translations\/(.+)\.properties:/);
+                                return !t || keep[t[1]] === 1;
+                            });
+                            preloadUrl = URL.createObjectURL(new Blob([lines.join('\n')]));
+                        })
+                        .catch(function () {});
+
+                var open = XMLHttpRequest.prototype.open;
+                XMLHttpRequest.prototype.open = function (method, url) {
+                    if (preloadUrl && /assets\/preload\.txt$/.test(url)) arguments[1] = preloadUrl;
+                    return open.apply(this, arguments);
+                };
+
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+
                 function boot() {
                     if (window.__uncivBootStarted) return;
                     if (typeof window.main !== 'function') {
@@ -33,7 +66,7 @@
                         return;
                     }
                     window.__uncivBootStarted = true;
-                    window.main();
+                    preloadReady.then(function () { window.main(); });
                 }
                 if (document.readyState === 'complete') {
                     setTimeout(boot, 0);
