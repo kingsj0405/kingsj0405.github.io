@@ -4,148 +4,60 @@
         <link rel="icon" href="data:,">
         <title>Unciv</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-        <!-- web-port: viewport 가 없으면 모바일 브라우저가 980px 데스크톱 폭으로 그려서 UI 가 작아진다 -->
+        <!-- web-port: viewport 가 없으면 모바일이 980px 데스크톱 폭으로 그려 UI 가 작아진다 -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <meta name="theme-color" content="#000000">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <style>
-            html, body {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 background: #000;
-                width: 100%;
-                height: 100%;
+                height: 100vh;
+                height: 100dvh;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                overscroll-behavior: none;
-            }
-            body {
-                position: fixed;
-                inset: 0;
-                height: 100vh;
-                height: 100dvh;
-                -webkit-user-select: none;
-                user-select: none;
-                -webkit-touch-callout: none;
-                -webkit-tap-highlight-color: transparent;
-            }
-            body > div {
-                width: 100%;
-                height: 100%;
             }
             #canvas {
-                display: block;
                 border: none;
                 touch-action: none;
             }
-            #boot {
-                position: fixed;
-                inset: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-                color: #ccc;
-                font: 14px/1.4 system-ui, sans-serif;
-                pointer-events: none;
-            }
-            #boot .spin {
-                width: 36px;
-                height: 36px;
-                border: 3px solid #333;
-                border-top-color: #ccc;
-                border-radius: 50%;
-                animation: spin 0.9s linear infinite;
-            }
-            @keyframes spin { to { transform: rotate(360deg); } }
         </style>
     </head>
     <body oncontextmenu="return false">
         <div>
             <canvas id="canvas"></canvas>
         </div>
-        <div id="boot"><div class="spin"></div><div id="boot-msg">Loading…</div></div>
         <script>
             (function () {
-                // web-port: 아래 두 가지는 빌드 산출물을 건드리지 않고 로딩을 줄이는 셸 쪽 장치다.
-                //  1) preload.txt 에서 쓰지 않는 언어의 번역 파일(~20MB)을 뺀다.
-                //  2) service worker 로 unciv.js·assets 를 캐시해 재방문 때 네트워크를 거의 안 탄다.
-                var params = new URLSearchParams(location.search);
-                var fullPreload = params.has('fullpreload');
+                // web-port: preload.txt 의 번역 파일 48개(~21MB) 중 쓰는 것만 받는다.
+                // ponytail: 게임 안에서 안 받은 언어로 바꾸면 새로고침 전까지 English 로 보인다.
+                var keep = { English: 1, Korean: 1, completionPercentages: 1 };
+                try {
+                    var m = (localStorage.getItem('unciv.settings') || '').match(/"language":"([^"]+)"/);
+                    if (m) keep[m[1]] = 1;
+                } catch (e) {}
 
-                // navigator.language → Unciv 번역 파일 이름. 없는 언어는 English 로 남는다.
-                var LANG_MAP = {
-                    ko: 'Korean', ja: 'Japanese', fr: 'French', de: 'German', es: 'Spanish',
-                    it: 'Italian', ru: 'Russian', uk: 'Ukrainian', pl: 'Polish', nl: 'Dutch',
-                    cs: 'Czech', fi: 'Finnish', sv: 'Swedish', nb: 'Norwegian', no: 'Norwegian',
-                    tr: 'Turkish', el: 'Greek', hu: 'Hungarian', ro: 'Romanian', bg: 'Bulgarian',
-                    hr: 'Croatian', bs: 'Bosnian', lt: 'Lithuanian', vi: 'Vietnamese', th: 'Thai',
-                    id: 'Indonesian', ms: 'Malay', fil: 'Filipino', tl: 'Filipino', hi: 'Hindi',
-                    bn: 'Bangla', fa: 'Persian_(Pinglish-UN)', ca: 'Catalan', gl: 'Galician',
-                    af: 'Afrikaans', be: 'Belarusian', mt: 'Maltese', zu: 'Zulu', la: 'Latin', pt: 'Portuguese'
-                };
-                function browserLanguage() {
-                    var tag = (navigator.language || 'en').toLowerCase();
-                    if (tag === 'pt-br') return 'Brazilian_Portuguese';
-                    if (tag.indexOf('zh') === 0) {
-                        return /tw|hk|mo|hant/.test(tag) ? 'Traditional_Chinese' : 'Simplified_Chinese';
-                    }
-                    return LANG_MAP[tag.split('-')[0]] || null;
-                }
-                function savedLanguage() {
-                    try {
-                        var s = localStorage.getItem('unciv.settings');
-                        var m = s && s.match(/"?language"?\s*:\s*"?([A-Za-z_()\-]+)"?/);
-                        return m ? m[1] : null;
-                    } catch (e) {
-                        return null;
-                    }
-                }
-                var keepLanguages = { English: 1 };
-                var lang = savedLanguage() || browserLanguage();
-                if (lang) keepLanguages[lang] = 1;
-
-                function filterPreload(text) {
-                    return text.split('\n').filter(function (line) {
-                        var m = line.match(/\/jsons\/translations\/([^:]+):/);
-                        if (!m) return true;
-                        var file = m[1];
-                        if (file === 'completionPercentages.properties') return true;
-                        var name = file.replace(/\.properties$/, '');
-                        return name !== file && keepLanguages[name] === 1;
-                    }).join('\n');
-                }
-
-                var preloadBlobUrl = null;
-                var origOpen = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function (method, url) {
-                    if (typeof url === 'string' && /assets\/preload\.txt(\?|$)/.test(url)) {
-                        hideBootOverlay();
-                        if (preloadBlobUrl) {
-                            arguments[1] = preloadBlobUrl;
-                        }
-                    }
-                    return origOpen.apply(this, arguments);
-                };
-
-                function hideBootOverlay() {
-                    var el = document.getElementById('boot');
-                    if (el) el.remove();
-                }
-
-                var preloadReady = fullPreload ? Promise.resolve() :
+                var preloadUrl = null;
+                var preloadReady = location.search.indexOf('fullpreload') >= 0 ? Promise.resolve() :
                     fetch('assets/preload.txt', { cache: 'no-cache' })
-                        .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+                        .then(function (r) { return r.text(); })
                         .then(function (text) {
-                            preloadBlobUrl = URL.createObjectURL(new Blob([filterPreload(text)], { type: 'text/plain' }));
+                            var lines = text.split('\n').filter(function (line) {
+                                var t = line.match(/\/jsons\/translations\/(.+)\.properties:/);
+                                return !t || keep[t[1]] === 1;
+                            });
+                            preloadUrl = URL.createObjectURL(new Blob([lines.join('\n')]));
                         })
-                        .catch(function () { /* 실패하면 원본 preload.txt 를 그대로 쓴다 */ });
+                        .catch(function () {});
 
-                if ('serviceWorker' in navigator && !params.has('nosw')) {
-                    navigator.serviceWorker.register('sw.js').catch(function () {});
-                }
+                var open = XMLHttpRequest.prototype.open;
+                XMLHttpRequest.prototype.open = function (method, url) {
+                    if (preloadUrl && /assets\/preload\.txt$/.test(url)) arguments[1] = preloadUrl;
+                    return open.apply(this, arguments);
+                };
+
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 
                 function boot() {
                     if (window.__uncivBootStarted) return;
