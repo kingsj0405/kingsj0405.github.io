@@ -36,7 +36,11 @@ TeaVM AOT(`unciv.js` ~61MB)로 브라우저에서 **메뉴 → New Game → 월�
 - [ ] **E. 잔여 플레이 경로 QA** — 실제 턴 진행 다회/Load/Map editor 등에서 추가 TeaVM 갭 가능(같은 방식 대응).
 - [ ] **F. unciv.js 축소(선택)** — 61MB(>GitHub 권장 50MB 경고). obfuscate/minify 또는 git-lfs 검토. 기능 무관.
 
-**배포 방법(M3 확정):** `web/build/dist/`에서 `index.html unciv.js jszip.min.js favicon.ico scripts assets`를 이 폴더로 rsync(`.map`/`.teavmdbg`/`WEB-INF`/`webtest`/`src` 제외) → github.io push → Pages 자동 배포(~1-2분). 서브패스 상대경로 OK. (런타임이 `assets/webapp/WEB-INF/web.xml` 404 탐색하나 무해.)
+**셸 개선 (2026-10-18, 재빌드 없이 `index.html`·`sw.js`만):** viewport meta(모바일 세로 뷰), `preload.txt`에서 번역은 English·Korean·저장된 언어만 받기(33MB→~13MB, `?fullpreload`로 끔), `sw.js` 캐시로 재방문 네트워크 0.
+- **★배포 때 dist의 `index.html`로 덮어쓰지 말고, 새 빌드면 `sw.js`의 `CACHE` 이름을 올린다**(안 올리면 옛 unciv.js가 계속 나감).
+- 재빌드가 필요한 후보: TeaVM obfuscate(61MB 파싱), 모바일 touch 실기기 확인(Playwright 터치 에뮬레이션엔 무반응), 번역 lazy-load, 월드 스크린 세로 배치.
+
+**배포 방법(M3 확정):** `web/build/dist/`에서 `unciv.js jszip.min.js favicon.ico scripts assets`를 이 폴더로 rsync(`.map`/`.teavmdbg`/`WEB-INF`/`webtest`/`src` 제외) → github.io push → Pages 자동 배포(~1-2분). 서브패스 상대경로 OK. (런타임이 `assets/webapp/WEB-INF/web.xml` 404 탐색하나 무해.)
 
 **빠른 명령:**
 ```bash
