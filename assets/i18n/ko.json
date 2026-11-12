@@ -29,7 +29,8 @@
       "kicker": "많이 본 글 & 대표 에세이",
       "title": "오래 남은 생각을 적습니다",
       "intro": "연구와 기술, 일과 삶을 지나며 오래 붙잡고 있던 생각을 적습니다.",
-      "cta": "블로그에서 더 읽기"
+      "cta": "블로그에서 더 읽기",
+      "newsletterCta": "📩 뉴스레터 구독"
     },
     "timeline": {
       "lgai_current": {
@@ -90,6 +91,9 @@
       },
       "dife": {
         "links": "[<a href=\"https://openreview.net/forum?id=m67FNFdgLO9\">논문</a>] [<a href=\"https://github.com/kingsj0405/DIFE\">코드</a>] [<a href=\"https://yangspace.co.kr/dife/\">프로젝트 페이지</a>]"
+      },
+      "kexaone2": {
+        "links": "[<a href=\"https://arxiv.org/abs/2608.04505\">논문</a>]"
       }
     },
     "misc": {
