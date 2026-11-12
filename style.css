@@ -909,6 +909,10 @@ footer a {
 
 .blog-actions {
     margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
 }
 
 .blog-button {
@@ -920,6 +924,7 @@ footer a {
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .blog-button:hover,
@@ -927,6 +932,19 @@ footer a {
     background: #111;
     color: #fff;
     outline: none;
+}
+
+.blog-button-secondary {
+    background: #ffffff;
+    color: #242422;
+    border: 1px solid #d3d1cb;
+}
+
+.blog-button-secondary:hover,
+.blog-button-secondary:focus-visible {
+    background: #f7f6f2;
+    color: #111;
+    border-color: #242422;
 }
 
 @media (max-width: 991px) {
