@@ -1026,11 +1026,18 @@ function letterCard(lt) {
             <span class="text-[11px] font-medium text-slate-300 tabnum">${esc(lt.date)} 발행</span>
             <span class="rounded-full bg-white/10 px-2.5 py-0.5 text-[10.5px] font-medium text-slate-200">${esc(lt.badge)}</span>
           </div>
-          <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-white/15 hover:bg-white/25 border border-white/20 px-3 py-1.5 text-[11.5px] font-semibold text-white transition">
-            <span>Claude Artifact 전문</span>
-            <i data-lucide="external-link" class="h-3 w-3"></i>
-          </a>
+      <div class="flex items-center gap-2">
+        <button data-action="copy-letter" data-no="${lt.no}"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 px-2.5 py-1.5 text-[11.5px] font-bold text-amber-200 transition">
+          <i data-lucide="share-2" class="h-3.5 w-3.5 text-amber-300"></i>
+          <span>공유 링크 복사</span>
+        </button>
+        <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-white/15 hover:bg-white/25 border border-white/20 px-3 py-1.5 text-[11.5px] font-semibold text-white transition">
+          <span>Claude Artifact 전문</span>
+          <i data-lucide="external-link" class="h-3 w-3"></i>
+        </a>
+      </div>
         </div>
         <h3 class="mt-3 text-[17px] sm:text-[19px] font-extrabold leading-snug tracking-tight text-white">${esc(lt.title)}</h3>
         <p class="mt-2 text-[12.5px] leading-relaxed text-slate-300/95">${esc(lt.summary)}</p>
@@ -1205,6 +1212,21 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  if (action === 'copy-letter') {
+    const no = el.dataset.no;
+    const url = `https://yangspace.co.kr/frontier-ax-salon/?letter=${no}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        toast(`커피 레터 ${no}호 공유 링크가 복사되었습니다! (비밀번호: fx2026)`, 'ok');
+      }).catch(() => {
+        prompt('커피 레터 공유 주소입니다 (복사해서 전달하세요):', url);
+      });
+    } else {
+      prompt('커피 레터 공유 주소입니다 (복사해서 전달하세요):', url);
+    }
+    return;
+  }
+
   if (action === 'modal-open') {
     document.getElementById('modal').classList.remove('hidden');
     const first = document.querySelector('#new-candidate-form input[name="title"]');
@@ -1306,6 +1328,7 @@ document.addEventListener('submit', (e) => {
           sessionStorage.setItem('frontier_ax_auth', 'true');
         } catch (err) {}
         unlockGate();
+        handleLetterDeepLink();
         toast('인증되었습니다. 환영합니다!', 'ok');
       } else {
         if (errEl) errEl.classList.remove('hidden');
@@ -1420,8 +1443,28 @@ async function checkGateAuth() {
 
   if (isAuth) {
     unlockGate();
+    handleLetterDeepLink();
   } else {
     lockGate();
+  }
+}
+
+function handleLetterDeepLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const qLetter = urlParams.get('letter') || urlParams.get('vol');
+  if (qLetter) {
+    state.tab = 'letters';
+    saveState();
+    render();
+    setTimeout(() => {
+      const targetId = 'letter-vol' + qLetter;
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2'), 2500);
+      }
+    }, 150);
   }
 }
 
