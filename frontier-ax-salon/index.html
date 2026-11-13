@@ -78,27 +78,76 @@
 <body class="font-sans antialiased">
 
 <!-- ============ PASSWORD GATE OVERLAY ============ -->
-<div id="gate-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-ink px-4 transition-opacity duration-300">
+<div id="gate-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-ink px-4 transition-opacity duration-300 py-6 overflow-y-auto">
   <div class="absolute inset-0" style="background:
       radial-gradient(800px 400px at 50% -10%, rgba(201,162,39,.18), transparent 70%),
       radial-gradient(600px 300px at 50% 110%, rgba(59,130,246,.15), transparent 70%);"></div>
-  <div class="relative w-full max-w-md rounded-2xl border border-slate-700/60 bg-[#0f172a]/95 p-7 shadow-2xl backdrop-blur-xl sm:p-9 text-center">
+  <div class="relative w-full max-w-lg rounded-2xl border border-slate-700/60 bg-[#0f172a]/95 p-6 shadow-2xl backdrop-blur-xl sm:p-8 text-center my-auto">
     <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-300">
-      <i data-lucide="lock" class="h-6 w-6"></i>
+      <i data-lucide="shield-check" class="h-6 w-6"></i>
     </div>
-    <div class="mt-4 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/90">
+    <div class="mt-3.5 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/90">
       <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
-      Frontier AX Salon · Private Gate
+      Frontier AX Salon · Private Board
     </div>
-    <h2 class="mt-2 text-2xl font-bold tracking-tight text-white">프론티어 AX 살롱</h2>
-    <p class="mt-2 text-[12.5px] text-slate-400 leading-relaxed">
-      크로스 인더스트리 리더 모임의 비공개 보드입니다.<br />
-      초대받은 멤버용 비밀번호(Passcode)를 입력해 주세요.
-    </p>
+    <h2 class="mt-1.5 text-2xl font-bold tracking-tight text-white sm:text-[26px]">프론티어 AX 살롱</h2>
+    <p class="mt-1 text-[12px] font-semibold text-amber-300/80">Cross-Industry AX Leaders &amp; Operators</p>
 
-    <form id="gate-form" class="mt-6 text-left">
+    <!-- 모임 소개 카드 (외부인/초대자용) -->
+    <div class="mt-4 rounded-xl border border-slate-700/70 bg-slate-900/80 p-4 text-left">
+      <p class="text-[12px] font-bold text-slate-200 flex items-center gap-1.5">
+        <i data-lucide="sparkles" class="h-3.5 w-3.5 text-amber-400"></i>
+        프론티어 AX 살롱은 어떤 모임인가요?
+      </p>
+      <p class="mt-2 text-[12px] leading-relaxed text-slate-400">
+        AI 테크리더, CFO, VC 심사역, 파트너 변호사 등 서로 다른 산업의 리더들이 모여 <b class="text-slate-200">현장 AX 도입 사례와 실전 노하우</b>를 나누는 프라이빗 살롱입니다. 하소연 대신 질문과 실행을 나눕니다.
+      </p>
+      <div class="mt-3 grid grid-cols-1 gap-2 border-t border-slate-800/80 pt-3 text-[11px] text-slate-400 sm:grid-cols-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="calendar" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>매주 금요일 점심 오프라인 살롱</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="coffee" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>금요 커피 레터 (tiro+Claude)</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-check" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>100% 만장일치 멤버십 합의제</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="lock" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>Chatham House Rule 비밀유지</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 신규 멤버 신청 / 프로필 등록 CTA -->
+    <div class="mt-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 p-3.5 text-left">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-indigo-200 flex items-center gap-1">
+            <i data-lucide="user-plus" class="h-3.5 w-3.5 text-indigo-400"></i>
+            살롱 합류 또는 멤버 발제를 원하시나요?
+          </p>
+          <p class="mt-0.5 text-[11px] text-indigo-300/80">간단한 프로필을 남겨주시면 정식 안건으로 상정됩니다.</p>
+        </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
+           target="_blank" rel="noopener noreferrer"
+           class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 text-[11.5px] font-bold text-white shadow-sm transition">
+          <span>멤버 신청하기</span>
+          <i data-lucide="external-link" class="h-3 w-3"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- 기존 멤버 보드 입장 폼 -->
+    <form id="gate-form" class="mt-4 border-t border-slate-800/80 pt-4 text-left">
       <div>
-        <label for="gate-pass" class="block text-[11.5px] font-semibold text-slate-300">살롱 비밀번호</label>
+        <div class="flex items-baseline justify-between">
+          <label for="gate-pass" class="block text-[11.5px] font-semibold text-slate-300">살롱 멤버 비밀번호 (Passcode)</label>
+          <span class="text-[10.5px] text-slate-500">슬랙 공지 또는 단톡방 공유</span>
+        </div>
         <div class="relative mt-1.5">
           <input type="password" id="gate-pass" name="pass" autocomplete="current-password" autofocus required
             placeholder="비밀번호 입력 (예: ax2026)"
@@ -107,12 +156,12 @@
         <p id="gate-error" class="mt-2 hidden text-xs font-medium text-rose-400">비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
       </div>
       <button type="submit"
-        class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 active:scale-[0.99]">
-        <span>입장하기</span>
+        class="mt-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 active:scale-[0.99]">
+        <span>살롱 보드 입장하기</span>
         <i data-lucide="arrow-right" class="h-4 w-4"></i>
       </button>
-      <p class="mt-3 text-center text-[11px] text-slate-500">
-        패스코드는 슬랙 공지 또는 단톡방에서 확인하실 수 있습니다.
+      <p class="mt-2 text-center text-[10.5px] text-slate-500">
+        링크 뒤에 <code class="text-amber-300/80 font-mono">?pass=fx2026</code> 을 붙이면 바로 자동 입장됩니다.
       </p>
     </form>
   </div>
@@ -122,6 +171,21 @@
 
 <!-- ============ HEADER ============ -->
 <header class="relative overflow-hidden bg-ink text-white">
+  <!-- Top Nav Bar: Slack link -->
+  <div class="relative z-10 border-b border-white/10 bg-black/20">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11.5px] font-semibold text-slate-300">Frontier AX Salon Private Board</span>
+      </div>
+      <a href="https://frontier-ax-salon.slack.com" target="_blank" rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 rounded-lg border border-indigo-400/40 bg-indigo-500/20 hover:bg-indigo-500/30 px-3 py-1 text-[11.5px] font-bold text-indigo-200 hover:text-white transition">
+        <i data-lucide="message-square" class="h-3.5 w-3.5 text-indigo-300"></i>
+        <span>살롱 슬랙 바로가기</span>
+        <i data-lucide="external-link" class="h-3 w-3 text-indigo-300/80"></i>
+      </a>
+    </div>
+  </div>
   <div class="absolute inset-0" style="background:
       radial-gradient(900px 320px at 8% -10%, rgba(201,162,39,.22), transparent 60%),
       radial-gradient(700px 300px at 92% -20%, rgba(59,130,246,.20), transparent 60%);"></div>
@@ -389,6 +453,100 @@ const SEED = {
       body: '살롱에서 오간 내용은 인용할 수 있지만, 누가 말했는지는 밝히지 않는다. 이 테이블의 내용이 회사 밖으로 나가는 순간이 이 모임의 가장 큰 리스크다.',
       notes: ['인용은 자유, 발화자 귀속은 금지', '화면·캡처 공유 시 이름 마스킹']
     }
+  ],
+
+  letters: [
+    {
+      id: 'vol2',
+      no: 2,
+      date: '2026. 11. 13.',
+      title: '금요 커피 레터 2호: 프론티어 AX 살롱의 시작과 둘이라 멀리 간 다섯 가지',
+      artifactUrl: 'https://claude.ai/artifact/GmEguASqAXu8f6xK33pmu4',
+      badge: '최신호 · 11/13 발행',
+      attendees: ['양세종 (LG AI 테크리더 · 모임 방장)', '양준호 (크멋 CFO · 모임 호스트)'],
+      summary: '두 번째 금요일에는 세종 님과 준호 님 둘만 앉았습니다. 사람이 적으니 이야기는 더 멀리 갔습니다. 누구를 더 모실지에서 시작해 칩과 데이터센터, AI 글래스와 배터리, 시험 없는 자격증을 거쳐, 공시 전 자료를 Claude에 올려도 되느냐는 질문으로 끝났습니다.',
+      threeLines: [
+        '모임을 "프론티어 AX 살롱"으로 키우자는 안이 나왔습니다. 비전이 크고 실행해 본 사람을 천천히 모시고, 새 멤버는 전원이 찬성해야 모십니다. 슬랙과 살롱 플랫폼 시제품도 열었습니다.',
+        '에이전틱 AI가 퍼지면 그 일만 받는 특수 목적 데이터센터와 전용 칩이 필요해질 수 있고, AI 글래스는 배터리의 벽을 서비스의 쓸모로 넘어서고 있다는 이야기가 오갔습니다.',
+        '보안은 뚫는 비용을 뚫어서 얻는 이득의 3배로 만드는 일이고, AI 이전에 만든 정보 등급표를 다시 짜야 한다는 데 뜻이 모였습니다.'
+      ],
+      topics: [
+        {
+          title: '세종 님의 두 가지 야망',
+          desc: '첫째는 10조 원(정부 5조+민간 5조)을 써서 연구해 보고 다시는 돈 없어 연구 못 한다는 말을 하지 않는 것. 둘째는 5년 안에 그룹 전체 매출을 10배로 키우는 데 힘을 보태는 것. 어머니가 늘 나라의 빛과 소금이 되라고 하셨다는 말에 공감.'
+        },
+        {
+          title: '칩과 에이전틱 AI 전용 데이터센터',
+          desc: 'NPU 회사의 출구는 상업적 판매보다 빅테크(ARM, Dell, NVIDIA)의 IP 인수. 에이전트 대화만 받아 내는 특수 목적 데이터센터와 전용 칩의 가능성 타진. 동아시아를 노리는 피클(SF 한국인 5인 팀) 사례.'
+        },
+        {
+          title: 'AI 글래스와 배터리의 벽',
+          desc: 'VR과 달리 글래스는 AI만 돌아가면 되니 배터리 한계를 서비스 쓸모로 돌파 중. 착탈식 배터리, 도수 렌즈, 맥 미니 조합. 배터리·소재의 "김치 회사"식 암묵지 노하우를 AI가 풀면 반도체·디스플레이도 급변.'
+        },
+        {
+          title: '시험으로 주는 자격증의 끝',
+          desc: '세무사 시험 만점자 논란 끝에 나온 통찰 — 해 본 경험을 AI가 더 잘 갖고 있으면 남는 건 책임뿐. 자격을 개인보다 법인에 주는 그림(세무법인 라이선스 배정) vs 미국식 경험 중심 모델.'
+        },
+        {
+          title: '공시 전 자료를 Claude에 올려도 될까?',
+          desc: '보안은 뚫는 비용을 이득의 3배로 만드는 일. 세종 님의 일침: "그럼 지메일이나 구글 드라이브는 뭘 믿고 쓰세요?" 이미 클라우드로 오가는 자료라면 같은 격리를 믿는 셈. AI 시대의 정보 등급표 재정의 필요.'
+        }
+      ],
+      quotes: [
+        { by: '양세종', text: '할 수 있는 능력보다, 하고 싶은 게 없는 게 문제예요.' },
+        { by: '양세종', text: '"아, 저렇게 일해도 놔두네" 싶은 사람이 한 명도 없어야 해요.' },
+        { by: '양준호', text: '양극재 회사들을 보니 김치 회사더라고요. 잘 버무리는데, 왜 맛있는지는 모르는.' },
+        { by: '양준호', text: '해 본 경험을 AI가 더 잘 갖고 있으면, 남는 건 책임밖에 없어요.' },
+        { by: '양세종', text: '안 뚫리는 건 세상에 없어요. 뚫는 데 돈이 더 들게 할 뿐이죠.' },
+        { by: '양세종', text: '그럼 지메일이나 구글 드라이브는 뭘 믿고 쓰세요?' }
+      ]
+    },
+    {
+      id: 'vol1',
+      no: 1,
+      date: '2026. 11. 06.',
+      title: '금요 커피 레터 1호: 첫 금요일 — 여섯 명, 네 자리와 각자의 자리에서 본 AX',
+      artifactUrl: 'https://claude.ai/artifact/DiKwJ3KsH6HxEjpi16zkw8',
+      badge: '창간호 · 11/06 발행',
+      attendees: ['양세종 (LG AI 테크리더)', '윤상원 (지오영 AI본부장)', '이승준 (SBVA 심사역)', '이세희 (크래프톤 AX TF장)', '이강용 (웰트 CFO)', '양준호 (크멋 CFO)'],
+      summary: '첫 금요일은 샌드위치를 나눠 들고 자기소개로 시작했습니다. 소개는 금방 각자 회사의 AX 현황으로 번졌고, 주니어가 설 자리와 사람이 남는 자리에 대한 이야기로 끝났습니다.',
+      threeLines: [
+        '재무 쪽 AX를 하는 두 회사 모두 흩어진 SaaS 데이터를 회사 안으로 가져오는 일부터 시작했고, 감사인의 시스템 감사 요구와 효익을 숫자로 보여 주는 일이 공통의 벽이었습니다.',
+        '회의록, 보고서 초안, 데이터 수집처럼 주니어가 배우며 하던 일이 AI로 넘어가면서 "90년대 중후반생이 모든 업을 시작할 수 있었던 막차"라는 말에 다들 공감했습니다.',
+        '법령 같은 지식은 모델이 이미 갖추고 있지만, 회의실 밖 전화와 구두로 오가는 사내 맥락은 아직 기록되지 않습니다. 사람이 남는 자리는 그 맥락과 책임 쪽이라는 데 의견이 모였습니다.'
+      ],
+      topics: [
+        {
+          title: '다섯 회사의 AX 현주소',
+          desc: '크래프톤(바텀업 TF 과제 도출), 지오영(결정론적 자동화 60개로 K-IFRS 개정 대응 및 컨설팅비 절감), SBVA(회의록·가치평가·LP 보고 자동화), 웰트(CTO의 에이전트 R&R 자율주행 및 전사 데이터 연동), LG AI(페타바이트급 데이터 생성·검수 및 24시간 GPU 실험 큐).'
+        },
+        {
+          title: '주간/월간 토큰 비용 비교',
+          desc: 'LG AI: 지난주 14만 달러(모델 개발용 데이터 생성 및 실험) vs 양준호 CFO: 3~4주 약 3천 달러 상당(상장예비심사신청서 작성, 실제는 정액 플랜).'
+        },
+        {
+          title: '주니어의 막차 & 전문직 화이트칼라',
+          desc: '회의록·PPT 같은 주니어 교육 과정이 AI로 증발. 6천만 원짜리 상장신청서 자문 작업을 3~4주 만에 2천만 원 수준으로 직접 처리하는 CFO PM의 탄생. "Do not fight the model."'
+        },
+        {
+          title: '지식은 모델에, 맥락은 사람에게',
+          desc: '세종 님: "장부에 무엇을 넣을지는 사람이 정해야 한다. AI는 법인격도 없고 감옥도 못 가고 승진 누락도 안 당하니까." 사내 암묵지와 책임이 남는 자리.'
+        },
+        {
+          title: '바텀업 문화와 보안의 속도',
+          desc: 'BCG식 챔피언십 경진대회 및 블랙벨트 전파 사례. 공통 저장소에 팀 스킬 강제 공유. IT 레거시와 감사인 시스템 감사 장벽 극복.'
+        }
+      ],
+      quotes: [
+        { by: '양준호', text: '비슷한 사람끼리 모이면 하소연만 하게 돼요.' },
+        { by: '양세종', text: '모델이 좋아졌을 때 고마운 마음이 들면 잘 되고 있는 거예요.' },
+        { by: '윤상원', text: '예전에 20점이던 게 지금 90점, 98점일 뿐인데, 우리는 늘 100점을 요구하잖아요.' },
+        { by: '양세종', text: 'AI는 법인격도 없고, 감옥도 못 가고, 승진 누락도 안 당하니까요.' },
+        { by: '양세종', text: '정상적인 말은 클로드가 해 줄 텐데, 심한 말 하라고 부르신 거 아닙니까.' },
+        { by: '윤상원', text: '팔이 고장 나면 떼고 기계 팔을 붙여 주는 식이에요.' },
+        { by: '이세희', text: '회사는 커지는데 조직은 줄어드는 것. 결국 그게 가장 큰 효익 아닐까요.' }
+      ]
+    }
   ]
 };
 
@@ -408,6 +566,9 @@ function loadState() {
     const parsed = JSON.parse(raw);
     if (!parsed || !Array.isArray(parsed.candidates) || !Array.isArray(parsed.agendas) || !Array.isArray(parsed.rules)) {
       return clone(SEED);
+    }
+    if (!Array.isArray(parsed.letters)) {
+      parsed.letters = clone(SEED.letters);
     }
     return parsed;
   } catch (err) {
@@ -536,15 +697,16 @@ function renderStats() {
       '크로스 인더스트리 10인 · 만장일치 기준') +
     card('user-plus', 'bg-amber-100 text-amber-700', '심사 중 후보자', inGate, '명',
       '영입 확정 ' + confirmed + '명 · 검토 중 ' + reviewing + '명') +
-    card('messages-square', 'bg-indigo-100 text-indigo-700', '이번 주 살롱 아젠다', state.agendas.length, '건',
-      '11/13 (금) 살롱 기준 · 댓글 ' + totalComments() + '개');
+    card('coffee', 'bg-emerald-100 text-emerald-800', '금요 커피 레터', (state.letters ? state.letters.length : 2), '편',
+      'tiro 음성 + Claude 아카이브 · 1호 & 2호');
 }
 
 function renderTabs() {
   const el = document.getElementById('tabs');
   if (!el) return;
   const tabs = [
-    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', sub: 'Membership Gate' },
+    { id: 'gate', icon: 'vote', label: '멤버 영입 심사 (거수기)', sub: 'Membership Gate' },
+    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', sub: 'tiro + Claude 아카이브' },
     { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', sub: 'Discussions' },
     { id: 'rules', icon: 'scroll-text', label: '살롱 그라운드룰', sub: 'Ground Rules' }
   ];
@@ -851,6 +1013,121 @@ function renderTopics() {
     <div class="mt-4 space-y-4">${state.agendas.map(agendaCard).join('')}</div>`;
 }
 
+
+function letterCard(lt) {
+  return `
+    <article class="card fade-in overflow-hidden shadow-sm" id="letter-${lt.id}">
+      <div class="border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-5 text-white">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 rounded-md bg-amber-400/20 px-2 py-0.5 text-[11px] font-extrabold text-amber-300 border border-amber-400/30">
+              VOL. 0${lt.no}
+            </span>
+            <span class="text-[11px] font-medium text-slate-300 tabnum">${esc(lt.date)} 발행</span>
+            <span class="rounded-full bg-white/10 px-2.5 py-0.5 text-[10.5px] font-medium text-slate-200">${esc(lt.badge)}</span>
+          </div>
+          <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-white/15 hover:bg-white/25 border border-white/20 px-3 py-1.5 text-[11.5px] font-semibold text-white transition">
+            <span>Claude Artifact 전문</span>
+            <i data-lucide="external-link" class="h-3 w-3"></i>
+          </a>
+        </div>
+        <h3 class="mt-3 text-[17px] sm:text-[19px] font-extrabold leading-snug tracking-tight text-white">${esc(lt.title)}</h3>
+        <p class="mt-2 text-[12.5px] leading-relaxed text-slate-300/95">${esc(lt.summary)}</p>
+
+        <div class="mt-3.5 flex flex-wrap items-center gap-1.5 pt-3 border-t border-white/10 text-[11px] text-slate-300">
+          <span class="font-semibold text-amber-300">참석:</span>
+          ${lt.attendees.map(at => '<span class="inline-flex items-center rounded-md bg-white/10 px-2 py-0.5 text-slate-200 font-medium">' + esc(at) + '</span>').join('')}
+        </div>
+      </div>
+
+      <div class="p-5 space-y-5">
+        <div class="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
+          <p class="flex items-center gap-1.5 text-[12px] font-bold text-indigo-900">
+            <i data-lucide="check-circle-2" class="h-4 w-4 text-indigo-600"></i>
+            이번 호 핵심 3줄 요약
+          </p>
+          <ol class="mt-2.5 space-y-2 text-[12.5px] text-slate-700 leading-relaxed">
+            ${lt.threeLines.map((line, idx) => `
+              <li class="flex items-start gap-2">
+                <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white tabnum">${idx + 1}</span>
+                <span>${esc(line)}</span>
+              </li>
+            `).join('')}
+          </ol>
+        </div>
+
+        <div>
+          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
+            <i data-lucide="layers" class="h-4 w-4 text-slate-500"></i>
+            테이블 위의 주요 화두
+          </p>
+          <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            ${lt.topics.map(tp => `
+              <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 hover:bg-slate-50 transition">
+                <h4 class="text-[12.5px] font-bold text-slate-800">${esc(tp.title)}</h4>
+                <p class="mt-1.5 text-[11.5px] leading-relaxed text-slate-600">${esc(tp.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
+            <i data-lucide="quote" class="h-4 w-4 text-amber-500"></i>
+            테이블에서 건진 문장 (어록)
+          </p>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            ${lt.quotes.map(q => `
+              <div class="flex items-start gap-2.5 rounded-xl border border-amber-100 bg-amber-50/40 p-3">
+                <span class="shrink-0 rounded-md bg-amber-200/80 px-1.5 py-0.5 text-[10px] font-bold text-amber-900">${esc(q.by)}</span>
+                <p class="text-[12px] font-medium leading-relaxed text-slate-800 italic">“${esc(q.text)}”</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="pt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
+          <span class="text-[11px] text-slate-400">티로 음성 녹음 + Claude Artifact 실시간 생성본</span>
+          <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-[12px] font-bold text-indigo-600 hover:text-indigo-800">
+            <span>Claude 원문 아티팩트 전체보기</span>
+            <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderLetters() {
+  const letters = state.letters || SEED.letters;
+  return `
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex h-6 items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+            <i data-lucide="sparkles" class="h-3 w-3"></i> tiro × Claude
+          </span>
+          <span class="chip">매주 금요일 정리</span>
+          <span class="chip">Chatham House Rule</span>
+        </div>
+        <h2 class="mt-2 text-[17px] font-bold tracking-tight text-slate-900 sm:text-[18px]">금요 커피 레터 아카이브
+          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Coffee Letters Archive</span>
+        </h2>
+        <p class="mt-1 text-[12.5px] leading-relaxed text-slate-500">
+          모임 호스트 양준호 CFO가 <b class="font-semibold text-slate-700">tiro 음성 기록</b>과 <b class="font-semibold text-slate-700">Claude</b>를 결합해 살롱 직후 정리하는 실전 아카이브입니다.
+        </p>
+      </div>
+      <span class="chip">누적 <b class="tabnum ml-0.5 font-bold text-slate-800">${letters.length}</b>편</span>
+    </div>
+
+    <div class="mt-5 space-y-6">
+      ${letters.map(lt => letterCard(lt)).join('')}
+    </div>
+  `;
+}
+
 function renderRules() {
   return `
     <div>
@@ -898,6 +1175,7 @@ function render() {
   if (!app) return;
   let html = '';
   if (state.tab === 'gate') html = renderGate();
+  else if (state.tab === 'letters') html = renderLetters();
   else if (state.tab === 'topics') html = renderTopics();
   else html = renderRules();
   app.innerHTML = html;
