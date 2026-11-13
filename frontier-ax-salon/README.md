@@ -2,12 +2,12 @@
 
 크로스 인더스트리 AX 리더 모임(프론티어 AX 살롱)의 **멤버 영입 심사 · 아젠다 보드** 프로토타입입니다.
 
-- 라이브: <https://kingsj0405.github.io/frontier-ax-salon/>
-- 저장소: <https://github.com/kingsj0405/frontier-ax-salon>
+- 라이브: <https://kingsj0405.github.io/frontier-ax-salon/> (→ <https://yangspace.co.kr/frontier-ax-salon/>)
+- 위치: `kingsj0405/kingsj0405.github.io` 저장소의 `frontier-ax-salon/` 폴더 (사이트의 다른 단일 HTML 앱과 같은 방식)
 
 ## 무엇을 하는 보드인가
 
-세종 님이 속한 크로스 인더스트리 AX 리더 모임(테크리더 · CFO · VC · 변호사)의 운영 규칙을 웹으로 옮긴 것입니다.
+크로스 인더스트리 AX 리더 모임(테크리더 · CFO · VC · 변호사)의 운영 규칙을 웹으로 옮긴 것입니다.
 핵심은 하나입니다. **새 멤버는 10명 전원이 찬성해야만 들어옵니다.**
 
 | 기능 | 설명 |
@@ -25,7 +25,7 @@
 ## 기술
 
 - 단일 HTML 파일 · Tailwind CSS (CDN) · Lucide 아이콘 · vanilla JS (반응형 상태)
-- 빌드 파이프라인 없음. `main` 브랜치 루트를 그대로 GitHub Pages가 서빙합니다.
+- 빌드 파이프라인 없음. 정적 파일을 그대로 서빙합니다.
 - 투표·댓글 상태는 브라우저 `localStorage`에만 저장됩니다(서버 없음). 데모 데이터는 푸터의 `데모 상태 초기화`로 되돌립니다.
 
 ## 로컬에서 보기
@@ -38,8 +38,9 @@ python3 -m http.server 8000
 ## 파일
 
 ```
-index.html   # 앱 전체 (HTML + CSS + JS)
-README.md
+frontier-ax-salon/
+  index.html   # 앱 전체 (HTML + CSS + JS)
+  README.md
 ```
 
 ## 참고
