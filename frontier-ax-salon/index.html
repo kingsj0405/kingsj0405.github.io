@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>프론티어 AX 살롱 · Frontier AX Salon</title>
+<meta name="description" content="프론티어 AX 살롱 — 크로스 인더스트리 AX 리더들의 100% 만장일치 멤버 영입 심사와 아젠다 보드." />
+<meta property="og:title" content="프론티어 AX 살롱 · Frontier AX Salon" />
+<meta property="og:description" content="Cross-Industry AX Leaders &amp; Operators — 100% 만장일치 합의제 멤버십 게이트" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#0b1220" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1220'/%3E%3Cpath d='M20 44V20h24v6H27v4h13v6H27v8z' fill='%23d9b45b'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { ink: '#0b1220', gold: '#c9a227' },
+        fontFamily: { sans: ['Pretendard Variable', 'Pretendard', 'system-ui', '-apple-system', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'] }
+      }
+    }
+  };
+</script>
+<script src="https://unpkg.com/lucide@0.417.0/dist/umd/lucide.min.js" defer></script>
+<style>
+  :root {
+    --paper: #f5f6f8;
+    --ink: #0b1220;
+    --line: #e6e8ec;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: #111827;
+    font-feature-settings: "tnum" on;
+    -webkit-font-smoothing: antialiased;
+    word-break: keep-all;
+  }
+  .tabnum { font-variant-numeric: tabular-nums; }
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -18px rgba(15, 23, 42, .25);
+  }
+  .hairline { background-image: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent); }
+  .seg { height: 12px; border-radius: 4px; transition: background-color .18s ease, transform .18s ease; }
+  .seg-hover:hover { transform: translateY(-1px); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+    padding: 3px 9px; border-radius: 999px;
+    background: #f3f4f6; color: #475569;
+    border: 1px solid #e9eaee;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .fade-in { animation: fadeIn .22s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .toast-in { animation: toastIn .24s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+  .ring-gold { box-shadow: inset 0 0 0 1px rgba(217,180,91,.45); }
+  textarea { resize: vertical; }
+  [data-action] { -webkit-tap-highlight-color: transparent; }
+  .vote-active-wave { animation: pulseVote .5s ease; }
+  @keyframes pulseVote { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in, .toast-in, .vote-active-wave { animation: none !important; }
+  }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .chev { transition: transform .18s ease; }
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- ============ HEADER ============ -->
+<header class="relative overflow-hidden bg-ink text-white">
+  <div class="absolute inset-0" style="background:
+      radial-gradient(900px 320px at 8% -10%, rgba(201,162,39,.22), transparent 60%),
+      radial-gradient(700px 300px at 92% -20%, rgba(59,130,246,.20), transparent 60%);"></div>
+  <div class="absolute inset-x-0 bottom-0 h-px hairline"></div>
+  <div class="relative mx-auto max-w-5xl px-4 pb-14 pt-9 sm:px-6 sm:pb-16 sm:pt-11">
+    <div class="flex items-start justify-between gap-6">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-amber-300/90">
+          <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
+          Frontier AX Salon
+        </div>
+        <h1 class="mt-2.5 text-[26px] font-bold leading-[1.15] tracking-tight sm:text-[34px]">
+          프론티어 AX 살롱
+        </h1>
+        <p class="mt-1.5 text-[13px] text-slate-300/90 sm:text-sm">Cross-Industry AX Leaders &amp; Operators</p>
+        <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1.5 ring-gold">
+          <i data-lucide="shield-check" class="h-3.5 w-3.5 text-amber-300"></i>
+          <span class="text-[12px] font-semibold text-amber-100">100% 만장일치 합의제</span>
+          <span class="hidden text-[11px] text-amber-200/60 sm:inline">Unanimous Consensus</span>
+        </div>
+      </div>
+      <div class="hidden shrink-0 text-right sm:block">
+        <div id="header-avatars" class="flex justify-end -space-x-2"></div>
+        <p class="mt-2 text-[11px] text-slate-400">멤버 <span class="tabnum text-slate-200">10</span>인 · 2026. 11.</p>
+        <p class="mt-0.5 text-[11px] text-slate-500">로그인 없이 둘러보는 프로토타입</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STAT CARDS ============ -->
+<main class="mx-auto max-w-5xl px-4 sm:px-6">
+  <section id="stats" class="-mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
+
+  <!-- ============ TABS ============ -->
+  <nav class="sticky top-0 z-30 -mx-4 mt-6 border-b border-slate-200/80 bg-[#f5f6f8]/85 px-4 backdrop-blur sm:mx-0 sm:rounded-none sm:px-0" aria-label="보드 탭">
+    <div id="tabs" class="no-scrollbar flex gap-1 overflow-x-auto py-2"></div>
+  </nav>
+
+  <!-- ============ PANEL ============ -->
+  <section id="app" class="pb-4 pt-5"></section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mt-8 border-t border-slate-200 bg-white/60">
+  <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="text-[11.5px] leading-relaxed text-slate-500">
+      <p class="font-semibold text-slate-700">프론티어 AX 살롱 · 합의 보드 프로토타입 v0.1</p>
+      <p class="mt-1">화면의 멤버·후보자 정보는 데모 데이터입니다. 실제 심사는 오프라인 살롱에서 확정됩니다.</p>
+      <p class="mt-0.5">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 13.</span></p>
+    </div>
+    <button data-action="reset" class="self-start rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 sm:self-auto">
+      데모 상태 초기화
+    </button>
+  </div>
+</footer>
+
+<!-- ============ NEW CANDIDATE MODAL ============ -->
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-ink/55 backdrop-blur-sm" data-action="modal-close"></div>
+  <div class="absolute inset-x-0 bottom-0 max-h-[92vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold tracking-tight text-slate-900">새 후보자 추천 (발제)</h2>
+        <p class="mt-1 text-[12.5px] text-slate-500">발제 즉시 멤버 10인에게 심사 카드가 열립니다. 추천인 표는 찬성으로 기록됩니다.</p>
+      </div>
+      <button data-action="modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+    </div>
+    <form id="new-candidate-form" class="mt-5 space-y-3.5">
+      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이름 / 직함 <span class="text-rose-500">*</span></span>
+          <input name="title" required maxlength="60" placeholder="예: 엔터프라이즈 CPO"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">소속 / 경력</span>
+          <input name="headline" maxlength="80" placeholder="예: 전 Bain 파트너 · 현 유니콘 CPO"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+      </div>
+      <label class="block">
+        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이력 요약 <span class="text-rose-500">*</span></span>
+        <textarea name="summary" required rows="3" maxlength="400" placeholder="지금 무엇을 하고, 어떤 문제를 풀어왔는지 2~3문장으로."
+          class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
+      </label>
+      <label class="block">
+        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 사유</span>
+        <textarea name="reason" rows="2" maxlength="300" placeholder="이 사람이 우리 테이블에 없어서 생기는 공백은 무엇인가요?"
+          class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
+      </label>
+      <div class="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11.5px] leading-relaxed text-amber-900">
+        <span class="font-semibold">100% 만장일치 원칙</span> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 오프라인 커피 미팅에서 다시 이야기합니다.
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button type="button" data-action="modal-close" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">취소</button>
+        <button type="submit" class="flex-[1.4] rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">후보자 등록</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="pointer-events-none fixed inset-x-0 bottom-5 z-[60] flex justify-center px-4">
+  <div id="toast-inner" class="hidden max-w-md items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl"></div>
+</div>
+
+<noscript>
+  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">이 보드는 자바스크립트가 필요합니다. 브라우저에서 자바스크립트를 켜 주세요.</div>
+</noscript>
+
+<script>
+/* =========================================================
+   Frontier AX Salon — Unanimous Consensus Board (prototype)
+   Single-file vanilla JS app. State lives in memory + localStorage.
+   ========================================================= */
+
+const STORAGE_KEY = 'frontier-ax-salon:v1';
+const ME = 'm1';
+
+const MEMBERS = [
+  { id: 'm1',  name: '양세종', role: 'LG AI Research',  title: 'AI Scientist · 테크리더', field: 'AI' },
+  { id: 'm2',  name: '양준호', role: 'CFO',              title: '재무총괄',                field: 'Finance' },
+  { id: 'm3',  name: '윤상원', role: '지오영',           title: 'AI본부장 · 변호사',        field: 'Legal' },
+  { id: 'm4',  name: '이승준', role: 'SBVA',             title: '심사역 · 전 BCG',          field: 'VC' },
+  { id: 'm5',  name: '이세희', role: '크래프톤',         title: '파이낸스 AX TF장',         field: 'AX' },
+  { id: 'm6',  name: '이강용', role: '웰트',             title: 'CFO',                     field: 'Finance' },
+  { id: 'm7',  name: '김도윤', role: '상장 게임사',      title: 'Chief AI Officer',        field: 'AI' },
+  { id: 'm8',  name: '박서연', role: '로펌',             title: '파트너 변호사 · AI/개인정보', field: 'Legal' },
+  { id: 'm9',  name: '최민혁', role: 'VC',               title: '파트너 · Series A',        field: 'VC' },
+  { id: 'm10', name: '한지우', role: '제조 대기업',      title: '디지털전환 실장',           field: 'Ops' }
+];
+const MEMBER_BY_ID = Object.fromEntries(MEMBERS.map(m => [m.id, m]));
+
+const VOTE_LABEL = { yes: '찬성', conditional: '조건부 찬성', veto: '비토', pending: '검토 중' };
+const VOTE_STYLE = {
+  yes:         { dot: 'bg-emerald-500', text: 'text-emerald-700', soft: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  conditional: { dot: 'bg-amber-400',   text: 'text-amber-700',   soft: 'bg-amber-50 text-amber-800 border-amber-200' },
+  veto:        { dot: 'bg-rose-500',    text: 'text-rose-700',    soft: 'bg-rose-50 text-rose-700 border-rose-200' },
+  pending:     { dot: 'bg-slate-300',   text: 'text-slate-500',   soft: 'bg-slate-100 text-slate-600 border-slate-200' }
+};
+
+/* ---------------- seed data ---------------- */
+
+const SEED = {
+  candidates: [
+    {
+      id: 'c1',
+      title: '엔터프라이즈 CPO',
+      headline: '전 Bain 파트너 · 현 유니콘 CPO',
+      nominator: 'm5',
+      nominatedAt: '2026-11-10T09:20:00+09:00',
+      summary: 'B2B SaaS 유니콘에서 200명 규모 제품 조직을 이끄는 CPO. 컨설팅에서 제품으로 넘어온 드문 이력으로, 엔터프라이즈 고객 300여 곳의 도입 실패와 성공을 모두 몸으로 겪었습니다. 최근에는 AI 에이전트 제품을 0에서 1까지 직접 런칭했습니다.',
+      highlights: ['Bain & Company 파트너 (테크·PE)', 'B2B SaaS CPO · ARR 3배 성장', 'AI 에이전트 제품 0→1', '엔터프라이즈 고객 300+'],
+      reason: '우리 살롱에는 파는 사람(VC)과 재는 사람(CFO)은 많은데, 엔터프라이즈 제품을 실제로 만들어 본 사람이 없습니다. AX 예산이 제품 P&L로 내려가는 순간 이 사람의 경험이 필요해집니다.',
+      votes: { m1: 'pending', m2: 'yes', m3: 'yes', m4: 'yes', m5: 'yes', m6: 'yes', m7: 'pending', m8: 'yes', m9: 'yes', m10: 'yes' },
+      comments: [
+        { id: 'k1', author: 'm2', text: '컨설팅에서 프로덕트로 넘어온 이력이 우리 테이블에서 드문 조합이라 반갑습니다. 다만 CFO 관점에서 궁금한 건, 유니콘 CPO로서 AI 예산을 어떤 기준으로 승인했는지입니다. 토큰 비용을 제품 단위 P&L로 내리는 데 성공한 사례가 있다면 11월 살롱에서 듣고 싶습니다.', at: '2026-11-11T10:12:00+09:00', likes: 4 },
+        { id: 'k2', author: 'm3', text: '계약·개인정보 이슈가 많은 엔터프라이즈 도메인 경험이 큰 자산으로 보입니다. 이해상충 확인을 위해 현 직장과 우리 멤버 간 거래 관계만 사전에 공유해 주시면 좋겠습니다. 저는 찬성입니다.', at: '2026-11-11T13:40:00+09:00', likes: 2 },
+        { id: 'k3', author: 'm4', text: 'Bain 파트너 출신에 현직 CPO라면 우리가 보는 딜의 제품 실사에 바로 투입할 수 있는 분입니다. 심사역 입장에서 반가운 프로필이고, 다만 8/10에서 멈춘 두 분의 검토 사유를 먼저 듣고 싶습니다.', at: '2026-11-12T09:05:00+09:00', likes: 3 }
+      ]
+    },
+    {
+      id: 'c2',
+      title: 'AI 파운데이션 모델 스타트업 파운더 & CTO',
+      headline: 'Foundation Model Startup · Founder & CTO',
+      nominator: 'm1',
+      nominatedAt: '2026-11-11T18:30:00+09:00',
+      summary: '국내에서 자체 파운데이션 모델을 학습·서빙하는 스타트업의 창업자 겸 CTO. 학습 인프라부터 평가 체계, 고객사 파인튜닝까지 한 사이클을 직접 운영합니다. 모델을 만드는 쪽의 언어로 우리의 AX 논의를 반박할 수 있는 유일한 자리입니다.',
+      highlights: ['자체 LLM 사전학습·서빙', 'GPU 클러스터 운영', '평가·정렬 파이프라인', 'B2B 파인튜닝 사업'],
+      reason: '모델을 쓰는 사람만 모이면 "벤더가 이렇게 해주면 좋겠다"가 남습니다. 모델을 만드는 사람이 한 명 있어야 논의가 거래가 됩니다.',
+      votes: { m1: 'yes', m2: 'yes', m3: 'yes', m4: 'yes', m5: 'yes', m6: 'yes', m7: 'yes', m8: 'yes', m9: 'yes', m10: 'yes' },
+      confirmedAt: '2026-11-11T21:10:00+09:00',
+      comments: [
+        { id: 'k4', author: 'm5', text: '추천인 자격으로 한 말씀: 파운데이션 모델을 직접 학습해 본 사람은 이 모임에 한 명뿐이라, 기술적 반대 심문이 가능한 자리가 됩니다. 만장일치 감사합니다.', at: '2026-11-11T21:12:00+09:00', likes: 6 },
+        { id: 'k5', author: 'm9', text: '투자 관점에서도 다음 라운드 이후 접점이 많을 분입니다. 11월 살롱에서 모델 단가와 평가 이야기를 해 주시면 좋겠습니다.', at: '2026-11-12T08:20:00+09:00', likes: 3 }
+      ]
+    }
+  ],
+  agendas: [
+    {
+      id: 'a1',
+      no: 1,
+      title: '상장예비심사신청서 AI 자동 작성과 책임의 소재',
+      owner: 'm2',
+      at: '2026-11-12T11:00:00+09:00',
+      tags: ['IPO', '감사', '책임소재'],
+      status: '이번 주 논의',
+      summary: '상장 준비 과정에서 AI로 신청서 초안을 작성했을 때, 오류·누락의 책임이 발행인·주관사·AI 벤더 중 어디에 귀속되는가. 실무에서는 이미 초안의 상당 부분이 AI로 작성되고 있지만, 책임 배분에 대한 합의는 아직 없습니다.',
+      points: [
+        '발행인의 검증 의무 범위 — AI가 쓴 문장을 "검토했다"는 사실을 무엇으로 증명하는가',
+        '주관사 실사(Due Diligence)에서 AI 산출물을 어떻게 표본 추출하고 기록하는가',
+        'AI 벤더 계약의 면책 조항과 손해배상 한도 — 실제로 협상 가능한 선은 어디인가'
+      ],
+      comments: [
+        { id: 'g1', author: 'm4', text: '심사 과정에서도 같은 문제를 겪습니다. 결국 "누가 언제 무엇을 확인했는지"의 로그가 책임의 근거가 될 것 같습니다. 사람이 읽었다는 기록이 없으면 아무것도 방어되지 않습니다.', at: '2026-11-12T14:20:00+09:00', likes: 5 },
+        { id: 'g2', author: 'm3', text: '법적으로는 발행인의 검증 의무가 면제되지 않습니다. AI 사용 사실을 감추는 것이 가장 위험하고, 사용과 검증을 분리해 기록하는 것이 방어의 핵심입니다.', at: '2026-11-12T16:02:00+09:00', likes: 7 },
+        { id: 'g3', author: 'm5', text: '재무 쪽에서는 AI가 만든 숫자의 원장 대사(reconciliation) 절차를 표준화하는 방향으로 가고 있습니다. 살롱에서 샘플 워크플로를 공유할 수 있습니다.', at: '2026-11-13T09:15:00+09:00', likes: 2 }
+      ]
+    },
+    {
+      id: 'a2',
+      no: 2,
+      title: 'SaaS 걷어내기와 감사인 시스템 감사 대응 가이드라인',
+      owner: 'm5',
+      at: '2026-11-12T16:30:00+09:00',
+      tags: ['SaaS', 'ITGC', '내부통제'],
+      status: '이번 주 논의',
+      summary: 'SaaS 구독을 자체 에이전트와 내부 툴로 대체하는 속도가 빨라졌지만, 감사인의 시스템 감사(ITGC)는 그 속도를 따라오지 못하고 있습니다. 무엇을 어떤 증거로 입증해야 하는지에 대한 공통 가이드라인이 필요합니다.',
+      points: [
+        '접근통제 — 에이전트에 부여된 권한과 승인 이력을 어떤 형태로 남기는가',
+        '변경이력 — 프롬프트와 모델 버전 변경도 형상관리 대상인가',
+        '데이터 무결성 — SaaS에서 내부 DB로 옮긴 데이터의 완전성을 어떻게 검증하는가'
+      ],
+      comments: [
+        { id: 'g4', author: 'm2', text: '감사인마다 요구 수준이 달라서, 우리끼리 최소 요구사항을 먼저 정하고 감사인과 협의하는 순서가 맞다고 봅니다. 이 문서를 살롱 공동 산출물로 만들면 좋겠습니다.', at: '2026-11-12T18:45:00+09:00', likes: 6 },
+        { id: 'g5', author: 'm6', text: '웰트에서도 올해 SaaS 12개를 걷어냈는데, 감사 대응용 증적 템플릿을 만들어 두었습니다. 다음 살롱에 가져가겠습니다.', at: '2026-11-13T10:30:00+09:00', likes: 4 }
+      ]
+    },
+    {
+      id: 'a3',
+      no: 3,
+      title: '주간 14만 달러 토큰 소모 최적화 및 ROI 측정',
+      owner: 'm1',
+      at: '2026-11-13T09:00:00+09:00',
+      tags: ['Cost', 'Token', 'ROI'],
+      status: '이번 주 논의',
+      summary: '한 주 토큰 비용이 14만 달러에 이르는 조직이 이미 나왔습니다. 비용은 인건비 항목과 비교되는 규모인데, ROI를 재는 단위는 아직 없습니다. 무엇을 절감으로 보고 무엇을 투자로 볼 것인가.',
+      points: [
+        '토큰을 팀·프로젝트·태스크 단위로 귀속시키는 청구 체계',
+        '절감액 산정 — 사람 시간 대체인가, 처리량 증가인가',
+        '모델 라우팅·캐싱·증류로 실제로 줄일 수 있는 여지'
+      ],
+      comments: [
+        { id: 'g6', author: 'm7', text: '저희는 태스크 단위로 원가를 붙였더니 상위 5% 태스크가 전체 비용의 60%를 쓰고 있었습니다. 측정만 해도 절반은 줄었습니다.', at: '2026-11-13T11:10:00+09:00', likes: 8 },
+        { id: 'g7', author: 'm10', text: '제조 쪽은 토큰보다 검증 비용이 큽니다. ROI 논의에 검증 인건비를 반드시 넣어야 숫자가 맞습니다.', at: '2026-11-13T12:05:00+09:00', likes: 3 }
+      ]
+    }
+  ],
+  rules: [
+    {
+      id: 'r1', no: 1, icon: 'users', tag: '크로스 인더스트리 원칙',
+      title: '비슷한 사람끼리 모이면 하소연만 남는다',
+      body: '한 산업에서 두 명을 넘지 않는다. AI 테크리더·CFO·VC·변호사가 같은 테이블에 앉을 때, 질문이 하소연이 아니라 거래가 된다.',
+      notes: ['직군별 최대 2인', '영입 심사에서 "우리와 무엇이 다른가"를 먼저 본다']
+    },
+    {
+      id: 'r2', no: 2, icon: 'shield-check', tag: '합의 방식',
+      title: '100% 만장일치제: 1명이라도 비토 시 오프라인 커피 미팅에서 경청',
+      body: '10명 중 1명이라도 비토하면 통과되지 않는다. 비토는 무효표가 아니라 오프라인 커피 미팅 요청이고, 발제자와 비토한 멤버가 1:1로 마주 앉아 경청한다. 만장일치라는 문턱이 영입의 질을 만든다.',
+      notes: ['찬성 8/10으로는 아무도 들어오지 못한다', '비토 사유는 기록으로 남긴다']
+    },
+    {
+      id: 'r3', no: 3, icon: 'lock', tag: '비밀유지',
+      title: 'Chatham House Rule (외부 발설 금지)',
+      body: '살롱에서 오간 내용은 인용할 수 있지만, 누가 말했는지는 밝히지 않는다. 이 테이블의 내용이 회사 밖으로 나가는 순간이 이 모임의 가장 큰 리스크다.',
+      notes: ['인용은 자유, 발화자 귀속은 금지', '화면·캡처 공유 시 이름 마스킹']
+    }
+  ]
+};
+
+/* ---------------- state ---------------- */
+
+let state = loadState();
+let drafts = {};          // per-input drafts so a re-render does not lose typing
+let openComments = {};    // which candidate/agenda comment box is expanded
+let agendaOpen = {};      // agenda detail expansion
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return clone(SEED);
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.candidates) || !Array.isArray(parsed.agendas) || !Array.isArray(parsed.rules)) {
+      return clone(SEED);
+    }
+    return parsed;
+  } catch (err) {
+    return clone(SEED);
+  }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (err) { /* private mode: ignore */ }
+}
+
+state.tab = state.tab || 'gate';
+
+/* ---------------- helpers ---------------- */
+
+const esc = (s) => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+function fmtDay(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return (d.getMonth() + 1) + '/' + d.getDate() + ' (' + DAYS[d.getDay()] + ')';
+}
+function fmtFull(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DAYS[d.getDay()] + ') ' + hh + ':' + mm;
+}
+function fmtDayDot(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
+}
+function initials(name) { return name ? name.slice(0, 1) : '?'; }
+
+const AVATAR_TINTS = [
+  'bg-slate-800 text-white', 'bg-indigo-600 text-white', 'bg-emerald-700 text-white',
+  'bg-amber-600 text-white', 'bg-rose-700 text-white', 'bg-cyan-700 text-white',
+  'bg-violet-700 text-white', 'bg-teal-700 text-white', 'bg-fuchsia-700 text-white',
+  'bg-slate-600 text-white'
+];
+function tint(id) {
+  const i = MEMBERS.findIndex(m => m.id === id);
+  return AVATAR_TINTS[(i < 0 ? 0 : i) % AVATAR_TINTS.length];
+}
+
+function avatar(id, size) {
+  const m = MEMBER_BY_ID[id] || { name: '?' };
+  const cls = size === 'lg' ? 'h-9 w-9 text-[13px]' : size === 'sm' ? 'h-6 w-6 text-[10px]' : 'h-7 w-7 text-[11px]';
+  return '<span class="inline-flex shrink-0 items-center justify-center rounded-full font-bold ring-2 ring-white ' + cls + ' ' + tint(id) + '">' + esc(initials(m.name)) + '</span>';
+}
+
+function tally(c) {
+  let yes = 0, conditional = 0, veto = 0, pending = 0;
+  for (const m of MEMBERS) {
+    const v = (c.votes && c.votes[m.id]) || 'pending';
+    if (v === 'yes') yes++;
+    else if (v === 'conditional') conditional++;
+    else if (v === 'veto') veto++;
+    else pending++;
+  }
+  const cast = yes + conditional;
+  const pct = Math.round((cast / MEMBERS.length) * 100);
+  const passed = veto === 0 && pending === 0;
+  const blocked = veto > 0;
+  return { yes, conditional, veto, pending, cast, pct, passed, blocked };
+}
+
+function totalComments() {
+  return state.agendas.reduce((n, a) => n + a.comments.length, 0);
+}
+
+/* ---------------- toast ---------------- */
+
+let toastTimer = null;
+function toast(msg, tone) {
+  const box = document.getElementById('toast-inner');
+  if (!box) return;
+  const iconName = tone === 'warn' ? 'alert-triangle' : tone === 'bad' ? 'x-circle' : 'check-circle-2';
+  const toneCls = tone === 'warn' ? 'bg-amber-500' : tone === 'bad' ? 'bg-rose-600' : 'bg-ink';
+  box.className = 'toast-in flex max-w-md items-center gap-2 rounded-full px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl ' + toneCls;
+  box.innerHTML = '<i data-lucide="' + iconName + '" class="h-4 w-4 shrink-0"></i><span>' + esc(msg) + '</span>';
+  if (window.lucide) window.lucide.createIcons();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { box.classList.add('hidden'); box.classList.remove('flex'); }, 2600);
+}
+
+/* ---------------- header avatars / stats / tabs ---------------- */
+
+function renderHeaderAvatars() {
+  const el = document.getElementById('header-avatars');
+  if (!el) return;
+  el.innerHTML = MEMBERS.slice(0, 5).map(m =>
+    '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold ring-2 ring-ink ' + tint(m.id) + '" title="' + esc(m.name + ' · ' + m.title) + '">' + esc(initials(m.name)) + '</span>'
+  ).join('') + '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[10px] font-bold text-slate-200 ring-2 ring-ink">+5</span>';
+}
+
+function renderStats() {
+  const el = document.getElementById('stats');
+  if (!el) return;
+  const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
+  const confirmed = state.candidates.filter(c => tally(c).passed).length;
+
+  const card = (icon, iconBg, label, value, unit, sub, subCls) => `
+    <div class="card flex items-start gap-3 px-4 py-4 sm:px-5">
+      <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg}">
+        <i data-lucide="${icon}" class="h-[18px] w-[18px]"></i>
+      </span>
+      <div class="min-w-0">
+        <p class="text-[11.5px] font-semibold text-slate-500">${label}</p>
+        <p class="mt-0.5 flex items-baseline gap-0.5 text-[24px] font-extrabold leading-none tracking-tight text-slate-900">
+          <span class="tabnum">${value}</span><span class="text-[13px] font-bold text-slate-400">${unit}</span>
+        </p>
+        <p class="mt-1.5 text-[11px] ${subCls || 'text-slate-400'}">${sub}</p>
+      </div>
+    </div>`;
+
+  el.innerHTML =
+    card('users', 'bg-slate-900 text-white', '영입 확정 멤버', MEMBERS.length, '명',
+      '크로스 인더스트리 10인 · 만장일치 기준') +
+    card('user-plus', 'bg-amber-100 text-amber-700', '심사 중 후보자', reviewing, '명',
+      (confirmed > 0 ? '영입 확정 ' + confirmed + '명 · ' : '') + '합의 대기 중') +
+    card('messages-square', 'bg-indigo-100 text-indigo-700', '이번 주 살롱 아젠다', state.agendas.length, '건',
+      '11/13 (금) 살롱 기준 · 댓글 ' + totalComments() + '개');
+}
+
+function renderTabs() {
+  const el = document.getElementById('tabs');
+  if (!el) return;
+  const tabs = [
+    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', sub: 'Membership Gate' },
+    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', sub: 'Discussions' },
+    { id: 'rules', icon: 'scroll-text', label: '살롱 그라운드룰', sub: 'Ground Rules' }
+  ];
+  el.innerHTML = tabs.map(t => {
+    const active = state.tab === t.id;
+    return `<button data-action="tab" data-id="${t.id}" role="tab" aria-selected="${active}"
+      class="group relative shrink-0 rounded-lg px-3 py-2 text-left transition sm:px-3.5 ${active ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-white/60'}">
+      <span class="flex items-center gap-1.5 text-[13px] font-semibold ${active ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-800'}">
+        <i data-lucide="${t.icon}" class="h-4 w-4 ${active ? 'text-indigo-600' : 'text-slate-400'}"></i>
+        ${t.label}
+      </span>
+      <span class="mt-0.5 block pl-[22px] text-[10px] uppercase tracking-wider ${active ? 'text-slate-400' : 'text-slate-400/70'}">${t.sub}</span>
+      ${active ? '<span class="absolute inset-x-3 -bottom-[9px] h-[2px] rounded-full bg-indigo-600"></span>' : ''}
+    </button>`;
+  }).join('');
+}
+
+/* ---------------- candidate card ---------------- */
+
+function voteButtons(c, t) {
+  const mine = (c.votes && c.votes[ME]) || 'pending';
+  const btn = (kind, label, icon, onCls, offCls) => {
+    const on = mine === kind;
+    return `<button data-action="vote" data-cand="${c.id}" data-vote="${kind}"
+      class="flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-[12.5px] font-semibold transition ${on ? onCls + ' vote-active-wave' : offCls}">
+      <i data-lucide="${icon}" class="h-4 w-4"></i><span>${label}</span>
+      ${on ? '<span class="ml-0.5 rounded-full bg-white/70 px-1.5 py-0.5 text-[10px] font-bold text-slate-700">내 표</span>' : ''}
+    </button>`;
+  };
+  return `
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      ${btn('yes', '찬의 (동의하기)', 'thumbs-up',
+        'border-emerald-600 bg-emerald-600 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700')}
+      ${btn('conditional', '조건부 찬성', 'help-circle',
+        'border-amber-500 bg-amber-500 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800')}
+      ${btn('veto', '비토 (오프라인 재논의)', 'ban',
+        'border-rose-600 bg-rose-600 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700')}
+    </div>`;
+}
+
+function gauge(c, t) {
+  const segs = [];
+  const push = (n, cls, label) => { for (let i = 0; i < n; i++) segs.push('<div class="seg seg-hover flex-1 ' + cls + '" title="' + label + '"></div>'); };
+  push(t.yes, 'bg-emerald-500', '찬성');
+  push(t.conditional, 'bg-amber-400', '조건부 찬성');
+  push(t.pending, 'bg-slate-200', '검토 중');
+  push(t.veto, 'bg-rose-500', '비토');
+
+  const remainTxt = t.blocked
+    ? '비토 ' + t.veto + '명 — 오프라인 재논의'
+    : t.passed
+      ? '만장일치 달성'
+      : '만장일치까지 ' + t.pending + '명';
+  const remainCls = t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-amber-600';
+
+  const legend = [
+    ['bg-emerald-500', '찬성', t.yes],
+    ['bg-amber-400', '조건부', t.conditional],
+    ['bg-slate-300', '검토 중', t.pending],
+    ['bg-rose-500', '비토', t.veto]
+  ].map(([dot, label, n]) =>
+    '<span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="h-1.5 w-1.5 rounded-full ' + dot + '"></span>' + label + ' <b class="tabnum font-semibold text-slate-700">' + n + '</b></span>'
+  ).join('');
+
+  return `
+    <div class="mt-4 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <p class="text-[12px] font-semibold text-slate-700">합의 게이지
+          <span class="ml-0.5 font-normal text-slate-500"><b class="tabnum text-slate-700">${t.cast}</b>/10 찬성 (${t.pct}%)${t.pending ? ' · ' + t.pending + '명 검토 중' : ''}</span>
+        </p>
+        <p class="text-[11.5px] font-bold ${remainCls}">${remainTxt}</p>
+      </div>
+      <div class="mt-2.5 flex gap-1">${segs.join('')}</div>
+      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">${legend}</div>
+    </div>`;
+}
+
+function voterGrid(c) {
+  return '<details class="mt-3 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5">' +
+    '<summary class="flex items-center justify-between text-[12px] font-semibold text-slate-600">' +
+      '<span class="flex items-center gap-1.5"><i data-lucide="users" class="h-3.5 w-3.5 text-slate-400"></i>멤버 10인 투표 현황</span>' +
+      '<i data-lucide="chevron-down" class="chev h-4 w-4 text-slate-400"></i>' +
+    '</summary>' +
+    '<ul class="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">' +
+      MEMBERS.map(m => {
+        const v = (c.votes && c.votes[m.id]) || 'pending';
+        const st = VOTE_STYLE[v];
+        return '<li class="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-50">' +
+          avatar(m.id, 'sm') +
+          '<span class="min-w-0 flex-1 truncate text-[11.5px] font-semibold text-slate-700">' + esc(m.name) +
+            '<span class="ml-1 font-normal text-slate-400">' + esc(m.title) + '</span></span>' +
+          '<span class="inline-flex shrink-0 items-center gap-1 text-[10.5px] font-semibold ' + st.text + '">' +
+            '<span class="h-1.5 w-1.5 rounded-full ' + st.dot + '"></span>' + VOTE_LABEL[v] + '</span>' +
+        '</li>';
+      }).join('') +
+    '</ul></details>';
+}
+
+function commentList(kind, item, canComment) {
+  const rows = item.comments.slice().sort((a, b) => new Date(b.at) - new Date(a.at));
+  const head = '<div class="flex items-center justify-between">' +
+    '<p class="flex items-center gap-1.5 text-[12.5px] font-bold text-slate-800"><i data-lucide="message-circle" class="h-4 w-4 text-slate-400"></i>댓글 <span class="tabnum text-slate-500">' + item.comments.length + '</span>' +
+    '<span class="ml-1 text-[10.5px] font-normal text-slate-400">최신순</span></p>' +
+    '</div>';
+
+  const list = rows.length
+    ? '<ul class="mt-3 space-y-3.5">' + rows.map(cm => {
+        const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
+        return '<li class="fade-in rounded-xl border border-slate-100 bg-white px-3.5 py-3">' +
+          '<div class="flex items-center gap-2">' + avatar(cm.author, 'sm') +
+            '<span class="text-[12px] font-bold text-slate-800">' + esc(m.name) + '</span>' +
+            '<span class="truncate text-[10.5px] text-slate-400">' + esc(m.title) + '</span>' +
+            '<span class="ml-auto shrink-0 text-[10px] tabnum text-slate-400">' + fmtFull(cm.at) + '</span>' +
+          '</div>' +
+          '<p class="mt-2 text-[12.5px] leading-[1.7] text-slate-600">' + esc(cm.text) + '</p>' +
+          '<button data-action="like" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '" data-liked="' + (cm.likedByMe ? '1' : '0') + '"' +
+            ' class="mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10.5px] font-semibold transition ' +
+            (cm.likedByMe ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700') + '">' +
+            '<i data-lucide="heart" class="h-3 w-3"></i><span class="tabnum">' + (cm.likes || 0) + '</span></button>' +
+        '</li>';
+      }).join('') + '</ul>'
+    : '<p class="mt-3 rounded-xl border border-dashed border-slate-200 px-3 py-4 text-center text-[11.5px] text-slate-400">아직 댓글이 없습니다. 첫 의견을 남겨 보세요.</p>';
+
+  const form = canComment
+    ? '<form data-form="comment" data-kind="' + kind + '" data-item="' + item.id + '" class="mt-3">' +
+        '<div class="flex items-start gap-2">' + avatar(ME, 'sm') +
+          '<div class="min-w-0 flex-1">' +
+            '<textarea name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" placeholder="이 후보자에 대한 의견을 남겨 주세요. (멤버 ' + (MEMBER_BY_ID[ME].name) + '로 기록됩니다)" ' +
+              'class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[12.5px] leading-relaxed outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white">' + esc(drafts[kind + ':' + item.id] || '') + '</textarea>' +
+            '<div class="mt-1.5 flex items-center justify-between gap-2">' +
+              '<p class="text-[10.5px] text-slate-400">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
+              '<button type="submit" class="shrink-0 rounded-lg bg-ink px-3 py-1.5 text-[11.5px] font-semibold text-white transition hover:bg-slate-800">댓글 등록</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</form>'
+    : '';
+
+  return '<div class="mt-4 border-t border-slate-100 pt-3.5">' + head + list + form + '</div>';
+}
+
+function candidateCard(c) {
+  const t = tally(c);
+  const nominator = MEMBER_BY_ID[c.nominator] || MEMBER_BY_ID[ME];
+
+  const badge = t.blocked
+    ? '<span class="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10.5px] font-bold text-rose-700"><i data-lucide="ban" class="h-3 w-3"></i>비토 — 오프라인 재논의</span>'
+    : t.passed
+      ? '<span class="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700"><i data-lucide="check-circle-2" class="h-3 w-3"></i>영입 확정</span>'
+      : '<span class="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10.5px] font-bold text-amber-800"><i data-lucide="clock" class="h-3 w-3"></i>심사 진행 중</span>';
+
+  const banner = t.passed
+    ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3">' +
+        '<i data-lucide="trophy" class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"></i>' +
+        '<div><p class="text-[12.5px] font-bold text-emerald-800">영입 확정 — 11월 오프라인 살롱 초청</p>' +
+        '<p class="mt-0.5 text-[11px] text-emerald-700/90">10/10 만장일치 · ' + (c.confirmedAt ? fmtFull(c.confirmedAt) : '') + ' 통과</p></div></div>'
+    : t.blocked
+      ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">' +
+          '<i data-lucide="coffee" class="mt-0.5 h-4 w-4 shrink-0 text-rose-600"></i>' +
+          '<div><p class="text-[12.5px] font-bold text-rose-800">비토 발생 — 오프라인 커피 미팅으로 이관</p>' +
+          '<p class="mt-0.5 text-[11px] text-rose-700/90">비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div></div>'
+      : '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50/80 px-3.5 py-3">' +
+          '<i data-lucide="hourglass" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>' +
+          '<div><p class="text-[12.5px] font-bold text-amber-900">만장일치 대기 중 — ' + t.pending + '명이 아직 검토 중입니다</p>' +
+          '<p class="mt-0.5 text-[11px] text-amber-800/80">찬성이 8명을 넘어도, 남은 1명이 비토하면 들어오지 못합니다.</p></div></div>';
+
+  return `<article class="card fade-in p-4 sm:p-5" id="cand-${c.id}">
+    <div class="flex items-start justify-between gap-4">
+      <div class="min-w-0">
+        <div class="flex flex-wrap items-center gap-2">${badge}
+          <span class="text-[10.5px] tabnum text-slate-400">발제 ${fmtDay(c.nominatedAt)}</span>
+        </div>
+        <h3 class="mt-2 text-[17px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[18px]">${esc(c.title)}</h3>
+        <p class="mt-1 text-[12.5px] text-slate-500">${esc(c.headline || '')}</p>
+      </div>
+      <div class="shrink-0 text-right">
+        <p class="text-[26px] font-extrabold leading-none tracking-tight tabnum ${t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-slate-900'}">${t.pct}<span class="text-[13px] font-bold text-slate-400">%</span></p>
+        <p class="mt-1 text-[10.5px] font-semibold text-slate-400">합의율</p>
+      </div>
+    </div>
+
+    <div class="mt-2.5 flex flex-wrap gap-1.5">
+      ${(c.highlights || []).map(h => '<span class="chip">' + esc(h) + '</span>').join('')}
+    </div>
+
+    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(c.summary)}</p>
+
+    <div class="mt-3.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
+      <div class="flex items-center gap-2">
+        <span class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">추천인</span>
+        ${avatar(nominator.id, 'sm')}
+        <span class="text-[12px] font-bold text-slate-800">${esc(nominator.name)}</span>
+        <span class="truncate text-[10.5px] text-slate-400">${esc(nominator.role)} · ${esc(nominator.title)}</span>
+      </div>
+      ${c.reason ? '<p class="mt-2 text-[11.5px] leading-[1.7] text-slate-500">“' + esc(c.reason) + '”</p>' : ''}
+    </div>
+
+    ${banner}
+    ${gauge(c, t)}
+    <div class="mt-3">${voteButtons(c, t)}</div>
+    <p class="mt-2 text-[10.5px] leading-relaxed text-slate-400">내 표: <b class="font-semibold text-slate-600">${VOTE_LABEL[(c.votes && c.votes[ME]) || 'pending']}</b> · 1명이라도 비토하면 통과되지 않고, 발제자와 비토한 멤버의 오프라인 커피 미팅으로 이어집니다.</p>
+    ${voterGrid(c)}
+    ${commentList('candidate', c, true)}
+  </article>`;
+}
+
+/* ---------------- panels ---------------- */
+
+function renderGate() {
+  const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
+  return `
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 class="text-[15px] font-bold tracking-tight text-slate-900">멤버 영입 심사
+          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Membership Consensus Gate</span>
+        </h2>
+        <p class="mt-1 text-[12px] text-slate-500">후보자 카드에 멤버 10인이 표를 던집니다. 10/10이 아니면 아무도 들어오지 못합니다.</p>
+      </div>
+      <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-[12.5px] font-semibold text-white shadow-sm transition hover:bg-indigo-700">
+        <i data-lucide="plus" class="h-4 w-4"></i>새 후보자 추천 (발제)
+      </button>
+    </div>
+
+    <div class="mt-3 flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5">
+      <i data-lucide="info" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400"></i>
+      <p class="text-[11.5px] leading-relaxed text-slate-500">
+        <b class="font-semibold text-slate-700">심사 중 ${reviewing}건</b> · 확정은 10명 전원 찬성일 때만. 비토 1표면 카드가 오프라인 재논의로 넘어갑니다.
+        표와 댓글은 이 브라우저에 저장되는 <span class="font-semibold text-slate-600">데모 동작</span>입니다.
+      </p>
+    </div>
+
+    <div class="mt-4 space-y-4">
+      ${state.candidates.map(candidateCard).join('')}
+    </div>
+
+    <button data-action="modal-open" class="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white/50 px-4 py-4 text-[12.5px] font-semibold text-slate-500 transition hover:border-indigo-300 hover:bg-white hover:text-indigo-700">
+      <i data-lucide="user-plus" class="h-4 w-4"></i>새 후보자 추천 (발제)
+    </button>`;
+}
+
+function agendaCard(a) {
+  const owner = MEMBER_BY_ID[a.owner] || MEMBER_BY_ID[ME];
+  const open = !!agendaOpen[a.id];
+  const rows = a.comments.slice().sort((x, y) => new Date(y.at) - new Date(x.at)).slice(0, open ? 99 : 1);
+
+  const preview = rows.map(cm => {
+    const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
+    return '<li class="flex items-start gap-2">' + avatar(cm.author, 'sm') +
+      '<div class="min-w-0"><p class="text-[11px] font-bold text-slate-700">' + esc(m.name) + ' <span class="font-normal text-slate-400">' + esc(m.title) + '</span></p>' +
+      '<p class="mt-0.5 text-[12px] leading-[1.7] text-slate-600 ' + (open ? '' : 'line-clamp-2') + '">' + esc(cm.text) + '</p></div></li>';
+  }).join('');
+
+  return `<article class="card p-4 sm:p-5">
+    <div class="flex items-start gap-3">
+      <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[12px] font-bold tabnum text-white">${a.no}</span>
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">${esc(a.status)}</span>
+          ${a.tags.map(tg => '<span class="chip">#' + esc(tg) + '</span>').join('')}
+        </div>
+        <h3 class="mt-1.5 text-[15.5px] font-bold leading-snug tracking-tight text-slate-900">${esc(a.title)}</h3>
+        <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] text-slate-400">
+          <span class="flex items-center gap-1">${avatar(owner.id, 'sm')}<b class="font-semibold text-slate-600">${esc(owner.name)}</b> ${esc(owner.title)} 발제</span>
+          <span>·</span><span class="tabnum">${fmtFull(a.at)}</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(a.summary)}</p>
+
+    ${open ? '<div class="mt-3 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">' +
+        '<p class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">핵심 쟁점</p>' +
+        '<ul class="mt-2 space-y-1.5">' + a.points.map((p, i) =>
+          '<li class="flex gap-2 text-[12px] leading-[1.7] text-slate-600"><span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-indigo-400"></span><span>' + esc(p) + '</span></li>'
+        ).join('') + '</ul></div>' : ''}
+
+    ${open ? '' : '<div class="mt-3 space-y-2.5">' + preview + '</div>'}
+
+    <div class="mt-3 flex items-center justify-between gap-2">
+      <button data-action="agenda-toggle" data-id="${a.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+        <i data-lucide="${open ? 'chevron-up' : 'chevron-down'}" class="h-3.5 w-3.5"></i>${open ? '접기' : '쟁점·댓글 ' + a.comments.length + '개 펼치기'}
+      </button>
+      ${open ? '' : '<span class="text-[10.5px] text-slate-400">댓글 ' + a.comments.length + '</span>'}
+    </div>
+
+    ${open ? commentList('agenda', a, true) : ''}
+  </article>`;
+}
+
+function renderTopics() {
+  return `
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 class="text-[15px] font-bold tracking-tight text-slate-900">AX 아젠다 토론
+          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Discussions &amp; Case Studies</span>
+        </h2>
+        <p class="mt-1 text-[12px] text-slate-500">이번 주 살롱에 올라온 안건 ${state.agendas.length}건. 각 안건은 발제자와 현장 사례를 함께 가져옵니다.</p>
+      </div>
+      <span class="chip">댓글 <b class="tabnum ml-0.5">${totalComments()}</b></span>
+    </div>
+    <div class="mt-4 space-y-4">${state.agendas.map(agendaCard).join('')}</div>`;
+}
+
+function renderRules() {
+  return `
+    <div>
+      <h2 class="text-[15px] font-bold tracking-tight text-slate-900">살롱 그라운드룰
+        <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Ground Rules</span>
+      </h2>
+      <p class="mt-1 text-[12px] text-slate-500">이 테이블이 유지되는 이유는 세 줄입니다. 개정도 만장일치로만 합니다.</p>
+    </div>
+
+    <div class="mt-4 space-y-4">
+      ${state.rules.map(r => `
+        <article class="card p-4 sm:p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink text-amber-300">
+              <i data-lucide="${r.icon}" class="h-[18px] w-[18px]"></i>
+            </span>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[10.5px] font-bold tabnum uppercase tracking-wider text-slate-400">Rule ${r.no}</span>
+                <span class="chip">${esc(r.tag)}</span>
+              </div>
+              <h3 class="mt-1.5 text-[15px] font-bold leading-snug tracking-tight text-slate-900">${esc(r.title)}</h3>
+            </div>
+          </div>
+          <p class="mt-3 text-[12.5px] leading-[1.8] text-slate-600">${esc(r.body)}</p>
+          <ul class="mt-3 flex flex-wrap gap-1.5">
+            ${r.notes.map(n => '<li class="chip">' + esc(n) + '</li>').join('')}
+          </ul>
+        </article>`).join('')}
+    </div>
+
+    <div class="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3">
+      <i data-lucide="quote" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>
+      <p class="text-[12px] leading-[1.75] text-amber-900">비슷한 사람끼리 모이면 하소연만 남는다. 그래서 이 모임은 직군이 아니라 <b class="font-semibold">문제</b>로 사람을 고릅니다.</p>
+    </div>`;
+}
+
+/* ---------------- render ---------------- */
+
+function render() {
+  renderHeaderAvatars();
+  renderStats();
+  renderTabs();
+  const app = document.getElementById('app');
+  if (!app) return;
+  let html = '';
+  if (state.tab === 'gate') html = renderGate();
+  else if (state.tab === 'topics') html = renderTopics();
+  else html = renderRules();
+  app.innerHTML = html;
+  if (window.lucide) window.lucide.createIcons();
+  const up = document.getElementById('updated-at');
+  if (up) up.textContent = fmtDayDot(new Date().toISOString());
+}
+
+/* ---------------- actions ---------------- */
+
+function findItem(kind, id) {
+  if (kind === 'candidate') return state.candidates.find(c => c.id === id);
+  if (kind === 'agenda') return state.agendas.find(a => a.id === id);
+  return null;
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+
+  if (action === 'tab') {
+    state.tab = el.dataset.id;
+    saveState();
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  if (action === 'modal-open') {
+    document.getElementById('modal').classList.remove('hidden');
+    const first = document.querySelector('#new-candidate-form input[name="title"]');
+    if (first) setTimeout(() => first.focus(), 60);
+    return;
+  }
+
+  if (action === 'modal-close') {
+    document.getElementById('modal').classList.add('hidden');
+    return;
+  }
+
+  if (action === 'vote') {
+    const c = state.candidates.find(x => x.id === el.dataset.cand);
+    if (!c) return;
+    const vote = el.dataset.vote;
+    c.votes = c.votes || {};
+    const prev = c.votes[ME] || 'pending';
+    c.votes[ME] = (prev === vote) ? 'pending' : vote;   // clicking the same vote withdraws it
+
+    if (c.votes[ME] === 'yes' || c.votes[ME] === 'conditional' || c.votes[ME] === 'veto') {
+      c.votes[ME + '_at'] = new Date().toISOString();
+    }
+    const t = tally(c);
+    if (t.passed && !c.confirmedAt) c.confirmedAt = new Date().toISOString();
+    if (!t.passed) delete c.confirmedAt;
+
+    saveState();
+    render();
+    if (prev === vote) toast('표를 철회했습니다 — ' + VOTE_LABEL.pending + '으로 돌아갑니다');
+    else if (t.passed) toast('10/10 만장일치 — 영입이 확정되었습니다', 'ok');
+    else if (t.blocked) toast('비토가 기록되었습니다 — 오프라인 재논의로 이관됩니다', 'bad');
+    else if (vote === 'yes') toast('찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'ok');
+    else if (vote === 'conditional') toast('조건부 찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'warn');
+    else toast('비토로 기록했습니다', 'bad');
+    return;
+  }
+
+  if (action === 'agenda-toggle') {
+    const id = el.dataset.id;
+    agendaOpen[id] = !agendaOpen[id];
+    render();
+    const node = document.querySelector('[data-action="agenda-toggle"][data-id="' + id + '"]');
+    if (node) node.scrollIntoView({ block: 'nearest' });
+    return;
+  }
+
+  if (action === 'like') {
+    const item = findItem(el.dataset.kind, el.dataset.item);
+    if (!item) return;
+    const cm = item.comments.find(x => x.id === el.dataset.comment);
+    if (!cm) return;
+    if (cm.likedByMe) { cm.likes = Math.max(0, (cm.likes || 0) - 1); cm.likedByMe = false; }
+    else { cm.likes = (cm.likes || 0) + 1; cm.likedByMe = true; }
+    saveState();
+    render();
+    return;
+  }
+
+  if (action === 'reset') {
+    state = clone(SEED);
+    state.tab = 'gate';
+    drafts = {};
+    agendaOpen = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
+    render();
+    toast('데모 상태를 초기값으로 되돌렸습니다');
+    return;
+  }
+});
+
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el && el.dataset && el.dataset.draft) drafts[el.dataset.draft] = el.value;
+});
+
+document.addEventListener('submit', (e) => {
+  const form = e.target;
+
+  if (form.id === 'new-candidate-form') {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const title = String(fd.get('title') || '').trim();
+    const summary = String(fd.get('summary') || '').trim();
+    if (!title || !summary) return;
+    const votes = {};
+    MEMBERS.forEach(m => { votes[m.id] = (m.id === ME) ? 'yes' : 'pending'; });
+    const cand = {
+      id: 'c' + Date.now(),
+      title,
+      headline: String(fd.get('headline') || '').trim(),
+      nominator: ME,
+      nominatedAt: new Date().toISOString(),
+      summary,
+      highlights: [],
+      reason: String(fd.get('reason') || '').trim(),
+      votes,
+      comments: []
+    };
+    state.candidates.unshift(cand);
+    state.tab = 'gate';
+    saveState();
+    form.reset();
+    document.getElementById('modal').classList.add('hidden');
+    render();
+    toast('후보자를 발제했습니다 — 1/10 찬성, 나머지 9명에게 심사 카드가 열렸습니다', 'ok');
+    const node = document.getElementById('cand-' + cand.id);
+    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  if (form.dataset.form === 'comment') {
+    e.preventDefault();
+    const item = findItem(form.dataset.kind, form.dataset.item);
+    if (!item) return;
+    const ta = form.querySelector('textarea[name="text"]');
+    const text = (ta && ta.value || '').trim();
+    if (!text) { if (ta) ta.focus(); return; }
+    item.comments.push({
+      id: 'k' + Date.now(),
+      author: ME,
+      text,
+      at: new Date().toISOString(),
+      likes: 0,
+      likedByMe: false
+    });
+    delete drafts[form.dataset.kind + ':' + form.dataset.item];
+    saveState();
+    render();
+    toast('댓글을 등록했습니다', 'ok');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.getElementById('modal').classList.add('hidden');
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    const form = e.target.closest && e.target.closest('form[data-form="comment"]');
+    if (form) form.requestSubmit();
+  }
+});
+
+/* ---------------- boot ---------------- */
+
+function boot() {
+  render();
+  if (window.lucide) window.lucide.createIcons();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+window.addEventListener('load', () => { if (window.lucide) window.lucide.createIcons(); });
+</script>
+</body>
+</html>
