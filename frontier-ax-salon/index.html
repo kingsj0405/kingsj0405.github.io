@@ -77,6 +77,49 @@
 </head>
 <body class="font-sans antialiased">
 
+<!-- ============ PASSWORD GATE OVERLAY ============ -->
+<div id="gate-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-ink px-4 transition-opacity duration-300">
+  <div class="absolute inset-0" style="background:
+      radial-gradient(800px 400px at 50% -10%, rgba(201,162,39,.18), transparent 70%),
+      radial-gradient(600px 300px at 50% 110%, rgba(59,130,246,.15), transparent 70%);"></div>
+  <div class="relative w-full max-w-md rounded-2xl border border-slate-700/60 bg-[#0f172a]/95 p-7 shadow-2xl backdrop-blur-xl sm:p-9 text-center">
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-300">
+      <i data-lucide="lock" class="h-6 w-6"></i>
+    </div>
+    <div class="mt-4 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/90">
+      <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
+      Frontier AX Salon · Private Gate
+    </div>
+    <h2 class="mt-2 text-2xl font-bold tracking-tight text-white">프론티어 AX 살롱</h2>
+    <p class="mt-2 text-[12.5px] text-slate-400 leading-relaxed">
+      크로스 인더스트리 리더 모임의 비공개 보드입니다.<br />
+      초대받은 멤버용 비밀번호(Passcode)를 입력해 주세요.
+    </p>
+
+    <form id="gate-form" class="mt-6 text-left">
+      <div>
+        <label for="gate-pass" class="block text-[11.5px] font-semibold text-slate-300">살롱 비밀번호</label>
+        <div class="relative mt-1.5">
+          <input type="password" id="gate-pass" name="pass" autocomplete="current-password" autofocus required
+            placeholder="비밀번호 입력 (예: ax2026)"
+            class="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400" />
+        </div>
+        <p id="gate-error" class="mt-2 hidden text-xs font-medium text-rose-400">비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
+      </div>
+      <button type="submit"
+        class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 active:scale-[0.99]">
+        <span>입장하기</span>
+        <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </button>
+      <p class="mt-3 text-center text-[11px] text-slate-500">
+        패스코드는 슬랙 공지 또는 단톡방에서 확인하실 수 있습니다.
+      </p>
+    </form>
+  </div>
+</div>
+
+<div id="main-content" class="transition-opacity duration-300 opacity-0 pointer-events-none">
+
 <!-- ============ HEADER ============ -->
 <header class="relative overflow-hidden bg-ink text-white">
   <div class="absolute inset-0" style="background:
@@ -130,11 +173,18 @@
       <p class="mt-1">화면의 멤버·후보자 정보는 데모 데이터입니다. 실제 심사는 오프라인 살롱에서 확정됩니다.</p>
       <p class="mt-0.5">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 13.</span></p>
     </div>
-    <button data-action="reset" class="self-start rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 sm:self-auto">
-      데모 상태 초기화
-    </button>
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <button data-action="lock-gate" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 flex items-center gap-1.5">
+        <i data-lucide="lock" class="h-3 w-3 text-slate-400"></i>
+        <span>화면 잠금</span>
+      </button>
+      <button data-action="reset" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+        데모 상태 초기화
+      </button>
+    </div>
   </div>
 </footer>
+</div>
 
 <!-- ============ NEW CANDIDATE MODAL ============ -->
 <div id="modal" class="fixed inset-0 z-50 hidden">
@@ -946,6 +996,16 @@ document.addEventListener('click', (e) => {
     toast('데모 상태를 초기값으로 되돌렸습니다');
     return;
   }
+
+  if (action === 'lock-gate') {
+    try {
+      localStorage.removeItem('frontier_ax_auth');
+      sessionStorage.removeItem('frontier_ax_auth');
+    } catch (err) {}
+    lockGate();
+    toast('화면을 잠갔습니다');
+    return;
+  }
 });
 
 document.addEventListener('input', (e) => {
@@ -955,6 +1015,30 @@ document.addEventListener('input', (e) => {
 
 document.addEventListener('submit', (e) => {
   const form = e.target;
+
+  if (form.id === 'gate-form') {
+    e.preventDefault();
+    const passInput = document.getElementById('gate-pass');
+    const errEl = document.getElementById('gate-error');
+    const val = (passInput && passInput.value || '').trim();
+    verifyPasscode(val).then(ok => {
+      if (ok) {
+        try {
+          localStorage.setItem('frontier_ax_auth', 'true');
+          sessionStorage.setItem('frontier_ax_auth', 'true');
+        } catch (err) {}
+        unlockGate();
+        toast('인증되었습니다. 환영합니다!', 'ok');
+      } else {
+        if (errEl) errEl.classList.remove('hidden');
+        if (passInput) {
+          passInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
+          passInput.select();
+        }
+      }
+    });
+    return;
+  }
 
   if (form.id === 'new-candidate-form') {
     e.preventDefault();
@@ -1018,10 +1102,83 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+/* ---------------- gate auth ---------------- */
+
+async function verifyPasscode(input) {
+  const clean = (input || '').trim().toLowerCase();
+  if (clean === 'ax2026' || clean === 'axsalon' || clean === 'frontier' || clean === '1113') return true;
+  try {
+    const msgBuffer = new TextEncoder().encode(clean);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const validHashes = [
+      'ffb363cbac73cb5d5f5ed87c87e83a2a069358c6ea8e719ed30bb924537e3739', // ax2026
+      'd9d1e27d1cfa6c68e09f332e9e98b71a9c74b5613b9a9ea939dea51a8058f316', // axsalon
+      'c6f2a33eb46b4122aa6a8cf12cdca4d7bc9e3b4a2bf180e0c03ce425e4c69b2d', // frontier
+      'd1c3be1bcfa465f1e14902802bb036d75d312bc8527a29633e9be573a4b009e8'  // 1113
+    ];
+    return validHashes.includes(hashHex);
+  } catch (err) {
+    return false;
+  }
+}
+
+async function checkGateAuth() {
+  let isAuth = false;
+  try {
+    isAuth = localStorage.getItem('frontier_ax_auth') === 'true' || sessionStorage.getItem('frontier_ax_auth') === 'true';
+  } catch (e) {}
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const qPass = urlParams.get('pass') || urlParams.get('key');
+  if (qPass) {
+    const ok = await verifyPasscode(qPass);
+    if (ok) {
+      isAuth = true;
+      try {
+        localStorage.setItem('frontier_ax_auth', 'true');
+        sessionStorage.setItem('frontier_ax_auth', 'true');
+      } catch (e) {}
+    }
+  }
+
+  if (isAuth) {
+    unlockGate();
+  } else {
+    lockGate();
+  }
+}
+
+function unlockGate() {
+  const overlay = document.getElementById('gate-overlay');
+  const main = document.getElementById('main-content');
+  if (overlay) overlay.classList.add('hidden');
+  if (main) {
+    main.classList.remove('opacity-0', 'pointer-events-none');
+    main.classList.add('opacity-100');
+  }
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function lockGate() {
+  const overlay = document.getElementById('gate-overlay');
+  const main = document.getElementById('main-content');
+  if (overlay) overlay.classList.remove('hidden');
+  if (main) {
+    main.classList.add('opacity-0', 'pointer-events-none');
+    main.classList.remove('opacity-100');
+  }
+  const passInput = document.getElementById('gate-pass');
+  if (passInput) setTimeout(() => passInput.focus(), 100);
+  if (window.lucide) window.lucide.createIcons();
+}
+
 /* ---------------- boot ---------------- */
 
 function boot() {
   render();
+  checkGateAuth();
   if (window.lucide) window.lucide.createIcons();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
