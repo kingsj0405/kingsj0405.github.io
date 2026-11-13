@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세종양 에세이 레터 독자 담벼락 | yangspace</title>
+  <meta name="description" content="세종양의 비정기 에세이 레터 독자 담벼락. 로그인 없이 남기는 익명의 솔직한 한마디와 감상.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20%22100%22%20%22100%22><text y=%22.9em%22 font-size=%2290%22>♨️</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            },
+            slate: {
+              850: '#111726',
+              900: '#0b0f17',
+              950: '#06090e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card-glow:hover {
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.08), 0 8px 10px -6px rgba(245, 158, 11, 0.04);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #262f40;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Navigation / Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="https://yangspace.co.kr" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500/20 transition">
+          🐑
+        </span>
+        <div>
+          <span class="font-bold text-sm text-slate-200 group-hover:text-amber-400 transition">yangspace</span>
+          <span class="text-xs text-slate-500 ml-1">/ letter-talk</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="https://maily.so/bismute/posts/mjz6q9jnrwk" target="_blank" class="text-xs px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 flex items-center gap-1.5 transition">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span class="hidden sm:inline">1호 다시보기</span>
+        </a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeFc1h3N6axlQcsH6BmqnnutYl3xvmGrXVv7cr8lnVd5H6tZA/viewform" target="_blank" class="text-xs px-3 py-1.5 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold flex items-center gap-1.5 transition shadow-sm">
+          <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+          <span>구독하기</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-4xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-3">
+        <span>♨️ 뜨거운 물에서 건져 올린 생각들</span>
+        <span class="w-1 h-1 rounded-full bg-amber-400"></span>
+        <span>독자 라운지</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+        세종양 에세이 레터 독자 담벼락
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        로그인이나 가입 없이, 편하게 익명으로 남기는 한마디.<br class="hidden sm:inline">
+        사우나 에세이 후기부터 다음 호에 읽고 싶은 주제까지 자유롭게 던져주세요.
+      </p>
+
+      <!-- Quick Metrics -->
+      <div class="flex items-center justify-center gap-4 sm:gap-6 mt-6 text-xs text-slate-400">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="message-square" class="w-4 h-4 text-amber-400"></i>
+          <span>독자 한마디 <strong id="metric-count" class="text-slate-200">2</strong>개</span>
+        </div>
+        <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="thermometer" class="w-4 h-4 text-rose-400"></i>
+          <span>온탕 지수 <strong class="text-slate-200">42.5℃ ♨️</strong></span>
+        </div>
+        <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+          <span>익명 100% 보장</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Form Card -->
+    <div class="bg-slate-850/80 border border-slate-800 rounded-2xl p-5 sm:p-6 mb-10 backdrop-blur shadow-xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/5 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+            익명으로 한마디 남기기
+          </h2>
+        </div>
+        <span class="text-xs text-slate-500">별명·호수 자유 선택</span>
+      </div>
+
+      <form id="comment-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Nickname -->
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1.5">닉네임</label>
+            <input 
+              type="text" 
+              id="input-name" 
+              placeholder="익명의 독자 (비워두면 자동 지정)" 
+              maxlength="20"
+              class="w-full bg-slate-900 border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/80 focus:ring-1 focus:ring-amber-500/80 transition"
+            >
+          </div>
+
+          <!-- Issue Select -->
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1.5">관련 에세이</label>
+            <select 
+              id="input-issue" 
+              class="w-full bg-slate-900 border border-slate-700/70 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/80 focus:ring-1 focus:ring-amber-500/80 transition"
+            >
+              <option value="1호 (사우나와 경제학)" selected>♨️ 1호 (사우나와 경제학)</option>
+              <option value="2호 (다음 호)">💡 2호 (다음 호 희망 주제)</option>
+              <option value="기타 / 전체">💬 기타 / 세종양에게 자유 한마디</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Emoji Reaction Picker -->
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1.5">오늘의 반응 이모지</label>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="emoji-group">
+            <button type="button" onclick="selectEmoji('♨️ 뜨거운 물 최고')" class="emoji-btn active flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border text-xs font-medium transition bg-amber-500/10 border-amber-500/50 text-amber-300" data-value="♨️ 뜨거운 물 최고">
+              <span>♨️</span><span class="truncate">온탕최고</span>
+            </button>
+            <button type="button" onclick="selectEmoji('☕ 커피 한잔')" class="emoji-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 text-xs font-medium transition" data-value="☕ 커피 한잔">
+              <span>☕</span><span class="truncate">커피한잔</span>
+            </button>
+            <button type="button" onclick="selectEmoji('🔥 심장 뛴다')" class="emoji-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 text-xs font-medium transition" data-value="🔥 심장 뛴다">
+              <span>🔥</span><span class="truncate">심장뛴다</span>
+            </button>
+            <button type="button" onclick="selectEmoji('💡 번뜩임')" class="emoji-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 text-xs font-medium transition" data-value="💡 번뜩임">
+              <span>💡</span><span class="truncate">번뜩임</span>
+            </button>
+            <button type="button" onclick="selectEmoji('🐑 메에')" class="emoji-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 text-xs font-medium transition" data-value="🐑 메에">
+              <span>🐑</span><span class="truncate">메에</span>
+            </button>
+            <button type="button" onclick="selectEmoji('ㅋㅋㅋ 빵터짐')" class="emoji-btn flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 text-xs font-medium transition" data-value="ㅋㅋㅋ 빵터짐">
+              <span>🤣</span><span class="truncate">빵터짐</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Message Body -->
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1.5">남길 한마디 <span class="text-amber-400">*</span></label>
+          <textarea 
+            id="input-message" 
+            rows="3" 
+            required 
+            maxlength="500"
+            placeholder="에세이를 읽고 든 생각, 나만의 사우나 루틴, 공감 가는 구절 등 무엇이든 적어주세요..."
+            class="w-full bg-slate-900 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/80 focus:ring-1 focus:ring-amber-500/80 transition resize-none custom-scrollbar"
+          ></textarea>
+          <div class="flex justify-between items-center text-[11px] text-slate-500 mt-1">
+            <span>부적절하거나 상처를 주는 글은 관리자에 의해 정리될 수 있습니다.</span>
+            <span id="char-count">0/500</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end pt-1">
+          <button 
+            type="submit" 
+            id="submit-btn"
+            class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm flex items-center gap-2 transition transform active:scale-95 shadow-md shadow-amber-500/10 cursor-pointer"
+          >
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>담벼락에 띄우기</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Feed Filter Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2">
+        <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i>
+        <h3 class="text-sm font-bold text-slate-200">독자들의 생각 모아보기</h3>
+      </div>
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="filter-tabs">
+        <button onclick="setFilter('all')" class="filter-tab active text-xs px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 whitespace-nowrap" data-filter="all">전체</button>
+        <button onclick="setFilter('1호')" class="filter-tab text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-slate-700/60 whitespace-nowrap" data-filter="1호">♨️ 1호 사우나</button>
+        <button onclick="setFilter('2호')" class="filter-tab text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-slate-700/60 whitespace-nowrap" data-filter="2호">💡 2호 기대</button>
+        <button onclick="setFilter('기타')" class="filter-tab text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-slate-700/60 whitespace-nowrap" data-filter="기타">💬 자유 한마디</button>
+      </div>
+    </div>
+
+    <!-- Feed Container -->
+    <div id="comment-feed" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Loading Skeleton -->
+      <div class="bg-slate-850/60 border border-slate-800 rounded-2xl p-5 animate-pulse">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-full bg-slate-800"></div>
+          <div class="space-y-1.5 flex-1">
+            <div class="w-24 h-3.5 bg-slate-800 rounded"></div>
+            <div class="w-16 h-2.5 bg-slate-800/60 rounded"></div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-3 bg-slate-800 rounded"></div>
+          <div class="w-3/4 h-3 bg-slate-800 rounded"></div>
+        </div>
+      </div>
+      <div class="bg-slate-850/60 border border-slate-800 rounded-2xl p-5 animate-pulse hidden sm:block">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-full bg-slate-800"></div>
+          <div class="space-y-1.5 flex-1">
+            <div class="w-20 h-3.5 bg-slate-800 rounded"></div>
+            <div class="w-14 h-2.5 bg-slate-800/60 rounded"></div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="w-full h-3 bg-slate-800 rounded"></div>
+          <div class="w-2/3 h-3 bg-slate-800 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="empty-state" class="hidden text-center py-12">
+      <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-2xl mx-auto mb-3">
+        ♨️
+      </div>
+      <p class="text-sm text-slate-400 font-medium">아직 해당 호수에 남겨진 한마디가 없습니다.</p>
+      <p class="text-xs text-slate-500 mt-1">첫 번째 따뜻한 한마디의 주인공이 되어보세요!</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/70 py-8 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-4xl mx-auto px-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-center gap-4 text-slate-400 font-medium">
+        <a href="https://yangspace.co.kr" class="hover:text-amber-400 transition">홈 (yangspace.co.kr)</a>
+        <span>·</span>
+        <a href="https://blog.yangspace.co.kr" target="_blank" class="hover:text-amber-400 transition">노션 블로그</a>
+        <span>·</span>
+        <a href="https://maily.so/bismute/posts/mjz6q9jnrwk" target="_blank" class="hover:text-amber-400 transition">메일리 1호 아카이브</a>
+        <span>·</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeFc1h3N6axlQcsH6BmqnnutYl3xvmGrXVv7cr8lnVd5H6tZA/viewform" target="_blank" class="hover:text-amber-400 transition">비정기 레터 구독</a>
+      </div>
+      <p class="text-[11px] text-slate-600">
+        © 2026 Sejong Yang · Crafted with Pickle & Cloudflare Pages · Pure Anonymous Lounge
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-800 border border-amber-500/40 text-slate-100 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+      <span class="text-lg" id="toast-icon">♨️</span>
+      <div>
+        <p class="text-xs font-bold text-amber-400" id="toast-title">담벼락 등록 완료</p>
+        <p class="text-xs text-slate-300" id="toast-msg">소중한 한마디가 실시간으로 기록되었습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const SPREADSHEET_ID = '1GkxkeIewJVFi_WfGjG-KFdkLUvb__CZhFV4zEdUdzj4';
+    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+    const FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSch3wLL1XpMhZmP0urZqoL6Pc_cW2nmkhKrs5COEKoL52Xy5g/formResponse';
+    
+    // Google Form entry keys
+    const ENTRY_NAME = 'entry.1753761451';
+    const ENTRY_ISSUE = 'entry.557110804';
+    const ENTRY_MESSAGE = 'entry.408148807';
+    const ENTRY_EMOJI = 'entry.1672396009';
+
+    // State
+    let selectedEmoji = '♨️ 뜨거운 물 최고';
+    let currentFilter = 'all';
+    let allComments = [];
+
+    // Character counter
+    const messageInput = document.getElementById('input-message');
+    const charCount = document.getElementById('char-count');
+    messageInput.addEventListener('input', () => {
+      charCount.textContent = `${messageInput.value.length}/500`;
+    });
+
+    // Emoji Selection
+    function selectEmoji(val) {
+      selectedEmoji = val;
+      document.querySelectorAll('.emoji-btn').forEach(btn => {
+        if (btn.dataset.value === val) {
+          btn.classList.add('bg-amber-500/10', 'border-amber-500/50', 'text-amber-300');
+          btn.classList.remove('border-slate-800', 'bg-slate-900/60', 'text-slate-300');
+        } else {
+          btn.classList.remove('bg-amber-500/10', 'border-amber-500/50', 'text-amber-300');
+          btn.classList.add('border-slate-800', 'bg-slate-900/60', 'text-slate-300');
+        }
+      });
+    }
+
+    // Filter selection
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        if (btn.dataset.filter === filter) {
+          btn.className = 'filter-tab text-xs px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30 whitespace-nowrap';
+        } else {
+          btn.className = 'filter-tab text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-slate-700/60 whitespace-nowrap';
+        }
+      });
+      renderComments();
+    }
+
+    // Helper: format emoji symbol
+    function extractEmoji(str) {
+      if (!str) return '♨️';
+      const m = str.match(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u);
+      return m ? m[0] : '♨️';
+    }
+
+    // Helper: format relative time
+    function formatTime(str) {
+      if (!str) return '방금 전';
+      if (str.includes('방금')) return str;
+      return str.split(' ')[0] || str;
+    }
+
+    // Render feed
+    function renderComments() {
+      const feed = document.getElementById('comment-feed');
+      const empty = document.getElementById('empty-state');
+      
+      let filtered = allComments;
+      if (currentFilter !== 'all') {
+        filtered = allComments.filter(c => c.issue.includes(currentFilter));
+      }
+
+      document.getElementById('metric-count').textContent = allComments.length;
+
+      if (filtered.length === 0) {
+        feed.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      feed.innerHTML = filtered.map((c, idx) => {
+        const emoji = extractEmoji(c.reaction);
+        const cardId = `comment-${c.id || idx}`;
+        const likes = getLikes(cardId);
+        const isEditor = c.name && c.name.includes('세종') && c.name.includes('편집자');
+
+        return `
+          <div class="bg-slate-850 border border-slate-800/90 rounded-2xl p-5 card-glow transition duration-200 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl ${isEditor ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300' : 'bg-slate-800 border border-slate-700/70 text-slate-200'} flex items-center justify-center text-lg shadow-sm">
+                    ${emoji}
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm font-bold ${isEditor ? 'text-amber-400' : 'text-slate-200'}">${escapeHtml(c.name || '익명의 독자')}</span>
+                      ${isEditor ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">작성자</span>' : ''}
+                      ${c.isLocal ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">방금 씀</span>' : ''}
+                    </div>
+                    <span class="text-[11px] text-slate-500">${formatTime(c.date)}</span>
+                  </div>
+                </div>
+                <span class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700/50 truncate max-w-[140px]">
+                  ${escapeHtml(c.issue || '1호')}
+                </span>
+              </div>
+              <p class="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap break-words">
+                ${escapeHtml(c.message)}
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-500">
+              <span class="text-[11px] text-slate-500">${c.reaction ? escapeHtml(c.reaction) : '♨️ 뜨거운 물 최고'}</span>
+              <button onclick="toggleLike('${cardId}')" class="like-btn flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition" id="like-btn-${cardId}">
+                <i data-lucide="heart" class="w-3.5 h-3.5 ${likes > 0 ? 'fill-rose-500 text-rose-500' : ''}"></i>
+                <span id="like-count-${cardId}">${likes}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Likes management in localStorage
+    function getLikes(id) {
+      return parseInt(localStorage.getItem(`likes_${id}`) || '0', 10);
+    }
+
+    function toggleLike(id) {
+      let current = getLikes(id);
+      current += 1;
+      localStorage.setItem(`likes_${id}`, current);
+      const span = document.getElementById(`like-count-${id}`);
+      const btn = document.getElementById(`like-btn-${id}`);
+      if (span) span.textContent = current;
+      if (btn) {
+        btn.classList.add('text-rose-400');
+        const icon = btn.querySelector('svg');
+        if (icon) icon.classList.add('fill-rose-500', 'text-rose-500');
+      }
+    }
+
+    // Escape HTML utility
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Toast helper
+    function showToast(title, msg, icon = '♨️') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-msg').textContent = msg;
+      document.getElementById('toast-icon').textContent = icon;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    // Handle Form Submit
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      const nameInput = document.getElementById('input-name');
+      const issueInput = document.getElementById('input-issue');
+      const messageInput = document.getElementById('input-message');
+
+      const name = nameInput.value.trim() || '익명의 독자';
+      const issue = issueInput.value;
+      const message = messageInput.value.trim();
+      const reaction = selectedEmoji;
+
+      if (!message) return;
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      // Optimistic Local Record
+      const newComment = {
+        id: 'local_' + Date.now(),
+        date: '방금 전',
+        name: name,
+        issue: issue,
+        message: message,
+        reaction: reaction,
+        isLocal: true
+      };
+
+      allComments.unshift(newComment);
+      saveLocalComments(newComment);
+      renderComments();
+      showToast('담벼락에 띄웠습니다!', '따뜻한 한마디가 실시간으로 기록되었습니다. ♨️');
+
+      // Send to Google Form (no-cors)
+      try {
+        const formData = new FormData();
+        formData.append(ENTRY_NAME, name);
+        formData.append(ENTRY_ISSUE, issue);
+        formData.append(ENTRY_MESSAGE, message);
+        formData.append(ENTRY_EMOJI, reaction);
+
+        await fetch(FORM_ACTION_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
+      } catch (err) {
+        console.warn('Form submission non-blocking notice:', err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        messageInput.value = '';
+        charCount.textContent = '0/500';
+      }
+    }
+
+    // Local Storage comments caching
+    function getStoredLocalComments() {
+      try {
+        return JSON.parse(localStorage.getItem('letter_my_comments') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalComments(item) {
+      try {
+        const list = getStoredLocalComments();
+        list.unshift(item);
+        localStorage.setItem('letter_my_comments', JSON.stringify(list.slice(0, 10)));
+      } catch {}
+    }
+
+    // Fetch Google Sheet via Gviz
+    async function fetchComments() {
+      try {
+        const res = await fetch(GVIZ_URL);
+        const text = await res.text();
+        const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/);
+        
+        let sheetComments = [];
+        if (jsonStr && jsonStr[1]) {
+          const data = JSON.parse(jsonStr[1]);
+          const rows = data.table?.rows || [];
+          
+          sheetComments = rows.map((r, i) => {
+            const cells = r.c || [];
+            const dateStr = cells[0]?.f || cells[0]?.v || '';
+            const name = cells[1]?.v || '익명의 독자';
+            const issue = cells[2]?.v || '1호';
+            const message = cells[3]?.v || '';
+            const reaction = cells[4]?.v || '♨️ 뜨거운 물 최고';
+            const status = cells[5]?.v || '공개';
+
+            if (status === '숨김' || !message) return null;
+
+            return {
+              id: 'sheet_' + i,
+              date: dateStr,
+              name: name,
+              issue: issue,
+              message: message,
+              reaction: reaction,
+              isLocal: false
+            };
+          }).filter(Boolean).reverse();
+        }
+
+        // Merge with local comments
+        const localComments = getStoredLocalComments();
+        const merged = [...localComments];
+        sheetComments.forEach(sc => {
+          if (!merged.some(m => m.message === sc.message && m.name === sc.name)) {
+            merged.push(sc);
+          }
+        });
+
+        allComments = merged;
+      } catch (err) {
+        console.warn('Failed to fetch from Google Sheet, falling back to local:', err);
+        allComments = [
+          {
+            id: 'default_1',
+            date: '2026-11-13 14:35',
+            name: '세종 (편집자)',
+            issue: '1호 (사우나와 경제학)',
+            message: '1호 레터를 열어주셔서 감사합니다. 뜨거운 물에서 잠시 쉬다 가세요 ♨️',
+            reaction: '☕ 커피 한잔',
+            isLocal: false
+          },
+          {
+            id: 'default_2',
+            date: '2026-11-13 15:10',
+            name: '익명의 헬스인',
+            issue: '1호 (사우나와 경제학)',
+            message: '사우나 에세이 읽고 오늘 바로 헬스장 탕 찍고 왔습니다 ㅋㅋ 다음 호도 기대돼요!',
+            reaction: '🔥 심장 뛴다',
+            isLocal: false
+          },
+          ...getStoredLocalComments()
+        ];
+      } finally {
+        renderComments();
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      fetchComments();
+    });
+  </script>
+</body>
+</html>
