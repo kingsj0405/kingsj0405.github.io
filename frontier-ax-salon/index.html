@@ -122,20 +122,20 @@
       </div>
     </div>
 
-    <!-- 신규 멤버 신청 / 프로필 등록 CTA -->
+    <!-- 신규 멤버 추천 / 프로필 제안 CTA -->
     <div class="mt-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 p-3.5 text-left">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div class="min-w-0">
           <p class="text-[12px] font-bold text-indigo-200 flex items-center gap-1">
             <i data-lucide="user-plus" class="h-3.5 w-3.5 text-indigo-400"></i>
-            살롱 합류 또는 멤버 발제를 원하시나요?
+            이런 분과 함께 이야기 나누고 싶으신가요?
           </p>
-          <p class="mt-0.5 text-[11px] text-indigo-300/80">간단한 프로필을 남겨주시면 정식 안건으로 상정됩니다.</p>
+          <p class="mt-0.5 text-[11px] text-indigo-300/80">함께하고 싶은 크로스 인더스트리 리더 동료를 추천해 주세요.</p>
         </div>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
            target="_blank" rel="noopener noreferrer"
            class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 text-[11.5px] font-bold text-white shadow-sm transition">
-          <span>멤버 신청하기</span>
+          <span>멤버 추천하기</span>
           <i data-lucide="external-link" class="h-3 w-3"></i>
         </a>
       </div>
@@ -160,9 +160,15 @@
         <span>살롱 보드 입장하기</span>
         <i data-lucide="arrow-right" class="h-4 w-4"></i>
       </button>
-      <p class="mt-2 text-center text-[10.5px] text-slate-500">
-        링크 뒤에 <code class="text-amber-300/80 font-mono">?pass=fx2026</code> 을 붙이면 바로 자동 입장됩니다.
-      </p>
+      <div class="mt-3 text-center">
+        <button type="button" data-action="toggle-gate-hint" class="text-[11px] text-slate-400 hover:text-amber-300 transition underline underline-offset-2">
+          비밀번호 힌트 및 자동 입장 안내 (클릭)
+        </button>
+        <p id="gate-hint-text" class="hidden mt-2 text-[11px] text-slate-400/90 bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/60 leading-relaxed text-left">
+          살롱 카톡 단톡방 또는 슬랙에 공지된 비밀번호(fx****)를 입력하세요.<br>
+          공유받은 <b>원클릭 자동입장 링크</b>를 통해서도 바로 입장할 수 있습니다.
+        </p>
+      </div>
     </form>
   </div>
 </div>
@@ -209,8 +215,11 @@
       </div>
       <div class="hidden shrink-0 text-right sm:block">
         <div id="header-avatars" class="flex justify-end -space-x-2"></div>
-        <p class="mt-2 text-[11px] text-slate-400">멤버 <span class="tabnum text-slate-200">10</span>인 · 2026. 11.</p>
-        <p class="mt-0.5 text-[11px] text-slate-500">로그인 없이 둘러보는 프로토타입</p>
+        <button data-action="members-modal-open" class="mt-2 text-[11px] text-slate-400 hover:text-amber-300 transition inline-flex items-center justify-end gap-1 ml-auto">
+          <span>멤버 <span class="tabnum text-slate-200 font-bold">10</span>인 명단 보기</span>
+          <i data-lucide="chevron-right" class="h-3 w-3"></i>
+        </button>
+        <p class="mt-0.5 text-[11px] text-slate-500">Cross-Industry Leaders &amp; Operators</p>
       </div>
     </div>
   </div>
@@ -220,9 +229,11 @@
 <main class="mx-auto max-w-5xl px-4 sm:px-6">
   <section id="stats" class="relative z-10 -mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
 
-  <!-- ============ TABS ============ -->
-  <nav class="sticky top-0 z-30 -mx-4 mt-6 border-b border-slate-200/80 bg-[#f5f6f8] px-4 sm:mx-0 sm:rounded-none sm:px-0" aria-label="보드 탭">
-    <div id="tabs" class="no-scrollbar flex gap-1 overflow-x-auto py-2"></div>
+  <!-- ============ FLOATING SEGMENTED NAV TABS ============ -->
+  <nav class="sticky top-2 z-30 mt-6 mx-auto max-w-5xl" aria-label="살롱 보드 탭 네비게이션">
+    <div class="rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-md">
+      <div id="tabs" class="no-scrollbar flex gap-1.5 overflow-x-auto"></div>
+    </div>
   </nav>
 
   <!-- ============ PANEL ============ -->
@@ -256,8 +267,8 @@
   <div class="absolute inset-x-0 bottom-0 max-h-[92vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
     <div class="flex items-start justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold tracking-tight text-slate-900">새 후보자 추천 (발제)</h2>
-        <p class="mt-1 text-[12.5px] text-slate-500">발제 즉시 멤버 10인에게 심사 카드가 열립니다. 추천인 표는 찬성으로 기록됩니다.</p>
+        <h2 class="text-lg font-bold tracking-tight text-slate-900">새 멤버 추천 (발제)</h2>
+        <p class="mt-1 text-[12.5px] text-slate-500">함께 테이블에서 이야기 나누고 싶은 동료 리더를 제안합니다. 발제 즉시 멤버 10인에게 공유됩니다.</p>
       </div>
       <button data-action="modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
         <i data-lucide="x" class="h-5 w-5"></i>
@@ -266,34 +277,67 @@
     <form id="new-candidate-form" class="mt-5 space-y-3.5">
       <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이름 / 직함 <span class="text-rose-500">*</span></span>
-          <input name="title" required maxlength="60" placeholder="예: 엔터프라이즈 CPO"
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 대상자 이름 / 직함 <span class="text-rose-500">*</span></span>
+          <input name="title" required maxlength="60" placeholder="예: 홍길동 / CPO"
             class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
         </label>
         <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">소속 / 경력</span>
-          <input name="headline" maxlength="80" placeholder="예: 전 Bain 파트너 · 현 유니콘 CPO"
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">소속 / 도메인</span>
+          <input name="headline" maxlength="80" placeholder="예: 유니콘 B2B SaaS · 엔지니어링 리드"
             class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
         </label>
       </div>
       <label class="block">
-        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이력 요약 <span class="text-rose-500">*</span></span>
-        <textarea name="summary" required rows="3" maxlength="400" placeholder="지금 무엇을 하고, 어떤 문제를 풀어왔는지 2~3문장으로."
+        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이력 및 주요 경험 <span class="text-rose-500">*</span></span>
+        <textarea name="summary" required rows="3" maxlength="400" placeholder="지금 어떤 문제를 풀고 계신지 2~3문장으로 편하게 소개해 주세요."
           class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
       </label>
-      <label class="block">
-        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 사유</span>
-        <textarea name="reason" rows="2" maxlength="300" placeholder="이 사람이 우리 테이블에 없어서 생기는 공백은 무엇인가요?"
-          class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
-      </label>
+      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 사유 / 함께 나눌 아젠다</span>
+          <input name="reason" maxlength="200" placeholder="우리 살롱 테이블에서 함께 풀고 싶은 문제"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">슬랙 초대용 이메일 <span class="text-slate-400 font-normal">(선택)</span></span>
+          <input name="email" type="email" maxlength="80" placeholder="합의 완료 시 초대장 발송용"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+      </div>
       <div class="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11.5px] leading-relaxed text-amber-900">
-        <span class="font-semibold">100% 만장일치 원칙</span> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 오프라인 커피 미팅에서 다시 이야기합니다.
+        <span class="font-semibold">100% 만장일치 원칙</span> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 기각이 아니라 오프라인 1:1 커피 미팅에서 경청합니다.
       </div>
       <div class="flex gap-2 pt-1">
         <button type="button" data-action="modal-close" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">취소</button>
-        <button type="submit" class="flex-[1.4] rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">후보자 등록</button>
+        <button type="submit" class="flex-[1.4] rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">추천 안건 상정</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- ============ MEMBERS MODAL ============ -->
+<div id="members-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" data-action="members-modal-close"></div>
+  <div class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[540px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+      <div>
+        <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600">
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+          Frontier AX Salon Members
+        </div>
+        <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">살롱 멤버 10인 명단</h2>
+        <p class="mt-0.5 text-xs text-slate-500">AI 테크리더, CFO, VC 심사역, 변호사 등 크로스 인더스트리 리더십</p>
+      </div>
+      <button data-action="members-modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+    </div>
+    <div id="members-modal-list" class="mt-4 divide-y divide-slate-100"></div>
+    <div class="mt-4 border-t border-slate-100 pt-3 text-center">
+      <button data-action="members-modal-close" class="w-full rounded-xl bg-slate-100 hover:bg-slate-200 py-2.5 text-xs font-bold text-slate-700 transition">
+        닫기
+      </button>
+    </div>
   </div>
 </div>
 
@@ -674,17 +718,23 @@ function renderHeaderAvatars() {
 function renderStats() {
   const el = document.getElementById('stats');
   if (!el) return;
-  const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
-  const confirmed = state.candidates.filter(c => tally(c).passed).length;
-  const inGate = reviewing + confirmed;
+  const allCandidates = state.candidates || [];
+  const realCandidates = allCandidates.filter(c => c.isUserCreated);
+  const inGate = realCandidates.length;
+  const confirmed = realCandidates.filter(c => tally(c).passed).length;
+  const reviewing = inGate - confirmed;
 
-  const card = (icon, iconBg, label, value, unit, sub, subCls) => `
-    <div class="card flex items-start gap-3 px-4 py-4 sm:px-5">
-      <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg}">
+  const card = (icon, iconBg, label, value, unit, sub, subCls, targetTab) => `
+    <div data-action="tab" data-id="${targetTab}" role="button" tabindex="0"
+         class="card flex items-start gap-3 px-4 py-4 sm:px-5 cursor-pointer hover:shadow-md hover:border-slate-300 transition-all duration-150 group active:scale-[0.99]">
+      <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg} transition group-hover:scale-105">
         <i data-lucide="${icon}" class="h-[18px] w-[18px]"></i>
       </span>
-      <div class="min-w-0">
-        <p class="text-[11.5px] font-semibold text-slate-500">${label}</p>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center justify-between">
+          <p class="text-[11.5px] font-semibold text-slate-500">${label}</p>
+          <i data-lucide="arrow-right" class="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-slate-600 transition"></i>
+        </div>
         <p class="mt-0.5 flex items-baseline gap-0.5 text-[24px] font-extrabold leading-none tracking-tight text-slate-900">
           <span class="tabnum">${value}</span><span class="text-[13px] font-bold text-slate-400">${unit}</span>
         </p>
@@ -694,32 +744,42 @@ function renderStats() {
 
   el.innerHTML =
     card('users', 'bg-slate-900 text-white', '영입 확정 멤버', MEMBERS.length, '명',
-      '크로스 인더스트리 10인 · 만장일치 기준') +
-    card('user-plus', 'bg-amber-100 text-amber-700', '심사 중 후보자', inGate, '명',
-      '영입 확정 ' + confirmed + '명 · 검토 중 ' + reviewing + '명') +
+      '크로스 인더스트리 10인 · 만장일치 기준', '', 'gate') +
+    card('user-plus', 'bg-amber-100 text-amber-700', '추천 심사 안건', inGate, '건',
+      (inGate > 0 ? `검토 중 ${reviewing}건 · 확정 ${confirmed}건` : '현재 신규 후보자 접수 대기 중 (클릭 시 예시)'), '', 'gate') +
     card('coffee', 'bg-emerald-100 text-emerald-800', '금요 커피 레터', (state.letters ? state.letters.length : 2), '편',
-      'tiro 음성 + Claude 아카이브 · 1호 & 2호');
+      'tiro 음성 + Claude 아카이브 · 1호 & 2호', '', 'letters');
 }
 
 function renderTabs() {
   const el = document.getElementById('tabs');
   if (!el) return;
   const tabs = [
-    { id: 'gate', icon: 'vote', label: '멤버 영입 심사 (거수기)', sub: 'Membership Gate' },
-    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', sub: 'tiro + Claude 아카이브' },
-    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', sub: 'Discussions' },
-    { id: 'rules', icon: 'scroll-text', label: '살롱 그라운드룰', sub: 'Ground Rules' }
+    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', badge: '10/10 거수기', sub: 'Unanimous Gate' },
+    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', badge: 'VOL. 02', sub: 'tiro + Claude 아카이브' },
+    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', badge: '3개 안건', sub: 'Discussions' },
+    { id: 'rules', icon: 'scroll-text', label: '살롱 그라운드룰', badge: '3대 원칙', sub: 'Ground Rules' }
   ];
   el.innerHTML = tabs.map(t => {
     const active = state.tab === t.id;
     return `<button data-action="tab" data-id="${t.id}" role="tab" aria-selected="${active}"
-      class="group relative shrink-0 rounded-lg px-3 py-2 text-left transition sm:px-3.5 ${active ? 'bg-white shadow-sm ring-1 ring-slate-200' : 'hover:bg-white/60'}">
-      <span class="flex items-center gap-1.5 text-[13px] font-semibold ${active ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-800'}">
-        <i data-lucide="${t.icon}" class="h-4 w-4 ${active ? 'text-indigo-600' : 'text-slate-400'}"></i>
-        ${t.label}
-      </span>
-      <span class="mt-0.5 block pl-[22px] text-[10px] uppercase tracking-wider ${active ? 'text-slate-400' : 'text-slate-400/70'}">${t.sub}</span>
-      ${active ? '<span class="absolute inset-x-3 -bottom-[9px] h-[2px] rounded-full bg-indigo-600"></span>' : ''}
+      class="flex-1 min-w-[155px] sm:min-w-0 group relative rounded-xl px-3.5 py-2.5 text-left transition-all duration-200 ${
+        active 
+          ? 'bg-slate-900 text-white shadow-md shadow-slate-900/15 ring-1 ring-slate-800' 
+          : 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+      }">
+      <div class="flex items-center justify-between gap-1">
+        <span class="flex items-center gap-1.5 text-[13px] font-bold ${active ? 'text-white' : 'text-slate-700 group-hover:text-slate-900'}">
+          <i data-lucide="${t.icon}" class="h-4 w-4 ${active ? 'text-amber-400' : 'text-slate-400 group-hover:text-slate-600'}"></i>
+          <span>${t.label}</span>
+        </span>
+        <span class="rounded-full px-1.5 py-0.5 text-[10px] font-extrabold tracking-tight ${
+          active 
+            ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' 
+            : 'bg-slate-100 text-slate-500 border border-slate-200'
+        }">${t.badge}</span>
+      </div>
+      <span class="mt-1 block pl-[22px] text-[10.5px] font-medium tracking-wide ${active ? 'text-slate-300' : 'text-slate-400'}">${t.sub}</span>
     </button>`;
   }).join('');
 }
@@ -918,36 +978,107 @@ function candidateCard(c) {
 /* ---------------- panels ---------------- */
 
 function renderGate() {
-  const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
-  const confirmed = state.candidates.filter(c => tally(c).passed).length;
+  const allCandidates = state.candidates || [];
+  const realCandidates = allCandidates.filter(c => c.isUserCreated);
+  const sampleCandidates = allCandidates.filter(c => !c.isUserCreated);
+  const showSamples = !!state.showSamples;
+
   return `
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h2 class="text-[15px] font-bold tracking-tight text-slate-900">멤버 영입 심사
-          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Membership Consensus Gate</span>
-        </h2>
-        <p class="mt-1 text-[12px] text-slate-500">후보자 카드에 멤버 10인이 표를 던집니다. 10/10이 아니면 아무도 들어오지 못합니다.</p>
+    <!-- 탭 배너 -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
+            100% Unanimous Consensus Gate
+          </div>
+          <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">멤버 영입 심사 (거수기)</h2>
+          <p class="mt-1 text-xs text-slate-500 leading-relaxed">
+            모든 신규 멤버 영입은 10인 전원 찬성(10/10) 시에만 확정됩니다. 단 1명이라도 비토 시 카드는 기각되지 않고 발제자와의 1:1 오프라인 커피미팅으로 자동 이관됩니다.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 px-3.5 py-2 text-xs font-bold text-slate-700 transition">
+            <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>
+            <span>추천 폼 열기</span>
+            <i data-lucide="external-link" class="h-3 w-3 text-slate-400"></i>
+          </a>
+          <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition">
+            <i data-lucide="plus" class="h-4 w-4 text-amber-400"></i>
+            <span>새 멤버 추천 (발제)</span>
+          </button>
+        </div>
       </div>
-      <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-[12.5px] font-semibold text-white shadow-sm transition hover:bg-indigo-700">
-        <i data-lucide="plus" class="h-4 w-4"></i>새 후보자 추천 (발제)
-      </button>
     </div>
 
-    <div class="mt-3 flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5">
-      <i data-lucide="info" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400"></i>
-      <p class="text-[11.5px] leading-relaxed text-slate-500">
-        <b class="font-semibold text-slate-700">검토 중 ${reviewing}건 · 확정 ${confirmed}건</b> · 확정은 10명 전원 찬성일 때만. 비토 1표면 카드가 오프라인 재논의로 넘어갑니다.
-        표와 댓글은 이 브라우저에 저장되는 <span class="font-semibold text-slate-600">데모 동작</span>입니다.
-      </p>
+    <!-- 실시간 심사 진행 영역 -->
+    <div class="mt-5 space-y-4">
+      ${realCandidates.length > 0 ? `
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <span>실시간 심사 안건</span>
+            <span class="rounded-full bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-xs text-indigo-700 font-extrabold">${realCandidates.length}건</span>
+          </h3>
+        </div>
+        ${realCandidates.map(candidateCard).join('')}
+      ` : `
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-7 text-center">
+          <div class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+            <i data-lucide="shield-check" class="h-6 w-6"></i>
+          </div>
+          <h4 class="mt-3 text-sm font-bold text-slate-800">현재 상정된 공식 심사 안건이 없습니다</h4>
+          <p class="mt-1 text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            살롱 멤버 추천은 상단의 <b>[새 멤버 추천 (발제)]</b> 버튼이나 외부 초대용 구글 폼을 통해 접수할 수 있습니다. 10인 전원 찬성 시에만 영입이 확정됩니다.
+          </p>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-slate-800">
+              <i data-lucide="plus" class="h-3.5 w-3.5 text-amber-400"></i>새 멤버 추천 발제
+            </button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700">
+              <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>추천 폼 열기
+            </a>
+          </div>
+        </div>
+      `}
     </div>
 
-    <div class="mt-4 space-y-4">
-      ${state.candidates.map(candidateCard).join('')}
-    </div>
+    <!-- 예시 후보자 / 동작 샘플 아코디언 (클릭하면 보여주기!) -->
+    <div class="mt-5 rounded-2xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50/70 via-white to-slate-50 p-4 sm:p-5 shadow-sm transition">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm mt-0.5">
+            <i data-lucide="play-circle" class="h-5 w-5"></i>
+          </span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-bold text-slate-900">100% 만장일치 거수기 동작 예시</h3>
+              <span class="rounded-full bg-indigo-100 border border-indigo-200 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">샘플 데모</span>
+            </div>
+            <p class="mt-0.5 text-xs text-slate-500 leading-relaxed">
+              10인 전원 찬성 게이지 및 비토 시 오프라인 커피미팅 자동 이관이 어떻게 작동하는지 직접 눌러보실 수 있는 체험용 예시 카드입니다.
+            </p>
+          </div>
+        </div>
+        <button data-action="toggle-samples" class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl border border-indigo-300 bg-white hover:bg-indigo-50 px-3.5 py-2 text-xs font-bold text-indigo-700 shadow-sm transition active:scale-95">
+          <i data-lucide="${showSamples ? 'chevron-up' : 'eye'}" class="h-3.5 w-3.5"></i>
+          <span>${showSamples ? '예시 카드 접기' : '예시 카드 보기 (클릭)'}</span>
+        </button>
+      </div>
 
-    <button data-action="modal-open" class="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white/50 px-4 py-4 text-[12.5px] font-semibold text-slate-500 transition hover:border-indigo-300 hover:bg-white hover:text-indigo-700">
-      <i data-lucide="user-plus" class="h-4 w-4"></i>새 후보자 추천 (발제)
-    </button>`;
+      ${showSamples ? `
+        <div class="mt-5 space-y-4 border-t border-indigo-100/90 pt-5 fade-in">
+          <div class="flex items-center gap-2 rounded-xl bg-indigo-100/60 px-3.5 py-2.5 text-xs font-medium text-indigo-900 border border-indigo-200/70">
+            <i data-lucide="info" class="h-4 w-4 text-indigo-600 shrink-0"></i>
+            <span>아래 카드에서 <b>[찬의], [조건부 찬성], [비토]</b> 버튼을 누르면 실시간 10인 게이지와 오프라인 커피미팅 이관 룰이 즉시 시뮬레이션됩니다.</span>
+          </div>
+          ${sampleCandidates.map(candidateCard).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
 }
 
 function agendaCard(a) {
@@ -1199,15 +1330,63 @@ function findItem(kind, id) {
   return null;
 }
 
+function renderMembersModalList() {
+  const el = document.getElementById('members-modal-list');
+  if (!el) return;
+  el.innerHTML = MEMBERS.map(m => `
+    <div class="flex items-center justify-between py-3">
+      <div class="flex items-center gap-3 min-w-0">
+        ${avatar(m.id, 'md')}
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-slate-900">${esc(m.name)}</p>
+          <p class="text-xs text-slate-500 truncate">${esc(m.role)} · ${esc(m.title)}</p>
+        </div>
+      </div>
+      <span class="chip shrink-0 text-[11px] font-semibold">${esc(m.field)}</span>
+    </div>
+  `).join('');
+}
+
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-action]');
   if (!el) return;
   const action = el.dataset.action;
 
+  if (action === 'toggle-samples') {
+    state.showSamples = !state.showSamples;
+    render();
+    return;
+  }
+
+  if (action === 'toggle-gate-hint') {
+    const hint = document.getElementById('gate-hint-text');
+    if (hint) hint.classList.toggle('hidden');
+    return;
+  }
+
+  if (action === 'members-modal-open') {
+    const modal = document.getElementById('members-modal');
+    if (modal) {
+      renderMembersModalList();
+      modal.classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+    return;
+  }
+
+  if (action === 'members-modal-close') {
+    const modal = document.getElementById('members-modal');
+    if (modal) modal.classList.add('hidden');
+    return;
+  }
+
   if (action === 'tab') {
     state.tab = el.dataset.id;
     saveState();
     render();
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '?tab=' + state.tab);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
@@ -1358,6 +1537,8 @@ document.addEventListener('submit', (e) => {
       summary,
       highlights: [],
       reason: String(fd.get('reason') || '').trim(),
+      email: String(fd.get('email') || '').trim(),
+      isUserCreated: true,
       votes,
       comments: []
     };
@@ -1452,6 +1633,8 @@ async function checkGateAuth() {
 function handleLetterDeepLink() {
   const urlParams = new URLSearchParams(window.location.search);
   const qLetter = urlParams.get('letter') || urlParams.get('vol');
+  const qTab = urlParams.get('tab') || window.location.hash.replace('#', '');
+
   if (qLetter) {
     state.tab = 'letters';
     saveState();
@@ -1465,6 +1648,13 @@ function handleLetterDeepLink() {
         setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2'), 2500);
       }
     }, 150);
+    return;
+  }
+
+  if (qTab && ['gate', 'letters', 'topics', 'rules'].includes(qTab)) {
+    state.tab = qTab;
+    saveState();
+    render();
   }
 }
 
