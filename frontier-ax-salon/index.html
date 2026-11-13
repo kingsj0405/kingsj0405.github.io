@@ -83,7 +83,7 @@
       radial-gradient(900px 320px at 8% -10%, rgba(201,162,39,.22), transparent 60%),
       radial-gradient(700px 300px at 92% -20%, rgba(59,130,246,.20), transparent 60%);"></div>
   <div class="absolute inset-x-0 bottom-0 h-px hairline"></div>
-  <div class="relative mx-auto max-w-5xl px-4 pb-14 pt-9 sm:px-6 sm:pb-16 sm:pt-11">
+  <div class="relative mx-auto max-w-5xl px-4 pb-12 pt-9 sm:px-6 sm:pb-14 sm:pt-11">
     <div class="flex items-start justify-between gap-6">
       <div class="min-w-0">
         <div class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-amber-300/90">
@@ -111,7 +111,7 @@
 
 <!-- ============ STAT CARDS ============ -->
 <main class="mx-auto max-w-5xl px-4 sm:px-6">
-  <section id="stats" class="-mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
+  <section id="stats" class="relative z-10 -mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
 
   <!-- ============ TABS ============ -->
   <nav class="sticky top-0 z-30 -mx-4 mt-6 border-b border-slate-200/80 bg-[#f5f6f8]/85 px-4 backdrop-blur sm:mx-0 sm:rounded-none sm:px-0" aria-label="보드 탭">
@@ -465,6 +465,7 @@ function renderStats() {
   if (!el) return;
   const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
   const confirmed = state.candidates.filter(c => tally(c).passed).length;
+  const inGate = reviewing + confirmed;
 
   const card = (icon, iconBg, label, value, unit, sub, subCls) => `
     <div class="card flex items-start gap-3 px-4 py-4 sm:px-5">
@@ -483,8 +484,8 @@ function renderStats() {
   el.innerHTML =
     card('users', 'bg-slate-900 text-white', '영입 확정 멤버', MEMBERS.length, '명',
       '크로스 인더스트리 10인 · 만장일치 기준') +
-    card('user-plus', 'bg-amber-100 text-amber-700', '심사 중 후보자', reviewing, '명',
-      (confirmed > 0 ? '영입 확정 ' + confirmed + '명 · ' : '') + '합의 대기 중') +
+    card('user-plus', 'bg-amber-100 text-amber-700', '심사 중 후보자', inGate, '명',
+      '영입 확정 ' + confirmed + '명 · 검토 중 ' + reviewing + '명') +
     card('messages-square', 'bg-indigo-100 text-indigo-700', '이번 주 살롱 아젠다', state.agendas.length, '건',
       '11/13 (금) 살롱 기준 · 댓글 ' + totalComments() + '개');
 }
@@ -624,7 +625,7 @@ function commentList(kind, item, canComment) {
     ? '<form data-form="comment" data-kind="' + kind + '" data-item="' + item.id + '" class="mt-3">' +
         '<div class="flex items-start gap-2">' + avatar(ME, 'sm') +
           '<div class="min-w-0 flex-1">' +
-            '<textarea name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" placeholder="이 후보자에 대한 의견을 남겨 주세요. (멤버 ' + (MEMBER_BY_ID[ME].name) + '로 기록됩니다)" ' +
+            '<textarea name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" placeholder="' + (kind === 'agenda' ? '이 안건에 대한 의견을 남겨 주세요.' : '이 후보자에 대한 의견을 남겨 주세요.') + ' (양세종 멤버로 기록됩니다)" ' +
               'class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[12.5px] leading-relaxed outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white">' + esc(drafts[kind + ':' + item.id] || '') + '</textarea>' +
             '<div class="mt-1.5 flex items-center justify-between gap-2">' +
               '<p class="text-[10.5px] text-slate-400">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
@@ -707,6 +708,7 @@ function candidateCard(c) {
 
 function renderGate() {
   const reviewing = state.candidates.filter(c => { const t = tally(c); return !t.passed && !t.blocked; }).length;
+  const confirmed = state.candidates.filter(c => tally(c).passed).length;
   return `
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
@@ -723,7 +725,7 @@ function renderGate() {
     <div class="mt-3 flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5">
       <i data-lucide="info" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400"></i>
       <p class="text-[11.5px] leading-relaxed text-slate-500">
-        <b class="font-semibold text-slate-700">심사 중 ${reviewing}건</b> · 확정은 10명 전원 찬성일 때만. 비토 1표면 카드가 오프라인 재논의로 넘어갑니다.
+        <b class="font-semibold text-slate-700">검토 중 ${reviewing}건 · 확정 ${confirmed}건</b> · 확정은 10명 전원 찬성일 때만. 비토 1표면 카드가 오프라인 재논의로 넘어갑니다.
         표와 댓글은 이 브라우저에 저장되는 <span class="font-semibold text-slate-600">데모 동작</span>입니다.
       </p>
     </div>
