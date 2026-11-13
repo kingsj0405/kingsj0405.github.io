@@ -4,7 +4,7 @@
 
 - 라이브: <https://kingsj0405.github.io/frontier-ax-salon/> (→ <https://yangspace.co.kr/frontier-ax-salon/>)
 - 위치: `kingsj0405/kingsj0405.github.io` 저장소의 `frontier-ax-salon/` 폴더 (사이트의 다른 단일 HTML 앱과 같은 방식)
-- 비공개 게이트 비밀번호: `ax2026` (또는 `?pass=ax2026` 파라미터로 자동 입장 가능)
+- 비공개 게이트 비밀번호: `fx2026` (또는 `?pass=fx2026` 파라미터로 자동 입장 가능)
 
 ## 무엇을 하는 보드인가
 
