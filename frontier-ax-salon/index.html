@@ -1106,17 +1106,14 @@ document.addEventListener('keydown', (e) => {
 
 async function verifyPasscode(input) {
   const clean = (input || '').trim().toLowerCase();
-  if (clean === 'ax2026' || clean === 'axsalon' || clean === 'frontier' || clean === '1113') return true;
+  if (clean === 'fx2026') return true;
   try {
     const msgBuffer = new TextEncoder().encode(clean);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     const validHashes = [
-      'ffb363cbac73cb5d5f5ed87c87e83a2a069358c6ea8e719ed30bb924537e3739', // ax2026
-      'd9d1e27d1cfa6c68e09f332e9e98b71a9c74b5613b9a9ea939dea51a8058f316', // axsalon
-      'c6f2a33eb46b4122aa6a8cf12cdca4d7bc9e3b4a2bf180e0c03ce425e4c69b2d', // frontier
-      'd1c3be1bcfa465f1e14902802bb036d75d312bc8527a29633e9be573a4b009e8'  // 1113
+      '66fee9b5ca0d133470956a0346c598bf0c1d6cea1148964c78946a956d3644e7' // fx2026
     ];
     return validHashes.includes(hashHex);
   } catch (err) {
