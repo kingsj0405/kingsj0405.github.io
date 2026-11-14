@@ -252,8 +252,8 @@ img { max-width: 100%; }
 .metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .metric { display: block; padding: 14px 18px; border-left: 1px solid var(--border); transition: background-color .15s var(--ease); }
 .metric:first-child { border-left: 0; padding-left: 0; }
-.metric:hover { background: var(--surface-2); }
-.metric:hover:first-child { background: transparent; }
+.metric:hover .metric-value { color: var(--accent-strong); }
+.metric:hover .metric-label { color: var(--text-2); }
 .metric-label { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: var(--text-3); }
 .metric-value { display: flex; align-items: baseline; gap: 2px; margin-top: 7px; font-size: var(--fs-24); font-weight: 700; letter-spacing: -.03em; line-height: 1; }
 .metric-unit { font-size: var(--fs-12); font-weight: 600; color: var(--text-3); }
@@ -702,29 +702,29 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
 <!-- ============ APP ============ -->
 <div id="app-shell" hidden>
 
-  <header class="site-header">
-    <div class="topbar">
-      <div class="wrap topbar-inner">
-        <div class="brand">
-          <span class="brand-mark"><i data-lucide="coffee"></i></span>
-          <span>
-            <span class="brand-name">금요커피클럽</span>
-            <span class="brand-sub">Friday Coffee Club</span>
-          </span>
-        </div>
-        <div class="topbar-actions">
-          <button type="button" class="btn btn-ghost btn-sm" data-action="members-modal-open">
-            <span>멤버 10인</span>
-          </button>
-          <a class="btn btn-secondary btn-sm" href="https://friday-coffee.slack.com" target="_blank" rel="noopener noreferrer">
-            <i data-lucide="message-square"></i>
-            <span>슬랙</span>
-            <i data-lucide="arrow-up-right"></i>
-          </a>
-        </div>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"><i data-lucide="coffee"></i></span>
+        <span>
+          <span class="brand-name">금요커피클럽</span>
+          <span class="brand-sub">Friday Coffee Club</span>
+        </span>
+      </div>
+      <div class="topbar-actions">
+        <button type="button" class="btn btn-ghost btn-sm" data-action="members-modal-open">
+          <span>멤버 10인</span>
+        </button>
+        <a class="btn btn-secondary btn-sm" href="https://friday-coffee.slack.com" target="_blank" rel="noopener noreferrer">
+          <i data-lucide="message-square"></i>
+          <span>슬랙</span>
+          <i data-lucide="arrow-up-right"></i>
+        </a>
       </div>
     </div>
+  </div>
 
+  <header class="site-header">
     <div class="masthead">
       <div class="wrap masthead-inner">
         <div>
@@ -751,13 +751,13 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
         <div id="metrics" class="metrics-grid"></div>
       </div>
     </section>
-
-    <nav class="tabs" aria-label="커피클럽 보드 탭">
-      <div class="wrap">
-        <div id="tabs" class="tabs-inner" role="tablist"></div>
-      </div>
-    </nav>
   </header>
+
+  <nav class="tabs" aria-label="커피클럽 보드 탭">
+    <div class="wrap">
+      <div id="tabs" class="tabs-inner" role="tablist"></div>
+    </div>
+  </nav>
 
   <main class="wrap page">
     <section id="app" class="panel" role="tabpanel"></section>
