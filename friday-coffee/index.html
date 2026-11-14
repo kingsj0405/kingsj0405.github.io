@@ -248,16 +248,35 @@ img { max-width: 100%; }
 .avatar-stack .avatar { margin-left: -7px; box-shadow: 0 0 0 2px var(--surface); }
 .avatar-stack .avatar:first-child { margin-left: 0; }
 
-.metrics { background: var(--surface); border-bottom: 1px solid var(--border); }
-.metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.metric { display: block; padding: 14px 18px; border-left: 1px solid var(--border); transition: background-color .15s var(--ease); }
-.metric:first-child { border-left: 0; padding-left: 0; }
-.metric:hover .metric-value { color: var(--accent-strong); }
-.metric:hover .metric-label { color: var(--text-2); }
-.metric-label { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: var(--text-3); }
-.metric-value { display: flex; align-items: baseline; gap: 2px; margin-top: 7px; font-size: var(--fs-24); font-weight: 700; letter-spacing: -.03em; line-height: 1; }
-.metric-unit { font-size: var(--fs-12); font-weight: 600; color: var(--text-3); }
-.metric-note { display: block; margin-top: 8px; font-size: 11.5px; line-height: 1.5; color: var(--text-3); }
+.dashboard { background: var(--surface); border-bottom: 1px solid var(--border); }
+.dash-wrap { padding-bottom: 18px; }
+.status-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 12px 0; font-size: var(--fs-12); color: var(--text-2); }
+.status-line-main { display: inline-flex; align-items: center; gap: 7px; }
+.status-line-main svg { width: 14px; height: 14px; color: var(--yes); flex-shrink: 0; }
+.status-line-main b { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.status-line .sep { color: var(--text-4); }
+.status-line-date { font-size: 11.5px; color: var(--text-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.dash { display: grid; grid-template-columns: 1.55fr 1fr 1fr 1.05fr; gap: 10px; }
+.dash-card {
+  display: flex; flex-direction: column; gap: 8px; min-height: 114px; padding: 14px 16px;
+  border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface);
+  text-align: left; box-shadow: var(--shadow-xs);
+  transition: border-color .16s var(--ease), background-color .16s var(--ease), box-shadow .16s var(--ease);
+}
+.dash-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.dash-label { font-size: 10.5px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: var(--text-3); }
+.dash-value { display: flex; align-items: baseline; gap: 3px; font-size: 32px; font-weight: 700; letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; }
+.dash-unit { font-size: var(--fs-12); font-weight: 600; letter-spacing: 0; color: var(--text-3); }
+.dash-note { margin-top: auto; font-size: 11.5px; line-height: 1.55; color: var(--text-3); }
+.dash-note b { font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.dash-card.is-hot { background: var(--ink); border-color: var(--ink); color: var(--text-inverse); }
+.dash-card.is-hot:hover { background: var(--ink-hover); border-color: var(--ink-hover); }
+.dash-card.is-hot .dash-label { color: rgba(251, 249, 246, .58); }
+.dash-title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-serif); font-size: var(--fs-15); font-weight: 600; line-height: 1.46; letter-spacing: -.018em; }
+.dash-card.is-hot .dash-note { color: rgba(251, 249, 246, .66); }
+.dash-card.is-hot .dash-note b { color: #ecd6b9; }
+.dash-card:disabled { cursor: default; }
 
 /* ---------- 9. Tabs ---------- */
 .tabs {
@@ -493,27 +512,89 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
 .letter-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-4); }
 .is-highlight { border-color: var(--accent-line); box-shadow: 0 0 0 3px var(--accent-soft); }
 
-/* ---------- 18. Agenda ---------- */
-.agenda-head { display: flex; gap: 12px; padding: 18px 20px 0; }
-.agenda-no { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; margin-top: 1px; border: 1px solid var(--border-strong); border-radius: 50%; font-size: var(--fs-12); font-weight: 600; color: var(--text-3); font-variant-numeric: tabular-nums; }
-.agenda-head-main { min-width: 0; }
-.agenda-title { margin-top: 6px; font-size: var(--fs-16); font-weight: 700; line-height: 1.46; }
-.agenda-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; margin-top: 8px; font-size: 11.5px; color: var(--text-3); }
-.agenda-meta .who { display: inline-flex; align-items: center; gap: 5px; }
-.agenda-meta .who b { font-weight: 600; color: var(--text-2); }
-.agenda-meta .sep { color: var(--text-4); }
-.agenda-body { display: flex; flex-direction: column; gap: var(--sp-3); padding: 12px 20px 18px; }
+/* ---------- 18. Opinion board: toolbar, accordion, stance, AI consensus ---------- */
+.board-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.board-head h2 { margin-top: 6px; font-size: var(--fs-24); }
+.board-head .section-sub { margin-top: 6px; }
+.board-tools { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.board-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-4); }
+.seg-nav { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow-xs); }
+.seg-btn { height: 30px; padding: 0 11px; border-radius: var(--r-sm); font-size: var(--fs-12); font-weight: 600; color: var(--text-3); white-space: nowrap; transition: background-color .15s var(--ease), color .15s var(--ease); }
+.seg-btn:hover { color: var(--text); }
+.seg-btn[aria-pressed="true"] { background: var(--surface-3); color: var(--text); }
+.seg-btn .n { margin-left: 4px; font-variant-numeric: tabular-nums; color: var(--text-3); }
+.seg-btn[aria-pressed="true"] .n { color: var(--accent-strong); }
+.search { position: relative; flex: 1 1 280px; max-width: 360px; min-width: 190px; }
+.search > svg { position: absolute; left: 11px; top: 50%; width: 14px; height: 14px; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
+.search input { width: 100%; height: 38px; padding: 0 12px 0 32px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); font-size: var(--fs-12); transition: border-color .15s var(--ease), background-color .15s var(--ease); }
+.search input::placeholder { color: var(--text-4); }
+.search input:focus { outline: none; background: var(--surface); border-color: var(--accent); box-shadow: var(--ring); }
+.board-count { margin-top: 10px; font-size: 11.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.board-count b { font-weight: 600; color: var(--text-2); }
+
+.bcard-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.bcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-xs); overflow: hidden; transition: border-color .16s var(--ease), box-shadow .16s var(--ease); }
+.bcard:hover { border-color: var(--border-strong); }
+.bcard.is-open { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.bcard-head { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 16px 18px; text-align: left; }
+.bcard-main { flex: 1; min-width: 0; }
+.bcard-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.bcard-title { margin-top: 9px; font-size: var(--fs-16); font-weight: 700; line-height: 1.46; letter-spacing: -.018em; }
+.bcard-sub { margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 12.5px; line-height: 1.64; color: var(--text-2); }
+.bcard-meta { display: flex; align-items: center; gap: 4px 9px; flex-wrap: wrap; margin-top: 9px; font-size: 11.5px; color: var(--text-3); }
+.bcard-meta .m { display: inline-flex; align-items: center; gap: 4px; font-variant-numeric: tabular-nums; }
+.bcard-meta .m svg { width: 12px; height: 12px; }
+.bcard-meta .who { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; color: var(--text-2); }
+.bcard-meta .sep { color: var(--text-4); }
+.bcard-chev { flex-shrink: 0; margin-top: 2px; color: var(--text-4); transition: transform .2s var(--ease); }
+.bcard-chev svg { width: 18px; height: 18px; }
+.bcard.is-open .bcard-chev { transform: rotate(180deg); }
+.bcard-body { display: flex; flex-direction: column; gap: var(--sp-3); padding: 14px 18px 18px; border-top: 1px solid var(--border); }
 .points { display: flex; flex-direction: column; gap: 6px; }
 .points li { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
 .points li::before { content: ""; width: 4px; height: 4px; margin-top: 9px; flex-shrink: 0; border-radius: 50%; background: var(--accent); }
-.preview { display: flex; flex-direction: column; gap: 10px; }
-.preview li { display: flex; gap: 8px; }
-.preview-main { min-width: 0; }
-.preview-author { font-size: 11px; font-weight: 600; color: var(--text-2); }
-.preview-author span { font-weight: 400; color: var(--text-3); }
-.preview-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
-.agenda-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
-.agenda-actions .caption { font-variant-numeric: tabular-nums; }
+
+.stance { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.stance-label { margin-right: 2px; font-size: 11px; font-weight: 600; letter-spacing: .05em; color: var(--text-3); }
+.stance-opt { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 11px; border: 1px solid var(--border-strong); border-radius: var(--r-full); background: var(--surface); font-size: var(--fs-12); font-weight: 600; color: var(--text-2); transition: background-color .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease); }
+.stance-opt svg { width: 13px; height: 13px; }
+.stance-opt .n { font-variant-numeric: tabular-nums; color: var(--text-3); }
+.stance-opt:hover { background: var(--surface-2); border-color: #c7bdae; color: var(--text); }
+.stance-agree[aria-pressed="true"] { background: var(--yes-soft); border-color: var(--yes-line); color: var(--yes-ink); }
+.stance-agree[aria-pressed="true"] .n { color: var(--yes-ink); }
+.stance-hold[aria-pressed="true"] { background: var(--cond-soft); border-color: var(--cond-line); color: var(--cond-ink); }
+.stance-hold[aria-pressed="true"] .n { color: var(--cond-ink); }
+.stance-disagree[aria-pressed="true"] { background: var(--veto-soft); border-color: var(--veto-line); color: var(--veto-ink); }
+.stance-disagree[aria-pressed="true"] .n { color: var(--veto-ink); }
+.stance-note { margin-top: 6px; font-size: 10.5px; line-height: 1.55; color: var(--text-4); }
+
+.ai { border: 1px solid var(--accent-line); border-radius: var(--r-md); background: #fffdf9; overflow: hidden; }
+.ai.is-loading { opacity: .74; }
+.ai-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 13px; background: var(--accent-soft); border-bottom: 1px solid var(--accent-line); }
+.ai-head h4 { font-size: 12.5px; font-weight: 700; letter-spacing: -.012em; }
+.ai-head .spark { display: grid; place-items: center; flex-shrink: 0; width: 22px; height: 22px; border: 1px solid var(--accent-line); border-radius: 50%; background: var(--surface); color: var(--accent-strong); }
+.ai-head .spark svg { width: 12px; height: 12px; }
+.ai-head .ai-src { margin-left: auto; font-size: 10.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.ai-body { display: flex; flex-direction: column; gap: 13px; padding: 13px; }
+.ai-sect { display: flex; flex-direction: column; gap: 6px; }
+.ai-sect-label { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-strong); }
+.ai-sect-label .num { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid var(--accent-line); border-radius: 50%; font-size: 9.5px; letter-spacing: 0; }
+.ai-list { display: flex; flex-direction: column; gap: 5px; }
+.ai-list li { display: flex; gap: 7px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
+.ai-list li::before { content: "—"; flex-shrink: 0; color: var(--accent); }
+.ai-draft { padding-left: 10px; border-left: 2px solid var(--accent-line); font-family: var(--font-serif); font-size: 13.5px; line-height: 1.8; letter-spacing: -.008em; color: var(--text); }
+.ai-empty { font-size: 12.5px; line-height: 1.72; color: var(--text-2); }
+.ai-empty b { font-weight: 600; color: var(--text); }
+.ai-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 9px 13px; border-top: 1px solid var(--accent-line); font-size: 10.5px; color: var(--text-3); }
+.ai-foot .meta { display: inline-flex; align-items: center; gap: 5px; }
+.ai-foot .meta svg { width: 11px; height: 11px; }
+.ai-foot .spacer { margin-left: auto; }
+.ai-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ai-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--accent-strong); }
+.ai-link svg { width: 12px; height: 12px; }
+.ai-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.spin { animation: spin 1.1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- 19. Rules ---------- */
 .rules-card { overflow: hidden; }
@@ -618,12 +699,22 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
   .masthead-inner { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 0 16px; }
   .masthead h1 { font-size: 28px; }
   .masthead-side { flex-direction: row; align-items: center; gap: 10px; }
-  .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .metric { padding: 12px 10px; }
-  .metric:first-child { padding-left: 0; }
-  .metric-value { font-size: 20px; }
-  .metric-note { font-size: 10.5px; }
-  .cand-head, .cand-body, .demo-head, .demo-body, .agenda-head, .agenda-body, .letter-head, .letter-body, .rule { padding-left: 16px; padding-right: 16px; }
+  .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .dash-card.is-hot { grid-column: span 2; min-height: 104px; }
+  .dash-card { min-height: 96px; padding: 12px 14px; }
+  .dash-value { font-size: 26px; }
+  .dash-note { font-size: 10.5px; }
+  .dash-title { font-size: var(--fs-14); -webkit-line-clamp: 2; }
+  .status-line { font-size: 11.5px; }
+  .board-head h2 { font-size: var(--fs-20); }
+  .board-toolbar { align-items: stretch; }
+  .seg-nav { overflow-x: auto; }
+  .search { max-width: none; flex-basis: 100%; }
+  .bcard-head, .bcard-body { padding-left: 16px; padding-right: 16px; }
+  .bcard-title { font-size: var(--fs-15); }
+  .ai-head, .ai-body, .ai-foot { padding-left: 12px; padding-right: 12px; }
+  .ai-head .ai-src { margin-left: 0; width: 100%; }
+  .cand-head, .cand-body, .demo-head, .demo-body, .letter-head, .letter-body, .rule { padding-left: 16px; padding-right: 16px; }
   .letter-title { font-size: 19px; }
   .letter-head { padding-top: 16px; }
   .topics-grid, .quotes, .voter-list { grid-template-columns: minmax(0, 1fr); }
@@ -740,6 +831,7 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
           <p class="masthead-sub">Cross-Industry Leaders, One Table, Every Friday</p>
           <div class="masthead-tags">
             <span class="tag tag-accent"><i data-lucide="shield-check"></i>100% 만장일치 합의제</span>
+            <span class="tag"><i data-lucide="sparkles"></i>AI 익명 합의안</span>
             <span class="masthead-when">매주 금요일 · 서울</span>
           </div>
         </div>
@@ -753,9 +845,10 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
       </div>
     </div>
 
-    <section class="metrics" aria-label="보드 요약">
-      <div class="wrap">
-        <div id="metrics" class="metrics-grid"></div>
+    <section class="dashboard" aria-label="보드 요약">
+      <div class="wrap dash-wrap">
+        <div id="status-line" class="status-line"></div>
+        <div id="metrics" class="dash"></div>
       </div>
     </section>
   </header>
@@ -778,6 +871,10 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
         <p class="footer-note">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 14.</span></p>
       </div>
       <div class="footer-actions">
+        <button type="button" class="btn btn-ghost btn-sm" data-action="ai-settings">
+          <i data-lucide="sparkles"></i>
+          <span>AI 합의 도출 연결</span>
+        </button>
         <button type="button" class="btn btn-ghost btn-sm" data-action="lock-gate">
           <i data-lucide="lock"></i>
           <span>화면 잠금</span>
@@ -863,6 +960,101 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
   </div>
 </div>
 
+<!-- ============ NEW TOPIC MODAL ============ -->
+<div id="topic-modal" class="modal" hidden>
+  <div class="modal-backdrop" data-action="topic-modal-close"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="topic-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New Topic</p>
+        <h2 id="topic-modal-title">주제 발제</h2>
+        <p>테이블에 올리고 싶은 안건이나 질문을 남깁니다. 발제 즉시 멤버 10인에게 열리고, 모인 익명 의견으로 합의안을 도출합니다.</p>
+      </div>
+      <button type="button" class="icon-btn" data-action="topic-modal-close" aria-label="닫기">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="new-topic-form" class="form-grid">
+        <label class="block">
+          <span class="field-label"><span>주제 제목 <span class="req">*</span></span></span>
+          <input class="input" name="title" required maxlength="90" placeholder="예: 에이전트에 어디까지 권한을 줄 것인가" />
+        </label>
+        <label class="block">
+          <span class="field-label"><span>한 줄 요약 <span class="req">*</span></span></span>
+          <textarea class="input" name="summary" required rows="2" maxlength="300" placeholder="지금 어떤 질문에 답이 필요한지 한두 문장으로 적어 주세요."></textarea>
+        </label>
+        <label class="block">
+          <span class="field-label"><span>핵심 쟁점</span><span class="hint">한 줄에 하나씩</span></span>
+          <textarea class="input" name="points" rows="3" maxlength="700" placeholder="예: 에이전트에 부여할 수 있는 최대 권한&#10;승인 이력을 남기는 방식"></textarea>
+        </label>
+        <div class="form-row">
+          <label class="block">
+            <span class="field-label"><span>태그</span><span class="hint">쉼표 구분</span></span>
+            <input class="input" name="tags" maxlength="90" placeholder="예: 거버넌스, 보안" />
+          </label>
+          <label class="block">
+            <span class="field-label"><span>상태</span></span>
+            <select class="input" name="status">
+              <option value="open">논의 중</option>
+              <option value="confirmed">확정</option>
+              <option value="guideline">가이드라인</option>
+            </select>
+          </label>
+        </div>
+        <div class="note">
+          <b>익명 합의 원칙</b> — 댓글과 입장은 발언자 이름 없이 합의 도출에만 쓰입니다. Chatham House Rule에 따라 인용은 되지만 귀속은 남기지 않습니다.
+        </div>
+        <div class="modal-foot" style="padding:6px 0 0;border:0">
+          <button type="button" class="btn btn-secondary" data-action="topic-modal-close">취소</button>
+          <button type="submit" class="btn btn-primary">주제 발제하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============ AI CONSENSUS SETTINGS ============ -->
+<div id="ai-modal" class="modal" hidden>
+  <div class="modal-backdrop" data-action="ai-modal-close"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Anonymous Consensus Engine</p>
+        <h2 id="ai-modal-title">AI 합의 도출 연결</h2>
+        <p>HuggingFace Pro(Inference Endpoint · Space · Router)를 붙이면 모인 익명 의견으로 합의안을 실시간 도출합니다. 연결하지 않아도 규칙 기반 초안과 LLM용 익명 프롬프트 복사는 그대로 쓸 수 있습니다.</p>
+      </div>
+      <button type="button" class="icon-btn" data-action="ai-modal-close" aria-label="닫기">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="ai-form" class="form-grid">
+        <label class="block">
+          <span class="field-label"><span>엔드포인트 URL</span><span class="hint">OpenAI 호환 /v1/chat/completions</span></span>
+          <input class="input" name="endpoint" type="url" maxlength="300" placeholder="https://router.huggingface.co/v1/chat/completions" />
+        </label>
+        <label class="block">
+          <span class="field-label"><span>모델 ID</span><span class="hint">예: Qwen/Qwen2.5-72B-Instruct</span></span>
+          <input class="input" name="model" maxlength="140" placeholder="Qwen/Qwen2.5-72B-Instruct" />
+        </label>
+        <label class="block">
+          <span class="field-label"><span>HF 토큰</span><span class="hint">이 브라우저에만 저장</span></span>
+          <input class="input" name="token" type="password" autocomplete="off" placeholder="hf_..." />
+        </label>
+        <div class="note">
+          토큰은 소스가 아니라 <b>이 브라우저의 localStorage</b>에만 저장되고 공유 링크로는 전달되지 않습니다. 호출은 브라우저에서 직접 나가므로 엔드포인트가 CORS를 허용해야 하며, 막혀 있으면 Space 프록시나 사내 서버리스 함수 주소를 넣어 주세요.
+        </div>
+        <div class="modal-foot" style="padding:6px 0 0;border:0">
+          <button type="button" class="btn btn-ghost" data-action="ai-clear">연결 해제</button>
+          <button type="button" class="btn btn-secondary" data-action="ai-modal-close">닫기</button>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- ============ TOAST ============ -->
 <div id="toast" aria-live="polite" aria-atomic="true">
   <div id="toast-inner" class="toast" hidden></div>
@@ -878,7 +1070,8 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
    Single-file vanilla JS. State lives in memory + localStorage.
    ========================================================= */
 
-const STORAGE_KEY = 'friday-coffee-club:v1';
+const STORAGE_KEY = 'friday-coffee-club:v2';
+const AI_KEY = 'friday-coffee-club:ai';
 const ME = 'm1';
 
 const MEMBERS = [
@@ -1111,12 +1304,106 @@ const SEED = {
   ]
 };;
 
+/* ---------------- board metadata: status · anonymous stance · seeded consensus ---------------- */
+
+const STANCE_SEED = {
+  a1: { m1: 'agree', m2: 'agree', m3: 'agree', m4: 'agree', m5: 'agree', m6: 'hold',  m7: 'disagree', m8: 'agree', m9: 'hold', m10: 'hold' },
+  a2: { m1: 'hold',  m2: 'agree', m3: 'hold',  m4: 'agree', m5: 'agree', m6: 'agree', m7: 'agree',    m8: 'agree', m9: 'hold', m10: 'hold' },
+  a3: { m1: 'agree', m2: 'agree', m3: 'hold',  m4: 'agree', m5: 'agree', m6: 'agree', m7: 'agree',    m8: 'agree', m9: 'agree', m10: 'hold' }
+};
+
+const SEED_CONSENSUS = {
+  a1: {
+    source: 'seed',
+    at: '2026-11-13T20:10:00+09:00',
+    agreed: [
+      'AI로 초안을 쓰는 것 자체는 이미 현실이고, 문제는 사용 여부가 아니라 검증을 어떻게 기록하는가다.',
+      '책임은 결국 발행인에게 남는다. AI 사용 사실을 감추는 쪽이 가장 위험하다는 데 의견이 모였다.',
+      '사람이 언제 무엇을 확인했는지의 로그가 방어의 최소 단위라는 점에는 이견이 없었다.'
+    ],
+    open: [
+      '검증의 단위 — 문장 단위인지 표·숫자 단위인지 아직 합의되지 않았다.',
+      '주관사 실사에서 AI 산출물을 몇 % 표본으로 뽑을지 기준이 필요하다.',
+      '벤더 계약의 손해배상 한도 — 실제로 협상 가능한 하한선이 확인되지 않았다.'
+    ],
+    draft: '테이블은 세 가지에 합의했습니다. AI 사용은 전제로 두고, 발행인의 검증 의무는 면제되지 않으며, 사용과 검증을 분리해 기록합니다. 다음 테이블에서는 검증 로그의 표준 양식과 주관사 표본 기준 두 가지를 먼저 확정합니다. 벤더 책임 한도는 계약 협상 사례를 모아 별도로 다룹니다.'
+  },
+  a2: {
+    source: 'seed',
+    at: '2026-11-13T21:40:00+09:00',
+    agreed: [
+      'SaaS를 걷어내는 속도가 감사 대응 속도보다 빠르다는 진단에 이견이 없었다.',
+      '감사인과 협의하기 전에 클럽 차원의 최소 요구사항을 먼저 정하는 순서가 맞다는 데 모였다.',
+      '접근통제·변경이력·데이터 무결성 세 축을 공통 증적 템플릿으로 만들자는 제안이 받아들여졌다.'
+    ],
+    open: [
+      '에이전트 권한의 승인 이력을 어느 시스템에 남길지 정해지지 않았다.',
+      '프롬프트와 모델 버전을 형상관리 대상으로 볼지 감사인별 입장이 갈린다.',
+      '내부 DB로 옮긴 데이터의 완전성 검증 방법이 아직 사례 수준에 머물러 있다.'
+    ],
+    draft: '세 축(접근통제·변경이력·데이터 무결성)을 클럽 공통 증적 템플릿으로 만들고, 다음 금요일에 각 사의 실제 양식을 한 장씩 모아 비교합니다. 프롬프트·모델 버전의 형상관리 여부는 감사인 두 곳에 같은 질문을 던져 답을 비교한 뒤 가이드라인으로 확정합니다.'
+  }
+};
+
+SEED.agendas.forEach(a => {
+  a.status = 'open';
+  a.stances = STANCE_SEED[a.id] || {};
+  if (SEED_CONSENSUS[a.id]) a.consensus = SEED_CONSENSUS[a.id];
+});
+
+SEED.agendas.push(
+  {
+    id: 'a4', no: 4, owner: 'm3', at: '2026-11-09T10:20:00+09:00',
+    title: '테이블 기록은 익명으로 남긴다 — 레터 인용 규칙',
+    tags: ['기록', '익명', 'Chatham'],
+    status: 'guideline',
+    summary: '커피 레터에 대화를 옮길 때 발화자 이름을 남기지 않는다. 인용은 자유롭지만 귀속은 금지하고, 캡처 공유 시에도 이름을 지운다. 이 규칙이 없으면 테이블의 솔직함이 먼저 사라진다.',
+    points: [
+      '레터에 실을 때 “한 CFO”, “한 변호사” 같은 익명 표기를 표준으로 쓴다.',
+      '사내 수치가 섞인 문장은 발행 전에 해당 멤버가 한 번 더 읽는다.',
+      '익명 표기 때문에 맥락이 사라지는 경우에만 저자가 직접 밝힌다.'
+    ],
+    stances: { m1: 'agree', m2: 'agree', m3: 'agree', m4: 'agree', m5: 'agree', m6: 'agree', m7: 'agree', m8: 'agree', m9: 'agree', m10: 'agree' },
+    comments: [
+      { id: 'g8', author: 'm2', text: '레터 1·2호를 이미 익명 표기로 정리했습니다. 이걸 규칙으로 못 박으면 다음 호부터 매번 고민하지 않아도 됩니다.', at: '2026-11-10T09:40:00+09:00', likes: 5 },
+      { id: 'g9', author: 'm8', text: '법적으로도 익명 처리가 안전합니다. 다만 인용 문장이 특정 회사의 공시 전 정보를 담고 있으면 익명이어도 위험하니, 그 경우만 발행 전 확인을 넣읍시다.', at: '2026-11-11T14:10:00+09:00', likes: 4 }
+    ]
+  },
+  {
+    id: 'a5', no: 5, owner: 'm2', at: '2026-11-07T11:00:00+09:00',
+    title: '신규 멤버는 동료 추천으로만 받는다',
+    tags: ['멤버십', '추천'],
+    status: 'confirmed',
+    summary: '본인 지원이 아니라 참석자의 동료 추천으로만 후보가 올라온다. 추천인은 왜 이 사람이어야 하는지 한 문단을 써야 하고, 10인 전원 찬성으로만 영입이 확정된다.',
+    points: [
+      '추천인은 후보자의 이력과 추천 사유를 함께 제출한다.',
+      '후보자에게는 심사 중임을 알리지 않는다.',
+      '비토가 나오면 추천인과 비토 멤버가 1:1 커피 미팅을 한다.'
+    ],
+    stances: { m1: 'agree', m2: 'agree', m3: 'agree', m4: 'agree', m5: 'agree', m6: 'agree', m7: 'agree', m8: 'agree', m9: 'agree', m10: 'agree' },
+    comments: [
+      { id: 'g10', author: 'm5', text: '지원서를 받으면 스펙 경쟁이 시작됩니다. 추천만 받는 게 테이블의 성격을 지키는 길이라고 봅니다.', at: '2026-11-08T10:05:00+09:00', likes: 6 }
+    ]
+  }
+);
+
+/* ---------------- AI consensus settings ---------------- */
+
+function loadAIConfig() {
+  try { return JSON.parse(localStorage.getItem(AI_KEY)) || {}; } catch (err) { return {}; }
+}
+let aiConfig = loadAIConfig();
+
+function saveAIConfig() {
+  try { localStorage.setItem(AI_KEY, JSON.stringify(aiConfig || {})); } catch (err) { /* private mode */ }
+}
+
 /* ---------------- state ---------------- */
 
 let state = loadState();
 let drafts = {};          // per-input drafts so a re-render does not lose typing
 let openComments = {};    // which candidate/agenda comment box is expanded
-let agendaOpen = {};      // agenda detail expansion
+let openCards = {};        // which board card (accordion) is expanded
 
 function clone(o) { return JSON.parse(JSON.stringify(o)); }
 
@@ -1141,7 +1428,9 @@ function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (err) { /* private mode: ignore */ }
 }
 
-state.tab = state.tab || 'gate';
+state.tab = state.tab || 'board';
+state.filter = state.filter || 'open';
+if (typeof state.query !== 'string') state.query = '';
 
 /* ---------------- helpers ---------------- */
 
@@ -1222,40 +1511,76 @@ function renderHeaderAvatars() {
   ).join('') + '<span class="avatar" title="나머지 5인">+' + (MEMBERS.length - 5) + '</span>';
 }
 
+function todayLabel() {
+  const d = new Date();
+  return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '. ' + DAYS[d.getDay()] + '요일';
+}
+
+function renderStatusLine() {
+  const el = document.getElementById('status-line');
+  if (!el) return;
+  const t = totalsOf();
+  const openN = allItems().filter(e => itemStatusOf(e.kind, e.item).key === 'open').length;
+  el.innerHTML =
+    '<span class="status-line-main"><i data-lucide="check-circle-2"></i>' +
+      '이번 주 테이블까지 <b>' + t.comments + '개</b>의 의견이 모였습니다' +
+      '<span class="sep">·</span>논의 중 <b>' + openN + '건</b>' +
+      '<span class="sep">·</span>금요일 커피클럽에서 정리합니다</span>' +
+    '<span class="status-line-date">' + todayLabel() + '</span>';
+}
+
 function renderMetrics() {
   const el = document.getElementById('metrics');
   if (!el) return;
-  const real = (state.candidates || []).filter(c => c.isUserCreated);
-  const confirmed = real.filter(c => tally(c).passed).length;
-  const reviewing = real.length - confirmed;
-  const letters = state.letters ? state.letters.length : 2;
-
-  const cell = (label, value, unit, note, action, id) =>
-    '<button type="button" class="metric" data-action="' + action + '"' + (id ? ' data-id="' + id + '"' : '') + '>' +
-      '<span class="metric-label">' + label + '</span>' +
-      '<span class="metric-value"><span class="tabnum">' + value + '</span><span class="metric-unit">' + unit + '</span></span>' +
-      '<span class="metric-note">' + note + '</span>' +
-    '</button>';
+  const entries = allItems();
+  const openEntries = entries.filter(e => itemStatusOf(e.kind, e.item).key === 'open');
+  const openAg = openEntries.filter(e => e.kind === 'agenda').length;
+  const openCand = openEntries.filter(e => e.kind === 'candidate').length;
+  const t = totalsOf();
+  const hot = hottestEntry();
+  const hotComments = hot ? (hot.item.comments || []).length : 0;
+  const hotVotes = hot ? itemVoteCount(hot.kind, hot.item) : 0;
 
   el.innerHTML =
-    cell('영입 확정 멤버', MEMBERS.length, '명', '크로스 인더스트리 10인 · 만장일치 기준', 'members-modal-open', null) +
-    cell('심사 안건', real.length, '건',
-      (real.length ? '검토 중 ' + reviewing + '건 · 확정 ' + confirmed + '건' : '신규 후보자 접수 대기 중'),
-      'tab', 'gate') +
-    cell('금요 커피 레터', letters, '편', 'tiro 음성 + Claude 아카이브', 'tab', 'letters');
+    '<button type="button" class="dash-card is-hot" data-action="hot-open"' +
+      (hot ? ' data-key="' + esc(keyOf(hot.kind, hot.item)) + '"' : '') + '>' +
+      '<span class="dash-label">지금 가장 뜨거운 주제</span>' +
+      (hot
+        ? '<span class="dash-title">' + esc(hot.item.title) + '</span>' +
+          '<span class="dash-note">댓글 <b>' + hotComments + '</b> · 입장 <b>' + hotVotes + '</b> — 펼쳐 보기 →</span>'
+        : '<span class="dash-title">아직 뜨거운 주제가 없습니다</span>' +
+          '<span class="dash-note">첫 주제를 발제해 보세요 →</span>') +
+    '</button>' +
+    '<button type="button" class="dash-card" data-action="filter" data-filter="open">' +
+      '<span class="dash-label">논의 중</span>' +
+      '<span class="dash-value">' + openEntries.length + '<span class="dash-unit">건</span></span>' +
+      '<span class="dash-note">아젠다 <b>' + openAg + '</b> · 멤버 심사 <b>' + openCand + '</b></span>' +
+    '</button>' +
+    '<button type="button" class="dash-card" data-action="filter" data-filter="all">' +
+      '<span class="dash-label">모인 의견</span>' +
+      '<span class="dash-value">' + (t.comments + t.votes) + '<span class="dash-unit">개</span></span>' +
+      '<span class="dash-note">댓글 <b>' + t.comments + '</b> · 입장 투표 <b>' + t.votes + '</b></span>' +
+    '</button>' +
+    '<button type="button" class="dash-card" data-action="members-modal-open">' +
+      '<span class="dash-label">멤버</span>' +
+      '<span class="dash-value">' + MEMBERS.length + '<span class="dash-unit">인</span></span>' +
+      '<span class="dash-note">크로스 인더스트리 · 명단 보기 →</span>' +
+    '</button>';
 }
 
 function renderTabs() {
   const el = document.getElementById('tabs');
   if (!el) return;
+  const openN = allItems().filter(e => itemStatusOf(e.kind, e.item).key === 'open').length;
+  const letters = state.letters ? state.letters.length : 2;
   const tabs = [
+    { id: 'board', icon: 'messages-square', label: '의견 교류', count: openN + '건', title: 'Opinions & Consensus' },
     { id: 'gate', icon: 'vote', label: '멤버 영입 심사', count: '10/10', title: 'Unanimous Gate' },
-    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', count: 'VOL. ' + ('0' + (state.letters ? state.letters.length : 2)).slice(-2), title: 'Coffee Letters' },
-    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다', count: state.agendas.length + '건', title: 'Discussions' },
+    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', count: 'VOL. ' + ('0' + letters).slice(-2), title: 'Coffee Letters' },
     { id: 'rules', icon: 'scroll-text', label: '그라운드룰', count: state.rules.length + '개', title: 'Ground Rules' }
   ];
   el.innerHTML = tabs.map(t => {
-    const active = state.tab === t.id;
+    const active = state.tab === t.id || (t.id === 'board' && state.tab === 'topics');
     return '<button type="button" role="tab" class="tab" data-action="tab" data-id="' + t.id + '"' +
       ' aria-selected="' + active + '" title="' + esc(t.title) + '">' +
       '<i data-lucide="' + t.icon + '"></i>' +
@@ -1427,6 +1752,7 @@ function candidateCard(c) {
       voteButtons(c) +
       '<p class="vote-note">' + note + '</p>' +
       voterGrid(c) +
+      aiBlock('candidate', c) +
       commentList('candidate', c, true) +
     '</div>' +
   '</article>';
@@ -1492,64 +1818,508 @@ function renderGate() {
   '</div>';
 }
 
-function agendaCard(a) {
-  const owner = MEMBER_BY_ID[a.owner] || MEMBER_BY_ID[ME];
-  const open = !!agendaOpen[a.id];
-  const rows = a.comments.slice().sort((x, y) => new Date(y.at) - new Date(x.at));
-  const previewRows = rows.slice(0, 2);
+/* ---------------- opinion board helpers ---------------- */
 
-  const preview = previewRows.map(cm => {
-    const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
-    return '<li>' + avatar(cm.author, 'sm') +
-      '<div class="preview-main">' +
-        '<p class="preview-author">' + esc(m.name) + ' <span>' + esc(m.title) + '</span></p>' +
-        '<p class="preview-text">' + esc(cm.text) + '</p>' +
-      '</div></li>';
-  }).join('');
+function keyOf(kind, item) { return kind + ':' + item.id; }
 
-  return '<article class="card fade-in">' +
-    '<div class="agenda-head">' +
-      '<span class="agenda-no">' + a.no + '</span>' +
-      '<div class="agenda-head-main">' +
-        '<div class="cand-meta"><span class="status is-review"><span class="dot"></span>' + esc(a.status) + '</span>' +
-          (a.tags || []).map(tg => '<span>· #' + esc(tg) + '</span>').join('') + '</div>' +
-        '<h3 class="agenda-title">' + esc(a.title) + '</h3>' +
-        '<div class="agenda-meta">' +
-          '<span class="who">' + avatar(owner.id, 'sm') + '<b>' + esc(owner.name) + '</b> 발제</span>' +
-          '<span class="sep">·</span><span class="tabnum">' + fmtFull(a.at) + '</span>' +
-        '</div>' +
-      '</div>' +
+function allItems() {
+  const agendas = (state.agendas || []).map(a => ({ kind: 'agenda', item: a }));
+  const cands = (state.candidates || []).map(c => ({ kind: 'candidate', item: c }));
+  return agendas.concat(cands);
+}
+
+function itemStatusOf(kind, item) {
+  if (kind === 'candidate') {
+    const t = tally(item);
+    if (t.passed) return { key: 'done', label: '영입 확정' };
+    return { key: 'open', label: t.blocked ? '비토 · 재논의' : '심사 중' };
+  }
+  if (item.status === 'guideline') return { key: 'done', label: '가이드라인' };
+  if (item.status === 'confirmed') return { key: 'done', label: '확정' };
+  return { key: 'open', label: '논의 중' };
+}
+
+function stanceCounts(item) {
+  const map = item.stances || {};
+  let agree = 0, hold = 0, disagree = 0;
+  MEMBERS.forEach(m => {
+    const v = map[m.id];
+    if (v === 'agree') agree++;
+    else if (v === 'hold') hold++;
+    else if (v === 'disagree') disagree++;
+  });
+  return { agree, hold, disagree, total: agree + hold + disagree };
+}
+
+function itemVoteCount(kind, item) {
+  if (kind === 'candidate') {
+    const t = tally(item);
+    return t.yes + t.conditional + t.veto;
+  }
+  return stanceCounts(item).total;
+}
+
+function likeCount(item) {
+  return (item.comments || []).reduce((n, c) => n + (c.likes || 0), 0);
+}
+
+function activityScore(entry) {
+  return (entry.item.comments || []).length * 3 + itemVoteCount(entry.kind, entry.item) + likeCount(entry.item);
+}
+
+function hottestEntry() {
+  const open = allItems().filter(e => itemStatusOf(e.kind, e.item).key === 'open');
+  if (!open.length) return null;
+  return open.slice().sort((a, b) => activityScore(b) - activityScore(a))[0];
+}
+
+function totalsOf() {
+  let comments = 0, votes = 0;
+  allItems().forEach(e => {
+    comments += (e.item.comments || []).length;
+    votes += itemVoteCount(e.kind, e.item);
+  });
+  return { comments, votes };
+}
+
+function filteredEntries(q) {
+  const query = String(q || '').trim().toLowerCase();
+  const out = allItems().filter(e => {
+    const st = itemStatusOf(e.kind, e.item).key;
+    if (state.filter === 'open' && st !== 'open') return false;
+    if (state.filter === 'done' && st !== 'done') return false;
+    if (!query) return true;
+    const it = e.item;
+    const hay = [
+      it.title, it.summary, it.headline, it.reason, (it.tags || []).join(' '), (it.points || []).join(' '),
+      (it.comments || []).map(c => c.text).join(' ')
+    ].join(' ').toLowerCase();
+    return hay.indexOf(query) !== -1;
+  });
+  return out.sort((a, b) => {
+    const sa = itemStatusOf(a.kind, a.item).key === 'open' ? 1 : 0;
+    const sb = itemStatusOf(b.kind, b.item).key === 'open' ? 1 : 0;
+    if (sa !== sb) return sb - sa;
+    return activityScore(b) - activityScore(a);
+  });
+}
+
+function focusCard(kind, id) {
+  const el = document.getElementById('bc-' + kind + '-' + id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function rerender(keepScroll) {
+  const y = window.scrollY;
+  render();
+  if (keepScroll) window.scrollTo(0, y);
+}
+
+function copyText(text, okMsg) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => toast(okMsg || '복사되었습니다', 'ok'))
+      .catch(() => prompt('아래 내용을 복사해 주세요:', text));
+  } else {
+    prompt('아래 내용을 복사해 주세요:', text);
+  }
+}
+
+/* ---------------- stance vote ---------------- */
+
+function stanceVote(item) {
+  const st = stanceCounts(item);
+  const mine = (item.stances || {})[ME];
+  const opt = (value, label, icon, cls, n) =>
+    '<button type="button" class="stance-opt ' + cls + '" data-action="stance" data-id="' + item.id + '" data-stance="' + value + '"' +
+      ' aria-pressed="' + (mine === value) + '"><i data-lucide="' + icon + '"></i><span>' + label + '</span>' +
+      '<span class="n">' + n + '</span></button>';
+  return '<div class="stance" role="group" aria-label="익명 입장 표시">' +
+      '<span class="stance-label">내 입장</span>' +
+      opt('agree', '찬성', 'thumbs-up', 'stance-agree', st.agree) +
+      opt('hold', '보류', 'pause', 'stance-hold', st.hold) +
+      opt('disagree', '반대', 'thumbs-down', 'stance-disagree', st.disagree) +
     '</div>' +
-    '<div class="agenda-body">' +
-      '<p class="summary">' + esc(a.summary) + '</p>' +
-      (open
-        ? '<div><span class="block-label">핵심 쟁점</span><ul class="points">' +
-          a.points.map(p => '<li><span>' + esc(p) + '</span></li>').join('') + '</ul></div>'
-        : '<ul class="preview">' + preview + '</ul>') +
-      '<div class="agenda-actions">' +
-        '<button type="button" class="btn btn-secondary btn-sm" data-action="agenda-toggle" data-id="' + a.id + '">' +
-          '<i data-lucide="' + (open ? 'chevron-up' : 'chevron-down') + '"></i>' +
-          '<span>' + (open ? '접기' : '쟁점과 댓글 펼치기') + '</span>' +
-        '</button>' +
-        '<span class="caption">댓글 ' + a.comments.length + '</span>' +
-      '</div>' +
-      (open ? commentList('agenda', a, true) : '') +
-    '</div>' +
+    '<p class="stance-note">' + (st.total ? st.total + '명이 입장을 남겼습니다' : '아직 입장이 없습니다') +
+      ' · 누가 어느 쪽인지는 남기지 않고 숫자만 집계합니다.</p>';
+}
+
+/* ---------------- AI anonymous consensus ---------------- */
+
+const AGREE_RE = /(찬성|좋겠|좋습니다|필요|공감|동의|맞습니다|반갑|핵심|중요|해야|권장|유용|현실|안전)/;
+const OPEN_RE = /(다만|우려|먼저|조건|궁금|위험|아직|논의|확인|질문|불확실|어렵|한계|걱정|갈리|미정|사례|조정)/;
+
+function aiSourceLabel(c) {
+  if (!c) return '아직 도출 전';
+  if (c.pending) return '도출 중…';
+  if (c.source === 'endpoint') return 'HF 실시간 도출';
+  if (c.source === 'seed') return '예시 합의안';
+  return '규칙 기반 초안';
+}
+
+function firstSentence(text, max) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!t) return '';
+  const m = t.match(/^(.{12,}?[.!?。])(\s|$)/);
+  let s = m ? m[1] : t;
+  const limit = max || 92;
+  if (s.length > limit) s = s.slice(0, limit - 1).replace(/[\s,·]$/, '') + '…';
+  return s;
+}
+
+function localConsensus(kind, item) {
+  const comments = (item.comments || []).slice().sort((a, b) => new Date(a.at) - new Date(b.at));
+  const agreed = [], open = [], seen = {};
+  const push = (arr, s) => {
+    if (!s) return;
+    const k = s.slice(0, 20);
+    if (seen[k]) return;
+    seen[k] = 1;
+    arr.push(s);
+  };
+  comments.forEach(cm => {
+    const text = String(cm.text || '');
+    const s = firstSentence(text, 92);
+    if (OPEN_RE.test(text)) push(open, s);
+    else push(agreed, s);
+  });
+
+  let agreedOut = agreed.slice(0, 3);
+  const openOut = open.slice(0, 3);
+
+  if (!agreedOut.length) {
+    if (kind === 'candidate') agreedOut.push('찬성 근거가 아직 댓글로 정리되지 않았습니다. 투표만 ' + tally(item).cast + '/10 찬성입니다.');
+    else agreedOut.push('아직 댓글이 없어 합의점이 수집되지 않았습니다. 첫 의견을 남겨 주세요.');
+  }
+  if (!openOut.length) openOut.push('세부 기준과 실행 주체는 아직 정해지지 않았습니다.');
+
+  let draft;
+  if (kind === 'candidate') {
+    const t = tally(item);
+    const head = t.passed
+      ? '10인 전원이 찬성해 영입이 확정된 안건입니다.'
+      : '현재 ' + t.cast + '/10 찬성' + (t.veto ? ' · 비토 ' + t.veto + '명' : ' · 검토 중 ' + t.pending + '명') + '입니다.';
+    const cond = open.length ? ' 심사에서 남은 조건은 “' + openOut[0] + '”입니다.' : '';
+    const next = t.passed
+      ? ' 다음 금요일 테이블에서 첫 인사를 나누고, 추천 사유를 레터에 익명으로 한 줄 남기는 것으로 정리합니다.'
+      : ' 이 조건을 먼저 확인한 뒤 다음 테이블에서 재표를 받는 순서를 제안합니다.';
+    draft = head + cond + next;
+  } else {
+    const st = stanceCounts(item);
+    const lead = st.total
+      ? '입장을 남긴 ' + st.total + '명 중 ' + st.agree + '명이 같은 방향에 섰습니다.' +
+        (st.disagree ? ' 반대 ' + st.disagree + '명의 이유는 남은 조건으로 옮겨 적었습니다.' : ' 뚜렷한 반대는 없습니다.')
+      : '아직 입장 표시가 없어 댓글만으로 초안을 정리했습니다.';
+    const body = agreed[0] ? ' 합의점은 ' + agreedOut.slice(0, 2).map(x => '“' + x + '”').join(', ') + ' 쪽으로 모였습니다.' : '';
+    const tail = open.length ? ' 다음 테이블에서는 “' + openOut[0] + '”을(를) 첫 안건으로 올려 확정합니다.' : '';
+    draft = lead + body + tail;
+  }
+
+  return { source: 'rules', at: new Date().toISOString(), agreed: agreedOut, open: openOut, draft };
+}
+
+function anonPrompt(kind, item) {
+  const labels = {};
+  const anon = (authorId) => {
+    if (!labels[authorId]) {
+      const n = Object.keys(labels).length + 1;
+      labels[authorId] = '참여자 ' + n;
+    }
+    return labels[authorId];
+  };
+  const comments = (item.comments || []).slice().sort((a, b) => new Date(a.at) - new Date(b.at));
+
+  let tallyLine;
+  if (kind === 'candidate') {
+    const t = tally(item);
+    tallyLine = '찬성 ' + t.yes + ' · 조건부 찬성 ' + t.conditional + ' · 비토 ' + t.veto + ' · 검토 중 ' + t.pending + ' (10인 기준)';
+  } else {
+    const st = stanceCounts(item);
+    tallyLine = '찬성 ' + st.agree + ' · 보류 ' + st.hold + ' · 반대 ' + st.disagree + ' (총 ' + st.total + '명 응답)';
+  }
+
+  const lines = [
+    '[금요커피클럽 — 익명 합의 도출]',
+    '너는 크로스 인더스트리 리더들의 비공개 논의를 정리하는 합의 도출 보조자다.',
+    '',
+    '규칙:',
+    '1. 아래 익명 처리된 의견만 근거로 쓴다. 발언자를 추측하거나 이름을 만들지 않는다.',
+    '2. 결과는 공통 합의점(agreed), 남은 쟁점·조건(open), 제안 합의안 초안(draft) 세 가지로만 정리한다.',
+    '3. agreed와 open은 각각 2~4개, 한 문장씩 쓴다. draft는 3~5문장의 한국어 존댓말로 조건과 다음 단계를 포함한다.',
+    '4. 근거가 없는 내용은 쓰지 않는다. 확실하지 않으면 “미정”이라고 적는다.',
+    '5. 출력은 아래 JSON 하나만. 설명이나 코드블록 없이.',
+    '{"agreed": ["..."], "open": ["..."], "draft": "..."}',
+    '',
+    '[안건]',
+    '유형: ' + (kind === 'candidate' ? '멤버 영입 심사' : '아젠다 토론'),
+    '제목: ' + item.title
+  ];
+  if (item.summary) lines.push('요약: ' + item.summary);
+  if ((item.points || []).length) lines.push('핵심 쟁점:\n- ' + item.points.join('\n- '));
+  lines.push('', '[입장 집계]', tallyLine, '', '[익명 댓글 ' + comments.length + '개]');
+  if (comments.length) comments.forEach(cm => lines.push(anon(cm.author) + ': ' + String(cm.text || '').replace(/\s+/g, ' ')));
+  else lines.push('(아직 댓글 없음)');
+  return lines.join('\n');
+}
+
+function parseConsensusText(raw) {
+  const text = String(raw || '').trim();
+  let body = text;
+  const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) body = fence[1];
+  const braced = body.match(/\{[\s\S]*\}/);
+  if (braced) body = braced[0];
+  try {
+    const obj = JSON.parse(body);
+    const arr = (v) => Array.isArray(v) ? v.map(x => String(x).trim()).filter(Boolean) : (v ? [String(v).trim()] : []);
+    const agreed = arr(obj.agreed || obj['공통 합의점'] || obj.consensus);
+    const open = arr(obj.open || obj['남은 쟁점'] || obj.openIssues || obj.conditions);
+    const draft = String(obj.draft || obj['제안 합의안'] || obj.proposal || '').trim();
+    if (agreed.length || open.length || draft) return { agreed, open, draft };
+  } catch (err) { /* not JSON: use raw text */ }
+  return { agreed: [], open: [], draft: text.slice(0, 1200) };
+}
+
+async function callEndpoint(prompt) {
+  const url = String(aiConfig.endpoint || '').trim();
+  if (!url) throw new Error('엔드포인트 없음');
+  const headers = { 'Content-Type': 'application/json' };
+  if (aiConfig.token) headers.Authorization = 'Bearer ' + aiConfig.token;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      model: (aiConfig.model || '').trim() || 'default',
+      messages: [
+        { role: 'system', content: '너는 한국어로 답하는 익명 합의 도출 보조자다. 주어진 익명 의견만 근거로 삼고 JSON만 출력한다.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.2,
+      max_tokens: 900,
+      stream: false
+    })
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  const choice = (data.choices || [])[0] || {};
+  const content = (choice.message && choice.message.content) || data.generated_text || data.output_text || '';
+  if (!content) throw new Error('빈 응답');
+  return parseConsensusText(content);
+}
+
+async function deriveConsensus(kind, id) {
+  const item = findItem(kind, id);
+  if (!item) return;
+  if (!aiConfig.endpoint) {
+    item.consensus = localConsensus(kind, item);
+    saveState();
+    rerender(true);
+    focusCard(kind, id);
+    toast('익명 의견으로 합의안 초안을 정리했습니다 (규칙 기반)', 'ok');
+    return;
+  }
+  const prompt = anonPrompt(kind, item);
+  item.consensus = { pending: true, at: new Date().toISOString(), source: 'endpoint' };
+  rerender(true);
+  focusCard(kind, id);
+  try {
+    const out = await callEndpoint(prompt);
+    item.consensus = { agreed: out.agreed, open: out.open, draft: out.draft, at: new Date().toISOString(), source: 'endpoint' };
+    saveState();
+    rerender(true);
+    focusCard(kind, id);
+    toast('HF 엔드포인트로 합의안을 도출했습니다', 'ok');
+  } catch (err) {
+    item.consensus = localConsensus(kind, item);
+    item.consensus.error = String((err && err.message) || err);
+    saveState();
+    rerender(true);
+    focusCard(kind, id);
+    toast('엔드포인트 호출 실패(' + ((err && err.message) || 'error') + ') — 규칙 기반 초안으로 대체했습니다', 'warn');
+  }
+}
+
+function aiBlock(kind, item) {
+  const c = item.consensus;
+  const connected = !!aiConfig.endpoint;
+  const comments = (item.comments || []).length;
+  const votes = itemVoteCount(kind, item);
+
+  const head = '<div class="ai-head">' +
+      '<span class="spark"><i data-lucide="sparkles"></i></span>' +
+      '<h4>AI 익명 합의안</h4>' +
+      '<span class="ai-src">' + esc(aiSourceLabel(c)) + (c && c.at && !c.pending ? ' · ' + esc(fmtDay(c.at)) : '') + '</span>' +
+    '</div>';
+
+  let body;
+  if (c && c.pending) {
+    body = '<div class="ai-body"><p class="ai-empty"><i data-lucide="loader" class="spin"></i> 익명 댓글 ' + comments + '개와 입장 ' + votes + '개를 HF 엔드포인트로 보내는 중입니다…</p></div>';
+  } else if (c) {
+    const sec = (num, label, arr) =>
+      '<div class="ai-sect"><span class="ai-sect-label"><span class="num">' + num + '</span>' + label + '</span>' +
+        '<ul class="ai-list">' + ((arr && arr.length) ? arr.map(x => '<li><span>' + esc(x) + '</span></li>').join('') : '<li><span>미정</span></li>') + '</ul>' +
+      '</div>';
+    body = '<div class="ai-body">' +
+        sec(1, '공통 합의점', c.agreed) +
+        sec(2, '남은 쟁점 · 조건', c.open) +
+        '<div class="ai-sect"><span class="ai-sect-label"><span class="num">3</span>제안 합의안 (초안)</span>' +
+          '<p class="ai-draft">' + esc(c.draft || '초안이 비어 있습니다. 다시 도출해 주세요.') + '</p></div>' +
+        (c.error ? '<p class="caption" style="color:var(--cond-ink)">엔드포인트 오류: ' + esc(c.error) + ' — 규칙 기반 초안으로 표시했습니다.</p>' : '') +
+      '</div>';
+  } else {
+    body = '<div class="ai-body"><p class="ai-empty">아직 합의안을 도출하지 않았습니다. 지금 모인 <b>익명 댓글 ' + comments + '개</b>와 <b>입장 ' + votes + '개</b>로 초안을 만들 수 있습니다. ' +
+      (connected ? 'HF 엔드포인트가 연결되어 있어 실시간으로 도출합니다.' : ' 연결 전에는 규칙 기반 초안과 LLM용 익명 프롬프트 복사를 제공합니다.') + '</p></div>';
+  }
+
+  const foot = '<div class="ai-foot">' +
+      '<span class="meta"><i data-lucide="lock"></i>익명 처리 · 댓글 ' + comments + ' · 입장 ' + votes + '</span>' +
+      '<span class="spacer"></span>' +
+      '<span class="ai-actions">' +
+        ((!c || !c.pending)
+          ? '<button type="button" class="ai-link" data-action="ai-derive" data-kind="' + kind + '" data-id="' + item.id + '">' +
+            '<i data-lucide="' + (c ? 'refresh-cw' : 'sparkles') + '"></i>' + (c ? '합의안 다시 도출' : '합의안 도출') + '</button>'
+          : '') +
+        '<button type="button" class="ai-link" data-action="ai-prompt-copy" data-kind="' + kind + '" data-id="' + item.id + '"><i data-lucide="clipboard-copy"></i>프롬프트 복사</button>' +
+        '<button type="button" class="ai-link" data-action="ai-settings"><i data-lucide="settings-2"></i>' + (connected ? 'HF 연결됨' : 'AI 연결') + '</button>' +
+      '</span>' +
+    '</div>';
+
+  return '<section class="ai' + (c && c.pending ? ' is-loading' : '') + '">' + head + body + foot + '</section>';
+}
+
+/* ---------------- board cards ---------------- */
+
+function boardCard(entry) {
+  const kind = entry.kind, item = entry.item;
+  const key = keyOf(kind, item);
+  const open = !!openCards[key];
+  const st = itemStatusOf(kind, item);
+  const owner = kind === 'agenda' ? (MEMBER_BY_ID[item.owner] || MEMBER_BY_ID[ME]) : (MEMBER_BY_ID[item.nominator] || MEMBER_BY_ID[ME]);
+  const at = kind === 'agenda' ? item.at : item.nominatedAt;
+  const comments = (item.comments || []).length;
+  const votes = itemVoteCount(kind, item);
+  const sub = kind === 'agenda' ? item.summary : (item.headline || item.summary);
+
+  const badges =
+    '<span class="tag ' + (st.key === 'open' ? 'tag-accent' : 'tag-yes') + '">' + esc(st.label) + '</span>' +
+    '<span class="tag">' + (kind === 'agenda' ? '아젠다' : '멤버 심사') + '</span>' +
+    (item.consensus && !item.consensus.pending
+      ? '<span class="tag tag-accent"><i data-lucide="sparkles"></i>AI 합의안</span>'
+      : (item.consensus && item.consensus.pending ? '<span class="tag"><i data-lucide="loader" class="spin"></i>도출 중</span>' : ''));
+
+  return '<article class="bcard' + (open ? ' is-open' : '') + '" id="bc-' + kind + '-' + item.id + '">' +
+    '<button type="button" class="bcard-head" data-action="card-toggle" data-key="' + esc(key) + '" aria-expanded="' + open + '">' +
+      '<span class="bcard-main">' +
+        '<span class="bcard-badges">' + badges + '</span>' +
+        '<span class="bcard-title" style="display:block">' + esc(item.title) + '</span>' +
+        '<span class="bcard-sub" style="display:-webkit-box">' + esc(sub || '') + '</span>' +
+        '<span class="bcard-meta">' +
+          '<span class="m"><i data-lucide="message-circle"></i>댓글 ' + comments + '</span>' +
+          '<span class="m"><i data-lucide="hand"></i>입장 ' + votes + '</span>' +
+          '<span class="sep">·</span>' +
+          '<span class="who">' + avatar(owner.id, 'sm') + esc(owner.name) + '</span>' +
+          '<span>' + esc(fmtDay(at)) + ' 발제</span>' +
+          (kind === 'agenda' ? (item.tags || []).slice(0, 3).map(t => '<span>#' + esc(t) + '</span>').join('') : '') +
+        '</span>' +
+      '</span>' +
+      '<span class="bcard-chev"><i data-lucide="chevron-down"></i></span>' +
+    '</button>' +
+    (open ? '<div class="bcard-body fade-in">' + boardBody(kind, item) + '</div>' : '') +
   '</article>';
 }
 
-function renderTopics() {
+function boardBody(kind, item) {
+  if (kind === 'candidate') {
+    const t = tally(item);
+    const nominator = MEMBER_BY_ID[item.nominator] || MEMBER_BY_ID[ME];
+    const myVote = VOTE_LABEL[(item.votes && item.votes[ME]) || 'pending'];
+    const banner = t.passed
+      ? '<div class="banner is-passed"><i data-lucide="check"></i><p><strong>영입 확정 — 다음 금요일 오프라인 커피클럽 초청</strong><br />10/10 만장일치' + (item.confirmedAt ? ' · ' + fmtFull(item.confirmedAt) + ' 통과' : '') + '</p></div>'
+      : t.blocked
+        ? '<div class="banner is-veto"><i data-lucide="coffee"></i><p><strong>비토 발생 — 오프라인 커피 미팅으로 이관</strong><br />비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div>'
+        : '';
+    return '<p class="summary">' + esc(item.summary) + '</p>' +
+      ((item.highlights || []).length ? '<div class="chip-row">' + item.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
+      (item.reason
+        ? '<figure class="nomination"><blockquote>“' + esc(item.reason) + '”</blockquote>' +
+          '<figcaption>' + avatar(nominator.id, 'sm') + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role) + ' ' + esc(nominator.title) + '</figcaption></figure>'
+        : '') +
+      banner +
+      aiBlock('candidate', item) +
+      gauge(t) +
+      voteButtons(item) +
+      '<p class="vote-note">내 표: <b>' + myVote + '</b> · 1명이라도 비토하면 통과되지 않고, 발제자와 비토한 멤버의 오프라인 커피 미팅으로 이어집니다.</p>' +
+      voterGrid(item) +
+      commentList('candidate', item, true);
+  }
+
+  return '<p class="summary">' + esc(item.summary) + '</p>' +
+    ((item.points || []).length
+      ? '<div><span class="block-label">핵심 쟁점</span><ul class="points">' + item.points.map(p => '<li><span>' + esc(p) + '</span></li>').join('') + '</ul></div>'
+      : '') +
+    aiBlock('agenda', item) +
+    stanceVote(item) +
+    commentList('agenda', item, true);
+}
+
+function renderBoard() {
+  const counts = { open: 0, done: 0, all: 0 };
+  allItems().forEach(e => {
+    const s = itemStatusOf(e.kind, e.item).key;
+    counts[s]++;
+    counts.all++;
+  });
+  const filter = state.filter || 'open';
+  const seg = (id, label, n) =>
+    '<button type="button" class="seg-btn" data-action="filter" data-filter="' + id + '" aria-pressed="' + (filter === id) + '">' +
+      label + '<span class="n">' + n + '</span></button>';
+
   return '<div class="stack">' +
-    '<div class="section-head">' +
+    '<div class="board-head">' +
       '<div>' +
-        '<p class="eyebrow">Discussions & Case Studies</p>' +
-        '<h2>AX 아젠다 토론</h2>' +
-        '<p class="section-sub">이번 주 테이블에 올라온 안건 ' + state.agendas.length + '건. 각 안건은 발제자와 현장 사례를 함께 가져옵니다.</p>' +
+        '<p class="eyebrow">Opinions &amp; Consensus</p>' +
+        '<h2>' + (filter === 'done' ? '확정된 안건' : filter === 'all' ? '전체 주제' : '논의 중 주제') + '</h2>' +
+        '<p class="section-sub">이번 주 테이블의 아젠다와 멤버 심사 안건을 한 보드에 모았습니다. 카드를 펼치면 핵심 쟁점, 익명 의견, 입장 투표, AI 합의안이 이어집니다.</p>' +
       '</div>' +
-      '<div class="section-actions"><span class="tag">댓글 <b class="tabnum">' + totalComments() + '</b></span></div>' +
+      '<div class="board-tools">' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-action="modal-open"><i data-lucide="user-plus"></i><span>멤버 추천</span></button>' +
+        '<button type="button" class="btn btn-primary" data-action="topic-modal-open"><i data-lucide="plus"></i><span>주제 발제</span></button>' +
+      '</div>' +
     '</div>' +
-    '<div class="stack">' + state.agendas.map(agendaCard).join('') + '</div>' +
+    '<div class="board-toolbar">' +
+      '<div class="seg-nav" role="group" aria-label="상태 필터">' +
+        seg('open', '논의 중', counts.open) + seg('done', '확정', counts.done) + seg('all', '전체', counts.all) +
+      '</div>' +
+      '<label class="search"><i data-lucide="search"></i>' +
+        '<input id="board-search" type="search" placeholder="주제 · 후보 · 댓글 검색" aria-label="주제·후보·댓글 검색" value="' + esc(state.query || '') + '" />' +
+      '</label>' +
+    '</div>' +
+    '<p id="board-count" class="board-count"></p>' +
+    '<div id="bcard-list" class="bcard-list"></div>' +
   '</div>';
+}
+
+function renderBoardList() {
+  const list = document.getElementById('bcard-list');
+  if (!list) return;
+  const q = (state.query || '').trim();
+  const items = filteredEntries(q);
+  list.innerHTML = items.length
+    ? items.map(boardCard).join('')
+    : '<div class="empty"><span class="empty-icon"><i data-lucide="search-x"></i></span>' +
+        '<h3>' + (q ? '검색 결과가 없습니다' : '이 상태의 주제가 없습니다') + '</h3>' +
+        '<p>' + (q ? '다른 단어로 검색하거나 필터를 전체로 바꿔 보세요.' : '주제를 발제하면 멤버 10인에게 바로 열립니다.') + '</p>' +
+        '<div class="empty-actions">' +
+          '<button type="button" class="btn btn-secondary btn-sm" data-action="filter" data-filter="all">전체 보기</button>' +
+          '<button type="button" class="btn btn-primary btn-sm" data-action="topic-modal-open"><i data-lucide="plus"></i>주제 발제</button>' +
+        '</div></div>';
+
+  const cnt = document.getElementById('board-count');
+  if (cnt) {
+    cnt.innerHTML = '<b>' + items.length + '</b>건 표시 · 전체 ' + allItems().length + '건' +
+      (q ? ' · “' + esc(q) + '” 검색 결과' : '') + ' · 최근 활동 순';
+  }
+  if (window.lucide) window.lucide.createIcons();
 }
 
 function letterCard(lt) {
@@ -1643,16 +2413,19 @@ function renderRules() {
 
 function render() {
   renderHeaderAvatars();
+  renderStatusLine();
   renderMetrics();
   renderTabs();
   const app = document.getElementById('app');
   if (!app) return;
-  let html = '';
-  if (state.tab === 'gate') html = renderGate();
-  else if (state.tab === 'letters') html = renderLetters();
-  else if (state.tab === 'topics') html = renderTopics();
-  else html = renderRules();
-  app.innerHTML = html;
+  if (state.tab === 'gate') app.innerHTML = renderGate();
+  else if (state.tab === 'letters') app.innerHTML = renderLetters();
+  else if (state.tab === 'rules') app.innerHTML = renderRules();
+  else {
+    state.tab = 'board';
+    app.innerHTML = renderBoard();
+    renderBoardList();
+  }
   if (window.lucide) window.lucide.createIcons();
   const up = document.getElementById('updated-at');
   if (up) up.textContent = fmtDayDot(new Date().toISOString());
@@ -1695,6 +2468,15 @@ function renderMembersModalList() {
       '<span class="tag member-field">' + esc(m.field) + '</span>' +
     '</div>'
   ).join('');
+}
+
+function fillAIModal() {
+  const form = document.getElementById('ai-form');
+  if (!form) return;
+  const set = (name, value) => { const f = form.querySelector('[name="' + name + '"]'); if (f) f.value = value || ''; };
+  set('endpoint', aiConfig.endpoint);
+  set('model', aiConfig.model);
+  set('token', aiConfig.token);
 }
 
 document.addEventListener('click', (e) => {
@@ -1787,12 +2569,92 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  if (action === 'agenda-toggle') {
-    const id = el.dataset.id;
-    agendaOpen[id] = !agendaOpen[id];
+  if (action === 'card-toggle') {
+    const key = el.dataset.key;
+    if (!key) return;
+    openCards[key] = !openCards[key];
+    rerender(true);
+    return;
+  }
+
+  if (action === 'hot-open') {
+    const key = el.dataset.key;
+    if (!key) { toast('아직 뜨거운 주제가 없습니다 — 첫 주제를 발제해 보세요'); return; }
+    state.tab = 'board';
+    state.filter = 'all';
+    state.query = '';
+    openCards[key] = true;
+    saveState();
     render();
-    const node = document.querySelector('[data-action="agenda-toggle"][data-id="' + id + '"]');
-    if (node) node.scrollIntoView({ block: 'nearest' });
+    setTabUrl('board');
+    setTimeout(() => { const p = key.split(':'); focusCard(p[0], p[1]); }, 90);
+    return;
+  }
+
+  if (action === 'filter') {
+    state.filter = el.dataset.filter || 'open';
+    state.tab = 'board';
+    saveState();
+    render();
+    setTabUrl('board');
+    return;
+  }
+
+  if (action === 'stance') {
+    const item = state.agendas.find(a => a.id === el.dataset.id);
+    if (!item) return;
+    const v = el.dataset.stance;
+    item.stances = item.stances || {};
+    const prev = item.stances[ME];
+    if (prev === v) delete item.stances[ME];
+    else item.stances[ME] = v;
+    saveState();
+    rerender(true);
+    if (prev === v) toast('입장을 철회했습니다');
+    else toast(v === 'agree' ? '찬성으로 기록했습니다 (숫자만 집계)' : v === 'hold' ? '보류로 기록했습니다 (숫자만 집계)' : '반대로 기록했습니다 (숫자만 집계)', 'ok');
+    return;
+  }
+
+  if (action === 'topic-modal-open') {
+    openModal('topic-modal');
+    const f = document.querySelector('#new-topic-form input[name="title"]');
+    if (f) setTimeout(() => f.focus(), 60);
+    return;
+  }
+
+  if (action === 'topic-modal-close') {
+    closeModal('topic-modal');
+    return;
+  }
+
+  if (action === 'ai-settings') {
+    fillAIModal();
+    openModal('ai-modal');
+    return;
+  }
+
+  if (action === 'ai-modal-close') {
+    closeModal('ai-modal');
+    return;
+  }
+
+  if (action === 'ai-derive') {
+    deriveConsensus(el.dataset.kind, el.dataset.id);
+    return;
+  }
+
+  if (action === 'ai-prompt-copy') {
+    const item = findItem(el.dataset.kind, el.dataset.id);
+    if (item) copyText(anonPrompt(el.dataset.kind, item), 'LLM용 익명 프롬프트를 복사했습니다');
+    return;
+  }
+
+  if (action === 'ai-clear') {
+    aiConfig = {};
+    saveAIConfig();
+    closeModal('ai-modal');
+    render();
+    toast('AI 연결을 해제했습니다 — 규칙 기반 초안을 씁니다');
     return;
   }
 
@@ -1810,9 +2672,11 @@ document.addEventListener('click', (e) => {
 
   if (action === 'reset') {
     state = clone(SEED);
-    state.tab = 'gate';
+    state.tab = 'board';
+    state.filter = 'open';
+    state.query = '';
     drafts = {};
-    agendaOpen = {};
+    openCards = {};
     try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
     render();
     toast('데모 상태를 초기값으로 되돌렸습니다');
@@ -1833,6 +2697,10 @@ document.addEventListener('click', (e) => {
 document.addEventListener('input', (e) => {
   const el = e.target;
   if (el && el.dataset && el.dataset.draft) drafts[el.dataset.draft] = el.value;
+  if (el && el.id === 'board-search') {
+    state.query = el.value;
+    renderBoardList();
+  }
 });
 
 document.addEventListener('submit', (e) => {
@@ -1898,6 +2766,61 @@ document.addEventListener('submit', (e) => {
     return;
   }
 
+  if (form.id === 'new-topic-form') {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const title = String(fd.get('title') || '').trim();
+    const summary = String(fd.get('summary') || '').trim();
+    if (!title || !summary) return;
+    const points = String(fd.get('points') || '').split('\n').map(s => s.trim()).filter(Boolean);
+    const tags = String(fd.get('tags') || '').split(',').map(s => s.trim().replace(/^#/, '')).filter(Boolean);
+    const status = String(fd.get('status') || 'open');
+    const item = {
+      id: 'a' + Date.now(),
+      no: state.agendas.length + 1,
+      title: title,
+      summary: summary,
+      points: points,
+      tags: tags,
+      status: status,
+      owner: ME,
+      at: new Date().toISOString(),
+      stances: { m1: 'agree' },
+      comments: [],
+      isUserCreated: true
+    };
+    state.agendas.unshift(item);
+    state.tab = 'board';
+    state.filter = status === 'open' ? 'open' : 'done';
+    state.query = '';
+    openCards['agenda:' + item.id] = true;
+    saveState();
+    form.reset();
+    closeModal('topic-modal');
+    render();
+    setTabUrl('board');
+    setTimeout(() => focusCard('agenda', item.id), 120);
+    toast('주제를 발제했습니다 — 멤버 10인에게 열렸습니다', 'ok');
+    return;
+  }
+
+  if (form.id === 'ai-form') {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const endpoint = String(fd.get('endpoint') || '').trim();
+    const model = String(fd.get('model') || '').trim();
+    const token = String(fd.get('token') || '').trim();
+    aiConfig = {};
+    if (endpoint) aiConfig.endpoint = endpoint;
+    if (model) aiConfig.model = model;
+    if (token) aiConfig.token = token;
+    saveAIConfig();
+    closeModal('ai-modal');
+    render();
+    toast(endpoint ? 'HF 엔드포인트를 연결했습니다 — 합의안을 실시간으로 도출합니다' : '저장했습니다 — 엔드포인트가 비어 있어 규칙 기반 초안을 씁니다', 'ok');
+    return;
+  }
+
   if (form.dataset.form === 'comment') {
     e.preventDefault();
     const item = findItem(form.dataset.kind, form.dataset.item);
@@ -1924,6 +2847,8 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal('modal');
     closeModal('members-modal');
+    closeModal('topic-modal');
+    closeModal('ai-modal');
   }
   if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
     const form = e.target.closest && e.target.closest('form[data-form="comment"]');
@@ -2013,8 +2938,8 @@ function handleLetterDeepLink() {
     return;
   }
 
-  if (qTab && ['gate', 'letters', 'topics', 'rules'].indexOf(qTab) !== -1) {
-    state.tab = qTab;
+  if (qTab && ['board', 'gate', 'letters', 'topics', 'rules'].indexOf(qTab) !== -1) {
+    state.tab = (qTab === 'topics') ? 'board' : qTab;
     saveState();
     render();
   }
