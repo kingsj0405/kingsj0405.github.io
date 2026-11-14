@@ -155,7 +155,7 @@
     <div class="wrap footer-inner">
       <div>
         <p class="footer-title">금요커피클럽 · 합의 보드</p>
-        <p class="footer-note">투표·의견은 이 브라우저에만 저장됩니다. 실제 영입은 금요일 오프라인 커피클럽에서 10인 전원 찬성으로 확정됩니다.</p>
+        <p class="footer-note">투표·의견·AI 합의안은 클럽 Space의 <b>공유 보드</b>에 익명으로 저장되어, 모든 멤버가 같은 보드를 봅니다. 실제 영입은 금요일 오프라인 커피클럽에서 10인 전원 찬성으로 확정됩니다.</p>
         <p class="footer-note">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 14.</span></p>
         <p class="footer-letters">
           <span class="footer-letters-label">금요 커피 레터</span>
@@ -174,7 +174,7 @@
           <i data-lucide="lock"></i>
           <span>화면 잠금</span>
         </button>
-        <button type="button" class="btn btn-ghost btn-sm" data-action="reset">보드 초기화</button>
+        <button type="button" class="btn btn-ghost btn-sm" data-action="reset">보드 새로고침</button>
       </div>
     </div>
   </footer>
@@ -380,7 +380,12 @@ const AI_DEFAULTS = {
   model: 'Qwen/Qwen3.5-35B-A3B',
   passcode: 'fx2026'
 };
-const ME = 'm1';
+let ME = 'm1';                 // 내 표의 키 — 공유 보드에 붙으면 서버가 준 anon_id로 바뀐다
+let ME_NICK = '';              // 서버가 IP 해시로 붙여 준 익명 별명 (장소 + 행위 + 동물)
+let boardOnline = false;       // Space 공유 보드 연결 상태
+const API_BASE = 'https://bismute-friday-coffee-consensus.hf.space';
+const API_PASSCODE = AI_DEFAULTS.passcode;
+const BOARD_POLL_MS = 25000;   // 다른 멤버의 의견을 25초마다 새로 받아 온다
 
 const MEMBERS = [
   { id: 'm1',  name: '양세종', role: 'LG AI Research',  title: 'AI Scientist · 테크리더', field: 'AI' },
@@ -494,6 +499,91 @@ function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (err) { /* private mode: ignore */ }
 }
 
+/* ---------------- shared board API (Friday Coffee Club Space) -------------
+   보드의 진짜 상태는 Space에 있다. localStorage는 새로고침 중 잠깐 보여 주는
+   캐시일 뿐이고, 모든 쓰기는 Space에 POST한 뒤 서버가 돌려준 전체 상태로 갈아 끼운다.
+   익명 별명·anon_id도 서버가 IP 해시로 정해 준 값을 그대로 쓴다. */
+
+function apiHeaders() {
+  return { 'Content-Type': 'application/json', 'x-passcode': API_PASSCODE };
+}
+
+async function apiFetch(path, options) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 45000);
+  try {
+    return await fetch(API_BASE + path, Object.assign({ signal: ctrl.signal, cache: 'no-store' }, options || {}));
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function applyBoard(payload) {
+  if (!payload || !payload.state) return false;
+  const incoming = payload.state;
+  if (!Array.isArray(incoming.candidates) || !Array.isArray(incoming.agendas)) return false;
+  const keep = { tab: state.tab, filter: state.filter, query: state.query };
+  state = incoming;
+  state.tab = keep.tab;
+  state.filter = keep.filter;
+  state.query = keep.query;
+  if (!Array.isArray(state.rules)) state.rules = clone(SEED).rules;   // 그라운드룰은 화면 고정 문구
+  if (payload.me) {
+    if (payload.me.anon_id) ME = payload.me.anon_id;
+    if (payload.me.nickname) ME_NICK = payload.me.nickname;
+  }
+  boardOnline = true;
+  saveState();
+  return true;
+}
+
+let boardPoll = null;
+let boardSyncing = false;
+
+async function syncBoard(opts) {
+  const quiet = !!(opts && opts.quiet);
+  if (boardSyncing) return false;
+  boardSyncing = true;
+  if (!quiet) renderBoardBadge(true);
+  try {
+    const res = await apiFetch('/api/board', { method: 'GET', headers: apiHeaders() });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const payload = await res.json();
+    const changed = applyBoard(payload);
+    renderBoardBadge(false);
+    if (changed) rerender(true);
+    return changed;
+  } catch (err) {
+    boardOnline = false;
+    renderBoardBadge(false, String((err && err.message) || err));
+    return false;
+  } finally {
+    boardSyncing = false;
+  }
+}
+
+async function boardPost(path, body) {
+  const res = await apiFetch(path, { method: 'POST', headers: apiHeaders(), body: JSON.stringify(body) });
+  let payload = null;
+  try { payload = await res.json(); } catch (err) { payload = null; }
+  if (!res.ok) {
+    const msg = (payload && payload.error && (payload.error.message || payload.error)) || ('HTTP ' + res.status);
+    throw new Error(typeof msg === 'string' ? msg : JSON.stringify(msg));
+  }
+  applyBoard(payload);
+  rerender(true);
+  return payload;
+}
+
+function startBoardSync() {
+  syncBoard();
+  if (boardPoll) clearInterval(boardPoll);
+  boardPoll = setInterval(() => {
+    if (document.hidden) return;
+    syncBoard({ quiet: true });
+  }, BOARD_POLL_MS);
+}
+
 state.tab = state.tab || 'board';
 state.filter = state.filter || 'open';
 if (typeof state.query !== 'string') state.query = '';
@@ -525,24 +615,33 @@ function fmtDayDot(iso) {
 }
 function initials(name) { return name ? name.slice(0, 1) : '?'; }
 
-function avatar(id, size) {
-  const m = MEMBER_BY_ID[id] || { name: '?' };
+function avatar(id, size, nick) {
+  const m = MEMBER_BY_ID[id];
+  const name = m ? m.name : (nick || (id && id === ME && ME_NICK) || '익명');
   const cls = size === 'lg' ? ' avatar-lg' : size === 'sm' ? ' avatar-sm' : '';
-  return '<span class="avatar' + cls + '" aria-hidden="true">' + esc(initials(m.name)) + '</span>';
+  const anon = m ? '' : ' avatar-anon';
+  return '<span class="avatar' + cls + anon + '" title="' + esc(m ? m.name + ' · ' + m.title : name + ' · 익명 별명') + '" aria-hidden="true">' + esc(initials(name)) + '</span>';
+}
+
+/* 거수기 표는 사람 id가 아니라 서버가 준 anon_id(IP 해시) 키로 쌓인다.
+   xxx_at 타임스탬프 키는 세지 않는다. 정원(10)에서 남은 자리를 검토 중으로 본다. */
+function voteValues(map) {
+  const out = [];
+  if (!map) return out;
+  Object.keys(map).forEach(k => { if (!/_at$/.test(k)) out.push(map[k]); });
+  return out;
 }
 
 function tally(c) {
-  let yes = 0, conditional = 0, veto = 0, pending = 0;
-  for (const m of MEMBERS) {
-    const v = (c.votes && c.votes[m.id]) || 'pending';
-    if (v === 'yes') yes++;
-    else if (v === 'conditional') conditional++;
-    else if (v === 'veto') veto++;
-    else pending++;
-  }
+  const vals = voteValues(c && c.votes);
+  const yes = vals.filter(v => v === 'yes').length;
+  const conditional = vals.filter(v => v === 'conditional').length;
+  const veto = vals.filter(v => v === 'veto').length;
   const cast = yes + conditional;
-  const pct = Math.round((cast / MEMBERS.length) * 100);
-  const passed = veto === 0 && pending === 0;
+  const seats = MEMBERS.length;
+  const pending = Math.max(0, seats - cast - veto);
+  const pct = Math.round((cast / seats) * 100);
+  const passed = veto === 0 && pending === 0 && cast >= seats;
   const blocked = veto > 0;
   return { yes, conditional, veto, pending, cast, pct, passed, blocked };
 }
@@ -588,7 +687,27 @@ function renderStatusLine() {
       '<span>이번 주 테이블까지 <b>' + t.comments + '개</b>의 의견이 모였습니다' +
       '<span class="sep">·</span>논의 중 <b>' + openN + '건</b>' +
       '<span class="sep">·</span>금요일 커피클럽에서 정리합니다</span></span>' +
-    '<span class="status-line-date">' + todayLabel() + '</span>';
+    '<span class="status-line-right"><span id="nick-badge-slot" class="nick-slot"></span>' +
+      '<span class="status-line-date">' + todayLabel() + '</span></span>';
+  renderBoardBadge(false);
+}
+
+/* 내 익명 별명 배지 — Space가 IP 해시로 정해 준 별명을 그대로 보여 준다. */
+function renderBoardBadge(busy, err) {
+  const el = document.getElementById('nick-badge-slot');
+  if (!el) return;
+  if (ME_NICK) {
+    el.innerHTML = '<span class="nick-badge' + (boardOnline ? '' : ' is-off') + '" title="IP 기반 익명 별명 · 같은 IP는 늘 같은 별명, 원본 IP는 저장되지 않습니다">' +
+        '<i data-lucide="user-round"></i>' +
+        '<span class="nick-label">내 익명 별명</span><b>' + esc(ME_NICK) + '</b>' +
+        (boardOnline ? '' : '<span class="nick-flag">오프라인</span>') +
+      '</span>';
+  } else {
+    el.innerHTML = busy
+      ? '<span class="nick-badge is-busy"><i data-lucide="loader" class="spin"></i><span>공유 보드에서 별명 받는 중…</span></span>'
+      : '<span class="nick-badge is-off"><i data-lucide="wifi-off"></i><span>공유 보드 연결 대기</span></span>';
+  }
+  if (window.lucide) window.lucide.createIcons();
 }
 
 function renderMetrics() {
@@ -703,22 +822,35 @@ function gauge(t) {
   '</div>';
 }
 
+function voterRow(name, role, vote, isAnon) {
+  const v = VOTE_LABEL[vote] ? vote : 'pending';
+  return '<li class="voter">' +
+    '<span class="avatar avatar-sm' + (isAnon ? ' avatar-anon' : '') + '" aria-hidden="true">' + esc(initials(name)) + '</span>' +
+    '<span class="voter-name">' + esc(name) + '</span>' +
+    '<span class="voter-role">' + esc(role) + '</span>' +
+    '<span class="voter-vote ' + VOTE_TONE[v] + '"><span class="dot"></span>' + VOTE_LABEL[v] + '</span>' +
+  '</li>';
+}
+
 function voterGrid(c) {
+  const votes = c.votes || {};
+  const names = c.vote_names || {};
+  const rows = Object.keys(votes)
+    .filter(k => !/_at$/.test(k))
+    .map(k => {
+      const m = MEMBER_BY_ID[k];
+      if (m) return voterRow(m.name, m.title, votes[k], false);
+      return voterRow(names[k] || '익명 멤버', 'IP 익명 거수', votes[k], true);
+    });
+  const t = tally(c);
+  if (t.pending) rows.push(voterRow('아직 검토 중', t.pending + '명', 'pending', true).replace('avatar-anon', 'avatar-wait'));
   return '<details class="disclosure">' +
     '<summary>' +
-      '<span class="summary-label"><i data-lucide="users"></i>멤버 10인 투표 현황</span>' +
+      '<span class="summary-label"><i data-lucide="users"></i>거수 현황 · 익명 ' + (t.cast + t.veto) + '/10</span>' +
       '<i data-lucide="chevron-down" class="chev"></i>' +
     '</summary>' +
-    '<ul class="voter-list">' +
-      MEMBERS.map(m => {
-        const v = (c.votes && c.votes[m.id]) || 'pending';
-        return '<li class="voter">' + avatar(m.id, 'sm') +
-          '<span class="voter-name">' + esc(m.name) + '</span>' +
-          '<span class="voter-role">' + esc(m.title) + '</span>' +
-          '<span class="voter-vote ' + VOTE_TONE[v] + '"><span class="dot"></span>' + VOTE_LABEL[v] + '</span>' +
-        '</li>';
-      }).join('') +
-    '</ul>' +
+    '<ul class="voter-list">' + rows.join('') + '</ul>' +
+    '<p class="caption" style="padding:0 2px 6px">표는 이름이 아니라 서버가 붙인 <b>익명 별명</b>으로만 남습니다. 같은 사람은 1표.</p>' +
   '</details>';
 }
 
@@ -731,17 +863,22 @@ function commentList(kind, item, canComment) {
 
   const list = rows.length
     ? '<ul class="comment-list">' + rows.map(cm => {
-        const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
+        const m = MEMBER_BY_ID[cm.author];
+        const cmName = m ? m.name : (cm.nickname || '익명 멤버');
+        const cmRole = m ? m.title : '익명 · IP 별명';
         return '<li class="comment fade-in">' +
-          '<div class="comment-head">' + avatar(cm.author, 'sm') +
-            '<span class="comment-author">' + esc(m.name) + '</span>' +
-            '<span class="comment-role">' + esc(m.title) + '</span>' +
+          '<div class="comment-head">' + avatar(cm.author, 'sm', cm.nickname) +
+            '<span class="comment-author">' + esc(cmName) + '</span>' +
+            '<span class="comment-role' + (m ? '' : ' is-anon') + '">' + esc(cmRole) + '</span>' +
             '<span class="comment-time tabnum">' + fmtFull(cm.at) + '</span>' +
           '</div>' +
           '<p class="comment-body">' + esc(cm.text) + '</p>' +
           '<button type="button" class="like-btn" data-action="like" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '"' +
             ' aria-pressed="' + (cm.likedByMe ? 'true' : 'false') + '" aria-label="공감">' +
             '<i data-lucide="heart"></i><span class="tabnum">' + (cm.likes || 0) + '</span></button>' +
+          (cm.author === ME
+            ? '<button type="button" class="comment-del" data-action="comment-delete" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '" aria-label="내 댓글 삭제">삭제</button>'
+            : '') +
         '</li>';
       }).join('') + '</ul>'
     : '<p class="caption" style="padding:12px 0">아직 댓글이 없습니다. 첫 의견을 남겨 보세요.</p>';
@@ -755,7 +892,7 @@ function commentList(kind, item, canComment) {
             esc(drafts[kind + ':' + item.id] || '') +
           '</textarea>' +
           '<div class="comment-form-foot">' +
-            '<p class="form-hint">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
+            '<p class="form-hint"><b>' + esc(ME_NICK || '익명 별명') + '</b> 로 남습니다 · Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
             '<button type="submit" class="btn btn-primary btn-sm">댓글 등록</button>' +
           '</div>' +
         '</div>' +
@@ -887,8 +1024,8 @@ function itemStatusOf(kind, item) {
 function stanceCounts(item) {
   const map = item.stances || {};
   let agree = 0, hold = 0, disagree = 0;
-  MEMBERS.forEach(m => {
-    const v = map[m.id];
+  Object.keys(map).forEach(k => {
+    const v = map[k];
     if (v === 'agree') agree++;
     else if (v === 'hold') hold++;
     else if (v === 'disagree') disagree++;
@@ -1182,32 +1319,23 @@ async function callEndpoint(prompt) {
 async function deriveConsensus(kind, id) {
   const item = findItem(kind, id);
   if (!item) return;
-  if (!aiEffective().endpoint) {
-    item.consensus = localConsensus(kind, item);
-    saveState();
-    rerender(true);
-    focusCard(kind, id);
-    toast('익명 의견으로 합의안 초안을 정리했습니다 (규칙 기반)', 'ok');
-    return;
-  }
+  // 다른 멤버도 바로 볼 수 있게, 도출은 Space가 하고 결과는 공유 상태에 저장된다.
   const prompt = anonPrompt(kind, item);
   item.consensus = { pending: true, at: new Date().toISOString(), source: 'endpoint' };
   rerender(true);
   focusCard(kind, id);
   try {
-    const out = await callEndpoint(prompt);
-    item.consensus = { agreed: out.agreed, open: out.open, draft: out.draft, at: new Date().toISOString(), source: 'endpoint', sn: (item.comments || []).length };
-    saveState();
-    rerender(true);
+    await boardPost('/api/ai-consensus', { kind, id, prompt });
     focusCard(kind, id);
-    toast('HF Pro로 익명 합의안을 도출했습니다', 'ok');
+    toast('HF Pro로 익명 합의안을 도출해 공유했습니다 — 다른 멤버도 바로 봅니다', 'ok');
   } catch (err) {
-    item.consensus = localConsensus(kind, item);
-    item.consensus.error = String((err && err.message) || err);
+    const fallback = localConsensus(kind, item);
+    fallback.error = String((err && err.message) || err);
+    item.consensus = fallback;
     saveState();
     rerender(true);
     focusCard(kind, id);
-    toast('엔드포인트 호출 실패(' + ((err && err.message) || 'error') + ') — 규칙 기반 초안으로 대체했습니다', 'warn');
+    toast('합의안 도출 실패(' + ((err && err.message) || 'error') + ') — 이 화면에만 규칙 기반 초안을 띄웠습니다', 'warn');
   }
 }
 
@@ -1546,28 +1674,38 @@ document.addEventListener('click', (e) => {
   }
 
   if (action === 'vote') {
-    const c = state.candidates.find(x => x.id === el.dataset.cand);
-    if (!c) return;
+    const cand = state.candidates.find(x => x.id === el.dataset.cand);
+    if (!cand) return;
     const vote = el.dataset.vote;
-    c.votes = c.votes || {};
-    const prev = c.votes[ME] || 'pending';
-    c.votes[ME] = (prev === vote) ? 'pending' : vote;   // same vote again withdraws it
+    const prev = (cand.votes && cand.votes[ME]) || 'pending';
+    const next = (prev === vote) ? 'pending' : vote;   // 같은 표를 다시 누르면 철회
 
-    if (c.votes[ME] === 'yes' || c.votes[ME] === 'conditional' || c.votes[ME] === 'veto') {
-      c.votes[ME + '_at'] = new Date().toISOString();
+    cand.votes = cand.votes || {};
+    cand.vote_names = cand.vote_names || {};
+    if (next === 'pending') {
+      delete cand.votes[ME];
+      delete cand.votes[ME + '_at'];
+    } else {
+      cand.votes[ME] = next;
+      cand.votes[ME + '_at'] = new Date().toISOString();
+      if (ME_NICK) cand.vote_names[ME] = ME_NICK;
     }
-    const t = tally(c);
-    if (t.passed && !c.confirmedAt) c.confirmedAt = new Date().toISOString();
-    if (!t.passed) delete c.confirmedAt;
+    rerender(true);
 
-    saveState();
-    render();
-    if (prev === vote) toast('표를 철회했습니다 — ' + VOTE_LABEL.pending + '으로 돌아갑니다');
-    else if (t.passed) toast('10/10 만장일치 — 영입이 확정되었습니다', 'ok');
-    else if (t.blocked) toast('비토가 기록되었습니다 — 오프라인 재논의로 이관됩니다', 'bad');
-    else if (vote === 'yes') toast('찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'ok');
-    else if (vote === 'conditional') toast('조건부 찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'warn');
-    else toast('비토로 기록했습니다', 'bad');
+    boardPost('/api/votes', { kind: 'candidate', id: cand.id, vote: next })
+      .then(() => {
+        const t = tally(findItem('candidate', cand.id) || cand);
+        if (prev === vote) toast('표를 철회했습니다 — ' + VOTE_LABEL.pending + '으로 돌아갑니다');
+        else if (t.passed) toast('10/10 만장일치 — 영입이 확정되었습니다', 'ok');
+        else if (t.blocked) toast('비토가 기록되었습니다 — 오프라인 재논의로 이관됩니다', 'bad');
+        else if (next === 'conditional') toast('조건부 찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'warn');
+        else if (next === 'veto') toast('비토로 기록했습니다 — 오프라인 재논의로 이관됩니다', 'bad');
+        else toast('찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'ok');
+      })
+      .catch(err => {
+        toast('표를 저장하지 못했습니다(' + err.message + ') — 공유 보드를 다시 불러옵니다', 'warn');
+        syncBoard({ quiet: true });
+      });
     return;
   }
 
@@ -1608,12 +1746,25 @@ document.addEventListener('click', (e) => {
     const v = el.dataset.stance;
     item.stances = item.stances || {};
     const prev = item.stances[ME];
-    if (prev === v) delete item.stances[ME];
-    else item.stances[ME] = v;
-    saveState();
+    const next = (prev === v) ? 'pending' : v;
+    if (next === 'pending') {
+      delete item.stances[ME];
+      delete item.stances[ME + '_at'];
+    } else {
+      item.stances[ME] = next;
+      item.stances[ME + '_at'] = new Date().toISOString();
+    }
     rerender(true);
-    if (prev === v) toast('입장을 철회했습니다');
-    else toast(v === 'agree' ? '찬성으로 기록했습니다 (숫자만 집계)' : v === 'hold' ? '보류로 기록했습니다 (숫자만 집계)' : '반대로 기록했습니다 (숫자만 집계)', 'ok');
+
+    boardPost('/api/votes', { kind: 'agenda', id: item.id, vote: next })
+      .then(() => {
+        if (prev === v) toast('입장을 철회했습니다');
+        else toast(v === 'agree' ? '찬성으로 기록했습니다 (숫자만 집계)' : v === 'hold' ? '보류로 기록했습니다 (숫자만 집계)' : '반대로 기록했습니다 (숫자만 집계)', 'ok');
+      })
+      .catch(err => {
+        toast('입장을 저장하지 못했습니다(' + err.message + ') — 공유 보드를 다시 불러옵니다', 'warn');
+        syncBoard({ quiet: true });
+      });
     return;
   }
 
@@ -1660,28 +1811,29 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  if (action === 'comment-delete') {
+    boardPost('/api/comments/delete', { kind: el.dataset.kind, id: el.dataset.item, comment: el.dataset.comment })
+      .then(() => toast('내 익명 댓글을 삭제했습니다'))
+      .catch(err => toast('댓글을 삭제하지 못했습니다(' + err.message + ')', 'warn'));
+    return;
+  }
+
   if (action === 'like') {
     const item = findItem(el.dataset.kind, el.dataset.item);
     if (!item) return;
     const cm = item.comments.find(x => x.id === el.dataset.comment);
     if (!cm) return;
-    if (cm.likedByMe) { cm.likes = Math.max(0, (cm.likes || 0) - 1); cm.likedByMe = false; }
-    else { cm.likes = (cm.likes || 0) + 1; cm.likedByMe = true; }
-    saveState();
-    render();
+    boardPost('/api/likes', { kind: el.dataset.kind, id: item.id, comment: cm.id })
+      .catch(err => {
+        toast('좋아요를 저장하지 못했습니다(' + err.message + ')', 'warn');
+        syncBoard({ quiet: true });
+      });
     return;
   }
 
   if (action === 'reset') {
-    state = clone(SEED);
-    state.tab = 'board';
-    state.filter = 'open';
-    state.query = '';
-    drafts = {};
-    openCards = {};
-    try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
-    render();
-    toast('보드를 초기 상태로 되돌렸습니다');
+    // 공유 보드라서 '초기화'는 모두의 기록을 지운다. 여기서는 새로 불러오기만 한다.
+    syncBoard().then(ok => toast(ok ? '공유 보드를 새로 불러왔습니다' : '공유 보드에 연결하지 못했습니다 — 잠시 뒤 다시 시도해 주세요', ok ? 'ok' : 'warn'));
     return;
   }
 
@@ -1740,31 +1892,31 @@ document.addEventListener('submit', (e) => {
     const title = String(fd.get('title') || '').trim();
     const summary = String(fd.get('summary') || '').trim();
     if (!title || !summary) return;
-    const votes = {};
-    MEMBERS.forEach(m => { votes[m.id] = (m.id === ME) ? 'yes' : 'pending'; });
-    const cand = {
-      id: 'c' + Date.now(),
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+    boardPost('/api/topics', {
+      kind: 'candidate',
       title,
       headline: String(fd.get('headline') || '').trim(),
-      nominator: ME,
-      nominatedAt: new Date().toISOString(),
       summary,
-      highlights: [],
       reason: String(fd.get('reason') || '').trim(),
-      email: String(fd.get('email') || '').trim(),
-      isUserCreated: true,
-      votes,
-      comments: []
-    };
-    state.candidates.unshift(cand);
-    state.tab = 'gate';
-    saveState();
-    form.reset();
-    closeModal('modal');
-    render();
-    toast('후보자를 발제했습니다 — 1/10 찬성, 나머지 9명에게 심사 카드가 열렸습니다', 'ok');
-    const node = document.getElementById('cand-' + cand.id);
-    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      email: String(fd.get('email') || '').trim()
+    }).then(() => {
+      const cand = (state.candidates || [])[0];
+      state.tab = 'gate';
+      saveState();
+      form.reset();
+      closeModal('modal');
+      render();
+      toast('후보자를 발제했습니다 — 내 1표로 시작해 멤버 10인에게 공유됐습니다', 'ok');
+      if (cand) {
+        openCards['candidate:' + cand.id] = true;
+        rerender(true);
+        setTimeout(() => focusCard('candidate', cand.id), 120);
+      }
+    }).catch(err => {
+      toast('발제하지 못했습니다(' + err.message + ')', 'warn');
+    }).finally(() => { if (btn) btn.disabled = false; });
     return;
   }
 
@@ -1777,32 +1929,25 @@ document.addEventListener('submit', (e) => {
     const points = String(fd.get('points') || '').split('\n').map(s => s.trim()).filter(Boolean);
     const tags = String(fd.get('tags') || '').split(',').map(s => s.trim().replace(/^#/, '')).filter(Boolean);
     const status = String(fd.get('status') || 'open');
-    const item = {
-      id: 'a' + Date.now(),
-      no: state.agendas.length + 1,
-      title: title,
-      summary: summary,
-      points: points,
-      tags: tags,
-      status: status,
-      owner: ME,
-      at: new Date().toISOString(),
-      stances: { m1: 'agree' },
-      comments: [],
-      isUserCreated: true
-    };
-    state.agendas.unshift(item);
-    state.tab = 'board';
-    state.filter = status === 'open' ? 'open' : 'done';
-    state.query = '';
-    openCards['agenda:' + item.id] = true;
-    saveState();
-    form.reset();
-    closeModal('topic-modal');
-    render();
-    setTabUrl('board');
-    setTimeout(() => focusCard('agenda', item.id), 120);
-    toast('주제를 발제했습니다 — 멤버 10인에게 열렸습니다', 'ok');
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+    boardPost('/api/topics', { kind: 'agenda', title, summary, points, tags, status })
+      .then(() => {
+        const item = (state.agendas || [])[0];
+        state.tab = 'board';
+        state.filter = status === 'open' ? 'open' : 'done';
+        state.query = '';
+        if (item) openCards['agenda:' + item.id] = true;
+        saveState();
+        form.reset();
+        closeModal('topic-modal');
+        render();
+        setTabUrl('board');
+        if (item) setTimeout(() => focusCard('agenda', item.id), 120);
+        toast('주제를 발제했습니다 — 멤버 10인에게 열렸습니다', 'ok');
+      })
+      .catch(err => toast('주제를 발제하지 못했습니다(' + err.message + ')', 'warn'))
+      .finally(() => { if (btn) btn.disabled = false; });
     return;
   }
 
@@ -1832,18 +1977,18 @@ document.addEventListener('submit', (e) => {
     const ta = form.querySelector('textarea[name="text"]');
     const text = (ta && ta.value || '').trim();
     if (!text) { if (ta) ta.focus(); return; }
-    item.comments.push({
-      id: 'k' + Date.now(),
-      author: ME,
-      text,
-      at: new Date().toISOString(),
-      likes: 0,
-      likedByMe: false
-    });
-    delete drafts[form.dataset.kind + ':' + form.dataset.item];
-    saveState();
-    render();
-    toast('댓글을 등록했습니다', 'ok');
+    const key = form.dataset.kind + ':' + form.dataset.item;
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+    boardPost('/api/comments', { kind: form.dataset.kind, id: form.dataset.item, text })
+      .then(() => {
+        delete drafts[key];
+        openCards[key] = true;
+        render();
+        toast('익명 댓글을 등록했습니다 — 모든 멤버가 같은 보드에서 봅니다', 'ok');
+      })
+      .catch(err => toast('댓글을 등록하지 못했습니다(' + err.message + ')', 'warn'))
+      .finally(() => { if (btn) btn.disabled = false; });
   }
 });
 
@@ -1958,6 +2103,7 @@ function unlockGate() {
   if (shell) shell.hidden = false;
   document.documentElement.style.overflow = '';
   if (window.lucide) window.lucide.createIcons();
+  startBoardSync();   // 공유 보드에서 공유 상태 + 내 익명 별명 받기
 }
 
 function lockGate() {
