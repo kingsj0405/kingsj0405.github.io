@@ -1524,9 +1524,9 @@ function renderStatusLine() {
   const openN = allItems().filter(e => itemStatusOf(e.kind, e.item).key === 'open').length;
   el.innerHTML =
     '<span class="status-line-main"><i data-lucide="check-circle-2"></i>' +
-      '이번 주 테이블까지 <b>' + t.comments + '개</b>의 의견이 모였습니다' +
+      '<span>이번 주 테이블까지 <b>' + t.comments + '개</b>의 의견이 모였습니다' +
       '<span class="sep">·</span>논의 중 <b>' + openN + '건</b>' +
-      '<span class="sep">·</span>금요일 커피클럽에서 정리합니다</span>' +
+      '<span class="sep">·</span>금요일 커피클럽에서 정리합니다</span></span>' +
     '<span class="status-line-date">' + todayLabel() + '</span>';
 }
 
