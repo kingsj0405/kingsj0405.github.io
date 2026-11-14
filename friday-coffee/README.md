@@ -21,10 +21,21 @@
 | 💬 의견 교류 보드 | 기본 탭. 아젠다와 멤버 심사 안건을 한 목록에 모아 상태 배지(논의 중·확정·가이드라인)·한 줄 요약·댓글 수와 함께 아코디언으로 보여 줍니다. 실시간 검색, 논의 중/확정/전체 필터, `+ 주제 발제`, 대시보드 4카드(가장 뜨거운 주제·논의 중·모인 의견·멤버 10인) |
 | ✨ AI 익명 합의안 | 펼친 카드마다 ① 공통 합의점 ② 남은 쟁점·조건 ③ 제안 합의안(초안). 발언자 이름을 지운 LLM용 프롬프트 복사, 규칙 기반 초안, HuggingFace 엔드포인트 연결 시 실시간 도출 |
 | 🗳️ 멤버 영입 심사 | 후보자 카드 · 추천인 · 이력 요약 · 실시간 합의 게이지 · 찬성/조건부 찬성/비토 · 멤버별 투표 현황 |
-| ☕ 금요 커피 레터 | 매주 금요일 테이블 기록 아카이브 (1·2호) · 공유 링크 복사 |
+| ☕ 금요 커피 레터 | **별도 페이지**로 분리: [1호](/friday-coffee/letter-1/) · [2호](/friday-coffee/letter-2/). 보드에는 탭이 없고 마스트헤드·푸터의 링크로만 이동합니다. 같은 비밀번호·같은 인증 세션을 씁니다 |
 | 📜 클럽 그라운드룰 | 크로스 인더스트리 원칙 · 100% 만장일치제 · Chatham House Rule |
 
-주소 파라미터는 그대로 유지됩니다: `?pass=fx2026`(자동 입장), `?letter=1`/`?letter=2`(레터 직행), `?tab=board|gate|letters|rules`(`topics`는 `board`로 연결).
+주소 파라미터는 그대로 유지됩니다: `?pass=fx2026`(자동 입장), `?tab=board|gate|rules`(`topics`·`letters`는 `board`로 연결).
+기존 레터 공유 링크 `?letter=1` / `?letter=2`(또는 `?vol=1`·`?vol=2`)로 들어오면 단독 페이지 `letter-1/`·`letter-2/`로 자동 이동하며, `?pass=` 값도 함께 넘깁니다.
+
+### 3개 페이지 구조
+
+| 경로 | 내용 | 비밀번호 게이트 |
+| --- | --- | --- |
+| `/friday-coffee/` | 의견 교류 · 10/10 만장일치 거수기 · HF Pro AI 익명 합의안 · 그라운드룰 · 멤버 10인 | `fx2026` |
+| `/friday-coffee/letter-1/` | 금요 커피 레터 1호 단독 (전문·3줄 요약·화두·어록·Claude 아티팩트) | `fx2026` (보드 인증 세션 공유) |
+| `/friday-coffee/letter-2/` | 금요 커피 레터 2호 단독 | `fx2026` (보드 인증 세션 공유) |
+
+세 페이지는 `assets/salon.css` 하나를 공유하고, 인증은 같은 오리진의 `localStorage`(`frontier_ax_auth`) 한 곳에 남습니다. 보드에서 한 번 인증하면 레터 페이지는 게이트 없이 바로 열립니다.
 
 ### 익명 합의 도출 (HuggingFace 연결)
 
@@ -41,7 +52,7 @@
 
 ## 디자인 시스템
 
-`index.html` 상단 `:root`에 토큰을 정의하고, 모든 화면을 그 토큰 위에서 조립합니다. 같은 규격이 게이트·헤더·탭·카드·레터·모달에 그대로 적용됩니다.
+`assets/salon.css` 상단 `:root`에 토큰을 정의하고, 세 페이지의 모든 화면을 그 토큰 위에서 조립합니다. 같은 규격이 게이트·헤더·탭·카드·레터·모달에 그대로 적용됩니다.
 
 **표면 (Surface)** — 두 개의 평면만 씁니다. 페이지는 웜 오프화이트(`--bg #faf9f7`), 보드는 순백(`--surface #ffffff`). 카드 안쪽은 `--surface-2 #f6f4f0`로 한 단계만 들어갑니다.
 
@@ -59,8 +70,8 @@
 
 ## 기술
 
-- 단일 HTML 파일 · 자체 CSS 디자인 시스템(토큰 기반, Tailwind CDN 제거) · Lucide 아이콘 · vanilla JS
-- 빌드 파이프라인 없음. 정적 파일을 그대로 서빙합니다.
+- 정적 HTML 3장(`index.html` · `letter-1/index.html` · `letter-2/index.html`) + 공유 CSS 1장(`assets/salon.css`) · Lucide 아이콘 · vanilla JS
+- 레터 본문은 `letters.json`이 유일한 원본이고 `tools/build-letter-pages.py`가 두 단독 페이지를 만들어 냅니다. 내용을 고칠 때는 `letters.json`을 고치고 `python3 tools/build-letter-pages.py`를 다시 돌립니다.
 - 투표·댓글·합의안 상태는 브라우저 `localStorage`에만 저장됩니다(서버 없음). 푸터의 `보드 초기화`로 저장된 투표·댓글을 지우고 초기 상태(실제 안건만)로 되돌립니다.
 - 예제·더미 데이터(가짜 후보자·가짜 아젠다·가짜 댓글·예시 합의안)는 모두 걷어냈습니다. 보드는 실제 안건만 보여 줍니다.
 
@@ -75,8 +86,13 @@ python3 -m http.server 8000
 
 ```
 friday-coffee/
-  index.html    # 앱 전체 (HTML + CSS + JS)
+  index.html              # 보드 앱 (의견 교류 · 거수기 · 그라운드룰)
+  assets/salon.css        # 세 페이지 공유 디자인 시스템
+  letter-1/index.html     # 금요 커피 레터 1호 단독
+  letter-2/index.html     # 금요 커피 레터 2호 단독
   README.md
+letters.json              # 레터 본문 원본 (1·2호)
+tools/build-letter-pages.py   # letters.json -> letter-1/ · letter-2/
 ```
 
 ## 배포
@@ -85,8 +101,10 @@ friday-coffee/
 repos/deploy-friday-coffee.sh
 ```
 
-- `index.html` · `README.md` → `kingsj0405/kingsj0405.github.io` 의 `friday-coffee/`
+- `index.html` · `README.md` · `assets/salon.css` · `letter-1/index.html` · `letter-2/index.html` → `kingsj0405/kingsj0405.github.io` 의 `friday-coffee/`
 - `redirect/index.html` → 같은 저장소의 `frontier-ax-salon/` (기존 링크 유지용 리다이렉트)
+- 로컬 스테이징 사본: `/workspace/deploy/friday-coffee/` 와 `friday-coffee.zip`
+- 스크립트가 먼저 `tools/build-letter-pages.py`를 돌려 레터 페이지를 `letters.json`에서 다시 만듭니다.
 
 ## 참고
 
