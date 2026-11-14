@@ -700,10 +700,12 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
   .masthead-inner { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 0 16px; }
   .masthead h1 { font-size: 28px; }
   .masthead-side { flex-direction: row; align-items: center; gap: 10px; }
-  .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .dash-card.is-hot { grid-column: span 2; min-height: 104px; }
-  .dash-card { min-height: 96px; padding: 12px 14px; }
-  .dash-value { font-size: 26px; }
+  .dash { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .dash-card.is-hot { grid-column: 1 / -1; min-height: 100px; }
+  .dash-card { min-height: 0; padding: 11px 12px; gap: 6px; }
+  .dash-card:not(.is-hot) .dash-note { display: none; }
+  .dash-value { font-size: 21px; }
+  .dash-label { font-size: 9.5px; letter-spacing: .08em; }
   .dash-note { font-size: 10.5px; }
   .dash-title { font-size: var(--fs-14); -webkit-line-clamp: 2; }
   .status-line { font-size: 11.5px; }
