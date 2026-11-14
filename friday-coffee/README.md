@@ -6,6 +6,9 @@
 - 이전 주소: <https://yangspace.co.kr/frontier-ax-salon/> → 쿼리 파라미터(`?pass=`, `?letter=`, `?tab=`)를 그대로 넘겨 새 주소로 이동
 - 위치: `kingsj0405/kingsj0405.github.io` 저장소의 `friday-coffee/` 폴더 (사이트의 다른 단일 HTML 앱과 같은 방식)
 - 비공개 게이트 비밀번호: `fx2026` (또는 `?pass=fx2026` 파라미터로 자동 입장 가능)
+- 슬랙 워크스페이스: <https://friday-coffee.slack.com> (이름 `금요커피클럽`, 이전 주소 frontier-ax-salon.slack.com → 자동 리다이렉트)
+  - 초대 링크: <https://join.slack.com/t/friday-coffee/invite/zt-4glb3daoj-2yi0jv2kcIdY5bI5kCmgKw> (2026-12-13 만료)
+  - 채널: `#금요-커피레터` (레터 1·2호 아카이브), `#ax-만들어본것` (멤버들이 AX로 만든 것 공유)
 - 멤버 추천 폼: <https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform>
 
 ## 무엇을 하는 보드인가
