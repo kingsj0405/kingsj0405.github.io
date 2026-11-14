@@ -549,6 +549,7 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
 .bcard-chev { flex-shrink: 0; margin-top: 2px; color: var(--text-4); transition: transform .2s var(--ease); }
 .bcard-chev svg { width: 18px; height: 18px; }
 .bcard.is-open .bcard-chev { transform: rotate(180deg); }
+.bcard.is-open .bcard-sub { display: block; -webkit-line-clamp: unset; overflow: visible; }
 .bcard-body { display: flex; flex-direction: column; gap: var(--sp-3); padding: 14px 18px 18px; border-top: 1px solid var(--border); }
 .points { display: flex; flex-direction: column; gap: 6px; }
 .points li { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
@@ -1947,7 +1948,7 @@ function stanceVote(item) {
 /* ---------------- AI anonymous consensus ---------------- */
 
 const AGREE_RE = /(찬성|좋겠|좋습니다|필요|공감|동의|맞습니다|반갑|핵심|중요|해야|권장|유용|현실|안전)/;
-const OPEN_RE = /(다만|우려|먼저|조건|궁금|위험|아직|논의|확인|질문|불확실|어렵|한계|걱정|갈리|미정|사례|조정)/;
+const OPEN_RE = /(다만|우려|조건|궁금|위험|아직|질문|불확실|어렵|한계|걱정|갈리|미정|조정|먼저|반대|비토|이견)/;
 
 function aiSourceLabel(c) {
   if (!c) return '아직 도출 전';
@@ -1957,14 +1958,24 @@ function aiSourceLabel(c) {
   return '규칙 기반 초안';
 }
 
-function firstSentence(text, max) {
+function clipText(text, max) {
   const t = String(text || '').replace(/\s+/g, ' ').trim();
-  if (!t) return '';
-  const m = t.match(/^(.{12,}?[.!?。])(\s|$)/);
-  let s = m ? m[1] : t;
-  const limit = max || 92;
-  if (s.length > limit) s = s.slice(0, limit - 1).replace(/[\s,·]$/, '') + '…';
-  return s;
+  const limit = max || 110;
+  if (t.length <= limit) return t;
+  const cut = t.slice(0, limit);
+  const at = Math.max(cut.lastIndexOf('다.'), cut.lastIndexOf('요.'), cut.lastIndexOf('.'), cut.lastIndexOf('·'), cut.lastIndexOf(','));
+  return at > limit * 0.55 ? cut.slice(0, at + 1) : cut.replace(/[\s,·]$/, '') + '…';
+}
+
+function sentencesOf(text) {
+  const parts = String(text || '').replace(/\s+/g, ' ').trim().match(/[^.!?。]+[.!?。]?/g) || [];
+  return parts.map(s => s.trim()).filter(Boolean);
+}
+
+function bestSentence(text, re, max) {
+  const parts = sentencesOf(text);
+  const hit = re ? parts.find(s => re.test(s)) : null;
+  return clipText(hit || parts[0] || String(text || ''), max || 110);
 }
 
 function localConsensus(kind, item) {
@@ -1972,26 +1983,25 @@ function localConsensus(kind, item) {
   const agreed = [], open = [], seen = {};
   const push = (arr, s) => {
     if (!s) return;
-    const k = s.slice(0, 20);
+    const k = s.slice(0, 18);
     if (seen[k]) return;
     seen[k] = 1;
     arr.push(s);
   };
   comments.forEach(cm => {
     const text = String(cm.text || '');
-    const s = firstSentence(text, 92);
-    if (OPEN_RE.test(text)) push(open, s);
-    else push(agreed, s);
+    if (OPEN_RE.test(text)) push(open, bestSentence(text, OPEN_RE, 110));
+    else push(agreed, bestSentence(text, null, 110));
   });
 
-  let agreedOut = agreed.slice(0, 3);
+  const agreedOut = agreed.slice(0, 3);
   const openOut = open.slice(0, 3);
 
   if (!agreedOut.length) {
     if (kind === 'candidate') agreedOut.push('찬성 근거가 아직 댓글로 정리되지 않았습니다. 투표만 ' + tally(item).cast + '/10 찬성입니다.');
     else agreedOut.push('아직 댓글이 없어 합의점이 수집되지 않았습니다. 첫 의견을 남겨 주세요.');
   }
-  if (!openOut.length) openOut.push('세부 기준과 실행 주체는 아직 정해지지 않았습니다.');
+  if (!openOut.length) openOut.push('뚜렷한 반대 의견은 아직 없습니다. 세부 기준과 실행 주체가 미정입니다.');
 
   let draft;
   if (kind === 'candidate') {
@@ -1999,20 +2009,24 @@ function localConsensus(kind, item) {
     const head = t.passed
       ? '10인 전원이 찬성해 영입이 확정된 안건입니다.'
       : '현재 ' + t.cast + '/10 찬성' + (t.veto ? ' · 비토 ' + t.veto + '명' : ' · 검토 중 ' + t.pending + '명') + '입니다.';
-    const cond = open.length ? ' 심사에서 남은 조건은 “' + openOut[0] + '”입니다.' : '';
-    const next = t.passed
-      ? ' 다음 금요일 테이블에서 첫 인사를 나누고, 추천 사유를 레터에 익명으로 한 줄 남기는 것으로 정리합니다.'
-      : ' 이 조건을 먼저 확인한 뒤 다음 테이블에서 재표를 받는 순서를 제안합니다.';
-    draft = head + cond + next;
+    const body = agreed[0] ? ' 찬성 쪽 근거는 “' + clipText(agreed[0], 80) + '”입니다.' : '';
+    const tail = t.passed
+      ? ' 다음 금요일 테이블에서 첫 인사를 나누고, 추천 사유를 레터에 익명으로 한 줄 남깁니다.'
+      : (open[0]
+        ? ' 남은 조건은 “' + clipText(open[0], 80) + '”이며, 이 조건을 확인한 뒤 다음 테이블에서 재표를 받는 순서를 제안합니다.'
+        : ' 남은 조건을 확인한 뒤 다음 테이블에서 재표를 받는 순서를 제안합니다.');
+    draft = head + body + tail;
   } else {
     const st = stanceCounts(item);
-    const lead = st.total
+    const head = st.total
       ? '입장을 남긴 ' + st.total + '명 중 ' + st.agree + '명이 같은 방향에 섰습니다.' +
-        (st.disagree ? ' 반대 ' + st.disagree + '명의 이유는 남은 조건으로 옮겨 적었습니다.' : ' 뚜렷한 반대는 없습니다.')
+        (st.disagree ? ' 반대 ' + st.disagree + '명의 우려는 남은 조건으로 옮겨 적었습니다.' : (st.hold ? ' 보류 ' + st.hold + '명이 붙인 조건이 남아 있습니다.' : ''))
       : '아직 입장 표시가 없어 댓글만으로 초안을 정리했습니다.';
-    const body = agreed[0] ? ' 합의점은 ' + agreedOut.slice(0, 2).map(x => '“' + x + '”').join(', ') + ' 쪽으로 모였습니다.' : '';
-    const tail = open.length ? ' 다음 테이블에서는 “' + openOut[0] + '”을(를) 첫 안건으로 올려 확정합니다.' : '';
-    draft = lead + body + tail;
+    const body = agreed[0] ? ' 공통된 출발점은 “' + clipText(agreed[0], 80) + '”입니다.' : '';
+    const tail = open[0]
+      ? ' 다음 테이블에서 먼저 확정할 조건은 “' + clipText(open[0], 80) + '”이며, 실행 주체와 기록 방식은 그 뒤에 정합니다.'
+      : ' 남은 쟁점이 뚜렷하지 않아, 실행 주체와 기록 방식을 정하는 것으로 마무리할 수 있습니다.';
+    draft = head + body + tail;
   }
 
   return { source: 'rules', at: new Date().toISOString(), agreed: agreedOut, open: openOut, draft };
@@ -2238,8 +2252,7 @@ function boardBody(kind, item) {
       : t.blocked
         ? '<div class="banner is-veto"><i data-lucide="coffee"></i><p><strong>비토 발생 — 오프라인 커피 미팅으로 이관</strong><br />비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div>'
         : '';
-    return '<p class="summary">' + esc(item.summary) + '</p>' +
-      ((item.highlights || []).length ? '<div class="chip-row">' + item.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
+    return ((item.highlights || []).length ? '<div class="chip-row">' + item.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
       (item.reason
         ? '<figure class="nomination"><blockquote>“' + esc(item.reason) + '”</blockquote>' +
           '<figcaption>' + avatar(nominator.id, 'sm') + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role) + ' ' + esc(nominator.title) + '</figcaption></figure>'
@@ -2253,8 +2266,7 @@ function boardBody(kind, item) {
       commentList('candidate', item, true);
   }
 
-  return '<p class="summary">' + esc(item.summary) + '</p>' +
-    ((item.points || []).length
+  return ((item.points || []).length
       ? '<div><span class="block-label">핵심 쟁점</span><ul class="points">' + item.points.map(p => '<li><span>' + esc(p) + '</span></li>').join('') + '</ul></div>'
       : '') +
     aiBlock('agenda', item) +
