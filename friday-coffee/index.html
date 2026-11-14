@@ -1316,6 +1316,7 @@ const STANCE_SEED = {
 const SEED_CONSENSUS = {
   a1: {
     source: 'seed',
+    sn: 3,
     at: '2026-11-13T20:10:00+09:00',
     agreed: [
       'AI로 초안을 쓰는 것 자체는 이미 현실이고, 문제는 사용 여부가 아니라 검증을 어떻게 기록하는가다.',
@@ -1331,6 +1332,7 @@ const SEED_CONSENSUS = {
   },
   a2: {
     source: 'seed',
+    sn: 2,
     at: '2026-11-13T21:40:00+09:00',
     agreed: [
       'SaaS를 걷어내는 속도가 감사 대응 속도보다 빠르다는 진단에 이견이 없었다.',
@@ -1480,10 +1482,6 @@ function tally(c) {
   const passed = veto === 0 && pending === 0;
   const blocked = veto > 0;
   return { yes, conditional, veto, pending, cast, pct, passed, blocked };
-}
-
-function totalComments() {
-  return state.agendas.reduce((n, a) => n + a.comments.length, 0);
 }
 
 /* ---------------- toast ---------------- */
@@ -1947,8 +1945,7 @@ function stanceVote(item) {
 
 /* ---------------- AI anonymous consensus ---------------- */
 
-const AGREE_RE = /(찬성|좋겠|좋습니다|필요|공감|동의|맞습니다|반갑|핵심|중요|해야|권장|유용|현실|안전)/;
-const OPEN_RE = /(다만|우려|조건|궁금|위험|아직|질문|불확실|어렵|한계|걱정|갈리|미정|조정|먼저|반대|비토|이견)/;
+const OPEN_RE = /(다만|우려|조건|궁금|위험|아직|질문|불확실|어렵|한계|걱정|갈리|미정|조정|먼저|반드시|반대|비토|이견)/;
 
 function aiSourceLabel(c) {
   if (!c) return '아직 도출 전';
@@ -1996,16 +1993,25 @@ function localConsensus(kind, item) {
 
   const agreedOut = agreed.slice(0, 3);
   const openOut = open.slice(0, 3);
+  const stance = kind === 'agenda' ? stanceCounts(item) : null;
+  const t = kind === 'candidate' ? tally(item) : null;
 
   if (!agreedOut.length) {
     if (kind === 'candidate') agreedOut.push('찬성 근거가 아직 댓글로 정리되지 않았습니다. 투표만 ' + tally(item).cast + '/10 찬성입니다.');
     else agreedOut.push('아직 댓글이 없어 합의점이 수집되지 않았습니다. 첫 의견을 남겨 주세요.');
   }
-  if (!openOut.length) openOut.push('뚜렷한 반대 의견은 아직 없습니다. 세부 기준과 실행 주체가 미정입니다.');
+  if (!openOut.length) {
+    if (stance && (stance.hold || stance.disagree)) {
+      openOut.push('보류 ' + stance.hold + '명' + (stance.disagree ? ' · 반대 ' + stance.disagree + '명' : '') + '의 조건이 아직 문장으로 정리되지 않았습니다.');
+    } else if (t && (t.pending || t.veto)) {
+      openOut.push('검토 중 ' + t.pending + '명' + (t.veto ? ' · 비토 ' + t.veto + '명' : '') + '의 사유가 아직 문장으로 정리되지 않았습니다.');
+    } else {
+      openOut.push('뚜렷한 반대 의견은 아직 없습니다. 세부 기준과 실행 주체가 미정입니다.');
+    }
+  }
 
   let draft;
   if (kind === 'candidate') {
-    const t = tally(item);
     const head = t.passed
       ? '10인 전원이 찬성해 영입이 확정된 안건입니다.'
       : '현재 ' + t.cast + '/10 찬성' + (t.veto ? ' · 비토 ' + t.veto + '명' : ' · 검토 중 ' + t.pending + '명') + '입니다.';
@@ -2017,19 +2023,20 @@ function localConsensus(kind, item) {
         : ' 남은 조건을 확인한 뒤 다음 테이블에서 재표를 받는 순서를 제안합니다.');
     draft = head + body + tail;
   } else {
-    const st = stanceCounts(item);
-    const head = st.total
-      ? '입장을 남긴 ' + st.total + '명 중 ' + st.agree + '명이 같은 방향에 섰습니다.' +
-        (st.disagree ? ' 반대 ' + st.disagree + '명의 우려는 남은 조건으로 옮겨 적었습니다.' : (st.hold ? ' 보류 ' + st.hold + '명이 붙인 조건이 남아 있습니다.' : ''))
+    const head = stance.total
+      ? '입장을 남긴 ' + stance.total + '명 중 ' + stance.agree + '명이 같은 방향에 섰습니다.' +
+        (stance.disagree ? ' 반대 ' + stance.disagree + '명의 우려는 남은 조건으로 옮겨 적었습니다.' : (stance.hold ? ' 보류 ' + stance.hold + '명이 붙인 조건이 남아 있습니다.' : ''))
       : '아직 입장 표시가 없어 댓글만으로 초안을 정리했습니다.';
     const body = agreed[0] ? ' 공통된 출발점은 “' + clipText(agreed[0], 80) + '”입니다.' : '';
-    const tail = open[0]
+    const tail = open.length
       ? ' 다음 테이블에서 먼저 확정할 조건은 “' + clipText(open[0], 80) + '”이며, 실행 주체와 기록 방식은 그 뒤에 정합니다.'
-      : ' 남은 쟁점이 뚜렷하지 않아, 실행 주체와 기록 방식을 정하는 것으로 마무리할 수 있습니다.';
+      : ((stance.hold || stance.disagree)
+        ? ' 다음 테이블에서 보류·반대 의견의 조건을 먼저 확인한 뒤 실행 주체와 기록 방식을 정합니다.'
+        : ' 남은 쟁점이 뚜렷하지 않아, 실행 주체와 기록 방식을 정하는 것으로 마무리할 수 있습니다.');
     draft = head + body + tail;
   }
 
-  return { source: 'rules', at: new Date().toISOString(), agreed: agreedOut, open: openOut, draft };
+  return { source: 'rules', at: new Date().toISOString(), sn: (item.comments || []).length, agreed: agreedOut, open: openOut, draft };
 }
 
 function anonPrompt(kind, item) {
@@ -2138,7 +2145,7 @@ async function deriveConsensus(kind, id) {
   focusCard(kind, id);
   try {
     const out = await callEndpoint(prompt);
-    item.consensus = { agreed: out.agreed, open: out.open, draft: out.draft, at: new Date().toISOString(), source: 'endpoint' };
+    item.consensus = { agreed: out.agreed, open: out.open, draft: out.draft, at: new Date().toISOString(), source: 'endpoint', sn: (item.comments || []).length };
     saveState();
     rerender(true);
     focusCard(kind, id);
@@ -2162,7 +2169,8 @@ function aiBlock(kind, item) {
   const head = '<div class="ai-head">' +
       '<span class="spark"><i data-lucide="sparkles"></i></span>' +
       '<h4>AI 익명 합의안</h4>' +
-      '<span class="ai-src">' + esc(aiSourceLabel(c)) + (c && c.at && !c.pending ? ' · ' + esc(fmtDay(c.at)) : '') + '</span>' +
+      '<span class="ai-src">' + esc(aiSourceLabel(c)) + (c && c.at && !c.pending ? ' · ' + esc(fmtDay(c.at)) : '') +
+        (c && !c.pending && typeof c.sn === 'number' && comments > c.sn ? ' · 새 의견 ' + (comments - c.sn) + '개 반영 전' : '') + '</span>' +
     '</div>';
 
   let body;
