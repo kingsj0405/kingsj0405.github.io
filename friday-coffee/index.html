@@ -8,382 +8,870 @@
 <meta property="og:title" content="금요커피클럽 · Friday Coffee Club" />
 <meta property="og:description" content="Cross-Industry Leaders, One Table, Every Friday — 100% 만장일치 합의제 멤버십 게이트" />
 <meta property="og:type" content="website" />
-<meta name="theme-color" content="#1a120c" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a120c'/%3E%3Cpath d='M16 22h26v14a11 11 0 0 1-11 11h-4a11 11 0 0 1-11-11z' fill='none' stroke='%23e0b98a' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M42 26h4a6 6 0 0 1 0 12h-4' fill='none' stroke='%23e0b98a' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M22 14c0 3-3 3-3 6M30 13c0 3-3 3-3 6M38 14c0 3-3 3-3 6' fill='none' stroke='%23c08552' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+<meta name="theme-color" content="#faf9f7" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23221b15'/%3E%3Cpath d='M16 22h26v14a11 11 0 0 1-11 11h-4a11 11 0 0 1-11-11z' fill='none' stroke='%23e6cfb2' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M42 26h4a6 6 0 0 1 0 12h-4' fill='none' stroke='%23e6cfb2' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M22 14c0 3-3 3-3 6M30 13c0 3-3 3-3 6M38 14c0 3-3 3-3 6' fill='none' stroke='%23a9784a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#1a120c',
-          gold: '#c79a52',
-          cream: '#f7f2ea',
-          /* warm espresso scale — replaces indigo accents with coffee browns */
-          indigo: {
-            50: '#f8f1e8', 100: '#f0e3d3', 200: '#e2c9ae', 300: '#cfa883', 400: '#b98a5e',
-            500: '#a4744a', 600: '#8a5c37', 700: '#6f472a', 800: '#553520', 900: '#3a2416', 950: '#241509'
-          },
-          /* caramel — replaces amber accents */
-          amber: {
-            50: '#fbf4e8', 100: '#f6e7cd', 200: '#ecd0a6', 300: '#dfb277', 400: '#d29a55',
-            500: '#c0843f', 600: '#a86c31', 700: '#8a5527', 800: '#6d4220', 900: '#57351b', 950: '#3a2410'
-          },
-          /* warm stone neutrals */
-          slate: {
-            50: '#faf8f5', 100: '#f3eee8', 200: '#e8e1d7', 300: '#d6ccbf', 400: '#a79d90',
-            500: '#7d7468', 600: '#5d5449', 700: '#453d34', 800: '#2f2822', 900: '#1e1814', 950: '#12100d'
-          }
-        },
-        fontFamily: {
-          sans: ['Pretendard Variable', 'Pretendard', 'system-ui', '-apple-system', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
-          serif: ['Noto Serif KR', 'Pretendard Variable', 'serif']
-        }
-      }
-    }
-  };
-</script>
 <script src="https://unpkg.com/lucide@0.417.0/dist/umd/lucide.min.js" defer></script>
 <style>
-  :root {
-    --paper: #f7f2ea;
-    --ink: #1a120c;
-    --line: #e8e1d7;
-  }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    background: var(--paper);
-    color: #111827;
-    font-feature-settings: "tnum" on;
-    -webkit-font-smoothing: antialiased;
-    word-break: keep-all;
-  }
-  .tabnum { font-variant-numeric: tabular-nums; }
-  .wordmark { font-family: 'Noto Serif KR', 'Pretendard Variable', serif; letter-spacing: -0.02em; }
+/* =============================================================
+   금요커피클럽 Design System
+   Surface planes : warm off-white page / pure white board surface
+   Rules          : 1px hairline borders, no gradients, no glow
+   Accent         : restrained espresso ink + caramel
+   ============================================================= */
 
-  .card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -18px rgba(15, 23, 42, .25);
-  }
-  .hairline { background-image: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent); }
-  .seg { height: 12px; border-radius: 4px; transition: background-color .18s ease, transform .18s ease; }
-  .seg-hover:hover { transform: translateY(-1px); }
-  .chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
-    padding: 3px 9px; border-radius: 999px;
-    background: #f3f4f6; color: #475569;
-    border: 1px solid #e9eaee;
-  }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  .fade-in { animation: fadeIn .22s ease both; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  .toast-in { animation: toastIn .24s cubic-bezier(.2,.8,.3,1) both; }
-  @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
-  .ring-gold { box-shadow: inset 0 0 0 1px rgba(217,180,91,.45); }
-  textarea { resize: vertical; }
-  [data-action] { -webkit-tap-highlight-color: transparent; }
-  .vote-active-wave { animation: pulseVote .5s ease; }
-  @keyframes pulseVote { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
-  @media (prefers-reduced-motion: reduce) {
-    .fade-in, .toast-in, .vote-active-wave { animation: none !important; }
-  }
-  details > summary { list-style: none; cursor: pointer; }
-  details > summary::-webkit-details-marker { display: none; }
-  details[open] .chev { transform: rotate(180deg); }
-  .chev { transition: transform .18s ease; }
+/* ---------- 1. Design tokens ---------- */
+:root {
+  /* surface */
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --surface-2: #f6f4f0;
+  --surface-3: #efebe4;
+  --overlay: rgba(27, 24, 21, .42);
+
+  /* hairline */
+  --border: #e7e2da;
+  --border-strong: #d7d0c5;
+
+  /* text hierarchy */
+  --text: #191512;
+  --text-2: #5a5349;
+  --text-3: #786f63;
+  --text-4: #8d8579;
+  --text-inverse: #fbf9f6;
+
+  /* coffee-club accent */
+  --ink: #221b15;
+  --ink-hover: #362b21;
+  --accent: #9c6b3c;
+  --accent-strong: #7b5129;
+  --accent-soft: #f7f0e7;
+  --accent-line: #e3d1bb;
+
+  /* semantic status */
+  --yes: #1f7a4d;
+  --yes-ink: #17663f;
+  --yes-soft: #eaf4ee;
+  --yes-line: #c2ddcd;
+  --cond: #b0741c;
+  --cond-ink: #8a550f;
+  --cond-soft: #fbf3e3;
+  --cond-line: #ecd9b6;
+  --veto: #b0342a;
+  --veto-ink: #952b22;
+  --veto-soft: #fceceb;
+  --veto-line: #f0cac5;
+  --track: #e7e2da;
+
+  /* type */
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-serif: 'Noto Serif KR', 'Pretendard Variable', serif;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+  --fs-34: 34px;
+
+  /* spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 56px;
+
+  /* radius */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+  --r-full: 999px;
+
+  /* elevation */
+  --shadow-xs: 0 1px 2px rgba(28, 22, 16, .04);
+  --shadow-sm: 0 1px 3px rgba(28, 22, 16, .05), 0 1px 2px rgba(28, 22, 16, .04);
+  --shadow-md: 0 16px 40px -20px rgba(28, 22, 16, .28), 0 2px 8px rgba(28, 22, 16, .05);
+  --ring: 0 0 0 3px rgba(156, 107, 60, .18);
+
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --maxw: 1000px;
+  --nav-h: 52px;
+}
+
+/* ---------- 2. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-15);
+  line-height: 1.62;
+  letter-spacing: -.011em;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" on;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -.022em; line-height: 1.32; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
+input, textarea { font: inherit; color: inherit; }
+svg { display: block; }
+img { max-width: 100%; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-xs); }
+::selection { background: var(--accent-soft); color: var(--accent-strong); }
+
+/* ---------- 3. Layout & typography utilities ---------- */
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--sp-6); }
+@media (max-width: 720px) { .wrap { padding: 0 var(--sp-4); } }
+.eyebrow {
+  font-size: var(--fs-11); font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--text-3);
+}
+.caption { font-size: var(--fs-12); line-height: 1.6; color: var(--text-3); }
+.tabnum { font-variant-numeric: tabular-nums; }
+.wordmark { font-family: var(--font-serif); font-weight: 700; letter-spacing: -.022em; }
+.serif { font-family: var(--font-serif); }
+.stack { display: flex; flex-direction: column; gap: var(--sp-4); }
+.stack-sm { display: flex; flex-direction: column; gap: var(--sp-2); }
+.block { display: block; }
+
+/* ---------- 4. Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: var(--r-md);
+  font-size: var(--fs-13); font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+  transition: background-color .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease);
+}
+.btn svg { width: 15px; height: 15px; }
+.btn-primary { background: var(--ink); color: var(--text-inverse); }
+.btn-primary:hover { background: var(--ink-hover); }
+.btn-secondary { background: var(--surface); border-color: var(--border-strong); color: var(--text-2); }
+.btn-secondary:hover { background: var(--surface-2); border-color: #c7bdae; color: var(--text); }
+.btn-ghost { color: var(--text-2); }
+.btn-ghost:hover { background: var(--surface-3); color: var(--text); }
+.btn-sm { height: 30px; padding: 0 10px; font-size: var(--fs-12); border-radius: var(--r-sm); }
+.btn-sm svg { width: 13px; height: 13px; }
+.btn-block { width: 100%; height: 42px; font-size: var(--fs-14); }
+.btn-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--fs-12); font-weight: 600; color: var(--accent-strong);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent-line);
+}
+.btn-link:hover { text-decoration-color: var(--accent); }
+.icon-btn {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  border-radius: var(--r-sm); color: var(--text-3);
+  transition: background-color .15s var(--ease), color .15s var(--ease);
+}
+.icon-btn:hover { background: var(--surface-3); color: var(--text); }
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* ---------- 5. Tags / chips ---------- */
+.tag {
+  display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px;
+  border: 1px solid var(--border); border-radius: var(--r-full);
+  background: var(--surface-2); color: var(--text-2);
+  font-size: var(--fs-11); font-weight: 600; letter-spacing: -.004em; white-space: nowrap;
+}
+.tag svg { width: 12px; height: 12px; }
+.tag-accent { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-strong); }
+.tag-yes { background: var(--yes-soft); border-color: var(--yes-line); color: var(--yes-ink); }
+.tag-veto { background: var(--veto-soft); border-color: var(--veto-line); color: var(--veto-ink); }
+.chip {
+  display: inline-flex; align-items: center; padding: 3px 8px; border-radius: var(--r-sm);
+  background: var(--surface-2); color: var(--text-2);
+  font-size: var(--fs-11); font-weight: 500; letter-spacing: -.004em;
+}
+
+/* ---------- 6. Cards & sections ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+}
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.section-head h2 { margin-top: 6px; font-size: var(--fs-20); }
+.section-sub { margin-top: 6px; max-width: 64ch; font-size: var(--fs-13); line-height: 1.68; color: var(--text-2); }
+.section-actions { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.note {
+  border-left: 2px solid var(--accent-line); padding: 2px 0 2px 10px;
+  font-size: var(--fs-12); line-height: 1.66; color: var(--text-2);
+}
+.divider { height: 1px; background: var(--border); border: 0; margin: 0; }
+
+/* ---------- 7. Top bar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); height: var(--nav-h); }
+.brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.brand-mark { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: #ecd6b9; flex-shrink: 0; }
+.brand-mark svg { width: 14px; height: 14px; }
+.brand-name { display: block; font-size: var(--fs-13); font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.brand-sub { display: block; font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--text-3); line-height: 1.35; }
+.topbar-actions { display: flex; align-items: center; gap: 4px; }
+
+/* ---------- 8. Masthead + metrics ---------- */
+.masthead { background: var(--surface); border-bottom: 1px solid var(--border); }
+.masthead-inner { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-6); padding: 26px 0 22px; }
+.masthead h1 { margin-top: 7px; font-size: var(--fs-34); line-height: 1.14; }
+.masthead-sub { margin-top: 7px; font-size: var(--fs-13); color: var(--text-2); }
+.masthead-tags { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-3); }
+.masthead-when { font-size: var(--fs-12); color: var(--text-3); }
+.masthead-side { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+.avatar-stack { display: flex; }
+.avatar-stack .avatar { margin-left: -7px; box-shadow: 0 0 0 2px var(--surface); }
+.avatar-stack .avatar:first-child { margin-left: 0; }
+
+.metrics { background: var(--surface); border-bottom: 1px solid var(--border); }
+.metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.metric { display: block; padding: 14px 18px; border-left: 1px solid var(--border); transition: background-color .15s var(--ease); }
+.metric:first-child { border-left: 0; padding-left: 0; }
+.metric:hover { background: var(--surface-2); }
+.metric:hover:first-child { background: transparent; }
+.metric-label { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: var(--text-3); }
+.metric-value { display: flex; align-items: baseline; gap: 2px; margin-top: 7px; font-size: var(--fs-24); font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+.metric-unit { font-size: var(--fs-12); font-weight: 600; color: var(--text-3); }
+.metric-note { display: block; margin-top: 8px; font-size: 11.5px; line-height: 1.5; color: var(--text-3); }
+
+/* ---------- 9. Tabs ---------- */
+.tabs {
+  position: sticky; top: var(--nav-h); z-index: 20;
+  background: rgba(250, 249, 247, .94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.tabs-inner { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.tabs-inner::-webkit-scrollbar { display: none; }
+.tab {
+  position: relative; display: inline-flex; align-items: center; gap: 7px;
+  padding: 13px 11px 12px; font-size: var(--fs-13); font-weight: 600;
+  color: var(--text-3); white-space: nowrap;
+  transition: color .15s var(--ease);
+}
+.tab:first-child { padding-left: 0; }
+.tab svg { width: 15px; height: 15px; opacity: .7; }
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { color: var(--text); }
+.tab[aria-selected="true"] svg { opacity: .9; }
+.tab[aria-selected="true"]::after {
+  content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+}
+.tab:first-child[aria-selected="true"]::after { left: 0; }
+.tab-count {
+  padding: 1px 6px; border-radius: var(--r-full); background: var(--surface-3);
+  color: var(--text-3); font-size: 10.5px; font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.tab[aria-selected="true"] .tab-count { background: var(--ink); color: var(--text-inverse); }
+
+/* ---------- 10. Page / panel ---------- */
+.page { padding: var(--sp-6) 0 var(--sp-2); }
+.panel { padding-top: 4px; }
+
+/* ---------- 11. Avatar ---------- */
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  background: var(--surface-3); color: #6b5f52;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0; line-height: 1;
+}
+.avatar-sm { width: 22px; height: 22px; font-size: 9.5px; }
+.avatar-lg { width: 32px; height: 32px; font-size: 12px; }
+
+/* ---------- 12. Candidate card ---------- */
+.cand-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); padding: 18px 20px 0; }
+.cand-head-main { min-width: 0; }
+.cand-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: var(--fs-12); color: var(--text-3); }
+.cand-title { margin-top: 7px; font-size: var(--fs-18); line-height: 1.4; }
+.cand-sub { margin-top: 3px; font-size: var(--fs-13); color: var(--text-3); }
+.cand-score { flex-shrink: 0; text-align: right; }
+.score-value { font-size: var(--fs-24); font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+.score-value span { margin-left: 1px; font-size: var(--fs-12); font-weight: 600; color: var(--text-3); }
+.score-label { display: block; margin-top: 4px; font-size: 10px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: var(--text-3); }
+.cand-body { display: flex; flex-direction: column; gap: var(--sp-4); padding: 14px 20px 20px; }
+
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: var(--fs-12); font-weight: 600; }
+.status .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.status.is-review { color: var(--cond-ink); }
+.status.is-passed { color: var(--yes-ink); }
+.status.is-veto { color: var(--veto-ink); }
+.status.is-new { color: var(--text-3); }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.summary { font-size: var(--fs-14); line-height: 1.72; color: var(--text-2); }
+
+.nomination { display: flex; flex-direction: column; gap: 7px; padding-left: 12px; border-left: 2px solid var(--accent-line); }
+.nomination blockquote { margin: 0; font-size: var(--fs-13); line-height: 1.72; color: var(--text-2); }
+.nomination figcaption { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-3); }
+.nomination figcaption b { font-weight: 600; color: var(--text-2); }
+
+.banner { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border: 1px solid; border-radius: var(--r-md); font-size: 12.5px; line-height: 1.6; }
+.banner svg { width: 15px; height: 15px; margin-top: 1px; flex-shrink: 0; }
+.banner strong { font-weight: 700; }
+.banner.is-passed { background: var(--yes-soft); border-color: var(--yes-line); color: var(--yes-ink); }
+.banner.is-veto { background: var(--veto-soft); border-color: var(--veto-line); color: var(--veto-ink); }
+
+.gauge { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); }
+.gauge-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.gauge-title { font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+.gauge-title b { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.gauge-status { font-size: 11.5px; font-weight: 600; }
+.gauge-status.is-review { color: var(--cond-ink); }
+.gauge-status.is-passed { color: var(--yes-ink); }
+.gauge-status.is-veto { color: var(--veto-ink); }
+.gauge-bar { display: flex; gap: 3px; margin-top: 10px; }
+.seg { height: 6px; flex: 1; border-radius: 2px; background: var(--track); transition: background-color .18s var(--ease); }
+.seg.is-yes { background: var(--yes); }
+.seg.is-cond { background: var(--cond); }
+.seg.is-veto { background: var(--veto); }
+.gauge-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 9px; font-size: 11px; color: var(--text-3); }
+.legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.legend-dot { width: 7px; height: 7px; border-radius: 2px; background: var(--track); }
+.legend-dot.is-yes { background: var(--yes); }
+.legend-dot.is-cond { background: var(--cond); }
+.legend-dot.is-veto { background: var(--veto); }
+.legend-item b { font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; }
+
+.vote-group { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.vote-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 38px; border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text-2);
+  font-size: var(--fs-13); font-weight: 600; white-space: nowrap;
+  transition: background-color .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+}
+.vote-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.vote-btn:hover { background: var(--surface-2); border-color: #c7bdae; color: var(--text); }
+.vote-btn[aria-pressed="true"] { font-weight: 700; }
+.vote-yes[aria-pressed="true"] { background: var(--yes-soft); border-color: var(--yes-line); color: var(--yes-ink); }
+.vote-cond[aria-pressed="true"] { background: var(--cond-soft); border-color: var(--cond-line); color: var(--cond-ink); }
+.vote-veto[aria-pressed="true"] { background: var(--veto-soft); border-color: var(--veto-line); color: var(--veto-ink); }
+.vote-note { font-size: 11.5px; line-height: 1.65; color: var(--text-3); }
+.vote-note b { font-weight: 600; color: var(--text-2); }
+
+.disclosure { border-top: 1px solid var(--border); padding-top: 12px; }
+.disclosure > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 12.5px; font-weight: 600; color: var(--text-2);
+  cursor: pointer; list-style: none;
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary:hover { color: var(--text); }
+.disclosure > summary .summary-label { display: inline-flex; align-items: center; gap: 6px; }
+.disclosure > summary svg { width: 15px; height: 15px; }
+.disclosure .chev { transition: transform .18s var(--ease); color: var(--text-4); }
+.disclosure[open] .chev { transform: rotate(180deg); }
+.voter-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 20px; margin-top: 10px; }
+.voter { display: flex; align-items: center; gap: 7px; padding: 4px 0; min-width: 0; font-size: var(--fs-12); }
+.voter-name { font-weight: 600; color: var(--text); white-space: nowrap; }
+.voter-role { color: var(--text-3); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.voter-vote { display: inline-flex; align-items: center; gap: 5px; margin-left: auto; font-size: 10.5px; font-weight: 600; white-space: nowrap; color: var(--text-3); }
+.voter-vote .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.voter-vote.is-yes { color: var(--yes-ink); }
+.voter-vote.is-cond { color: var(--cond-ink); }
+.voter-vote.is-veto { color: var(--veto-ink); }
+
+/* ---------- 13. Comments ---------- */
+.comments { border-top: 1px solid var(--border); padding-top: 13px; }
+.comments-head { display: flex; align-items: baseline; gap: 8px; }
+.comments-head h4 { font-size: var(--fs-13); font-weight: 700; }
+.comments-head span { font-size: var(--fs-12); color: var(--text-3); font-variant-numeric: tabular-nums; }
+.comments-head .caption { margin-left: auto; }
+.comment-list { margin-top: 2px; }
+.comment { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.comment:last-child { border-bottom: 0; }
+.comment-head { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.comment-author { font-size: var(--fs-12); font-weight: 600; color: var(--text); }
+.comment-role { font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.comment-time { margin-left: auto; font-size: 10.5px; color: var(--text-4); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.comment-body { margin-top: 6px; font-size: var(--fs-13); line-height: 1.72; color: var(--text-2); }
+.like-btn {
+  display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; margin-top: 8px;
+  border: 1px solid var(--border); border-radius: var(--r-full);
+  background: var(--surface); color: var(--text-3); font-size: 11px; font-weight: 600;
+  transition: border-color .15s var(--ease), color .15s var(--ease), background-color .15s var(--ease);
+}
+.like-btn svg { width: 12px; height: 12px; }
+.like-btn:hover { border-color: var(--border-strong); color: var(--text-2); }
+.like-btn[aria-pressed="true"] { background: var(--veto-soft); border-color: var(--veto-line); color: var(--veto-ink); }
+
+.comment-form { display: flex; align-items: flex-start; gap: 9px; margin-top: 12px; }
+.comment-form .form-wrap { flex: 1; min-width: 0; }
+.comment-form-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: 6px; }
+.form-hint { font-size: 10.5px; color: var(--text-4); }
+
+/* ---------- 14. Form fields ---------- */
+.field-label { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: 12px; font-weight: 600; color: var(--text-2); }
+.field-label .req { color: var(--veto); }
+.field-label .hint { font-size: 10.5px; font-weight: 500; color: var(--text-4); }
+.input {
+  width: 100%; padding: 9px 11px;
+  border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text); font-size: var(--fs-13);
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.input::placeholder { color: var(--text-4); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
+.input.is-invalid { border-color: var(--veto); box-shadow: 0 0 0 3px rgba(176, 52, 42, .12); }
+textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
+.field-error { margin-top: 6px; font-size: 11.5px; font-weight: 600; color: var(--veto-ink); }
+.form-grid { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; gap: 14px; }
+@media (min-width: 560px) { .form-row { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- 15. Sample / demo panel ---------- */
+.demo-panel { overflow: hidden; }
+.demo-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); padding: 16px 20px; flex-wrap: wrap; }
+.demo-head h3 { margin-top: 5px; font-size: var(--fs-14); }
+.demo-head .caption { margin-top: 4px; max-width: 60ch; }
+.demo-body { display: flex; flex-direction: column; gap: var(--sp-4); padding: 0 20px 20px; }
+.demo-note { display: flex; align-items: flex-start; gap: 7px; padding: 10px 12px; border-radius: var(--r-md); background: var(--surface-2); font-size: 12px; line-height: 1.65; color: var(--text-2); }
+.demo-note svg { width: 14px; height: 14px; margin-top: 1px; color: var(--accent); flex-shrink: 0; }
+.demo-note b { font-weight: 600; color: var(--text); }
+
+/* ---------- 16. Empty state ---------- */
+.empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 44px 24px; text-align: center; border: 1px dashed var(--border-strong); border-radius: var(--r-lg); background: var(--surface); }
+.empty-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 6px; border-radius: 50%; background: var(--surface-2); color: var(--text-3); }
+.empty-icon svg { width: 18px; height: 18px; }
+.empty h3 { font-size: var(--fs-14); }
+.empty p { max-width: 46ch; font-size: var(--fs-12); line-height: 1.68; color: var(--text-3); }
+.empty-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+
+/* ---------- 17. Letter ---------- */
+.letter { overflow: hidden; }
+.letter-head { padding: 20px 22px 18px; border-bottom: 1px solid var(--border); }
+.letter-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.letter-vol { display: flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+.letter-vol b { color: var(--accent-strong); letter-spacing: .08em; }
+.letter-title { margin-top: 12px; font-family: var(--font-serif); font-size: var(--fs-24); font-weight: 600; line-height: 1.44; letter-spacing: -.024em; }
+.letter-lead { margin-top: 10px; max-width: 72ch; font-size: var(--fs-14); line-height: 1.78; color: var(--text-2); }
+.letter-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 14px; font-size: 11.5px; color: var(--text-3); }
+.letter-meta .who { font-weight: 600; color: var(--text-2); }
+.letter-meta .sep { color: var(--text-4); }
+.letter-actions { display: flex; align-items: center; gap: 6px; }
+.letter-body { display: flex; flex-direction: column; gap: var(--sp-6); padding: 20px 22px 22px; }
+.block-label { display: block; margin-bottom: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+.three-lines li { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--border); font-size: var(--fs-13); line-height: 1.72; color: var(--text-2); }
+.three-lines li:first-child { border-top: 0; padding-top: 0; }
+.numeral { flex-shrink: 0; width: 14px; font-family: var(--font-serif); font-size: 12px; font-weight: 600; color: var(--accent-strong); line-height: 1.9; }
+.topics-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
+.topic-item { border-top: 1px solid var(--border); padding-top: 10px; }
+.topic-item h4 { font-size: var(--fs-13); font-weight: 700; letter-spacing: -.015em; }
+.topic-item p { margin-top: 4px; font-size: 12.5px; line-height: 1.68; color: var(--text-2); }
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+.quote { display: flex; flex-direction: column; gap: 6px; padding-left: 12px; border-left: 2px solid var(--accent-line); }
+.quote p { font-family: var(--font-serif); font-size: var(--fs-14); line-height: 1.72; color: var(--text); letter-spacing: -.012em; }
+.quote cite { font-style: normal; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.letter-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-4); }
+.is-highlight { border-color: var(--accent-line); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* ---------- 18. Agenda ---------- */
+.agenda-head { display: flex; gap: 12px; padding: 18px 20px 0; }
+.agenda-no { display: grid; place-items: center; flex-shrink: 0; width: 26px; height: 26px; margin-top: 1px; border: 1px solid var(--border-strong); border-radius: 50%; font-size: var(--fs-12); font-weight: 600; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.agenda-head-main { min-width: 0; }
+.agenda-title { margin-top: 6px; font-size: var(--fs-16); font-weight: 700; line-height: 1.46; }
+.agenda-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; margin-top: 8px; font-size: 11.5px; color: var(--text-3); }
+.agenda-meta .who { display: inline-flex; align-items: center; gap: 5px; }
+.agenda-meta .who b { font-weight: 600; color: var(--text-2); }
+.agenda-meta .sep { color: var(--text-4); }
+.agenda-body { display: flex; flex-direction: column; gap: var(--sp-3); padding: 12px 20px 18px; }
+.points { display: flex; flex-direction: column; gap: 6px; }
+.points li { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
+.points li::before { content: ""; width: 4px; height: 4px; margin-top: 9px; flex-shrink: 0; border-radius: 50%; background: var(--accent); }
+.preview { display: flex; flex-direction: column; gap: 10px; }
+.preview li { display: flex; gap: 8px; }
+.preview-main { min-width: 0; }
+.preview-author { font-size: 11px; font-weight: 600; color: var(--text-2); }
+.preview-author span { font-weight: 400; color: var(--text-3); }
+.preview-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; font-size: 12.5px; line-height: 1.66; color: var(--text-2); }
+.agenda-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+.agenda-actions .caption { font-variant-numeric: tabular-nums; }
+
+/* ---------- 19. Rules ---------- */
+.rules-card { overflow: hidden; }
+.rule { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 22px 24px; border-top: 1px solid var(--border); }
+.rule:first-child { border-top: 0; }
+.rule-no { font-family: var(--font-serif); font-size: 26px; font-weight: 600; line-height: 1; color: #b59675; padding-top: 3px; }
+.rule-tag { margin-bottom: 6px; }
+.rule-title { font-size: var(--fs-16); font-weight: 700; line-height: 1.46; }
+.rule-body { margin-top: 8px; font-size: var(--fs-13); line-height: 1.76; color: var(--text-2); }
+.rule-notes { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+.rule-notes li { display: flex; gap: 8px; font-size: 11.5px; line-height: 1.6; color: var(--text-3); }
+.rule-notes li::before { content: "—"; color: var(--text-4); }
+.pull-line { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-radius: var(--r-md); background: var(--accent-soft); border: 1px solid var(--accent-line); }
+.pull-line svg { width: 15px; height: 15px; margin-top: 2px; color: var(--accent-strong); flex-shrink: 0; }
+.pull-line p { font-size: var(--fs-13); line-height: 1.7; color: var(--accent-strong); }
+.pull-line b { font-weight: 700; }
+
+/* ---------- 20. Modals ---------- */
+.modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
+.modal-backdrop { position: absolute; inset: 0; background: var(--overlay); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+.modal-panel {
+  position: relative; z-index: 1; display: flex; flex-direction: column;
+  width: 100%; max-width: 560px; max-height: 92vh;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-xl) var(--r-xl) 0 0; box-shadow: var(--shadow-md); overflow: hidden;
+}
+.modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3); padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }
+.modal-head h2 { font-size: var(--fs-16); }
+.modal-head p { margin-top: 4px; max-width: 52ch; font-size: var(--fs-12); line-height: 1.62; color: var(--text-3); }
+.modal-body { padding: 18px 20px 20px; overflow-y: auto; }
+.modal-foot { display: flex; gap: var(--sp-2); padding: 14px 20px 18px; border-top: 1px solid var(--border); }
+.modal-foot .btn { flex: 1; }
+@media (min-width: 640px) {
+  .modal { align-items: center; padding: var(--sp-6); }
+  .modal-panel { border-radius: var(--r-xl); }
+}
+.modal-head .eyebrow { margin-bottom: 4px; }
+
+.member-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); }
+.member-row:first-child { border-top: 0; }
+.member-name { font-size: var(--fs-13); font-weight: 600; }
+.member-role { font-size: 11.5px; color: var(--text-3); }
+.member-field { margin-left: auto; flex-shrink: 0; }
+
+/* ---------- 21. Gate ---------- */
+.gate {
+  position: fixed; inset: 0; z-index: 50; overflow-y: auto;
+  background: var(--bg);
+  display: flex; justify-content: center;
+  padding: var(--sp-7) var(--sp-5) var(--sp-8);
+}
+.gate::before { content: ""; position: fixed; left: 0; right: 0; top: 0; height: 2px; background: var(--accent); }
+.gate-inner { width: 100%; max-width: 420px; margin: auto; display: flex; flex-direction: column; gap: var(--sp-5); }
+.gate-brand { text-align: center; }
+.gate-mark { display: grid; place-items: center; width: 40px; height: 40px; margin: 0 auto 14px; border-radius: 11px; background: var(--ink); color: #ecd6b9; box-shadow: var(--shadow-sm); }
+.gate-mark svg { width: 20px; height: 20px; }
+.gate-brand h1 { margin-top: 8px; font-size: var(--fs-28); line-height: 1.2; }
+.gate-tagline { margin-top: 7px; font-size: var(--fs-12); color: var(--text-3); letter-spacing: .01em; }
+.gate-card { padding: 22px; }
+.gate-card h2 { font-size: var(--fs-16); }
+.gate-card > p { margin-top: 5px; font-size: var(--fs-12); color: var(--text-3); }
+.gate-form { margin-top: 16px; }
+.gate-form .btn-block { margin-top: 12px; }
+.gate-links { display: flex; justify-content: center; margin-top: 14px; }
+.gate-hint { margin-top: 10px; padding: 10px 12px; border-radius: var(--r-md); background: var(--surface-2); font-size: 11.5px; line-height: 1.7; color: var(--text-2); }
+.gate-hint b { font-weight: 600; color: var(--text); }
+.gate-about { display: flex; flex-direction: column; gap: 10px; padding-top: 18px; border-top: 1px solid var(--border); }
+.gate-about h2 { font-size: var(--fs-13); font-weight: 700; }
+.gate-about > p { font-size: 12px; line-height: 1.72; color: var(--text-2); }
+.gate-about b { font-weight: 600; color: var(--text); }
+.gate-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 12px; margin-top: 2px; }
+.gate-facts li { display: flex; gap: 6px; font-size: 11px; line-height: 1.55; color: var(--text-3); }
+.gate-facts li::before { content: ""; width: 4px; height: 4px; margin-top: 7px; flex-shrink: 0; border-radius: 50%; background: var(--accent-line); }
+.gate-cta { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--border); }
+.gate-cta p { font-size: 11.5px; line-height: 1.6; color: var(--text-3); }
+.gate-foot { text-align: center; font-size: 10.5px; line-height: 1.6; color: var(--text-4); }
+
+/* ---------- 22. Footer & toast ---------- */
+.site-footer { margin-top: var(--sp-8); border-top: 1px solid var(--border); background: var(--surface); }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-5); flex-wrap: wrap; padding: 22px 0 28px; }
+.footer-title { font-size: 12px; font-weight: 600; color: var(--text-2); }
+.footer-note { margin-top: 4px; font-size: 11px; line-height: 1.65; color: var(--text-3); }
+.footer-actions { display: flex; align-items: center; gap: 6px; }
+#toast { position: fixed; left: 0; right: 0; bottom: 20px; z-index: 80; display: flex; justify-content: center; padding: 0 var(--sp-4); pointer-events: none; }
+.toast { display: inline-flex; align-items: center; gap: 8px; max-width: 440px; padding: 10px 14px; border-radius: var(--r-full); background: var(--ink); color: var(--text-inverse); font-size: 12.5px; font-weight: 500; box-shadow: var(--shadow-md); }
+.toast svg { width: 15px; height: 15px; flex-shrink: 0; }
+.toast.is-warn { background: #8a550f; }
+.toast.is-bad { background: #8f2a22; }
+
+/* ---------- 23. Motion ---------- */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: fadeIn .2s var(--ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- 24. Responsive ---------- */
+@media (max-width: 720px) {
+  :root { --nav-h: 48px; }
+  .masthead-inner { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 0 16px; }
+  .masthead h1 { font-size: 28px; }
+  .masthead-side { flex-direction: row; align-items: center; gap: 10px; }
+  .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .metric { padding: 12px 10px; }
+  .metric:first-child { padding-left: 0; }
+  .metric-value { font-size: 20px; }
+  .metric-note { font-size: 10.5px; }
+  .cand-head, .cand-body, .demo-head, .demo-body, .agenda-head, .agenda-body, .letter-head, .letter-body, .rule { padding-left: 16px; padding-right: 16px; }
+  .letter-title { font-size: 19px; }
+  .letter-head { padding-top: 16px; }
+  .topics-grid, .quotes, .voter-list { grid-template-columns: minmax(0, 1fr); }
+  .vote-btn { font-size: 12px; gap: 4px; padding: 0 4px; }
+  .vote-btn svg { width: 13px; height: 13px; }
+  .rule { grid-template-columns: 32px 1fr; gap: 12px; }
+  .rule-no { font-size: 20px; }
+  .brand-sub { display: none; }
+}
+@media (max-width: 420px) {
+  .vote-group { grid-template-columns: minmax(0, 1fr); }
+  .vote-btn { justify-content: flex-start; padding: 0 12px; }
+}
 </style>
 </head>
-<body class="font-sans antialiased">
+<body>
 
-<!-- ============ PASSWORD GATE OVERLAY ============ -->
-<div id="gate-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-ink px-4 transition-opacity duration-300 py-6 overflow-y-auto">
-  <div class="absolute inset-0" style="background:
-      radial-gradient(800px 400px at 50% -10%, rgba(199,154,82,.22), transparent 70%),
-      radial-gradient(600px 300px at 50% 110%, rgba(138,92,55,.30), transparent 70%);"></div>
-  <div class="relative w-full max-w-lg rounded-2xl border border-slate-700/60 bg-[#1c140e]/95 p-6 shadow-2xl backdrop-blur-xl sm:p-8 text-center my-auto">
-    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-300">
-      <i data-lucide="coffee" class="h-6 w-6"></i>
+<!-- ============ PASSWORD GATE ============ -->
+<div id="gate" class="gate">
+  <div class="gate-inner">
+    <div class="gate-brand">
+      <span class="gate-mark"><i data-lucide="coffee"></i></span>
+      <p class="eyebrow">Friday Coffee Club · Private Board</p>
+      <h1 class="wordmark">금요커피클럽</h1>
+      <p class="gate-tagline">Cross-Industry Leaders, One Table, Every Friday</p>
     </div>
-    <div class="mt-3.5 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/90">
-      <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
-      Friday Coffee Club · Private Board
-    </div>
-    <h2 class="wordmark mt-1.5 text-2xl font-bold tracking-tight text-white sm:text-[26px]">금요커피클럽</h2>
-    <p class="mt-1 text-[12px] font-semibold text-amber-300/80">Cross-Industry Leaders, One Table, Every Friday</p>
 
-    <!-- 모임 소개 카드 (외부인/초대자용) -->
-    <div class="mt-4 rounded-xl border border-slate-700/70 bg-slate-900/80 p-4 text-left">
-      <p class="text-[12px] font-bold text-slate-200 flex items-center gap-1.5">
-        <i data-lucide="sparkles" class="h-3.5 w-3.5 text-amber-400"></i>
-        금요커피클럽은 어떤 모임인가요?
-      </p>
-      <p class="mt-2 text-[12px] leading-relaxed text-slate-400">
-        AI 테크리더, CFO, VC 심사역, 파트너 변호사 등 서로 다른 산업의 리더들이 매주 금요일 커피 한 잔을 사이에 두고 <b class="text-slate-200">현장 AX 도입 사례와 실전 노하우</b>를 나누는 프라이빗 클럽입니다. 하소연 대신 질문과 실행을 나눕니다.
-      </p>
-      <div class="mt-3 grid grid-cols-1 gap-2 border-t border-slate-800/80 pt-3 text-[11px] text-slate-400 sm:grid-cols-2">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="calendar" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
-          <span>매주 금요일 오프라인 커피클럽</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="coffee" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
-          <span>금요 커피 레터 (tiro+Claude)</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="check-check" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
-          <span>100% 만장일치 멤버십 합의제</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="lock" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
-          <span>Chatham House Rule 비밀유지</span>
-        </div>
+    <div class="card gate-card">
+      <h2>멤버 보드 입장</h2>
+      <p>클럽 멤버에게 공유된 비밀번호를 입력해 주세요.</p>
+      <form id="gate-form" class="gate-form">
+        <label class="field-label" for="gate-pass">
+          <span>비밀번호 (Passcode)</span>
+          <span class="hint">슬랙 공지 · 단톡방 공유</span>
+        </label>
+        <input class="input" type="password" id="gate-pass" name="pass" autocomplete="current-password" required
+          placeholder="예: ax2026" />
+        <p id="gate-error" class="field-error" hidden>비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>보드 입장하기</span>
+          <i data-lucide="arrow-right"></i>
+        </button>
+      </form>
+      <div class="gate-links">
+        <button type="button" class="btn-link" data-action="toggle-gate-hint">비밀번호 힌트 및 자동 입장 안내</button>
       </div>
+      <p id="gate-hint-text" class="gate-hint" hidden>
+        카톡 단톡방 또는 슬랙에 공지된 비밀번호(fx****)를 입력하세요.<br />
+        공유받은 <b>원클릭 자동 입장 링크</b>로도 바로 들어올 수 있습니다.
+      </p>
     </div>
 
-    <!-- 신규 멤버 추천 / 프로필 제안 CTA -->
-    <div class="mt-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 p-3.5 text-left">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <div class="min-w-0">
-          <p class="text-[12px] font-bold text-indigo-200 flex items-center gap-1">
-            <i data-lucide="user-plus" class="h-3.5 w-3.5 text-indigo-400"></i>
-            이런 분과 커피 한 잔 나누고 싶으신가요?
-          </p>
-          <p class="mt-0.5 text-[11px] text-indigo-300/80">함께 테이블에 앉고 싶은 크로스 인더스트리 리더 동료를 추천해 주세요.</p>
-        </div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
-           target="_blank" rel="noopener noreferrer"
-           class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 text-[11.5px] font-bold text-white shadow-sm transition">
+    <div class="gate-about">
+      <h2>금요커피클럽은 어떤 모임인가요?</h2>
+      <p>
+        AI 테크리더, CFO, VC 심사역, 파트너 변호사 등 서로 다른 산업의 리더들이 매주 금요일 커피 한 잔을 사이에 두고
+        <b>현장 AX 도입 사례와 실전 노하우</b>를 나누는 프라이빗 클럽입니다. 하소연 대신 질문과 실행을 나눕니다.
+      </p>
+      <ul class="gate-facts">
+        <li>매주 금요일 오프라인 커피클럽</li>
+        <li>금요 커피 레터 (tiro + Claude)</li>
+        <li>100% 만장일치 멤버십 합의제</li>
+        <li>Chatham House Rule 비밀유지</li>
+      </ul>
+      <div class="gate-cta">
+        <p>함께 테이블에 앉고 싶은 동료가 있나요?</p>
+        <a class="btn btn-secondary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
+           target="_blank" rel="noopener noreferrer">
           <span>멤버 추천하기</span>
-          <i data-lucide="external-link" class="h-3 w-3"></i>
+          <i data-lucide="arrow-up-right"></i>
         </a>
       </div>
     </div>
 
-    <!-- 기존 멤버 보드 입장 폼 -->
-    <form id="gate-form" class="mt-4 border-t border-slate-800/80 pt-4 text-left">
-      <div>
-        <div class="flex items-baseline justify-between">
-          <label for="gate-pass" class="block text-[11.5px] font-semibold text-slate-300">클럽 멤버 비밀번호 (Passcode)</label>
-          <span class="text-[10.5px] text-slate-500">슬랙 공지 또는 단톡방 공유</span>
-        </div>
-        <div class="relative mt-1.5">
-          <input type="password" id="gate-pass" name="pass" autocomplete="current-password" autofocus required
-            placeholder="클럽 공지 비밀번호 입력"
-            class="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400" />
-        </div>
-        <p id="gate-error" class="mt-2 hidden text-xs font-medium text-rose-400">비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
-      </div>
-      <button type="submit"
-        class="mt-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 active:scale-[0.99]">
-        <span>커피클럽 보드 입장하기</span>
-        <i data-lucide="arrow-right" class="h-4 w-4"></i>
-      </button>
-      <div class="mt-3 text-center">
-        <button type="button" data-action="toggle-gate-hint" class="text-[11px] text-slate-400 hover:text-amber-300 transition underline underline-offset-2">
-          비밀번호 힌트 및 자동 입장 안내 (클릭)
-        </button>
-        <p id="gate-hint-text" class="hidden mt-2 text-[11px] text-slate-400/90 bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/60 leading-relaxed text-left">
-          카톡 단톡방 또는 슬랙에 공지된 비밀번호(fx****)를 입력하세요.<br>
-          공유받은 <b>원클릭 자동입장 링크</b>를 통해서도 바로 입장할 수 있습니다.
-        </p>
-      </div>
-    </form>
+    <p class="gate-foot">초대받은 분께는 원클릭 자동 입장 링크가 함께 공유됩니다.</p>
   </div>
 </div>
 
-<div id="main-content" class="transition-opacity duration-300 opacity-0 pointer-events-none">
+<!-- ============ APP ============ -->
+<div id="app-shell" hidden>
 
-<!-- ============ HEADER ============ -->
-<header class="relative overflow-hidden bg-ink text-white">
-  <!-- Top Nav Bar: Slack link -->
-  <div class="relative z-10 border-b border-white/10 bg-black/20">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6 text-xs">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-[11.5px] font-semibold text-slate-300">Friday Coffee Club · Private Board</span>
+  <header class="site-header">
+    <div class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <span class="brand-mark"><i data-lucide="coffee"></i></span>
+          <span>
+            <span class="brand-name">금요커피클럽</span>
+            <span class="brand-sub">Friday Coffee Club</span>
+          </span>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-action="members-modal-open">
+            <span>멤버 10인</span>
+          </button>
+          <a class="btn btn-secondary btn-sm" href="https://friday-coffee.slack.com" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="message-square"></i>
+            <span>슬랙</span>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        </div>
       </div>
-      <a href="https://friday-coffee.slack.com" target="_blank" rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 rounded-lg border border-indigo-400/40 bg-indigo-500/20 hover:bg-indigo-500/30 px-3 py-1 text-[11.5px] font-bold text-indigo-200 hover:text-white transition">
-        <i data-lucide="message-square" class="h-3.5 w-3.5 text-indigo-300"></i>
-        <span>클럽 슬랙 바로가기</span>
-        <i data-lucide="external-link" class="h-3 w-3 text-indigo-300/80"></i>
-      </a>
     </div>
-  </div>
-  <div class="absolute inset-0" style="background:
-      radial-gradient(900px 320px at 8% -10%, rgba(199,154,82,.24), transparent 60%),
-      radial-gradient(700px 300px at 92% -20%, rgba(138,92,55,.32), transparent 60%);"></div>
-  <div class="absolute inset-x-0 bottom-0 h-px hairline"></div>
-  <div class="relative mx-auto max-w-5xl px-4 pb-12 pt-9 sm:px-6 sm:pb-14 sm:pt-11">
-    <div class="flex items-start justify-between gap-6">
-      <div class="min-w-0">
-        <div class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-amber-300/90">
-          <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
-          Friday Coffee Club
+
+    <div class="masthead">
+      <div class="wrap masthead-inner">
+        <div>
+          <p class="eyebrow">Private Board</p>
+          <h1 class="wordmark">금요커피클럽</h1>
+          <p class="masthead-sub">Cross-Industry Leaders, One Table, Every Friday</p>
+          <div class="masthead-tags">
+            <span class="tag tag-accent"><i data-lucide="shield-check"></i>100% 만장일치 합의제</span>
+            <span class="masthead-when">매주 금요일 · 서울</span>
+          </div>
         </div>
-        <h1 class="wordmark mt-2.5 text-[26px] font-bold leading-[1.15] tracking-tight sm:text-[34px]">
-          금요커피클럽
-        </h1>
-        <p class="mt-1.5 text-[13px] text-slate-300/90 sm:text-sm">Cross-Industry Leaders, One Table, Every Friday</p>
-        <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1.5 ring-gold">
-          <i data-lucide="shield-check" class="h-3.5 w-3.5 text-amber-300"></i>
-          <span class="text-[12px] font-semibold text-amber-100">100% 만장일치 합의제</span>
-          <span class="hidden text-[11px] text-amber-200/60 sm:inline">Unanimous Consensus</span>
+        <div class="masthead-side">
+          <div id="header-avatars" class="avatar-stack"></div>
+          <button type="button" class="btn-link" data-action="members-modal-open">
+            <span>멤버 <b class="tabnum">10</b>인 명단</span>
+            <i data-lucide="chevron-right" style="width:12px;height:12px"></i>
+          </button>
         </div>
       </div>
-      <div class="hidden shrink-0 text-right sm:block">
-        <div id="header-avatars" class="flex justify-end -space-x-2"></div>
-        <button data-action="members-modal-open" class="mt-2 text-[11px] text-slate-400 hover:text-amber-300 transition inline-flex items-center justify-end gap-1 ml-auto">
-          <span>멤버 <span class="tabnum text-slate-200 font-bold">10</span>인 명단 보기</span>
-          <i data-lucide="chevron-right" class="h-3 w-3"></i>
+    </div>
+
+    <section class="metrics" aria-label="보드 요약">
+      <div class="wrap">
+        <div id="metrics" class="metrics-grid"></div>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="커피클럽 보드 탭">
+      <div class="wrap">
+        <div id="tabs" class="tabs-inner" role="tablist"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap page">
+    <section id="app" class="panel" role="tabpanel"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="footer-title">금요커피클럽 · 합의 보드</p>
+        <p class="footer-note">화면의 멤버·후보자 정보는 데모 데이터입니다. 실제 심사는 금요일 오프라인 커피클럽에서 확정됩니다.</p>
+        <p class="footer-note">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 14.</span></p>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="btn btn-ghost btn-sm" data-action="lock-gate">
+          <i data-lucide="lock"></i>
+          <span>화면 잠금</span>
         </button>
-        <p class="mt-0.5 text-[11px] text-slate-500">매주 금요일, 한 테이블</p>
+        <button type="button" class="btn btn-ghost btn-sm" data-action="reset">데모 상태 초기화</button>
       </div>
     </div>
-  </div>
-</header>
-
-<!-- ============ STAT CARDS ============ -->
-<main class="mx-auto max-w-5xl px-4 sm:px-6">
-  <section id="stats" class="relative z-10 -mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
-
-  <!-- ============ FLOATING SEGMENTED NAV TABS ============ -->
-  <nav class="sticky top-2 z-30 mt-6 mx-auto max-w-5xl" aria-label="커피클럽 보드 탭 네비게이션">
-    <div class="rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-md">
-      <div id="tabs" class="no-scrollbar flex gap-1.5 overflow-x-auto"></div>
-    </div>
-  </nav>
-
-  <!-- ============ PANEL ============ -->
-  <section id="app" class="pb-4 pt-5"></section>
-</main>
-
-<!-- ============ FOOTER ============ -->
-<footer class="mt-8 border-t border-slate-200 bg-white/60">
-  <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-    <div class="text-[11.5px] leading-relaxed text-slate-500">
-      <p class="font-semibold text-slate-700">금요커피클럽 · 합의 보드 프로토타입 v0.1</p>
-      <p class="mt-1">화면의 멤버·후보자 정보는 데모 데이터입니다. 실제 심사는 금요일 오프라인 커피클럽에서 확정됩니다.</p>
-      <p class="mt-0.5">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 14.</span></p>
-    </div>
-    <div class="flex items-center gap-2 self-start sm:self-auto">
-      <button data-action="lock-gate" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 flex items-center gap-1.5">
-        <i data-lucide="lock" class="h-3 w-3 text-slate-400"></i>
-        <span>화면 잠금</span>
-      </button>
-      <button data-action="reset" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
-        데모 상태 초기화
-      </button>
-    </div>
-  </div>
-</footer>
+  </footer>
 </div>
 
 <!-- ============ NEW CANDIDATE MODAL ============ -->
-<div id="modal" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-ink/55 backdrop-blur-sm" data-action="modal-close"></div>
-  <div class="absolute inset-x-0 bottom-0 max-h-[92vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
-    <div class="flex items-start justify-between gap-4">
+<div id="modal" class="modal" hidden>
+  <div class="modal-backdrop" data-action="modal-close"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
       <div>
-        <h2 class="text-lg font-bold tracking-tight text-slate-900">새 멤버 추천 (발제)</h2>
-        <p class="mt-1 text-[12.5px] text-slate-500">함께 테이블에서 이야기 나누고 싶은 동료 리더를 제안합니다. 발제 즉시 멤버 10인에게 공유됩니다.</p>
+        <p class="eyebrow">Nomination</p>
+        <h2 id="modal-title">새 멤버 추천</h2>
+        <p>함께 테이블에서 이야기 나누고 싶은 동료 리더를 제안합니다. 발제 즉시 멤버 10인에게 공유됩니다.</p>
       </div>
-      <button data-action="modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
-        <i data-lucide="x" class="h-5 w-5"></i>
+      <button type="button" class="icon-btn" data-action="modal-close" aria-label="닫기">
+        <i data-lucide="x"></i>
       </button>
     </div>
-    <form id="new-candidate-form" class="mt-5 space-y-3.5">
-      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+    <div class="modal-body">
+      <form id="new-candidate-form" class="form-grid">
+        <div class="form-row">
+          <label class="block">
+            <span class="field-label"><span>이름 / 직함 <span class="req">*</span></span></span>
+            <input class="input" name="title" required maxlength="60" placeholder="예: 홍길동 / CPO" />
+          </label>
+          <label class="block">
+            <span class="field-label"><span>소속 / 도메인</span></span>
+            <input class="input" name="headline" maxlength="80" placeholder="예: 유니콘 B2B SaaS · 엔지니어링 리드" />
+          </label>
+        </div>
         <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 대상자 이름 / 직함 <span class="text-rose-500">*</span></span>
-          <input name="title" required maxlength="60" placeholder="예: 홍길동 / CPO"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+          <span class="field-label"><span>이력 및 주요 경험 <span class="req">*</span></span></span>
+          <textarea class="input" name="summary" required rows="3" maxlength="400" placeholder="지금 어떤 문제를 풀고 계신지 2~3문장으로 편하게 소개해 주세요."></textarea>
         </label>
-        <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">소속 / 도메인</span>
-          <input name="headline" maxlength="80" placeholder="예: 유니콘 B2B SaaS · 엔지니어링 리드"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
-        </label>
-      </div>
-      <label class="block">
-        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이력 및 주요 경험 <span class="text-rose-500">*</span></span>
-        <textarea name="summary" required rows="3" maxlength="400" placeholder="지금 어떤 문제를 풀고 계신지 2~3문장으로 편하게 소개해 주세요."
-          class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
-      </label>
-      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-        <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 사유 / 함께 나눌 아젠다</span>
-          <input name="reason" maxlength="200" placeholder="우리 테이블에서 함께 풀고 싶은 문제"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
-        </label>
-        <label class="block">
-          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">슬랙 초대용 이메일 <span class="text-slate-400 font-normal">(선택)</span></span>
-          <input name="email" type="email" maxlength="80" placeholder="합의 완료 시 초대장 발송용"
-            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
-        </label>
-      </div>
-      <div class="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11.5px] leading-relaxed text-amber-900">
-        <span class="font-semibold">100% 만장일치 원칙</span> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 기각이 아니라 오프라인 1:1 커피 미팅에서 경청합니다.
-      </div>
-      <div class="flex gap-2 pt-1">
-        <button type="button" data-action="modal-close" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">취소</button>
-        <button type="submit" class="flex-[1.4] rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">추천 안건 상정</button>
-      </div>
-    </form>
+        <div class="form-row">
+          <label class="block">
+            <span class="field-label"><span>추천 사유 / 아젠다</span></span>
+            <input class="input" name="reason" maxlength="200" placeholder="우리 테이블에서 함께 풀고 싶은 문제" />
+          </label>
+          <label class="block">
+            <span class="field-label"><span>슬랙 초대용 이메일</span><span class="hint">선택</span></span>
+            <input class="input" name="email" type="email" maxlength="80" placeholder="합의 완료 시 초대장 발송용" />
+          </label>
+        </div>
+        <div class="note">
+          <b>100% 만장일치 원칙</b> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 기각이 아니라 오프라인 1:1 커피 미팅에서 경청합니다.
+        </div>
+        <div class="modal-foot" style="padding:6px 0 0;border:0">
+          <button type="button" class="btn btn-secondary" data-action="modal-close">취소</button>
+          <button type="submit" class="btn btn-primary">추천 안건 상정</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
 <!-- ============ MEMBERS MODAL ============ -->
-<div id="members-modal" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" data-action="members-modal-close"></div>
-  <div class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[540px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
-    <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+<div id="members-modal" class="modal" hidden>
+  <div class="modal-backdrop" data-action="members-modal-close"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="members-modal-title">
+    <div class="modal-head">
       <div>
-        <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600">
-          <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-          Friday Coffee Club Members
-        </div>
-        <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">커피클럽 멤버 10인 명단</h2>
-        <p class="mt-0.5 text-xs text-slate-500">AI 테크리더, CFO, VC 심사역, 변호사 등 크로스 인더스트리 리더십</p>
+        <p class="eyebrow">Members</p>
+        <h2 id="members-modal-title">커피클럽 멤버 10인</h2>
+        <p>AI 테크리더 · CFO · VC 심사역 · 변호사 등 크로스 인더스트리 리더십.</p>
       </div>
-      <button data-action="members-modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
-        <i data-lucide="x" class="h-5 w-5"></i>
+      <button type="button" class="icon-btn" data-action="members-modal-close" aria-label="닫기">
+        <i data-lucide="x"></i>
       </button>
     </div>
-    <div id="members-modal-list" class="mt-4 divide-y divide-slate-100"></div>
-    <div class="mt-4 border-t border-slate-100 pt-3 text-center">
-      <button data-action="members-modal-close" class="w-full rounded-xl bg-slate-100 hover:bg-slate-200 py-2.5 text-xs font-bold text-slate-700 transition">
-        닫기
-      </button>
+    <div class="modal-body">
+      <div id="members-modal-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary btn-block" data-action="members-modal-close">닫기</button>
     </div>
   </div>
 </div>
 
 <!-- ============ TOAST ============ -->
-<div id="toast" class="pointer-events-none fixed inset-x-0 bottom-5 z-[60] flex justify-center px-4">
-  <div id="toast-inner" class="hidden max-w-md items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl"></div>
+<div id="toast" aria-live="polite" aria-atomic="true">
+  <div id="toast-inner" class="toast" hidden></div>
 </div>
 
 <noscript>
-  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">이 보드는 자바스크립트가 필요합니다. 브라우저에서 자바스크립트를 켜 주세요.</div>
+  <div class="wrap" style="padding:24px 0;font-size:14px;color:#5a5349">이 보드는 자바스크립트가 필요합니다. 브라우저에서 자바스크립트를 켜 주세요.</div>
 </noscript>
 
 <script>
 /* =========================================================
-   Friday Coffee Club — Unanimous Consensus Board (prototype)
-   Single-file vanilla JS app. State lives in memory + localStorage.
+   Friday Coffee Club — Unanimous Consensus Board
+   Single-file vanilla JS. State lives in memory + localStorage.
    ========================================================= */
 
-const STORAGE_KEY = 'friday-coffee-club:v1';   // 새 브랜드 네임스페이스 — 이전 저장 상태(구 카피)를 물려받지 않습니다
+const STORAGE_KEY = 'friday-coffee-club:v1';
 const ME = 'm1';
 
 const MEMBERS = [
@@ -401,12 +889,7 @@ const MEMBERS = [
 const MEMBER_BY_ID = Object.fromEntries(MEMBERS.map(m => [m.id, m]));
 
 const VOTE_LABEL = { yes: '찬성', conditional: '조건부 찬성', veto: '비토', pending: '검토 중' };
-const VOTE_STYLE = {
-  yes:         { dot: 'bg-emerald-500', text: 'text-emerald-700', soft: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  conditional: { dot: 'bg-amber-400',   text: 'text-amber-700',   soft: 'bg-amber-50 text-amber-800 border-amber-200' },
-  veto:        { dot: 'bg-rose-500',    text: 'text-rose-700',    soft: 'bg-rose-50 text-rose-700 border-rose-200' },
-  pending:     { dot: 'bg-slate-300',   text: 'text-slate-500',   soft: 'bg-slate-100 text-slate-600 border-slate-200' }
-};
+const VOTE_TONE = { yes: 'is-yes', conditional: 'is-cond', veto: 'is-veto', pending: 'is-pending' };
 
 /* ---------------- seed data ---------------- */
 
@@ -619,7 +1102,7 @@ const SEED = {
       ]
     }
   ]
-};
+};;
 
 /* ---------------- state ---------------- */
 
@@ -680,21 +1163,10 @@ function fmtDayDot(iso) {
 }
 function initials(name) { return name ? name.slice(0, 1) : '?'; }
 
-const AVATAR_TINTS = [
-  'bg-slate-800 text-white', 'bg-indigo-600 text-white', 'bg-emerald-700 text-white',
-  'bg-amber-600 text-white', 'bg-rose-700 text-white', 'bg-cyan-700 text-white',
-  'bg-violet-700 text-white', 'bg-teal-700 text-white', 'bg-fuchsia-700 text-white',
-  'bg-slate-600 text-white'
-];
-function tint(id) {
-  const i = MEMBERS.findIndex(m => m.id === id);
-  return AVATAR_TINTS[(i < 0 ? 0 : i) % AVATAR_TINTS.length];
-}
-
 function avatar(id, size) {
   const m = MEMBER_BY_ID[id] || { name: '?' };
-  const cls = size === 'lg' ? 'h-9 w-9 text-[13px]' : size === 'sm' ? 'h-6 w-6 text-[10px]' : 'h-7 w-7 text-[11px]';
-  return '<span class="inline-flex shrink-0 items-center justify-center rounded-full font-bold ring-2 ring-white ' + cls + ' ' + tint(id) + '">' + esc(initials(m.name)) + '</span>';
+  const cls = size === 'lg' ? ' avatar-lg' : size === 'sm' ? ' avatar-sm' : '';
+  return '<span class="avatar' + cls + '" aria-hidden="true">' + esc(initials(m.name)) + '</span>';
 }
 
 function tally(c) {
@@ -723,618 +1195,448 @@ let toastTimer = null;
 function toast(msg, tone) {
   const box = document.getElementById('toast-inner');
   if (!box) return;
-  const iconName = tone === 'warn' ? 'alert-triangle' : tone === 'bad' ? 'x-circle' : 'check-circle-2';
-  const toneCls = tone === 'warn' ? 'bg-amber-500' : tone === 'bad' ? 'bg-rose-600' : 'bg-ink';
-  box.className = 'toast-in flex max-w-md items-center gap-2 rounded-full px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl ' + toneCls;
-  box.innerHTML = '<i data-lucide="' + iconName + '" class="h-4 w-4 shrink-0"></i><span>' + esc(msg) + '</span>';
+  const iconName = tone === 'warn' ? 'alert-triangle' : tone === 'bad' ? 'x-circle' : 'check';
+  const toneCls = tone === 'warn' ? ' is-warn' : tone === 'bad' ? ' is-bad' : '';
+  box.className = 'toast fade-in' + toneCls;
+  box.innerHTML = '<i data-lucide="' + iconName + '"></i><span>' + esc(msg) + '</span>';
+  box.hidden = false;
   if (window.lucide) window.lucide.createIcons();
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { box.classList.add('hidden'); box.classList.remove('flex'); }, 2600);
+  toastTimer = setTimeout(() => { box.hidden = true; }, 2800);
 }
 
-/* ---------------- header avatars / stats / tabs ---------------- */
+/* ---------------- header / metrics / tabs ---------------- */
 
 function renderHeaderAvatars() {
   const el = document.getElementById('header-avatars');
   if (!el) return;
   el.innerHTML = MEMBERS.slice(0, 5).map(m =>
-    '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold ring-2 ring-ink ' + tint(m.id) + '" title="' + esc(m.name + ' · ' + m.title) + '">' + esc(initials(m.name)) + '</span>'
-  ).join('') + '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[10px] font-bold text-slate-200 ring-2 ring-ink">+5</span>';
+    '<span class="avatar" title="' + esc(m.name + ' · ' + m.title) + '">' + esc(initials(m.name)) + '</span>'
+  ).join('') + '<span class="avatar" title="나머지 5인">+' + (MEMBERS.length - 5) + '</span>';
 }
 
-function renderStats() {
-  const el = document.getElementById('stats');
+function renderMetrics() {
+  const el = document.getElementById('metrics');
   if (!el) return;
-  const allCandidates = state.candidates || [];
-  const realCandidates = allCandidates.filter(c => c.isUserCreated);
-  const inGate = realCandidates.length;
-  const confirmed = realCandidates.filter(c => tally(c).passed).length;
-  const reviewing = inGate - confirmed;
+  const real = (state.candidates || []).filter(c => c.isUserCreated);
+  const confirmed = real.filter(c => tally(c).passed).length;
+  const reviewing = real.length - confirmed;
+  const letters = state.letters ? state.letters.length : 2;
 
-  const card = (icon, iconBg, label, value, unit, sub, subCls, targetTab) => `
-    <div data-action="tab" data-id="${targetTab}" role="button" tabindex="0"
-         class="card flex items-start gap-3 px-4 py-4 sm:px-5 cursor-pointer hover:shadow-md hover:border-slate-300 transition-all duration-150 group active:scale-[0.99]">
-      <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg} transition group-hover:scale-105">
-        <i data-lucide="${icon}" class="h-[18px] w-[18px]"></i>
-      </span>
-      <div class="min-w-0 flex-1">
-        <div class="flex items-center justify-between">
-          <p class="text-[11.5px] font-semibold text-slate-500">${label}</p>
-          <i data-lucide="arrow-right" class="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-slate-600 transition"></i>
-        </div>
-        <p class="mt-0.5 flex items-baseline gap-0.5 text-[24px] font-extrabold leading-none tracking-tight text-slate-900">
-          <span class="tabnum">${value}</span><span class="text-[13px] font-bold text-slate-400">${unit}</span>
-        </p>
-        <p class="mt-1.5 text-[11px] ${subCls || 'text-slate-400'}">${sub}</p>
-      </div>
-    </div>`;
+  const cell = (label, value, unit, note, action, id) =>
+    '<button type="button" class="metric" data-action="' + action + '"' + (id ? ' data-id="' + id + '"' : '') + '>' +
+      '<span class="metric-label">' + label + '</span>' +
+      '<span class="metric-value"><span class="tabnum">' + value + '</span><span class="metric-unit">' + unit + '</span></span>' +
+      '<span class="metric-note">' + note + '</span>' +
+    '</button>';
 
   el.innerHTML =
-    card('users', 'bg-slate-900 text-white', '영입 확정 멤버', MEMBERS.length, '명',
-      '크로스 인더스트리 10인 · 만장일치 기준', '', 'gate') +
-    card('user-plus', 'bg-amber-100 text-amber-700', '추천 심사 안건', inGate, '건',
-      (inGate > 0 ? `검토 중 ${reviewing}건 · 확정 ${confirmed}건` : '현재 신규 후보자 접수 대기 중 (클릭 시 예시)'), '', 'gate') +
-    card('coffee', 'bg-emerald-100 text-emerald-800', '금요 커피 레터', (state.letters ? state.letters.length : 2), '편',
-      'tiro 음성 + Claude 아카이브 · 1호 & 2호', '', 'letters');
+    cell('영입 확정 멤버', MEMBERS.length, '명', '크로스 인더스트리 10인 · 만장일치 기준', 'members-modal-open', null) +
+    cell('심사 안건', real.length, '건',
+      (real.length ? '검토 중 ' + reviewing + '건 · 확정 ' + confirmed + '건' : '신규 후보자 접수 대기 중'),
+      'tab', 'gate') +
+    cell('금요 커피 레터', letters, '편', 'tiro 음성 + Claude 아카이브', 'tab', 'letters');
 }
 
 function renderTabs() {
   const el = document.getElementById('tabs');
   if (!el) return;
   const tabs = [
-    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', badge: '10/10 거수기', sub: 'Unanimous Gate' },
-    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', badge: 'VOL. 02', sub: 'tiro + Claude 아카이브' },
-    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', badge: '3개 안건', sub: 'Discussions' },
-    { id: 'rules', icon: 'scroll-text', label: '클럽 그라운드룰', badge: '3대 원칙', sub: 'Ground Rules' }
+    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', count: '10/10', title: 'Unanimous Gate' },
+    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', count: 'VOL. ' + ('0' + (state.letters ? state.letters.length : 2)).slice(-2), title: 'Coffee Letters' },
+    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다', count: state.agendas.length + '건', title: 'Discussions' },
+    { id: 'rules', icon: 'scroll-text', label: '그라운드룰', count: state.rules.length + '개', title: 'Ground Rules' }
   ];
   el.innerHTML = tabs.map(t => {
     const active = state.tab === t.id;
-    return `<button data-action="tab" data-id="${t.id}" role="tab" aria-selected="${active}"
-      class="flex-1 min-w-[155px] sm:min-w-0 group relative rounded-xl px-3.5 py-2.5 text-left transition-all duration-200 ${
-        active 
-          ? 'bg-slate-900 text-white shadow-md shadow-slate-900/15 ring-1 ring-slate-800' 
-          : 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
-      }">
-      <div class="flex items-center justify-between gap-1">
-        <span class="flex items-center gap-1.5 text-[13px] font-bold ${active ? 'text-white' : 'text-slate-700 group-hover:text-slate-900'}">
-          <i data-lucide="${t.icon}" class="h-4 w-4 ${active ? 'text-amber-400' : 'text-slate-400 group-hover:text-slate-600'}"></i>
-          <span>${t.label}</span>
-        </span>
-        <span class="rounded-full px-1.5 py-0.5 text-[10px] font-extrabold tracking-tight ${
-          active 
-            ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' 
-            : 'bg-slate-100 text-slate-500 border border-slate-200'
-        }">${t.badge}</span>
-      </div>
-      <span class="mt-1 block pl-[22px] text-[10.5px] font-medium tracking-wide ${active ? 'text-slate-300' : 'text-slate-400'}">${t.sub}</span>
-    </button>`;
+    return '<button type="button" role="tab" class="tab" data-action="tab" data-id="' + t.id + '"' +
+      ' aria-selected="' + active + '" title="' + esc(t.title) + '">' +
+      '<i data-lucide="' + t.icon + '"></i>' +
+      '<span>' + esc(t.label) + '</span>' +
+      '<span class="tab-count">' + esc(t.count) + '</span>' +
+    '</button>';
   }).join('');
 }
 
 /* ---------------- candidate card ---------------- */
 
-function voteButtons(c, t) {
+function voteButtons(c) {
   const mine = (c.votes && c.votes[ME]) || 'pending';
-  const btn = (kind, label, icon, onCls, offCls) => {
-    const on = mine === kind;
-    return `<button data-action="vote" data-cand="${c.id}" data-vote="${kind}"
-      class="flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-[12.5px] font-semibold transition ${on ? onCls + ' vote-active-wave' : offCls}">
-      <i data-lucide="${icon}" class="h-4 w-4"></i><span>${label}</span>
-    </button>`;
+  const btn = (kind, label, icon, cls) => {
+    const on = mine === kind ? 'true' : 'false';
+    return '<button type="button" class="vote-btn ' + cls + '" data-action="vote" data-cand="' + c.id + '" data-vote="' + kind + '"' +
+      ' aria-pressed="' + on + '" title="' + esc(label) + (on === 'true' ? ' (다시 누르면 철회)' : '') + '">' +
+      '<i data-lucide="' + icon + '"></i><span>' + esc(label) + '</span></button>';
   };
-  return `
-    <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-      ${btn('yes', '찬의 (동의하기)', 'thumbs-up',
-        'border-emerald-600 bg-emerald-600 text-white shadow-sm',
-        'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700')}
-      ${btn('conditional', '조건부 찬성', 'help-circle',
-        'border-amber-500 bg-amber-500 text-white shadow-sm',
-        'border-slate-200 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800')}
-      ${btn('veto', '비토 (오프라인 재논의)', 'ban',
-        'border-rose-600 bg-rose-600 text-white shadow-sm',
-        'border-slate-200 bg-white text-slate-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700')}
-    </div>`;
+  return '<div class="vote-group" role="group" aria-label="내 투표">' +
+      btn('yes', '찬의', 'thumbs-up', 'vote-yes') +
+      btn('conditional', '조건부 찬성', 'help-circle', 'vote-cond') +
+      btn('veto', '비토', 'ban', 'vote-veto') +
+    '</div>';
 }
 
-function gauge(c, t) {
+function gauge(t) {
   const segs = [];
-  const push = (n, cls, label) => { for (let i = 0; i < n; i++) segs.push('<div class="seg seg-hover flex-1 ' + cls + '" title="' + label + '"></div>'); };
-  push(t.yes, 'bg-emerald-500', '찬성');
-  push(t.conditional, 'bg-amber-400', '조건부 찬성');
-  push(t.pending, 'bg-slate-200', '검토 중');
-  push(t.veto, 'bg-rose-500', '비토');
+  const push = (n, cls, label) => {
+    for (let i = 0; i < n; i++) segs.push('<span class="seg ' + cls + '" title="' + label + '"></span>');
+  };
+  push(t.yes, 'is-yes', '찬성');
+  push(t.conditional, 'is-cond', '조건부 찬성');
+  push(t.pending, '', '검토 중');
+  push(t.veto, 'is-veto', '비토');
 
-  const remainTxt = t.blocked
+  const tone = t.blocked ? 'is-veto' : t.passed ? 'is-passed' : 'is-review';
+  const stateText = t.blocked
     ? '비토 ' + t.veto + '명 — 오프라인 재논의'
     : t.passed
       ? '만장일치 달성'
       : '만장일치까지 ' + t.pending + '명';
-  const remainCls = t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-amber-600';
 
   const legend = [
-    ['bg-emerald-500', '찬성', t.yes],
-    ['bg-amber-400', '조건부', t.conditional],
-    ['bg-slate-300', '검토 중', t.pending],
-    ['bg-rose-500', '비토', t.veto]
-  ].map(([dot, label, n]) =>
-    '<span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="h-1.5 w-1.5 rounded-full ' + dot + '"></span>' + label + ' <b class="tabnum font-semibold text-slate-700">' + n + '</b></span>'
+    ['is-yes', '찬성', t.yes],
+    ['is-cond', '조건부', t.conditional],
+    ['', '검토 중', t.pending],
+    ['is-veto', '비토', t.veto]
+  ].map(([cls, label, n]) =>
+    '<span class="legend-item"><span class="legend-dot ' + cls + '"></span>' + label + ' <b>' + n + '</b></span>'
   ).join('');
 
-  return `
-    <div class="mt-4 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
-      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <p class="text-[12px] font-semibold text-slate-700">합의 게이지
-          <span class="ml-0.5 font-normal text-slate-500"><b class="tabnum text-slate-700">${t.cast}</b>/10 찬성 (${t.pct}%)${t.pending ? ' · ' + t.pending + '명 검토 중' : ''}</span>
-        </p>
-        <p class="text-[11.5px] font-bold ${remainCls}">${remainTxt}</p>
-      </div>
-      <div class="mt-2.5 flex gap-1">${segs.join('')}</div>
-      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">${legend}</div>
-    </div>`;
+  return '<div class="gauge">' +
+    '<div class="gauge-top">' +
+      '<p class="gauge-title">합의 게이지 <b>' + t.cast + '</b>/10 찬성 (' + t.pct + '%)</p>' +
+      '<p class="gauge-status ' + tone + '">' + stateText + '</p>' +
+    '</div>' +
+    '<div class="gauge-bar" role="img" aria-label="찬성 ' + t.yes + ', 조건부 ' + t.conditional + ', 검토 중 ' + t.pending + ', 비토 ' + t.veto + '">' + segs.join('') + '</div>' +
+    '<div class="gauge-legend">' + legend + '</div>' +
+  '</div>';
 }
 
 function voterGrid(c) {
-  return '<details class="mt-3 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5">' +
-    '<summary class="flex items-center justify-between text-[12px] font-semibold text-slate-600">' +
-      '<span class="flex items-center gap-1.5"><i data-lucide="users" class="h-3.5 w-3.5 text-slate-400"></i>멤버 10인 투표 현황</span>' +
-      '<i data-lucide="chevron-down" class="chev h-4 w-4 text-slate-400"></i>' +
+  return '<details class="disclosure">' +
+    '<summary>' +
+      '<span class="summary-label"><i data-lucide="users"></i>멤버 10인 투표 현황</span>' +
+      '<i data-lucide="chevron-down" class="chev"></i>' +
     '</summary>' +
-    '<ul class="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">' +
+    '<ul class="voter-list">' +
       MEMBERS.map(m => {
         const v = (c.votes && c.votes[m.id]) || 'pending';
-        const st = VOTE_STYLE[v];
-        return '<li class="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-50">' +
-          avatar(m.id, 'sm') +
-          '<span class="min-w-0 flex-1 truncate text-[11.5px] font-semibold text-slate-700">' + esc(m.name) +
-            '<span class="ml-1 font-normal text-slate-400">' + esc(m.title) + '</span></span>' +
-          '<span class="inline-flex shrink-0 items-center gap-1 text-[10.5px] font-semibold ' + st.text + '">' +
-            '<span class="h-1.5 w-1.5 rounded-full ' + st.dot + '"></span>' + VOTE_LABEL[v] + '</span>' +
+        return '<li class="voter">' + avatar(m.id, 'sm') +
+          '<span class="voter-name">' + esc(m.name) + '</span>' +
+          '<span class="voter-role">' + esc(m.title) + '</span>' +
+          '<span class="voter-vote ' + VOTE_TONE[v] + '"><span class="dot"></span>' + VOTE_LABEL[v] + '</span>' +
         '</li>';
       }).join('') +
-    '</ul></details>';
+    '</ul>' +
+  '</details>';
 }
 
 function commentList(kind, item, canComment) {
   const rows = item.comments.slice().sort((a, b) => new Date(b.at) - new Date(a.at));
-  const head = '<div class="flex items-center justify-between">' +
-    '<p class="flex items-center gap-1.5 text-[12.5px] font-bold text-slate-800"><i data-lucide="message-circle" class="h-4 w-4 text-slate-400"></i>댓글 <span class="tabnum text-slate-500">' + item.comments.length + '</span>' +
-    '<span class="ml-1 text-[10.5px] font-normal text-slate-400">최신순</span></p>' +
-    '</div>';
+  const head = '<div class="comments-head">' +
+    '<h4>댓글</h4><span class="tabnum">' + item.comments.length + '</span>' +
+    '<span class="caption">최신순</span>' +
+  '</div>';
 
   const list = rows.length
-    ? '<ul class="mt-3 space-y-3.5">' + rows.map(cm => {
+    ? '<ul class="comment-list">' + rows.map(cm => {
         const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
-        return '<li class="fade-in rounded-xl border border-slate-100 bg-white px-3.5 py-3">' +
-          '<div class="flex items-center gap-2">' + avatar(cm.author, 'sm') +
-            '<span class="text-[12px] font-bold text-slate-800">' + esc(m.name) + '</span>' +
-            '<span class="truncate text-[10.5px] text-slate-400">' + esc(m.title) + '</span>' +
-            '<span class="ml-auto shrink-0 text-[10px] tabnum text-slate-400">' + fmtFull(cm.at) + '</span>' +
+        return '<li class="comment fade-in">' +
+          '<div class="comment-head">' + avatar(cm.author, 'sm') +
+            '<span class="comment-author">' + esc(m.name) + '</span>' +
+            '<span class="comment-role">' + esc(m.title) + '</span>' +
+            '<span class="comment-time tabnum">' + fmtFull(cm.at) + '</span>' +
           '</div>' +
-          '<p class="mt-2 text-[12.5px] leading-[1.7] text-slate-600">' + esc(cm.text) + '</p>' +
-          '<button data-action="like" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '" data-liked="' + (cm.likedByMe ? '1' : '0') + '"' +
-            ' class="mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10.5px] font-semibold transition ' +
-            (cm.likedByMe ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700') + '">' +
-            '<i data-lucide="heart" class="h-3 w-3"></i><span class="tabnum">' + (cm.likes || 0) + '</span></button>' +
+          '<p class="comment-body">' + esc(cm.text) + '</p>' +
+          '<button type="button" class="like-btn" data-action="like" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '"' +
+            ' aria-pressed="' + (cm.likedByMe ? 'true' : 'false') + '" aria-label="공감">' +
+            '<i data-lucide="heart"></i><span class="tabnum">' + (cm.likes || 0) + '</span></button>' +
         '</li>';
       }).join('') + '</ul>'
-    : '<p class="mt-3 rounded-xl border border-dashed border-slate-200 px-3 py-4 text-center text-[11.5px] text-slate-400">아직 댓글이 없습니다. 첫 의견을 남겨 보세요.</p>';
+    : '<p class="caption" style="padding:12px 0">아직 댓글이 없습니다. 첫 의견을 남겨 보세요.</p>';
 
   const form = canComment
-    ? '<form data-form="comment" data-kind="' + kind + '" data-item="' + item.id + '" class="mt-3">' +
-        '<div class="flex items-start gap-2">' + avatar(ME, 'sm') +
-          '<div class="min-w-0 flex-1">' +
-            '<textarea name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" placeholder="' + (kind === 'agenda' ? '이 안건에 대한 의견을 남겨 주세요.' : '이 후보자에 대한 의견을 남겨 주세요.') + ' (양세종 멤버로 기록됩니다)" ' +
-              'class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[12.5px] leading-relaxed outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white">' + esc(drafts[kind + ':' + item.id] || '') + '</textarea>' +
-            '<div class="mt-1.5 flex items-center justify-between gap-2">' +
-              '<p class="text-[10.5px] text-slate-400">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
-              '<button type="submit" class="shrink-0 rounded-lg bg-ink px-3 py-1.5 text-[11.5px] font-semibold text-white transition hover:bg-slate-800">댓글 등록</button>' +
-            '</div>' +
+    ? '<form class="comment-form" data-form="comment" data-kind="' + kind + '" data-item="' + item.id + '">' +
+        avatar(ME, 'sm') +
+        '<div class="form-wrap">' +
+          '<textarea class="input" name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" ' +
+            'placeholder="' + (kind === 'agenda' ? '이 안건에 대한 의견을 남겨 주세요.' : '이 후보자에 대한 의견을 남겨 주세요.') + '">' +
+            esc(drafts[kind + ':' + item.id] || '') +
+          '</textarea>' +
+          '<div class="comment-form-foot">' +
+            '<p class="form-hint">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
+            '<button type="submit" class="btn btn-primary btn-sm">댓글 등록</button>' +
           '</div>' +
         '</div>' +
       '</form>'
     : '';
 
-  return '<div class="mt-4 border-t border-slate-100 pt-3.5">' + head + list + form + '</div>';
+  return '<section class="comments">' + head + list + form + '</section>';
 }
 
 function candidateCard(c) {
   const t = tally(c);
   const nominator = MEMBER_BY_ID[c.nominator] || MEMBER_BY_ID[ME];
 
-  const badge = t.blocked
-    ? '<span class="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10.5px] font-bold text-rose-700"><i data-lucide="ban" class="h-3 w-3"></i>비토 — 오프라인 재논의</span>'
+  const status = t.blocked
+    ? '<span class="status is-veto"><span class="dot"></span>비토 — 오프라인 재논의</span>'
     : t.passed
-      ? '<span class="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700"><i data-lucide="check-circle-2" class="h-3 w-3"></i>영입 확정</span>'
-      : '<span class="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10.5px] font-bold text-amber-800"><i data-lucide="clock" class="h-3 w-3"></i>심사 진행 중</span>';
+      ? '<span class="status is-passed"><span class="dot"></span>영입 확정</span>'
+      : '<span class="status is-review"><span class="dot"></span>심사 진행 중</span>';
 
   const banner = t.passed
-    ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3">' +
-        '<i data-lucide="trophy" class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"></i>' +
-        '<div><p class="text-[12.5px] font-bold text-emerald-800">영입 확정 — 다음 금요일 오프라인 커피클럽 초청</p>' +
-        '<p class="mt-0.5 text-[11px] text-emerald-700/90">10/10 만장일치 · ' + (c.confirmedAt ? fmtFull(c.confirmedAt) : '') + ' 통과</p></div></div>'
+    ? '<div class="banner is-passed"><i data-lucide="check"></i><p><strong>영입 확정 — 다음 금요일 오프라인 커피클럽 초청</strong><br />' +
+      '10/10 만장일치' + (c.confirmedAt ? ' · ' + fmtFull(c.confirmedAt) + ' 통과' : '') + '</p></div>'
     : t.blocked
-      ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">' +
-          '<i data-lucide="coffee" class="mt-0.5 h-4 w-4 shrink-0 text-rose-600"></i>' +
-          '<div><p class="text-[12.5px] font-bold text-rose-800">비토 발생 — 오프라인 커피 미팅으로 이관</p>' +
-          '<p class="mt-0.5 text-[11px] text-rose-700/90">비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div></div>'
-      : '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50/80 px-3.5 py-3">' +
-          '<i data-lucide="hourglass" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>' +
-          '<div><p class="text-[12.5px] font-bold text-amber-900">만장일치 대기 중 — ' + t.pending + '명이 아직 검토 중입니다</p>' +
-          '<p class="mt-0.5 text-[11px] text-amber-800/80">찬성이 8명을 넘어도, 남은 1명이 비토하면 들어오지 못합니다.</p></div></div>';
+      ? '<div class="banner is-veto"><i data-lucide="coffee"></i><p><strong>비토 발생 — 오프라인 커피 미팅으로 이관</strong><br />' +
+        '비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div>'
+      : '';
 
-  return `<article class="card fade-in p-4 sm:p-5" id="cand-${c.id}">
-    <div class="flex items-start justify-between gap-4">
-      <div class="min-w-0">
-        <div class="flex flex-wrap items-center gap-2">${badge}
-          <span class="text-[10.5px] tabnum text-slate-400">발제 ${fmtDay(c.nominatedAt)}</span>
-        </div>
-        <h3 class="mt-2 text-[17px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[18px]">${esc(c.title)}</h3>
-        <p class="mt-1 text-[12.5px] text-slate-500">${esc(c.headline || '')}</p>
-      </div>
-      <div class="shrink-0 text-right">
-        <p class="text-[26px] font-extrabold leading-none tracking-tight tabnum ${t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-slate-900'}">${t.pct}<span class="text-[13px] font-bold text-slate-400">%</span></p>
-        <p class="mt-1 text-[10.5px] font-semibold text-slate-400">합의율</p>
-      </div>
-    </div>
+  const myVote = VOTE_LABEL[(c.votes && c.votes[ME]) || 'pending'];
+  const note = t.passed
+    ? '내 표: <b>' + myVote + '</b> · 10명 전원 찬성으로 확정된 안건입니다.'
+    : '내 표: <b>' + myVote + '</b> · 1명이라도 비토하면 통과되지 않고, 발제자와 비토한 멤버의 오프라인 커피 미팅으로 이어집니다.';
 
-    <div class="mt-2.5 flex flex-wrap gap-1.5">
-      ${(c.highlights || []).map(h => '<span class="chip">' + esc(h) + '</span>').join('')}
-    </div>
-
-    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(c.summary)}</p>
-
-    <div class="mt-3.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
-      <div class="flex items-center gap-2">
-        <span class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">추천인</span>
-        ${avatar(nominator.id, 'sm')}
-        <span class="text-[12px] font-bold text-slate-800">${esc(nominator.name)}</span>
-        <span class="truncate text-[10.5px] text-slate-400">${esc(nominator.role)} · ${esc(nominator.title)}</span>
-      </div>
-      ${c.reason ? '<p class="mt-2 text-[11.5px] leading-[1.7] text-slate-500">“' + esc(c.reason) + '”</p>' : ''}
-    </div>
-
-    ${banner}
-    ${gauge(c, t)}
-    <div class="mt-3">${voteButtons(c, t)}</div>
-    <p class="mt-2 text-[10.5px] leading-relaxed text-slate-400">내 표: <b class="font-semibold text-slate-600">${VOTE_LABEL[(c.votes && c.votes[ME]) || 'pending']}</b> · 1명이라도 비토하면 통과되지 않고, 발제자와 비토한 멤버의 오프라인 커피 미팅으로 이어집니다.</p>
-    ${voterGrid(c)}
-    ${commentList('candidate', c, true)}
-  </article>`;
+  return '<article class="card fade-in" id="cand-' + c.id + '">' +
+    '<div class="cand-head">' +
+      '<div class="cand-head-main">' +
+        '<div class="cand-meta">' + status + '<span>발제 ' + fmtDay(c.nominatedAt) + ' · ' + esc(nominator.name) + '</span></div>' +
+        '<h3 class="cand-title">' + esc(c.title) + '</h3>' +
+        (c.headline ? '<p class="cand-sub">' + esc(c.headline) + '</p>' : '') +
+      '</div>' +
+      '<div class="cand-score">' +
+        '<p class="score-value">' + t.pct + '<span>%</span></p>' +
+        '<span class="score-label">합의율</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="cand-body">' +
+      ((c.highlights || []).length ? '<div class="chip-row">' + c.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
+      '<p class="summary">' + esc(c.summary) + '</p>' +
+      (c.reason
+        ? '<figure class="nomination"><blockquote>“' + esc(c.reason) + '”</blockquote>' +
+          '<figcaption>' + avatar(nominator.id, 'sm') + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role) + ' ' + esc(nominator.title) + '</figcaption></figure>'
+        : '') +
+      banner +
+      gauge(t) +
+      voteButtons(c) +
+      '<p class="vote-note">' + note + '</p>' +
+      voterGrid(c) +
+      commentList('candidate', c, true) +
+    '</div>' +
+  '</article>';
 }
 
 /* ---------------- panels ---------------- */
 
 function renderGate() {
-  const allCandidates = state.candidates || [];
-  const realCandidates = allCandidates.filter(c => c.isUserCreated);
-  const sampleCandidates = allCandidates.filter(c => !c.isUserCreated);
+  const all = state.candidates || [];
+  const real = all.filter(c => c.isUserCreated);
+  const samples = all.filter(c => !c.isUserCreated);
   const showSamples = !!state.showSamples;
 
-  return `
-    <!-- 탭 배너 -->
-    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div class="min-w-0">
-          <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
-            <span class="inline-block h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
-            100% Unanimous Consensus Gate
-          </div>
-          <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">멤버 영입 심사 (거수기)</h2>
-          <p class="mt-1 text-xs text-slate-500 leading-relaxed">
-            모든 신규 멤버 영입은 10인 전원 찬성(10/10) 시에만 확정됩니다. 단 1명이라도 비토 시 카드는 기각되지 않고 발제자와의 1:1 오프라인 커피미팅으로 자동 이관됩니다.
-          </p>
-        </div>
-        <div class="flex items-center gap-2">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
-             target="_blank" rel="noopener noreferrer"
-             class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 px-3.5 py-2 text-xs font-bold text-slate-700 transition">
-            <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>
-            <span>추천 폼 열기</span>
-            <i data-lucide="external-link" class="h-3 w-3 text-slate-400"></i>
-          </a>
-          <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition">
-            <i data-lucide="plus" class="h-4 w-4 text-amber-400"></i>
-            <span>새 멤버 추천 (발제)</span>
-          </button>
-        </div>
-      </div>
-    </div>
+  return '<div class="stack">' +
+    '<div class="section-head">' +
+      '<div>' +
+        '<p class="eyebrow">Unanimous Consensus Gate</p>' +
+        '<h2>멤버 영입 심사</h2>' +
+        '<p class="section-sub">모든 신규 멤버 영입은 10인 전원 찬성(10/10)일 때만 확정됩니다. 1명이라도 비토하면 기각이 아니라 발제자와의 1:1 오프라인 커피 미팅으로 이어집니다.</p>' +
+      '</div>' +
+      '<div class="section-actions">' +
+        '<a class="btn btn-secondary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform" target="_blank" rel="noopener noreferrer">' +
+          '<i data-lucide="form-input"></i><span>추천 폼</span><i data-lucide="arrow-up-right"></i></a>' +
+        '<button type="button" class="btn btn-primary btn-sm" data-action="modal-open">' +
+          '<i data-lucide="plus"></i><span>새 멤버 추천</span></button>' +
+      '</div>' +
+    '</div>' +
 
-    <!-- 실시간 심사 진행 영역 -->
-    <div class="mt-5 space-y-4">
-      ${realCandidates.length > 0 ? `
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <span>실시간 심사 안건</span>
-            <span class="rounded-full bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-xs text-indigo-700 font-extrabold">${realCandidates.length}건</span>
-          </h3>
-        </div>
-        ${realCandidates.map(candidateCard).join('')}
-      ` : `
-        <div class="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-7 text-center">
-          <div class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
-            <i data-lucide="shield-check" class="h-6 w-6"></i>
-          </div>
-          <h4 class="mt-3 text-sm font-bold text-slate-800">현재 상정된 공식 심사 안건이 없습니다</h4>
-          <p class="mt-1 text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-            클럽 멤버 추천은 상단의 <b>[새 멤버 추천 (발제)]</b> 버튼이나 외부 초대용 구글 폼을 통해 접수할 수 있습니다. 10인 전원 찬성 시에만 영입이 확정됩니다.
-          </p>
-          <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
-            <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-slate-800">
-              <i data-lucide="plus" class="h-3.5 w-3.5 text-amber-400"></i>새 멤버 추천 발제
-            </button>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform" target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700">
-              <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>추천 폼 열기
-            </a>
-          </div>
-        </div>
-      `}
-    </div>
+    (real.length
+      ? '<div class="stack">' +
+          '<div class="cand-meta"><span>실시간 심사 안건 <b>' + real.length + '</b>건</span></div>' +
+          real.map(candidateCard).join('') +
+        '</div>'
+      : '<div class="empty">' +
+          '<span class="empty-icon"><i data-lucide="shield-check"></i></span>' +
+          '<h3>아직 상정된 심사 안건이 없습니다</h3>' +
+          '<p>멤버 추천은 상단의 <b>새 멤버 추천</b> 버튼이나 외부 초대용 구글 폼으로 접수합니다. 10인 전원 찬성 시에만 영입이 확정됩니다.</p>' +
+          '<div class="empty-actions">' +
+            '<button type="button" class="btn btn-primary btn-sm" data-action="modal-open"><i data-lucide="plus"></i>새 멤버 추천</button>' +
+            '<a class="btn btn-secondary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform" target="_blank" rel="noopener noreferrer"><i data-lucide="form-input"></i>추천 폼 열기</a>' +
+          '</div>' +
+        '</div>') +
 
-    <!-- 예시 후보자 / 동작 샘플 아코디언 (클릭하면 보여주기!) -->
-    <div class="mt-5 rounded-2xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50/70 via-white to-slate-50 p-4 sm:p-5 shadow-sm transition">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-start gap-3">
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm mt-0.5">
-            <i data-lucide="play-circle" class="h-5 w-5"></i>
-          </span>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-sm font-bold text-slate-900">100% 만장일치 거수기 동작 예시</h3>
-              <span class="rounded-full bg-indigo-100 border border-indigo-200 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">샘플 데모</span>
-            </div>
-            <p class="mt-0.5 text-xs text-slate-500 leading-relaxed">
-              10인 전원 찬성 게이지 및 비토 시 오프라인 커피미팅 자동 이관이 어떻게 작동하는지 직접 눌러보실 수 있는 체험용 예시 카드입니다.
-            </p>
-          </div>
-        </div>
-        <button data-action="toggle-samples" class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl border border-indigo-300 bg-white hover:bg-indigo-50 px-3.5 py-2 text-xs font-bold text-indigo-700 shadow-sm transition active:scale-95">
-          <i data-lucide="${showSamples ? 'chevron-up' : 'eye'}" class="h-3.5 w-3.5"></i>
-          <span>${showSamples ? '예시 카드 접기' : '예시 카드 보기 (클릭)'}</span>
-        </button>
-      </div>
-
-      ${showSamples ? `
-        <div class="mt-5 space-y-4 border-t border-indigo-100/90 pt-5 fade-in">
-          <div class="flex items-center gap-2 rounded-xl bg-indigo-100/60 px-3.5 py-2.5 text-xs font-medium text-indigo-900 border border-indigo-200/70">
-            <i data-lucide="info" class="h-4 w-4 text-indigo-600 shrink-0"></i>
-            <span>아래 카드에서 <b>[찬의], [조건부 찬성], [비토]</b> 버튼을 누르면 실시간 10인 게이지와 오프라인 커피미팅 이관 룰이 즉시 시뮬레이션됩니다.</span>
-          </div>
-          ${sampleCandidates.map(candidateCard).join('')}
-        </div>
-      ` : ''}
-    </div>
-  `;
+    '<section class="card demo-panel">' +
+      '<div class="demo-head">' +
+        '<div>' +
+          '<p class="eyebrow">Demo</p>' +
+          '<h3>100% 만장일치 거수기 동작 예시</h3>' +
+          '<p class="caption">찬성·조건부·비토를 눌러 10인 게이지와 오프라인 커피 미팅 이관 규칙이 어떻게 작동하는지 확인해 보세요.</p>' +
+        '</div>' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-action="toggle-samples">' +
+          '<i data-lucide="' + (showSamples ? 'chevron-up' : 'eye') + '"></i>' +
+          '<span>' + (showSamples ? '예시 접기' : '예시 카드 보기') + '</span>' +
+        '</button>' +
+      '</div>' +
+      (showSamples
+        ? '<div class="demo-body fade-in">' +
+            '<div class="demo-note"><i data-lucide="info"></i><p>아래 카드의 <b>찬의 · 조건부 찬성 · 비토</b> 버튼을 누르면 실시간 10인 게이지와 재논의 이관 규칙이 바로 시뮬레이션됩니다.</p></div>' +
+            samples.map(candidateCard).join('') +
+          '</div>'
+        : '') +
+    '</section>' +
+  '</div>';
 }
 
 function agendaCard(a) {
   const owner = MEMBER_BY_ID[a.owner] || MEMBER_BY_ID[ME];
   const open = !!agendaOpen[a.id];
-  const rows = a.comments.slice().sort((x, y) => new Date(y.at) - new Date(x.at)).slice(0, open ? 99 : 1);
+  const rows = a.comments.slice().sort((x, y) => new Date(y.at) - new Date(x.at));
+  const previewRows = rows.slice(0, 2);
 
-  const preview = rows.map(cm => {
+  const preview = previewRows.map(cm => {
     const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
-    return '<li class="flex items-start gap-2">' + avatar(cm.author, 'sm') +
-      '<div class="min-w-0"><p class="text-[11px] font-bold text-slate-700">' + esc(m.name) + ' <span class="font-normal text-slate-400">' + esc(m.title) + '</span></p>' +
-      '<p class="mt-0.5 text-[12px] leading-[1.7] text-slate-600 ' + (open ? '' : 'line-clamp-2') + '">' + esc(cm.text) + '</p></div></li>';
+    return '<li>' + avatar(cm.author, 'sm') +
+      '<div class="preview-main">' +
+        '<p class="preview-author">' + esc(m.name) + ' <span>' + esc(m.title) + '</span></p>' +
+        '<p class="preview-text">' + esc(cm.text) + '</p>' +
+      '</div></li>';
   }).join('');
 
-  return `<article class="card p-4 sm:p-5">
-    <div class="flex items-start gap-3">
-      <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[12px] font-bold tabnum text-white">${a.no}</span>
-      <div class="min-w-0 flex-1">
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">${esc(a.status)}</span>
-          ${a.tags.map(tg => '<span class="chip">#' + esc(tg) + '</span>').join('')}
-        </div>
-        <h3 class="mt-1.5 text-[15.5px] font-bold leading-snug tracking-tight text-slate-900">${esc(a.title)}</h3>
-        <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] text-slate-400">
-          <span class="flex items-center gap-1">${avatar(owner.id, 'sm')}<b class="font-semibold text-slate-600">${esc(owner.name)}</b> ${esc(owner.title)} 발제</span>
-          <span>·</span><span class="tabnum">${fmtFull(a.at)}</span>
-        </div>
-      </div>
-    </div>
-
-    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(a.summary)}</p>
-
-    ${open ? '<div class="mt-3 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">' +
-        '<p class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">핵심 쟁점</p>' +
-        '<ul class="mt-2 space-y-1.5">' + a.points.map((p, i) =>
-          '<li class="flex gap-2 text-[12px] leading-[1.7] text-slate-600"><span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-indigo-400"></span><span>' + esc(p) + '</span></li>'
-        ).join('') + '</ul></div>' : ''}
-
-    ${open ? '' : '<ul class="mt-3 space-y-2.5">' + preview + '</ul>'}
-
-    <div class="mt-3 flex items-center justify-between gap-2">
-      <button data-action="agenda-toggle" data-id="${a.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
-        <i data-lucide="${open ? 'chevron-up' : 'chevron-down'}" class="h-3.5 w-3.5"></i>${open ? '접기' : '쟁점·댓글 ' + a.comments.length + '개 펼치기'}
-      </button>
-      ${open ? '' : '<span class="text-[10.5px] text-slate-400">댓글 ' + a.comments.length + '</span>'}
-    </div>
-
-    ${open ? commentList('agenda', a, true) : ''}
-  </article>`;
+  return '<article class="card fade-in">' +
+    '<div class="agenda-head">' +
+      '<span class="agenda-no">' + a.no + '</span>' +
+      '<div class="agenda-head-main">' +
+        '<div class="cand-meta"><span class="status is-review"><span class="dot"></span>' + esc(a.status) + '</span>' +
+          (a.tags || []).map(tg => '<span>· #' + esc(tg) + '</span>').join('') + '</div>' +
+        '<h3 class="agenda-title">' + esc(a.title) + '</h3>' +
+        '<div class="agenda-meta">' +
+          '<span class="who">' + avatar(owner.id, 'sm') + '<b>' + esc(owner.name) + '</b> 발제</span>' +
+          '<span class="sep">·</span><span class="tabnum">' + fmtFull(a.at) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="agenda-body">' +
+      '<p class="summary">' + esc(a.summary) + '</p>' +
+      (open
+        ? '<div><span class="block-label">핵심 쟁점</span><ul class="points">' +
+          a.points.map(p => '<li><span>' + esc(p) + '</span></li>').join('') + '</ul></div>'
+        : '<ul class="preview">' + preview + '</ul>') +
+      '<div class="agenda-actions">' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-action="agenda-toggle" data-id="' + a.id + '">' +
+          '<i data-lucide="' + (open ? 'chevron-up' : 'chevron-down') + '"></i>' +
+          '<span>' + (open ? '접기' : '쟁점과 댓글 펼치기') + '</span>' +
+        '</button>' +
+        '<span class="caption">댓글 ' + a.comments.length + '</span>' +
+      '</div>' +
+      (open ? commentList('agenda', a, true) : '') +
+    '</div>' +
+  '</article>';
 }
 
 function renderTopics() {
-  return `
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h2 class="text-[15px] font-bold tracking-tight text-slate-900">AX 아젠다 토론
-          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Discussions &amp; Case Studies</span>
-        </h2>
-        <p class="mt-1 text-[12px] text-slate-500">이번 주 커피클럽 테이블에 올라온 안건 ${state.agendas.length}건. 각 안건은 발제자와 현장 사례를 함께 가져옵니다.</p>
-      </div>
-      <span class="chip">댓글 <b class="tabnum ml-0.5">${totalComments()}</b></span>
-    </div>
-    <div class="mt-4 space-y-4">${state.agendas.map(agendaCard).join('')}</div>`;
+  return '<div class="stack">' +
+    '<div class="section-head">' +
+      '<div>' +
+        '<p class="eyebrow">Discussions & Case Studies</p>' +
+        '<h2>AX 아젠다 토론</h2>' +
+        '<p class="section-sub">이번 주 테이블에 올라온 안건 ' + state.agendas.length + '건. 각 안건은 발제자와 현장 사례를 함께 가져옵니다.</p>' +
+      '</div>' +
+      '<div class="section-actions"><span class="tag">댓글 <b class="tabnum">' + totalComments() + '</b></span></div>' +
+    '</div>' +
+    '<div class="stack">' + state.agendas.map(agendaCard).join('') + '</div>' +
+  '</div>';
 }
 
-
 function letterCard(lt) {
-  return `
-    <article class="card fade-in overflow-hidden shadow-sm" id="letter-${lt.id}">
-      <div class="border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-5 text-white">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1 rounded-md bg-amber-400/20 px-2 py-0.5 text-[11px] font-extrabold text-amber-300 border border-amber-400/30">
-              VOL. 0${lt.no}
-            </span>
-            <span class="text-[11px] font-medium text-slate-300 tabnum">${esc(lt.date)} 발행</span>
-            <span class="rounded-full bg-white/10 px-2.5 py-0.5 text-[10.5px] font-medium text-slate-200">${esc(lt.badge)}</span>
-          </div>
-      <div class="flex items-center gap-2">
-        <button data-action="copy-letter" data-no="${lt.no}"
-          class="inline-flex items-center gap-1.5 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 px-2.5 py-1.5 text-[11.5px] font-bold text-amber-200 transition">
-          <i data-lucide="share-2" class="h-3.5 w-3.5 text-amber-300"></i>
-          <span>공유 링크 복사</span>
-        </button>
-        <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 rounded-lg bg-white/15 hover:bg-white/25 border border-white/20 px-3 py-1.5 text-[11.5px] font-semibold text-white transition">
-          <span>Claude Artifact 전문</span>
-          <i data-lucide="external-link" class="h-3 w-3"></i>
-        </a>
-      </div>
-        </div>
-        <h3 class="mt-3 text-[17px] sm:text-[19px] font-extrabold leading-snug tracking-tight text-white">${esc(lt.title)}</h3>
-        <p class="mt-2 text-[12.5px] leading-relaxed text-slate-300/95">${esc(lt.summary)}</p>
+  const attendees = (lt.attendees || []).map(at => '<span>' + esc(at) + '</span>').join('<span class="sep">·</span>');
 
-        <div class="mt-3.5 flex flex-wrap items-center gap-1.5 pt-3 border-t border-white/10 text-[11px] text-slate-300">
-          <span class="font-semibold text-amber-300">참석:</span>
-          ${lt.attendees.map(at => '<span class="inline-flex items-center rounded-md bg-white/10 px-2 py-0.5 text-slate-200 font-medium">' + esc(at) + '</span>').join('')}
-        </div>
-      </div>
-
-      <div class="p-5 space-y-5">
-        <div class="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
-          <p class="flex items-center gap-1.5 text-[12px] font-bold text-indigo-900">
-            <i data-lucide="check-circle-2" class="h-4 w-4 text-indigo-600"></i>
-            이번 호 핵심 3줄 요약
-          </p>
-          <ol class="mt-2.5 space-y-2 text-[12.5px] text-slate-700 leading-relaxed">
-            ${lt.threeLines.map((line, idx) => `
-              <li class="flex items-start gap-2">
-                <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white tabnum">${idx + 1}</span>
-                <span>${esc(line)}</span>
-              </li>
-            `).join('')}
-          </ol>
-        </div>
-
-        <div>
-          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
-            <i data-lucide="layers" class="h-4 w-4 text-slate-500"></i>
-            테이블 위의 주요 화두
-          </p>
-          <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-            ${lt.topics.map(tp => `
-              <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 hover:bg-slate-50 transition">
-                <h4 class="text-[12.5px] font-bold text-slate-800">${esc(tp.title)}</h4>
-                <p class="mt-1.5 text-[11.5px] leading-relaxed text-slate-600">${esc(tp.desc)}</p>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div>
-          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
-            <i data-lucide="quote" class="h-4 w-4 text-amber-500"></i>
-            테이블에서 건진 문장 (어록)
-          </p>
-          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            ${lt.quotes.map(q => `
-              <div class="flex items-start gap-2.5 rounded-xl border border-amber-100 bg-amber-50/40 p-3">
-                <span class="shrink-0 rounded-md bg-amber-200/80 px-1.5 py-0.5 text-[10px] font-bold text-amber-900">${esc(q.by)}</span>
-                <p class="text-[12px] font-medium leading-relaxed text-slate-800 italic">“${esc(q.text)}”</p>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="pt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
-          <span class="text-[11px] text-slate-400">티로 음성 녹음 + Claude Artifact 실시간 생성본</span>
-          <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-[12px] font-bold text-indigo-600 hover:text-indigo-800">
-            <span>Claude 원문 아티팩트 전체보기</span>
-            <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
-          </a>
-        </div>
-      </div>
-    </article>
-  `;
+  return '<article class="card letter fade-in" id="letter-' + lt.id + '">' +
+    '<div class="letter-head">' +
+      '<div class="letter-top">' +
+        '<div class="letter-vol"><b>VOL. 0' + lt.no + '</b><span>' + esc(lt.date) + ' 발행</span>' +
+          '<span class="tag tag-accent">' + esc(lt.badge) + '</span></div>' +
+        '<div class="letter-actions">' +
+          '<button type="button" class="btn btn-secondary btn-sm" data-action="copy-letter" data-no="' + lt.no + '">' +
+            '<i data-lucide="share-2"></i><span>공유 링크</span></button>' +
+          '<a class="btn btn-secondary btn-sm" href="' + esc(lt.artifactUrl) + '" target="_blank" rel="noopener noreferrer">' +
+            '<span>Claude 아티팩트</span><i data-lucide="arrow-up-right"></i></a>' +
+        '</div>' +
+      '</div>' +
+      '<h3 class="letter-title">' + esc(lt.title) + '</h3>' +
+      '<p class="letter-lead">' + esc(lt.summary) + '</p>' +
+      '<div class="letter-meta"><span class="who">참석</span>' + attendees + '</div>' +
+    '</div>' +
+    '<div class="letter-body">' +
+      '<div>' +
+        '<span class="block-label">이번 호 핵심 3줄</span>' +
+        '<ol class="three-lines">' + lt.threeLines.map((line, idx) =>
+          '<li><span class="numeral">' + (idx + 1) + '</span><span>' + esc(line) + '</span></li>').join('') + '</ol>' +
+      '</div>' +
+      '<div>' +
+        '<span class="block-label">테이블 위의 주요 화두</span>' +
+        '<div class="topics-grid">' + lt.topics.map(tp =>
+          '<div class="topic-item"><h4>' + esc(tp.title) + '</h4><p>' + esc(tp.desc) + '</p></div>').join('') + '</div>' +
+      '</div>' +
+      '<div>' +
+        '<span class="block-label">테이블에서 건진 문장</span>' +
+        '<div class="quotes">' + lt.quotes.map(q =>
+          '<blockquote class="quote"><p>“' + esc(q.text) + '”</p><cite>' + esc(q.by) + '</cite></blockquote>').join('') + '</div>' +
+      '</div>' +
+      '<div class="letter-foot">' +
+        '<span>tiro 음성 녹음 + Claude 아티팩트</span>' +
+        '<a class="btn-link" href="' + esc(lt.artifactUrl) + '" target="_blank" rel="noopener noreferrer">원문 전체보기<i data-lucide="arrow-right" style="width:12px;height:12px"></i></a>' +
+      '</div>' +
+    '</div>' +
+  '</article>';
 }
 
 function renderLetters() {
   const letters = state.letters || SEED.letters;
-  return `
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="inline-flex h-6 items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
-            <i data-lucide="sparkles" class="h-3 w-3"></i> tiro × Claude
-          </span>
-          <span class="chip">매주 금요일 정리</span>
-          <span class="chip">Chatham House Rule</span>
-        </div>
-        <h2 class="mt-2 text-[17px] font-bold tracking-tight text-slate-900 sm:text-[18px]">금요 커피 레터 아카이브
-          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Coffee Letters Archive</span>
-        </h2>
-        <p class="mt-1 text-[12.5px] leading-relaxed text-slate-500">
-          모임 호스트 양준호 CFO가 <b class="font-semibold text-slate-700">tiro 음성 기록</b>과 <b class="font-semibold text-slate-700">Claude</b>를 결합해 금요일 테이블 직후 정리하는 실전 아카이브입니다.
-        </p>
-      </div>
-      <span class="chip">누적 <b class="tabnum ml-0.5 font-bold text-slate-800">${letters.length}</b>편</span>
-    </div>
-
-    <div class="mt-5 space-y-6">
-      ${letters.map(lt => letterCard(lt)).join('')}
-    </div>
-  `;
+  return '<div class="stack">' +
+    '<div class="section-head">' +
+      '<div>' +
+        '<p class="eyebrow">Coffee Letters Archive</p>' +
+        '<h2>금요 커피 레터</h2>' +
+        '<p class="section-sub">모임 호스트 양준호 CFO가 tiro 음성 기록과 Claude를 엮어 금요일 테이블 직후에 정리한 아카이브입니다. 링크를 받은 클럽 멤버는 비밀번호로 열람합니다.</p>' +
+      '</div>' +
+      '<div class="section-actions"><span class="tag">누적 <b class="tabnum">' + letters.length + '</b>편</span></div>' +
+    '</div>' +
+    '<div class="stack">' + letters.map(letterCard).join('') + '</div>' +
+  '</div>';
 }
 
 function renderRules() {
-  return `
-    <div>
-      <h2 class="wordmark text-[15px] font-bold tracking-tight text-slate-900">커피클럽 그라운드룰
-        <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Ground Rules</span>
-      </h2>
-      <p class="mt-1 text-[12px] text-slate-500">이 테이블이 유지되는 이유는 세 줄입니다. 개정도 만장일치로만 합니다.</p>
-    </div>
-
-    <div class="mt-4 space-y-4">
-      ${state.rules.map(r => `
-        <article class="card p-4 sm:p-5">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink text-amber-300">
-              <i data-lucide="${r.icon}" class="h-[18px] w-[18px]"></i>
-            </span>
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span class="text-[10.5px] font-bold tabnum uppercase tracking-wider text-slate-400">Rule ${r.no}</span>
-                <span class="chip">${esc(r.tag)}</span>
-              </div>
-              <h3 class="mt-1.5 text-[15px] font-bold leading-snug tracking-tight text-slate-900">${esc(r.title)}</h3>
-            </div>
-          </div>
-          <p class="mt-3 text-[12.5px] leading-[1.8] text-slate-600">${esc(r.body)}</p>
-          <ul class="mt-3 flex flex-wrap gap-1.5">
-            ${r.notes.map(n => '<li class="chip">' + esc(n) + '</li>').join('')}
-          </ul>
-        </article>`).join('')}
-    </div>
-
-    <div class="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3">
-      <i data-lucide="quote" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>
-      <p class="text-[12px] leading-[1.75] text-amber-900">비슷한 사람끼리 모이면 하소연만 남는다. 그래서 이 모임은 직군이 아니라 <b class="font-semibold">문제</b>로 사람을 고릅니다.</p>
-    </div>`;
+  return '<div class="stack">' +
+    '<div class="section-head">' +
+      '<div>' +
+        '<p class="eyebrow">Ground Rules</p>' +
+        '<h2>커피클럽 그라운드룰</h2>' +
+        '<p class="section-sub">이 테이블이 유지되는 이유는 세 줄입니다. 개정도 만장일치로만 합니다.</p>' +
+      '</div>' +
+      '<div class="section-actions"><span class="tag">' + state.rules.length + '대 원칙</span></div>' +
+    '</div>' +
+    '<section class="card rules-card">' +
+      state.rules.map(r =>
+        '<article class="rule">' +
+          '<span class="rule-no tabnum">0' + r.no + '</span>' +
+          '<div>' +
+            '<span class="tag rule-tag">' + esc(r.tag) + '</span>' +
+            '<h3 class="rule-title">' + esc(r.title) + '</h3>' +
+            '<p class="rule-body">' + esc(r.body) + '</p>' +
+            '<ul class="rule-notes">' + r.notes.map(n => '<li>' + esc(n) + '</li>').join('') + '</ul>' +
+          '</div>' +
+        '</article>').join('') +
+    '</section>' +
+    '<div class="pull-line">' +
+      '<i data-lucide="quote"></i>' +
+      '<p>비슷한 사람끼리 모이면 하소연만 남는다. 그래서 이 모임은 직군이 아니라 <b>문제</b>로 사람을 고릅니다.</p>' +
+    '</div>' +
+  '</div>';
 }
 
 /* ---------------- render ---------------- */
 
 function render() {
   renderHeaderAvatars();
-  renderStats();
+  renderMetrics();
   renderTabs();
   const app = document.getElementById('app');
   if (!app) return;
@@ -1357,21 +1659,35 @@ function findItem(kind, id) {
   return null;
 }
 
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.hidden = false;
+  document.documentElement.style.overflow = 'hidden';
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.hidden = true;
+  const anyOpen = document.querySelector('.modal:not([hidden])');
+  if (!anyOpen) document.documentElement.style.overflow = '';
+}
+
 function renderMembersModalList() {
   const el = document.getElementById('members-modal-list');
   if (!el) return;
-  el.innerHTML = MEMBERS.map(m => `
-    <div class="flex items-center justify-between py-3">
-      <div class="flex items-center gap-3 min-w-0">
-        ${avatar(m.id, 'md')}
-        <div class="min-w-0">
-          <p class="text-sm font-bold text-slate-900">${esc(m.name)}</p>
-          <p class="text-xs text-slate-500 truncate">${esc(m.role)} · ${esc(m.title)}</p>
-        </div>
-      </div>
-      <span class="chip shrink-0 text-[11px] font-semibold">${esc(m.field)}</span>
-    </div>
-  `).join('');
+  el.innerHTML = MEMBERS.map(m =>
+    '<div class="member-row">' +
+      avatar(m.id, 'lg') +
+      '<div style="min-width:0">' +
+        '<p class="member-name">' + esc(m.name) + '</p>' +
+        '<p class="member-role">' + esc(m.role) + ' · ' + esc(m.title) + '</p>' +
+      '</div>' +
+      '<span class="tag member-field">' + esc(m.field) + '</span>' +
+    '</div>'
+  ).join('');
 }
 
 document.addEventListener('click', (e) => {
@@ -1387,23 +1703,18 @@ document.addEventListener('click', (e) => {
 
   if (action === 'toggle-gate-hint') {
     const hint = document.getElementById('gate-hint-text');
-    if (hint) hint.classList.toggle('hidden');
+    if (hint) hint.hidden = !hint.hidden;
     return;
   }
 
   if (action === 'members-modal-open') {
-    const modal = document.getElementById('members-modal');
-    if (modal) {
-      renderMembersModalList();
-      modal.classList.remove('hidden');
-      if (window.lucide) window.lucide.createIcons();
-    }
+    renderMembersModalList();
+    openModal('members-modal');
     return;
   }
 
   if (action === 'members-modal-close') {
-    const modal = document.getElementById('members-modal');
-    if (modal) modal.classList.add('hidden');
+    closeModal('members-modal');
     return;
   }
 
@@ -1411,19 +1722,17 @@ document.addEventListener('click', (e) => {
     state.tab = el.dataset.id;
     saveState();
     render();
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, '', '?tab=' + state.tab);
-    }
+    setTabUrl(state.tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
   if (action === 'copy-letter') {
     const no = el.dataset.no;
-    const url = `https://yangspace.co.kr/friday-coffee/?letter=${no}`;
+    const url = 'https://yangspace.co.kr/friday-coffee/?letter=' + no;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(() => {
-        toast(`커피 레터 ${no}호 공유 링크가 복사되었습니다! (비밀번호: fx2026)`, 'ok');
+        toast('커피 레터 ' + no + '호 공유 링크가 복사되었습니다 (비밀번호: fx2026)', 'ok');
       }).catch(() => {
         prompt('커피 레터 공유 주소입니다 (복사해서 전달하세요):', url);
       });
@@ -1434,14 +1743,14 @@ document.addEventListener('click', (e) => {
   }
 
   if (action === 'modal-open') {
-    document.getElementById('modal').classList.remove('hidden');
+    openModal('modal');
     const first = document.querySelector('#new-candidate-form input[name="title"]');
     if (first) setTimeout(() => first.focus(), 60);
     return;
   }
 
   if (action === 'modal-close') {
-    document.getElementById('modal').classList.add('hidden');
+    closeModal('modal');
     return;
   }
 
@@ -1451,7 +1760,7 @@ document.addEventListener('click', (e) => {
     const vote = el.dataset.vote;
     c.votes = c.votes || {};
     const prev = c.votes[ME] || 'pending';
-    c.votes[ME] = (prev === vote) ? 'pending' : vote;   // clicking the same vote withdraws it
+    c.votes[ME] = (prev === vote) ? 'pending' : vote;   // same vote again withdraws it
 
     if (c.votes[ME] === 'yes' || c.votes[ME] === 'conditional' || c.votes[ME] === 'veto') {
       c.votes[ME + '_at'] = new Date().toISOString();
@@ -1533,13 +1842,14 @@ document.addEventListener('submit', (e) => {
           localStorage.setItem('frontier_ax_auth', 'true');
           sessionStorage.setItem('frontier_ax_auth', 'true');
         } catch (err) {}
+        if (errEl) errEl.hidden = true;
         unlockGate();
         handleLetterDeepLink();
         toast('인증되었습니다. 환영합니다!', 'ok');
       } else {
-        if (errEl) errEl.classList.remove('hidden');
+        if (errEl) errEl.hidden = false;
         if (passInput) {
-          passInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
+          passInput.classList.add('is-invalid');
           passInput.select();
         }
       }
@@ -1573,7 +1883,7 @@ document.addEventListener('submit', (e) => {
     state.tab = 'gate';
     saveState();
     form.reset();
-    document.getElementById('modal').classList.add('hidden');
+    closeModal('modal');
     render();
     toast('후보자를 발제했습니다 — 1/10 찬성, 나머지 9명에게 심사 카드가 열렸습니다', 'ok');
     const node = document.getElementById('cand-' + cand.id);
@@ -1604,7 +1914,10 @@ document.addEventListener('submit', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') document.getElementById('modal').classList.add('hidden');
+  if (e.key === 'Escape') {
+    closeModal('modal');
+    closeModal('members-modal');
+  }
   if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
     const form = e.target.closest && e.target.closest('form[data-form="comment"]');
     if (form) form.requestSubmit();
@@ -1652,9 +1965,25 @@ async function checkGateAuth() {
   if (isAuth) {
     unlockGate();
     handleLetterDeepLink();
+    stripPassFromUrl();
   } else {
     lockGate();
   }
+}
+
+function stripPassFromUrl() {
+  if (!window.history || !window.history.replaceState) return;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('pass') && !params.has('key')) return;
+  params.delete('pass');
+  params.delete('key');
+  const qs = params.toString();
+  window.history.replaceState(null, '', qs ? '?' + qs : window.location.pathname);
+}
+
+function setTabUrl(tab) {
+  if (!window.history || !window.history.replaceState) return;
+  window.history.replaceState(null, '', '?tab=' + tab);
 }
 
 function handleLetterDeepLink() {
@@ -1667,18 +1996,17 @@ function handleLetterDeepLink() {
     saveState();
     render();
     setTimeout(() => {
-      const targetId = 'letter-vol' + qLetter;
-      const el = document.getElementById(targetId);
+      const el = document.getElementById('letter-vol' + qLetter);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        el.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2');
-        setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2'), 2500);
+        el.classList.add('is-highlight');
+        setTimeout(() => el.classList.remove('is-highlight'), 2600);
       }
     }, 150);
     return;
   }
 
-  if (qTab && ['gate', 'letters', 'topics', 'rules'].includes(qTab)) {
+  if (qTab && ['gate', 'letters', 'topics', 'rules'].indexOf(qTab) !== -1) {
     state.tab = qTab;
     saveState();
     render();
@@ -1686,24 +2014,20 @@ function handleLetterDeepLink() {
 }
 
 function unlockGate() {
-  const overlay = document.getElementById('gate-overlay');
-  const main = document.getElementById('main-content');
-  if (overlay) overlay.classList.add('hidden');
-  if (main) {
-    main.classList.remove('opacity-0', 'pointer-events-none');
-    main.classList.add('opacity-100');
-  }
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('app-shell');
+  if (gate) gate.hidden = true;
+  if (shell) shell.hidden = false;
+  document.documentElement.style.overflow = '';
   if (window.lucide) window.lucide.createIcons();
 }
 
 function lockGate() {
-  const overlay = document.getElementById('gate-overlay');
-  const main = document.getElementById('main-content');
-  if (overlay) overlay.classList.remove('hidden');
-  if (main) {
-    main.classList.add('opacity-0', 'pointer-events-none');
-    main.classList.remove('opacity-100');
-  }
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('app-shell');
+  if (gate) gate.hidden = false;
+  if (shell) shell.hidden = true;
+  document.documentElement.style.overflow = 'hidden';
   const passInput = document.getElementById('gate-pass');
   if (passInput) setTimeout(() => passInput.focus(), 100);
   if (window.lucide) window.lucide.createIcons();
