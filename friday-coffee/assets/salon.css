@@ -785,3 +785,5 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
 }
 .comment-del { margin-left: 6px; padding: 2px 6px; border-radius: 6px; font-size: 10.5px; color: var(--text-4); }
 .comment-del:hover { background: var(--veto-soft); color: var(--veto-ink); }
+
+.own-actions { margin: 0 0 10px; }
