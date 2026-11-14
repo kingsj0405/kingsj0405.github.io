@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>금요커피클럽 · Friday Coffee Club</title>
+<meta name="description" content="금요커피클럽(Friday Coffee Club) — 매주 금요일 한 테이블에 모이는 크로스 인더스트리 리더들의 100% 만장일치 멤버 영입 심사와 AX 아젠다 보드." />
+<meta property="og:title" content="금요커피클럽 · Friday Coffee Club" />
+<meta property="og:description" content="Cross-Industry Leaders, One Table, Every Friday — 100% 만장일치 합의제 멤버십 게이트" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#1a120c" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a120c'/%3E%3Cpath d='M16 22h26v14a11 11 0 0 1-11 11h-4a11 11 0 0 1-11-11z' fill='none' stroke='%23e0b98a' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M42 26h4a6 6 0 0 1 0 12h-4' fill='none' stroke='%23e0b98a' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M22 14c0 3-3 3-3 6M30 13c0 3-3 3-3 6M38 14c0 3-3 3-3 6' fill='none' stroke='%23c08552' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&display=swap" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#1a120c',
+          gold: '#c79a52',
+          cream: '#f7f2ea',
+          /* warm espresso scale — replaces indigo accents with coffee browns */
+          indigo: {
+            50: '#f8f1e8', 100: '#f0e3d3', 200: '#e2c9ae', 300: '#cfa883', 400: '#b98a5e',
+            500: '#a4744a', 600: '#8a5c37', 700: '#6f472a', 800: '#553520', 900: '#3a2416', 950: '#241509'
+          },
+          /* caramel — replaces amber accents */
+          amber: {
+            50: '#fbf4e8', 100: '#f6e7cd', 200: '#ecd0a6', 300: '#dfb277', 400: '#d29a55',
+            500: '#c0843f', 600: '#a86c31', 700: '#8a5527', 800: '#6d4220', 900: '#57351b', 950: '#3a2410'
+          },
+          /* warm stone neutrals */
+          slate: {
+            50: '#faf8f5', 100: '#f3eee8', 200: '#e8e1d7', 300: '#d6ccbf', 400: '#a79d90',
+            500: '#7d7468', 600: '#5d5449', 700: '#453d34', 800: '#2f2822', 900: '#1e1814', 950: '#12100d'
+          }
+        },
+        fontFamily: {
+          sans: ['Pretendard Variable', 'Pretendard', 'system-ui', '-apple-system', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'],
+          serif: ['Noto Serif KR', 'Pretendard Variable', 'serif']
+        }
+      }
+    }
+  };
+</script>
+<script src="https://unpkg.com/lucide@0.417.0/dist/umd/lucide.min.js" defer></script>
+<style>
+  :root {
+    --paper: #f7f2ea;
+    --ink: #1a120c;
+    --line: #e8e1d7;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: #111827;
+    font-feature-settings: "tnum" on;
+    -webkit-font-smoothing: antialiased;
+    word-break: keep-all;
+  }
+  .tabnum { font-variant-numeric: tabular-nums; }
+  .wordmark { font-family: 'Noto Serif KR', 'Pretendard Variable', serif; letter-spacing: -0.02em; }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -18px rgba(15, 23, 42, .25);
+  }
+  .hairline { background-image: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent); }
+  .seg { height: 12px; border-radius: 4px; transition: background-color .18s ease, transform .18s ease; }
+  .seg-hover:hover { transform: translateY(-1px); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+    padding: 3px 9px; border-radius: 999px;
+    background: #f3f4f6; color: #475569;
+    border: 1px solid #e9eaee;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .fade-in { animation: fadeIn .22s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .toast-in { animation: toastIn .24s cubic-bezier(.2,.8,.3,1) both; }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+  .ring-gold { box-shadow: inset 0 0 0 1px rgba(217,180,91,.45); }
+  textarea { resize: vertical; }
+  [data-action] { -webkit-tap-highlight-color: transparent; }
+  .vote-active-wave { animation: pulseVote .5s ease; }
+  @keyframes pulseVote { 0% { transform: scale(1); } 40% { transform: scale(1.02); } 100% { transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in, .toast-in, .vote-active-wave { animation: none !important; }
+  }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .chev { transition: transform .18s ease; }
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- ============ PASSWORD GATE OVERLAY ============ -->
+<div id="gate-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-ink px-4 transition-opacity duration-300 py-6 overflow-y-auto">
+  <div class="absolute inset-0" style="background:
+      radial-gradient(800px 400px at 50% -10%, rgba(199,154,82,.22), transparent 70%),
+      radial-gradient(600px 300px at 50% 110%, rgba(138,92,55,.30), transparent 70%);"></div>
+  <div class="relative w-full max-w-lg rounded-2xl border border-slate-700/60 bg-[#1c140e]/95 p-6 shadow-2xl backdrop-blur-xl sm:p-8 text-center my-auto">
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-300">
+      <i data-lucide="coffee" class="h-6 w-6"></i>
+    </div>
+    <div class="mt-3.5 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/90">
+      <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
+      Friday Coffee Club · Private Board
+    </div>
+    <h2 class="wordmark mt-1.5 text-2xl font-bold tracking-tight text-white sm:text-[26px]">금요커피클럽</h2>
+    <p class="mt-1 text-[12px] font-semibold text-amber-300/80">Cross-Industry Leaders, One Table, Every Friday</p>
+
+    <!-- 모임 소개 카드 (외부인/초대자용) -->
+    <div class="mt-4 rounded-xl border border-slate-700/70 bg-slate-900/80 p-4 text-left">
+      <p class="text-[12px] font-bold text-slate-200 flex items-center gap-1.5">
+        <i data-lucide="sparkles" class="h-3.5 w-3.5 text-amber-400"></i>
+        금요커피클럽은 어떤 모임인가요?
+      </p>
+      <p class="mt-2 text-[12px] leading-relaxed text-slate-400">
+        AI 테크리더, CFO, VC 심사역, 파트너 변호사 등 서로 다른 산업의 리더들이 매주 금요일 커피 한 잔을 사이에 두고 <b class="text-slate-200">현장 AX 도입 사례와 실전 노하우</b>를 나누는 프라이빗 클럽입니다. 하소연 대신 질문과 실행을 나눕니다.
+      </p>
+      <div class="mt-3 grid grid-cols-1 gap-2 border-t border-slate-800/80 pt-3 text-[11px] text-slate-400 sm:grid-cols-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="calendar" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>매주 금요일 오프라인 커피클럽</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="coffee" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>금요 커피 레터 (tiro+Claude)</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="check-check" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>100% 만장일치 멤버십 합의제</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="lock" class="h-3.5 w-3.5 text-amber-400 shrink-0"></i>
+          <span>Chatham House Rule 비밀유지</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 신규 멤버 추천 / 프로필 제안 CTA -->
+    <div class="mt-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 p-3.5 text-left">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-indigo-200 flex items-center gap-1">
+            <i data-lucide="user-plus" class="h-3.5 w-3.5 text-indigo-400"></i>
+            이런 분과 커피 한 잔 나누고 싶으신가요?
+          </p>
+          <p class="mt-0.5 text-[11px] text-indigo-300/80">함께 테이블에 앉고 싶은 크로스 인더스트리 리더 동료를 추천해 주세요.</p>
+        </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
+           target="_blank" rel="noopener noreferrer"
+           class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 text-[11.5px] font-bold text-white shadow-sm transition">
+          <span>멤버 추천하기</span>
+          <i data-lucide="external-link" class="h-3 w-3"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- 기존 멤버 보드 입장 폼 -->
+    <form id="gate-form" class="mt-4 border-t border-slate-800/80 pt-4 text-left">
+      <div>
+        <div class="flex items-baseline justify-between">
+          <label for="gate-pass" class="block text-[11.5px] font-semibold text-slate-300">클럽 멤버 비밀번호 (Passcode)</label>
+          <span class="text-[10.5px] text-slate-500">슬랙 공지 또는 단톡방 공유</span>
+        </div>
+        <div class="relative mt-1.5">
+          <input type="password" id="gate-pass" name="pass" autocomplete="current-password" autofocus required
+            placeholder="클럽 공지 비밀번호 입력"
+            class="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400" />
+        </div>
+        <p id="gate-error" class="mt-2 hidden text-xs font-medium text-rose-400">비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
+      </div>
+      <button type="submit"
+        class="mt-3.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-2.5 text-sm font-semibold text-ink shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-amber-500 active:scale-[0.99]">
+        <span>커피클럽 보드 입장하기</span>
+        <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </button>
+      <div class="mt-3 text-center">
+        <button type="button" data-action="toggle-gate-hint" class="text-[11px] text-slate-400 hover:text-amber-300 transition underline underline-offset-2">
+          비밀번호 힌트 및 자동 입장 안내 (클릭)
+        </button>
+        <p id="gate-hint-text" class="hidden mt-2 text-[11px] text-slate-400/90 bg-slate-800/80 rounded-lg p-2.5 border border-slate-700/60 leading-relaxed text-left">
+          카톡 단톡방 또는 슬랙에 공지된 비밀번호(fx****)를 입력하세요.<br>
+          공유받은 <b>원클릭 자동입장 링크</b>를 통해서도 바로 입장할 수 있습니다.
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="main-content" class="transition-opacity duration-300 opacity-0 pointer-events-none">
+
+<!-- ============ HEADER ============ -->
+<header class="relative overflow-hidden bg-ink text-white">
+  <!-- Top Nav Bar: Slack link -->
+  <div class="relative z-10 border-b border-white/10 bg-black/20">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-2.5 sm:px-6 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11.5px] font-semibold text-slate-300">Friday Coffee Club · Private Board</span>
+      </div>
+      <a href="https://frontier-ax-salon.slack.com" target="_blank" rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 rounded-lg border border-indigo-400/40 bg-indigo-500/20 hover:bg-indigo-500/30 px-3 py-1 text-[11.5px] font-bold text-indigo-200 hover:text-white transition">
+        <i data-lucide="message-square" class="h-3.5 w-3.5 text-indigo-300"></i>
+        <span>클럽 슬랙 바로가기</span>
+        <i data-lucide="external-link" class="h-3 w-3 text-indigo-300/80"></i>
+      </a>
+    </div>
+  </div>
+  <div class="absolute inset-0" style="background:
+      radial-gradient(900px 320px at 8% -10%, rgba(199,154,82,.24), transparent 60%),
+      radial-gradient(700px 300px at 92% -20%, rgba(138,92,55,.32), transparent 60%);"></div>
+  <div class="absolute inset-x-0 bottom-0 h-px hairline"></div>
+  <div class="relative mx-auto max-w-5xl px-4 pb-12 pt-9 sm:px-6 sm:pb-14 sm:pt-11">
+    <div class="flex items-start justify-between gap-6">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-amber-300/90">
+          <span class="inline-block h-1 w-1 rounded-full bg-amber-300"></span>
+          Friday Coffee Club
+        </div>
+        <h1 class="wordmark mt-2.5 text-[26px] font-bold leading-[1.15] tracking-tight sm:text-[34px]">
+          금요커피클럽
+        </h1>
+        <p class="mt-1.5 text-[13px] text-slate-300/90 sm:text-sm">Cross-Industry Leaders, One Table, Every Friday</p>
+        <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1.5 ring-gold">
+          <i data-lucide="shield-check" class="h-3.5 w-3.5 text-amber-300"></i>
+          <span class="text-[12px] font-semibold text-amber-100">100% 만장일치 합의제</span>
+          <span class="hidden text-[11px] text-amber-200/60 sm:inline">Unanimous Consensus</span>
+        </div>
+      </div>
+      <div class="hidden shrink-0 text-right sm:block">
+        <div id="header-avatars" class="flex justify-end -space-x-2"></div>
+        <button data-action="members-modal-open" class="mt-2 text-[11px] text-slate-400 hover:text-amber-300 transition inline-flex items-center justify-end gap-1 ml-auto">
+          <span>멤버 <span class="tabnum text-slate-200 font-bold">10</span>인 명단 보기</span>
+          <i data-lucide="chevron-right" class="h-3 w-3"></i>
+        </button>
+        <p class="mt-0.5 text-[11px] text-slate-500">매주 금요일, 한 테이블</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STAT CARDS ============ -->
+<main class="mx-auto max-w-5xl px-4 sm:px-6">
+  <section id="stats" class="relative z-10 -mt-9 grid grid-cols-1 gap-3 sm:-mt-10 sm:grid-cols-3 sm:gap-4"></section>
+
+  <!-- ============ FLOATING SEGMENTED NAV TABS ============ -->
+  <nav class="sticky top-2 z-30 mt-6 mx-auto max-w-5xl" aria-label="커피클럽 보드 탭 네비게이션">
+    <div class="rounded-2xl border border-slate-200/90 bg-white/95 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-md">
+      <div id="tabs" class="no-scrollbar flex gap-1.5 overflow-x-auto"></div>
+    </div>
+  </nav>
+
+  <!-- ============ PANEL ============ -->
+  <section id="app" class="pb-4 pt-5"></section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="mt-8 border-t border-slate-200 bg-white/60">
+  <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="text-[11.5px] leading-relaxed text-slate-500">
+      <p class="font-semibold text-slate-700">금요커피클럽 · 합의 보드 프로토타입 v0.1</p>
+      <p class="mt-1">화면의 멤버·후보자 정보는 데모 데이터입니다. 실제 심사는 금요일 오프라인 커피클럽에서 확정됩니다.</p>
+      <p class="mt-0.5">Inspired by 배광록 님의 그라운드룰 보드 · <span id="updated-at" class="tabnum">2026. 11. 14.</span></p>
+    </div>
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <button data-action="lock-gate" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900 flex items-center gap-1.5">
+        <i data-lucide="lock" class="h-3 w-3 text-slate-400"></i>
+        <span>화면 잠금</span>
+      </button>
+      <button data-action="reset" class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+        데모 상태 초기화
+      </button>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ============ NEW CANDIDATE MODAL ============ -->
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-ink/55 backdrop-blur-sm" data-action="modal-close"></div>
+  <div class="absolute inset-x-0 bottom-0 max-h-[92vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold tracking-tight text-slate-900">새 멤버 추천 (발제)</h2>
+        <p class="mt-1 text-[12.5px] text-slate-500">함께 테이블에서 이야기 나누고 싶은 동료 리더를 제안합니다. 발제 즉시 멤버 10인에게 공유됩니다.</p>
+      </div>
+      <button data-action="modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+    </div>
+    <form id="new-candidate-form" class="mt-5 space-y-3.5">
+      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 대상자 이름 / 직함 <span class="text-rose-500">*</span></span>
+          <input name="title" required maxlength="60" placeholder="예: 홍길동 / CPO"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">소속 / 도메인</span>
+          <input name="headline" maxlength="80" placeholder="예: 유니콘 B2B SaaS · 엔지니어링 리드"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+      </div>
+      <label class="block">
+        <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">이력 및 주요 경험 <span class="text-rose-500">*</span></span>
+        <textarea name="summary" required rows="3" maxlength="400" placeholder="지금 어떤 문제를 풀고 계신지 2~3문장으로 편하게 소개해 주세요."
+          class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm leading-relaxed outline-none transition focus:border-slate-400 focus:bg-white"></textarea>
+      </label>
+      <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">추천 사유 / 함께 나눌 아젠다</span>
+          <input name="reason" maxlength="200" placeholder="우리 테이블에서 함께 풀고 싶은 문제"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+        <label class="block">
+          <span class="mb-1.5 block text-[12px] font-semibold text-slate-700">슬랙 초대용 이메일 <span class="text-slate-400 font-normal">(선택)</span></span>
+          <input name="email" type="email" maxlength="80" placeholder="합의 완료 시 초대장 발송용"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm outline-none transition focus:border-slate-400 focus:bg-white" />
+        </label>
+      </div>
+      <div class="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11.5px] leading-relaxed text-amber-900">
+        <span class="font-semibold">100% 만장일치 원칙</span> — 10명 전원이 찬성해야 영입이 확정됩니다. 1명이라도 비토하면 기각이 아니라 오프라인 1:1 커피 미팅에서 경청합니다.
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button type="button" data-action="modal-close" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">취소</button>
+        <button type="submit" class="flex-[1.4] rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800">추천 안건 상정</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ MEMBERS MODAL ============ -->
+<div id="members-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" data-action="members-modal-close"></div>
+  <div class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-2xl sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[540px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:p-6">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+      <div>
+        <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600">
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+          Friday Coffee Club Members
+        </div>
+        <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">커피클럽 멤버 10인 명단</h2>
+        <p class="mt-0.5 text-xs text-slate-500">AI 테크리더, CFO, VC 심사역, 변호사 등 크로스 인더스트리 리더십</p>
+      </div>
+      <button data-action="members-modal-close" aria-label="닫기" class="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+    </div>
+    <div id="members-modal-list" class="mt-4 divide-y divide-slate-100"></div>
+    <div class="mt-4 border-t border-slate-100 pt-3 text-center">
+      <button data-action="members-modal-close" class="w-full rounded-xl bg-slate-100 hover:bg-slate-200 py-2.5 text-xs font-bold text-slate-700 transition">
+        닫기
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="pointer-events-none fixed inset-x-0 bottom-5 z-[60] flex justify-center px-4">
+  <div id="toast-inner" class="hidden max-w-md items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl"></div>
+</div>
+
+<noscript>
+  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">이 보드는 자바스크립트가 필요합니다. 브라우저에서 자바스크립트를 켜 주세요.</div>
+</noscript>
+
+<script>
+/* =========================================================
+   Friday Coffee Club — Unanimous Consensus Board (prototype)
+   Single-file vanilla JS app. State lives in memory + localStorage.
+   ========================================================= */
+
+const STORAGE_KEY = 'frontier-ax-salon:v1';
+const ME = 'm1';
+
+const MEMBERS = [
+  { id: 'm1',  name: '양세종', role: 'LG AI Research',  title: 'AI Scientist · 테크리더', field: 'AI' },
+  { id: 'm2',  name: '양준호', role: 'CFO',              title: '재무총괄',                field: 'Finance' },
+  { id: 'm3',  name: '윤상원', role: '지오영',           title: 'AI본부장 · 변호사',        field: 'Legal' },
+  { id: 'm4',  name: '이승준', role: 'SBVA',             title: '심사역 · 전 BCG',          field: 'VC' },
+  { id: 'm5',  name: '이세희', role: '크래프톤',         title: '파이낸스 AX TF장',         field: 'AX' },
+  { id: 'm6',  name: '이강용', role: '웰트',             title: 'CFO',                     field: 'Finance' },
+  { id: 'm7',  name: '김도윤', role: '상장 게임사',      title: 'Chief AI Officer',        field: 'AI' },
+  { id: 'm8',  name: '박서연', role: '로펌',             title: '파트너 변호사 · AI/개인정보', field: 'Legal' },
+  { id: 'm9',  name: '최민혁', role: 'VC',               title: '파트너 · Series A',        field: 'VC' },
+  { id: 'm10', name: '한지우', role: '제조 대기업',      title: '디지털전환 실장',           field: 'Ops' }
+];
+const MEMBER_BY_ID = Object.fromEntries(MEMBERS.map(m => [m.id, m]));
+
+const VOTE_LABEL = { yes: '찬성', conditional: '조건부 찬성', veto: '비토', pending: '검토 중' };
+const VOTE_STYLE = {
+  yes:         { dot: 'bg-emerald-500', text: 'text-emerald-700', soft: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  conditional: { dot: 'bg-amber-400',   text: 'text-amber-700',   soft: 'bg-amber-50 text-amber-800 border-amber-200' },
+  veto:        { dot: 'bg-rose-500',    text: 'text-rose-700',    soft: 'bg-rose-50 text-rose-700 border-rose-200' },
+  pending:     { dot: 'bg-slate-300',   text: 'text-slate-500',   soft: 'bg-slate-100 text-slate-600 border-slate-200' }
+};
+
+/* ---------------- seed data ---------------- */
+
+const SEED = {
+  candidates: [
+    {
+      id: 'c1',
+      title: '엔터프라이즈 CPO',
+      headline: '전 Bain 파트너 · 현 유니콘 CPO',
+      nominator: 'm5',
+      nominatedAt: '2026-11-10T09:20:00+09:00',
+      summary: 'B2B SaaS 유니콘에서 200명 규모 제품 조직을 이끄는 CPO. 컨설팅에서 제품으로 넘어온 드문 이력으로, 엔터프라이즈 고객 300여 곳의 도입 실패와 성공을 모두 몸으로 겪었습니다. 최근에는 AI 에이전트 제품을 0에서 1까지 직접 런칭했습니다.',
+      highlights: ['Bain & Company 파트너 (테크·PE)', 'B2B SaaS CPO · ARR 3배 성장', 'AI 에이전트 제품 0→1', '엔터프라이즈 고객 300+'],
+      reason: '우리 테이블에는 파는 사람(VC)과 재는 사람(CFO)은 많은데, 엔터프라이즈 제품을 실제로 만들어 본 사람이 없습니다. AX 예산이 제품 P&L로 내려가는 순간 이 사람의 경험이 필요해집니다.',
+      votes: { m1: 'pending', m2: 'yes', m3: 'yes', m4: 'yes', m5: 'yes', m6: 'yes', m7: 'pending', m8: 'yes', m9: 'yes', m10: 'yes' },
+      comments: [
+        { id: 'k1', author: 'm2', text: '컨설팅에서 프로덕트로 넘어온 이력이 우리 테이블에서 드문 조합이라 반갑습니다. 다만 CFO 관점에서 궁금한 건, 유니콘 CPO로서 AI 예산을 어떤 기준으로 승인했는지입니다. 토큰 비용을 제품 단위 P&L로 내리는 데 성공한 사례가 있다면 11월 테이블에서 듣고 싶습니다.', at: '2026-11-11T10:12:00+09:00', likes: 4 },
+        { id: 'k2', author: 'm3', text: '계약·개인정보 이슈가 많은 엔터프라이즈 도메인 경험이 큰 자산으로 보입니다. 이해상충 확인을 위해 현 직장과 우리 멤버 간 거래 관계만 사전에 공유해 주시면 좋겠습니다. 저는 찬성입니다.', at: '2026-11-11T13:40:00+09:00', likes: 2 },
+        { id: 'k3', author: 'm4', text: 'Bain 파트너 출신에 현직 CPO라면 우리가 보는 딜의 제품 실사에 바로 투입할 수 있는 분입니다. 심사역 입장에서 반가운 프로필이고, 다만 8/10에서 멈춘 두 분의 검토 사유를 먼저 듣고 싶습니다.', at: '2026-11-12T09:05:00+09:00', likes: 3 }
+      ]
+    },
+    {
+      id: 'c2',
+      title: 'AI 파운데이션 모델 스타트업 파운더 & CTO',
+      headline: 'Foundation Model Startup · Founder & CTO',
+      nominator: 'm1',
+      nominatedAt: '2026-11-11T18:30:00+09:00',
+      summary: '국내에서 자체 파운데이션 모델을 학습·서빙하는 스타트업의 창업자 겸 CTO. 학습 인프라부터 평가 체계, 고객사 파인튜닝까지 한 사이클을 직접 운영합니다. 모델을 만드는 쪽의 언어로 우리의 AX 논의를 반박할 수 있는 유일한 자리입니다.',
+      highlights: ['자체 LLM 사전학습·서빙', 'GPU 클러스터 운영', '평가·정렬 파이프라인', 'B2B 파인튜닝 사업'],
+      reason: '모델을 쓰는 사람만 모이면 "벤더가 이렇게 해주면 좋겠다"가 남습니다. 모델을 만드는 사람이 한 명 있어야 논의가 거래가 됩니다.',
+      votes: { m1: 'yes', m2: 'yes', m3: 'yes', m4: 'yes', m5: 'yes', m6: 'yes', m7: 'yes', m8: 'yes', m9: 'yes', m10: 'yes' },
+      confirmedAt: '2026-11-11T21:10:00+09:00',
+      comments: [
+        { id: 'k4', author: 'm5', text: '추천인 자격으로 한 말씀: 파운데이션 모델을 직접 학습해 본 사람은 이 테이블에 한 명뿐이라, 기술적 반대 심문이 가능한 자리가 됩니다. 만장일치 감사합니다.', at: '2026-11-11T21:12:00+09:00', likes: 6 },
+        { id: 'k5', author: 'm9', text: '투자 관점에서도 다음 라운드 이후 접점이 많을 분입니다. 11월 테이블에서 모델 단가와 평가 이야기를 해 주시면 좋겠습니다.', at: '2026-11-12T08:20:00+09:00', likes: 3 }
+      ]
+    }
+  ],
+  agendas: [
+    {
+      id: 'a1',
+      no: 1,
+      title: '상장예비심사신청서 AI 자동 작성과 책임의 소재',
+      owner: 'm2',
+      at: '2026-11-12T11:00:00+09:00',
+      tags: ['IPO', '감사', '책임소재'],
+      status: '이번 주 논의',
+      summary: '상장 준비 과정에서 AI로 신청서 초안을 작성했을 때, 오류·누락의 책임이 발행인·주관사·AI 벤더 중 어디에 귀속되는가. 실무에서는 이미 초안의 상당 부분이 AI로 작성되고 있지만, 책임 배분에 대한 합의는 아직 없습니다.',
+      points: [
+        '발행인의 검증 의무 범위 — AI가 쓴 문장을 "검토했다"는 사실을 무엇으로 증명하는가',
+        '주관사 실사(Due Diligence)에서 AI 산출물을 어떻게 표본 추출하고 기록하는가',
+        'AI 벤더 계약의 면책 조항과 손해배상 한도 — 실제로 협상 가능한 선은 어디인가'
+      ],
+      comments: [
+        { id: 'g1', author: 'm4', text: '심사 과정에서도 같은 문제를 겪습니다. 결국 "누가 언제 무엇을 확인했는지"의 로그가 책임의 근거가 될 것 같습니다. 사람이 읽었다는 기록이 없으면 아무것도 방어되지 않습니다.', at: '2026-11-12T14:20:00+09:00', likes: 5 },
+        { id: 'g2', author: 'm3', text: '법적으로는 발행인의 검증 의무가 면제되지 않습니다. AI 사용 사실을 감추는 것이 가장 위험하고, 사용과 검증을 분리해 기록하는 것이 방어의 핵심입니다.', at: '2026-11-12T16:02:00+09:00', likes: 7 },
+        { id: 'g3', author: 'm5', text: '재무 쪽에서는 AI가 만든 숫자의 원장 대사(reconciliation) 절차를 표준화하는 방향으로 가고 있습니다. 이번 주 테이블에서 샘플 워크플로를 공유할 수 있습니다.', at: '2026-11-13T09:15:00+09:00', likes: 2 }
+      ]
+    },
+    {
+      id: 'a2',
+      no: 2,
+      title: 'SaaS 걷어내기와 감사인 시스템 감사 대응 가이드라인',
+      owner: 'm5',
+      at: '2026-11-12T16:30:00+09:00',
+      tags: ['SaaS', 'ITGC', '내부통제'],
+      status: '이번 주 논의',
+      summary: 'SaaS 구독을 자체 에이전트와 내부 툴로 대체하는 속도가 빨라졌지만, 감사인의 시스템 감사(ITGC)는 그 속도를 따라오지 못하고 있습니다. 무엇을 어떤 증거로 입증해야 하는지에 대한 공통 가이드라인이 필요합니다.',
+      points: [
+        '접근통제 — 에이전트에 부여된 권한과 승인 이력을 어떤 형태로 남기는가',
+        '변경이력 — 프롬프트와 모델 버전 변경도 형상관리 대상인가',
+        '데이터 무결성 — SaaS에서 내부 DB로 옮긴 데이터의 완전성을 어떻게 검증하는가'
+      ],
+      comments: [
+        { id: 'g4', author: 'm2', text: '감사인마다 요구 수준이 달라서, 우리끼리 최소 요구사항을 먼저 정하고 감사인과 협의하는 순서가 맞다고 봅니다. 이 문서를 클럽 공동 산출물로 만들면 좋겠습니다.', at: '2026-11-12T18:45:00+09:00', likes: 6 },
+        { id: 'g5', author: 'm6', text: '웰트에서도 올해 SaaS 12개를 걷어냈는데, 감사 대응용 증적 템플릿을 만들어 두었습니다. 다음 금요일 커피클럽에 가져가겠습니다.', at: '2026-11-13T10:30:00+09:00', likes: 4 }
+      ]
+    },
+    {
+      id: 'a3',
+      no: 3,
+      title: '주간 14만 달러 토큰 소모 최적화 및 ROI 측정',
+      owner: 'm1',
+      at: '2026-11-13T09:00:00+09:00',
+      tags: ['Cost', 'Token', 'ROI'],
+      status: '이번 주 논의',
+      summary: '한 주 토큰 비용이 14만 달러에 이르는 조직이 이미 나왔습니다. 비용은 인건비 항목과 비교되는 규모인데, ROI를 재는 단위는 아직 없습니다. 무엇을 절감으로 보고 무엇을 투자로 볼 것인가.',
+      points: [
+        '토큰을 팀·프로젝트·태스크 단위로 귀속시키는 청구 체계',
+        '절감액 산정 — 사람 시간 대체인가, 처리량 증가인가',
+        '모델 라우팅·캐싱·증류로 실제로 줄일 수 있는 여지'
+      ],
+      comments: [
+        { id: 'g6', author: 'm7', text: '저희는 태스크 단위로 원가를 붙였더니 상위 5% 태스크가 전체 비용의 60%를 쓰고 있었습니다. 측정만 해도 절반은 줄었습니다.', at: '2026-11-13T11:10:00+09:00', likes: 8 },
+        { id: 'g7', author: 'm10', text: '제조 쪽은 토큰보다 검증 비용이 큽니다. ROI 논의에 검증 인건비를 반드시 넣어야 숫자가 맞습니다.', at: '2026-11-13T12:05:00+09:00', likes: 3 }
+      ]
+    }
+  ],
+  rules: [
+    {
+      id: 'r1', no: 1, icon: 'users', tag: '크로스 인더스트리 원칙',
+      title: '비슷한 사람끼리 모이면 하소연만 남는다',
+      body: '한 산업에서 두 명을 넘지 않는다. AI 테크리더·CFO·VC·변호사가 같은 테이블에 앉아 커피를 나눌 때, 질문이 하소연이 아니라 거래가 된다.',
+      notes: ['직군별 최대 2인', '영입 심사에서 "우리와 무엇이 다른가"를 먼저 본다']
+    },
+    {
+      id: 'r2', no: 2, icon: 'shield-check', tag: '합의 방식',
+      title: '100% 만장일치제: 1명이라도 비토 시 오프라인 커피 미팅에서 경청',
+      body: '10명 중 1명이라도 비토하면 통과되지 않는다. 비토는 무효표가 아니라 오프라인 커피 미팅 요청이고, 발제자와 비토한 멤버가 1:1로 마주 앉아 경청한다. 만장일치라는 문턱이 영입의 질을 만든다.',
+      notes: ['찬성 8/10으로는 아무도 들어오지 못한다', '비토 사유는 기록으로 남긴다']
+    },
+    {
+      id: 'r3', no: 3, icon: 'lock', tag: '비밀유지',
+      title: 'Chatham House Rule (외부 발설 금지)',
+      body: '이 테이블에서 오간 내용은 인용할 수 있지만, 누가 말했는지는 밝히지 않는다. 테이블의 내용이 회사 밖으로 나가는 순간이 이 모임의 가장 큰 리스크다.',
+      notes: ['인용은 자유, 발화자 귀속은 금지', '화면·캡처 공유 시 이름 마스킹']
+    }
+  ],
+
+  letters: [
+    {
+      id: 'vol2',
+      no: 2,
+      date: '2026. 11. 13.',
+      title: '금요 커피 레터 2호: 프론티어 AX 살롱의 시작과 둘이라 멀리 간 다섯 가지',
+      artifactUrl: 'https://claude.ai/artifact/GmEguASqAXu8f6xK33pmu4',
+      badge: '최신호 · 11/13 발행',
+      attendees: ['양세종 (LG AI 테크리더 · 모임 방장)', '양준호 (크멋 CFO · 모임 호스트)'],
+      summary: '두 번째 금요일에는 세종 님과 준호 님 둘만 앉았습니다. 사람이 적으니 이야기는 더 멀리 갔습니다. 누구를 더 모실지에서 시작해 칩과 데이터센터, AI 글래스와 배터리, 시험 없는 자격증을 거쳐, 공시 전 자료를 Claude에 올려도 되느냐는 질문으로 끝났습니다.',
+      threeLines: [
+        '모임을 "프론티어 AX 살롱"으로 키우자는 안이 나왔습니다. 비전이 크고 실행해 본 사람을 천천히 모시고, 새 멤버는 전원이 찬성해야 모십니다. 슬랙과 살롱 플랫폼 시제품도 열었습니다.',
+        '에이전틱 AI가 퍼지면 그 일만 받는 특수 목적 데이터센터와 전용 칩이 필요해질 수 있고, AI 글래스는 배터리의 벽을 서비스의 쓸모로 넘어서고 있다는 이야기가 오갔습니다.',
+        '보안은 뚫는 비용을 뚫어서 얻는 이득의 3배로 만드는 일이고, AI 이전에 만든 정보 등급표를 다시 짜야 한다는 데 뜻이 모였습니다.'
+      ],
+      topics: [
+        {
+          title: '세종 님의 두 가지 야망',
+          desc: '첫째는 10조 원(정부 5조+민간 5조)을 써서 연구해 보고 다시는 돈 없어 연구 못 한다는 말을 하지 않는 것. 둘째는 5년 안에 그룹 전체 매출을 10배로 키우는 데 힘을 보태는 것. 어머니가 늘 나라의 빛과 소금이 되라고 하셨다는 말에 공감.'
+        },
+        {
+          title: '칩과 에이전틱 AI 전용 데이터센터',
+          desc: 'NPU 회사의 출구는 상업적 판매보다 빅테크(ARM, Dell, NVIDIA)의 IP 인수. 에이전트 대화만 받아 내는 특수 목적 데이터센터와 전용 칩의 가능성 타진. 동아시아를 노리는 피클(SF 한국인 5인 팀) 사례.'
+        },
+        {
+          title: 'AI 글래스와 배터리의 벽',
+          desc: 'VR과 달리 글래스는 AI만 돌아가면 되니 배터리 한계를 서비스 쓸모로 돌파 중. 착탈식 배터리, 도수 렌즈, 맥 미니 조합. 배터리·소재의 "김치 회사"식 암묵지 노하우를 AI가 풀면 반도체·디스플레이도 급변.'
+        },
+        {
+          title: '시험으로 주는 자격증의 끝',
+          desc: '세무사 시험 만점자 논란 끝에 나온 통찰 — 해 본 경험을 AI가 더 잘 갖고 있으면 남는 건 책임뿐. 자격을 개인보다 법인에 주는 그림(세무법인 라이선스 배정) vs 미국식 경험 중심 모델.'
+        },
+        {
+          title: '공시 전 자료를 Claude에 올려도 될까?',
+          desc: '보안은 뚫는 비용을 이득의 3배로 만드는 일. 세종 님의 일침: "그럼 지메일이나 구글 드라이브는 뭘 믿고 쓰세요?" 이미 클라우드로 오가는 자료라면 같은 격리를 믿는 셈. AI 시대의 정보 등급표 재정의 필요.'
+        }
+      ],
+      quotes: [
+        { by: '양세종', text: '할 수 있는 능력보다, 하고 싶은 게 없는 게 문제예요.' },
+        { by: '양세종', text: '"아, 저렇게 일해도 놔두네" 싶은 사람이 한 명도 없어야 해요.' },
+        { by: '양준호', text: '양극재 회사들을 보니 김치 회사더라고요. 잘 버무리는데, 왜 맛있는지는 모르는.' },
+        { by: '양준호', text: '해 본 경험을 AI가 더 잘 갖고 있으면, 남는 건 책임밖에 없어요.' },
+        { by: '양세종', text: '안 뚫리는 건 세상에 없어요. 뚫는 데 돈이 더 들게 할 뿐이죠.' },
+        { by: '양세종', text: '그럼 지메일이나 구글 드라이브는 뭘 믿고 쓰세요?' }
+      ]
+    },
+    {
+      id: 'vol1',
+      no: 1,
+      date: '2026. 11. 06.',
+      title: '금요 커피 레터 1호: 첫 금요일 — 여섯 명, 네 자리와 각자의 자리에서 본 AX',
+      artifactUrl: 'https://claude.ai/artifact/DiKwJ3KsH6HxEjpi16zkw8',
+      badge: '창간호 · 11/06 발행',
+      attendees: ['양세종 (LG AI 테크리더)', '윤상원 (지오영 AI본부장)', '이승준 (SBVA 심사역)', '이세희 (크래프톤 AX TF장)', '이강용 (웰트 CFO)', '양준호 (크멋 CFO)'],
+      summary: '첫 금요일은 샌드위치를 나눠 들고 자기소개로 시작했습니다. 소개는 금방 각자 회사의 AX 현황으로 번졌고, 주니어가 설 자리와 사람이 남는 자리에 대한 이야기로 끝났습니다.',
+      threeLines: [
+        '재무 쪽 AX를 하는 두 회사 모두 흩어진 SaaS 데이터를 회사 안으로 가져오는 일부터 시작했고, 감사인의 시스템 감사 요구와 효익을 숫자로 보여 주는 일이 공통의 벽이었습니다.',
+        '회의록, 보고서 초안, 데이터 수집처럼 주니어가 배우며 하던 일이 AI로 넘어가면서 "90년대 중후반생이 모든 업을 시작할 수 있었던 막차"라는 말에 다들 공감했습니다.',
+        '법령 같은 지식은 모델이 이미 갖추고 있지만, 회의실 밖 전화와 구두로 오가는 사내 맥락은 아직 기록되지 않습니다. 사람이 남는 자리는 그 맥락과 책임 쪽이라는 데 의견이 모였습니다.'
+      ],
+      topics: [
+        {
+          title: '다섯 회사의 AX 현주소',
+          desc: '크래프톤(바텀업 TF 과제 도출), 지오영(결정론적 자동화 60개로 K-IFRS 개정 대응 및 컨설팅비 절감), SBVA(회의록·가치평가·LP 보고 자동화), 웰트(CTO의 에이전트 R&R 자율주행 및 전사 데이터 연동), LG AI(페타바이트급 데이터 생성·검수 및 24시간 GPU 실험 큐).'
+        },
+        {
+          title: '주간/월간 토큰 비용 비교',
+          desc: 'LG AI: 지난주 14만 달러(모델 개발용 데이터 생성 및 실험) vs 양준호 CFO: 3~4주 약 3천 달러 상당(상장예비심사신청서 작성, 실제는 정액 플랜).'
+        },
+        {
+          title: '주니어의 막차 & 전문직 화이트칼라',
+          desc: '회의록·PPT 같은 주니어 교육 과정이 AI로 증발. 6천만 원짜리 상장신청서 자문 작업을 3~4주 만에 2천만 원 수준으로 직접 처리하는 CFO PM의 탄생. "Do not fight the model."'
+        },
+        {
+          title: '지식은 모델에, 맥락은 사람에게',
+          desc: '세종 님: "장부에 무엇을 넣을지는 사람이 정해야 한다. AI는 법인격도 없고 감옥도 못 가고 승진 누락도 안 당하니까." 사내 암묵지와 책임이 남는 자리.'
+        },
+        {
+          title: '바텀업 문화와 보안의 속도',
+          desc: 'BCG식 챔피언십 경진대회 및 블랙벨트 전파 사례. 공통 저장소에 팀 스킬 강제 공유. IT 레거시와 감사인 시스템 감사 장벽 극복.'
+        }
+      ],
+      quotes: [
+        { by: '양준호', text: '비슷한 사람끼리 모이면 하소연만 하게 돼요.' },
+        { by: '양세종', text: '모델이 좋아졌을 때 고마운 마음이 들면 잘 되고 있는 거예요.' },
+        { by: '윤상원', text: '예전에 20점이던 게 지금 90점, 98점일 뿐인데, 우리는 늘 100점을 요구하잖아요.' },
+        { by: '양세종', text: 'AI는 법인격도 없고, 감옥도 못 가고, 승진 누락도 안 당하니까요.' },
+        { by: '양세종', text: '정상적인 말은 클로드가 해 줄 텐데, 심한 말 하라고 부르신 거 아닙니까.' },
+        { by: '윤상원', text: '팔이 고장 나면 떼고 기계 팔을 붙여 주는 식이에요.' },
+        { by: '이세희', text: '회사는 커지는데 조직은 줄어드는 것. 결국 그게 가장 큰 효익 아닐까요.' }
+      ]
+    }
+  ]
+};
+
+/* ---------------- state ---------------- */
+
+let state = loadState();
+let drafts = {};          // per-input drafts so a re-render does not lose typing
+let openComments = {};    // which candidate/agenda comment box is expanded
+let agendaOpen = {};      // agenda detail expansion
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return clone(SEED);
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.candidates) || !Array.isArray(parsed.agendas) || !Array.isArray(parsed.rules)) {
+      return clone(SEED);
+    }
+    if (!Array.isArray(parsed.letters)) {
+      parsed.letters = clone(SEED.letters);
+    }
+    return parsed;
+  } catch (err) {
+    return clone(SEED);
+  }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (err) { /* private mode: ignore */ }
+}
+
+state.tab = state.tab || 'gate';
+
+/* ---------------- helpers ---------------- */
+
+const esc = (s) => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+function fmtDay(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return (d.getMonth() + 1) + '/' + d.getDate() + ' (' + DAYS[d.getDay()] + ')';
+}
+function fmtFull(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DAYS[d.getDay()] + ') ' + hh + ':' + mm;
+}
+function fmtDayDot(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.';
+}
+function initials(name) { return name ? name.slice(0, 1) : '?'; }
+
+const AVATAR_TINTS = [
+  'bg-slate-800 text-white', 'bg-indigo-600 text-white', 'bg-emerald-700 text-white',
+  'bg-amber-600 text-white', 'bg-rose-700 text-white', 'bg-cyan-700 text-white',
+  'bg-violet-700 text-white', 'bg-teal-700 text-white', 'bg-fuchsia-700 text-white',
+  'bg-slate-600 text-white'
+];
+function tint(id) {
+  const i = MEMBERS.findIndex(m => m.id === id);
+  return AVATAR_TINTS[(i < 0 ? 0 : i) % AVATAR_TINTS.length];
+}
+
+function avatar(id, size) {
+  const m = MEMBER_BY_ID[id] || { name: '?' };
+  const cls = size === 'lg' ? 'h-9 w-9 text-[13px]' : size === 'sm' ? 'h-6 w-6 text-[10px]' : 'h-7 w-7 text-[11px]';
+  return '<span class="inline-flex shrink-0 items-center justify-center rounded-full font-bold ring-2 ring-white ' + cls + ' ' + tint(id) + '">' + esc(initials(m.name)) + '</span>';
+}
+
+function tally(c) {
+  let yes = 0, conditional = 0, veto = 0, pending = 0;
+  for (const m of MEMBERS) {
+    const v = (c.votes && c.votes[m.id]) || 'pending';
+    if (v === 'yes') yes++;
+    else if (v === 'conditional') conditional++;
+    else if (v === 'veto') veto++;
+    else pending++;
+  }
+  const cast = yes + conditional;
+  const pct = Math.round((cast / MEMBERS.length) * 100);
+  const passed = veto === 0 && pending === 0;
+  const blocked = veto > 0;
+  return { yes, conditional, veto, pending, cast, pct, passed, blocked };
+}
+
+function totalComments() {
+  return state.agendas.reduce((n, a) => n + a.comments.length, 0);
+}
+
+/* ---------------- toast ---------------- */
+
+let toastTimer = null;
+function toast(msg, tone) {
+  const box = document.getElementById('toast-inner');
+  if (!box) return;
+  const iconName = tone === 'warn' ? 'alert-triangle' : tone === 'bad' ? 'x-circle' : 'check-circle-2';
+  const toneCls = tone === 'warn' ? 'bg-amber-500' : tone === 'bad' ? 'bg-rose-600' : 'bg-ink';
+  box.className = 'toast-in flex max-w-md items-center gap-2 rounded-full px-4 py-2.5 text-[12.5px] font-medium text-white shadow-xl ' + toneCls;
+  box.innerHTML = '<i data-lucide="' + iconName + '" class="h-4 w-4 shrink-0"></i><span>' + esc(msg) + '</span>';
+  if (window.lucide) window.lucide.createIcons();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { box.classList.add('hidden'); box.classList.remove('flex'); }, 2600);
+}
+
+/* ---------------- header avatars / stats / tabs ---------------- */
+
+function renderHeaderAvatars() {
+  const el = document.getElementById('header-avatars');
+  if (!el) return;
+  el.innerHTML = MEMBERS.slice(0, 5).map(m =>
+    '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold ring-2 ring-ink ' + tint(m.id) + '" title="' + esc(m.name + ' · ' + m.title) + '">' + esc(initials(m.name)) + '</span>'
+  ).join('') + '<span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[10px] font-bold text-slate-200 ring-2 ring-ink">+5</span>';
+}
+
+function renderStats() {
+  const el = document.getElementById('stats');
+  if (!el) return;
+  const allCandidates = state.candidates || [];
+  const realCandidates = allCandidates.filter(c => c.isUserCreated);
+  const inGate = realCandidates.length;
+  const confirmed = realCandidates.filter(c => tally(c).passed).length;
+  const reviewing = inGate - confirmed;
+
+  const card = (icon, iconBg, label, value, unit, sub, subCls, targetTab) => `
+    <div data-action="tab" data-id="${targetTab}" role="button" tabindex="0"
+         class="card flex items-start gap-3 px-4 py-4 sm:px-5 cursor-pointer hover:shadow-md hover:border-slate-300 transition-all duration-150 group active:scale-[0.99]">
+      <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg} transition group-hover:scale-105">
+        <i data-lucide="${icon}" class="h-[18px] w-[18px]"></i>
+      </span>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center justify-between">
+          <p class="text-[11.5px] font-semibold text-slate-500">${label}</p>
+          <i data-lucide="arrow-right" class="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-slate-600 transition"></i>
+        </div>
+        <p class="mt-0.5 flex items-baseline gap-0.5 text-[24px] font-extrabold leading-none tracking-tight text-slate-900">
+          <span class="tabnum">${value}</span><span class="text-[13px] font-bold text-slate-400">${unit}</span>
+        </p>
+        <p class="mt-1.5 text-[11px] ${subCls || 'text-slate-400'}">${sub}</p>
+      </div>
+    </div>`;
+
+  el.innerHTML =
+    card('users', 'bg-slate-900 text-white', '영입 확정 멤버', MEMBERS.length, '명',
+      '크로스 인더스트리 10인 · 만장일치 기준', '', 'gate') +
+    card('user-plus', 'bg-amber-100 text-amber-700', '추천 심사 안건', inGate, '건',
+      (inGate > 0 ? `검토 중 ${reviewing}건 · 확정 ${confirmed}건` : '현재 신규 후보자 접수 대기 중 (클릭 시 예시)'), '', 'gate') +
+    card('coffee', 'bg-emerald-100 text-emerald-800', '금요 커피 레터', (state.letters ? state.letters.length : 2), '편',
+      'tiro 음성 + Claude 아카이브 · 1호 & 2호', '', 'letters');
+}
+
+function renderTabs() {
+  const el = document.getElementById('tabs');
+  if (!el) return;
+  const tabs = [
+    { id: 'gate', icon: 'vote', label: '멤버 영입 심사', badge: '10/10 거수기', sub: 'Unanimous Gate' },
+    { id: 'letters', icon: 'coffee', label: '금요 커피 레터', badge: 'VOL. 02', sub: 'tiro + Claude 아카이브' },
+    { id: 'topics', icon: 'messages-square', label: 'AX 아젠다 토론', badge: '3개 안건', sub: 'Discussions' },
+    { id: 'rules', icon: 'scroll-text', label: '클럽 그라운드룰', badge: '3대 원칙', sub: 'Ground Rules' }
+  ];
+  el.innerHTML = tabs.map(t => {
+    const active = state.tab === t.id;
+    return `<button data-action="tab" data-id="${t.id}" role="tab" aria-selected="${active}"
+      class="flex-1 min-w-[155px] sm:min-w-0 group relative rounded-xl px-3.5 py-2.5 text-left transition-all duration-200 ${
+        active 
+          ? 'bg-slate-900 text-white shadow-md shadow-slate-900/15 ring-1 ring-slate-800' 
+          : 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+      }">
+      <div class="flex items-center justify-between gap-1">
+        <span class="flex items-center gap-1.5 text-[13px] font-bold ${active ? 'text-white' : 'text-slate-700 group-hover:text-slate-900'}">
+          <i data-lucide="${t.icon}" class="h-4 w-4 ${active ? 'text-amber-400' : 'text-slate-400 group-hover:text-slate-600'}"></i>
+          <span>${t.label}</span>
+        </span>
+        <span class="rounded-full px-1.5 py-0.5 text-[10px] font-extrabold tracking-tight ${
+          active 
+            ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' 
+            : 'bg-slate-100 text-slate-500 border border-slate-200'
+        }">${t.badge}</span>
+      </div>
+      <span class="mt-1 block pl-[22px] text-[10.5px] font-medium tracking-wide ${active ? 'text-slate-300' : 'text-slate-400'}">${t.sub}</span>
+    </button>`;
+  }).join('');
+}
+
+/* ---------------- candidate card ---------------- */
+
+function voteButtons(c, t) {
+  const mine = (c.votes && c.votes[ME]) || 'pending';
+  const btn = (kind, label, icon, onCls, offCls) => {
+    const on = mine === kind;
+    return `<button data-action="vote" data-cand="${c.id}" data-vote="${kind}"
+      class="flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-[12.5px] font-semibold transition ${on ? onCls + ' vote-active-wave' : offCls}">
+      <i data-lucide="${icon}" class="h-4 w-4"></i><span>${label}</span>
+    </button>`;
+  };
+  return `
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      ${btn('yes', '찬의 (동의하기)', 'thumbs-up',
+        'border-emerald-600 bg-emerald-600 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700')}
+      ${btn('conditional', '조건부 찬성', 'help-circle',
+        'border-amber-500 bg-amber-500 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800')}
+      ${btn('veto', '비토 (오프라인 재논의)', 'ban',
+        'border-rose-600 bg-rose-600 text-white shadow-sm',
+        'border-slate-200 bg-white text-slate-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700')}
+    </div>`;
+}
+
+function gauge(c, t) {
+  const segs = [];
+  const push = (n, cls, label) => { for (let i = 0; i < n; i++) segs.push('<div class="seg seg-hover flex-1 ' + cls + '" title="' + label + '"></div>'); };
+  push(t.yes, 'bg-emerald-500', '찬성');
+  push(t.conditional, 'bg-amber-400', '조건부 찬성');
+  push(t.pending, 'bg-slate-200', '검토 중');
+  push(t.veto, 'bg-rose-500', '비토');
+
+  const remainTxt = t.blocked
+    ? '비토 ' + t.veto + '명 — 오프라인 재논의'
+    : t.passed
+      ? '만장일치 달성'
+      : '만장일치까지 ' + t.pending + '명';
+  const remainCls = t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-amber-600';
+
+  const legend = [
+    ['bg-emerald-500', '찬성', t.yes],
+    ['bg-amber-400', '조건부', t.conditional],
+    ['bg-slate-300', '검토 중', t.pending],
+    ['bg-rose-500', '비토', t.veto]
+  ].map(([dot, label, n]) =>
+    '<span class="inline-flex items-center gap-1.5 text-[11px] text-slate-500"><span class="h-1.5 w-1.5 rounded-full ' + dot + '"></span>' + label + ' <b class="tabnum font-semibold text-slate-700">' + n + '</b></span>'
+  ).join('');
+
+  return `
+    <div class="mt-4 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <p class="text-[12px] font-semibold text-slate-700">합의 게이지
+          <span class="ml-0.5 font-normal text-slate-500"><b class="tabnum text-slate-700">${t.cast}</b>/10 찬성 (${t.pct}%)${t.pending ? ' · ' + t.pending + '명 검토 중' : ''}</span>
+        </p>
+        <p class="text-[11.5px] font-bold ${remainCls}">${remainTxt}</p>
+      </div>
+      <div class="mt-2.5 flex gap-1">${segs.join('')}</div>
+      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">${legend}</div>
+    </div>`;
+}
+
+function voterGrid(c) {
+  return '<details class="mt-3 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5">' +
+    '<summary class="flex items-center justify-between text-[12px] font-semibold text-slate-600">' +
+      '<span class="flex items-center gap-1.5"><i data-lucide="users" class="h-3.5 w-3.5 text-slate-400"></i>멤버 10인 투표 현황</span>' +
+      '<i data-lucide="chevron-down" class="chev h-4 w-4 text-slate-400"></i>' +
+    '</summary>' +
+    '<ul class="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">' +
+      MEMBERS.map(m => {
+        const v = (c.votes && c.votes[m.id]) || 'pending';
+        const st = VOTE_STYLE[v];
+        return '<li class="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-50">' +
+          avatar(m.id, 'sm') +
+          '<span class="min-w-0 flex-1 truncate text-[11.5px] font-semibold text-slate-700">' + esc(m.name) +
+            '<span class="ml-1 font-normal text-slate-400">' + esc(m.title) + '</span></span>' +
+          '<span class="inline-flex shrink-0 items-center gap-1 text-[10.5px] font-semibold ' + st.text + '">' +
+            '<span class="h-1.5 w-1.5 rounded-full ' + st.dot + '"></span>' + VOTE_LABEL[v] + '</span>' +
+        '</li>';
+      }).join('') +
+    '</ul></details>';
+}
+
+function commentList(kind, item, canComment) {
+  const rows = item.comments.slice().sort((a, b) => new Date(b.at) - new Date(a.at));
+  const head = '<div class="flex items-center justify-between">' +
+    '<p class="flex items-center gap-1.5 text-[12.5px] font-bold text-slate-800"><i data-lucide="message-circle" class="h-4 w-4 text-slate-400"></i>댓글 <span class="tabnum text-slate-500">' + item.comments.length + '</span>' +
+    '<span class="ml-1 text-[10.5px] font-normal text-slate-400">최신순</span></p>' +
+    '</div>';
+
+  const list = rows.length
+    ? '<ul class="mt-3 space-y-3.5">' + rows.map(cm => {
+        const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
+        return '<li class="fade-in rounded-xl border border-slate-100 bg-white px-3.5 py-3">' +
+          '<div class="flex items-center gap-2">' + avatar(cm.author, 'sm') +
+            '<span class="text-[12px] font-bold text-slate-800">' + esc(m.name) + '</span>' +
+            '<span class="truncate text-[10.5px] text-slate-400">' + esc(m.title) + '</span>' +
+            '<span class="ml-auto shrink-0 text-[10px] tabnum text-slate-400">' + fmtFull(cm.at) + '</span>' +
+          '</div>' +
+          '<p class="mt-2 text-[12.5px] leading-[1.7] text-slate-600">' + esc(cm.text) + '</p>' +
+          '<button data-action="like" data-kind="' + kind + '" data-item="' + item.id + '" data-comment="' + cm.id + '" data-liked="' + (cm.likedByMe ? '1' : '0') + '"' +
+            ' class="mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10.5px] font-semibold transition ' +
+            (cm.likedByMe ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700') + '">' +
+            '<i data-lucide="heart" class="h-3 w-3"></i><span class="tabnum">' + (cm.likes || 0) + '</span></button>' +
+        '</li>';
+      }).join('') + '</ul>'
+    : '<p class="mt-3 rounded-xl border border-dashed border-slate-200 px-3 py-4 text-center text-[11.5px] text-slate-400">아직 댓글이 없습니다. 첫 의견을 남겨 보세요.</p>';
+
+  const form = canComment
+    ? '<form data-form="comment" data-kind="' + kind + '" data-item="' + item.id + '" class="mt-3">' +
+        '<div class="flex items-start gap-2">' + avatar(ME, 'sm') +
+          '<div class="min-w-0 flex-1">' +
+            '<textarea name="text" rows="2" data-draft="' + kind + ':' + item.id + '" maxlength="500" placeholder="' + (kind === 'agenda' ? '이 안건에 대한 의견을 남겨 주세요.' : '이 후보자에 대한 의견을 남겨 주세요.') + ' (양세종 멤버로 기록됩니다)" ' +
+              'class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-[12.5px] leading-relaxed outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:bg-white">' + esc(drafts[kind + ':' + item.id] || '') + '</textarea>' +
+            '<div class="mt-1.5 flex items-center justify-between gap-2">' +
+              '<p class="text-[10.5px] text-slate-400">Chatham House Rule — 인용은 되지만 발화자 귀속은 금지</p>' +
+              '<button type="submit" class="shrink-0 rounded-lg bg-ink px-3 py-1.5 text-[11.5px] font-semibold text-white transition hover:bg-slate-800">댓글 등록</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</form>'
+    : '';
+
+  return '<div class="mt-4 border-t border-slate-100 pt-3.5">' + head + list + form + '</div>';
+}
+
+function candidateCard(c) {
+  const t = tally(c);
+  const nominator = MEMBER_BY_ID[c.nominator] || MEMBER_BY_ID[ME];
+
+  const badge = t.blocked
+    ? '<span class="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10.5px] font-bold text-rose-700"><i data-lucide="ban" class="h-3 w-3"></i>비토 — 오프라인 재논의</span>'
+    : t.passed
+      ? '<span class="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700"><i data-lucide="check-circle-2" class="h-3 w-3"></i>영입 확정</span>'
+      : '<span class="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10.5px] font-bold text-amber-800"><i data-lucide="clock" class="h-3 w-3"></i>심사 진행 중</span>';
+
+  const banner = t.passed
+    ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3">' +
+        '<i data-lucide="trophy" class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"></i>' +
+        '<div><p class="text-[12.5px] font-bold text-emerald-800">영입 확정 — 다음 금요일 오프라인 커피클럽 초청</p>' +
+        '<p class="mt-0.5 text-[11px] text-emerald-700/90">10/10 만장일치 · ' + (c.confirmedAt ? fmtFull(c.confirmedAt) : '') + ' 통과</p></div></div>'
+    : t.blocked
+      ? '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3">' +
+          '<i data-lucide="coffee" class="mt-0.5 h-4 w-4 shrink-0 text-rose-600"></i>' +
+          '<div><p class="text-[12.5px] font-bold text-rose-800">비토 발생 — 오프라인 커피 미팅으로 이관</p>' +
+          '<p class="mt-0.5 text-[11px] text-rose-700/90">비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div></div>'
+      : '<div class="mt-3.5 flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50/80 px-3.5 py-3">' +
+          '<i data-lucide="hourglass" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>' +
+          '<div><p class="text-[12.5px] font-bold text-amber-900">만장일치 대기 중 — ' + t.pending + '명이 아직 검토 중입니다</p>' +
+          '<p class="mt-0.5 text-[11px] text-amber-800/80">찬성이 8명을 넘어도, 남은 1명이 비토하면 들어오지 못합니다.</p></div></div>';
+
+  return `<article class="card fade-in p-4 sm:p-5" id="cand-${c.id}">
+    <div class="flex items-start justify-between gap-4">
+      <div class="min-w-0">
+        <div class="flex flex-wrap items-center gap-2">${badge}
+          <span class="text-[10.5px] tabnum text-slate-400">발제 ${fmtDay(c.nominatedAt)}</span>
+        </div>
+        <h3 class="mt-2 text-[17px] font-bold leading-snug tracking-tight text-slate-900 sm:text-[18px]">${esc(c.title)}</h3>
+        <p class="mt-1 text-[12.5px] text-slate-500">${esc(c.headline || '')}</p>
+      </div>
+      <div class="shrink-0 text-right">
+        <p class="text-[26px] font-extrabold leading-none tracking-tight tabnum ${t.blocked ? 'text-rose-600' : t.passed ? 'text-emerald-600' : 'text-slate-900'}">${t.pct}<span class="text-[13px] font-bold text-slate-400">%</span></p>
+        <p class="mt-1 text-[10.5px] font-semibold text-slate-400">합의율</p>
+      </div>
+    </div>
+
+    <div class="mt-2.5 flex flex-wrap gap-1.5">
+      ${(c.highlights || []).map(h => '<span class="chip">' + esc(h) + '</span>').join('')}
+    </div>
+
+    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(c.summary)}</p>
+
+    <div class="mt-3.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">
+      <div class="flex items-center gap-2">
+        <span class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">추천인</span>
+        ${avatar(nominator.id, 'sm')}
+        <span class="text-[12px] font-bold text-slate-800">${esc(nominator.name)}</span>
+        <span class="truncate text-[10.5px] text-slate-400">${esc(nominator.role)} · ${esc(nominator.title)}</span>
+      </div>
+      ${c.reason ? '<p class="mt-2 text-[11.5px] leading-[1.7] text-slate-500">“' + esc(c.reason) + '”</p>' : ''}
+    </div>
+
+    ${banner}
+    ${gauge(c, t)}
+    <div class="mt-3">${voteButtons(c, t)}</div>
+    <p class="mt-2 text-[10.5px] leading-relaxed text-slate-400">내 표: <b class="font-semibold text-slate-600">${VOTE_LABEL[(c.votes && c.votes[ME]) || 'pending']}</b> · 1명이라도 비토하면 통과되지 않고, 발제자와 비토한 멤버의 오프라인 커피 미팅으로 이어집니다.</p>
+    ${voterGrid(c)}
+    ${commentList('candidate', c, true)}
+  </article>`;
+}
+
+/* ---------------- panels ---------------- */
+
+function renderGate() {
+  const allCandidates = state.candidates || [];
+  const realCandidates = allCandidates.filter(c => c.isUserCreated);
+  const sampleCandidates = allCandidates.filter(c => !c.isUserCreated);
+  const showSamples = !!state.showSamples;
+
+  return `
+    <!-- 탭 배너 -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
+            100% Unanimous Consensus Gate
+          </div>
+          <h2 class="mt-1 text-lg font-bold tracking-tight text-slate-900">멤버 영입 심사 (거수기)</h2>
+          <p class="mt-1 text-xs text-slate-500 leading-relaxed">
+            모든 신규 멤버 영입은 10인 전원 찬성(10/10) 시에만 확정됩니다. 단 1명이라도 비토 시 카드는 기각되지 않고 발제자와의 1:1 오프라인 커피미팅으로 자동 이관됩니다.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 px-3.5 py-2 text-xs font-bold text-slate-700 transition">
+            <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>
+            <span>추천 폼 열기</span>
+            <i data-lucide="external-link" class="h-3 w-3 text-slate-400"></i>
+          </a>
+          <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition">
+            <i data-lucide="plus" class="h-4 w-4 text-amber-400"></i>
+            <span>새 멤버 추천 (발제)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 실시간 심사 진행 영역 -->
+    <div class="mt-5 space-y-4">
+      ${realCandidates.length > 0 ? `
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <span>실시간 심사 안건</span>
+            <span class="rounded-full bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-xs text-indigo-700 font-extrabold">${realCandidates.length}건</span>
+          </h3>
+        </div>
+        ${realCandidates.map(candidateCard).join('')}
+      ` : `
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-7 text-center">
+          <div class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+            <i data-lucide="shield-check" class="h-6 w-6"></i>
+          </div>
+          <h4 class="mt-3 text-sm font-bold text-slate-800">현재 상정된 공식 심사 안건이 없습니다</h4>
+          <p class="mt-1 text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            클럽 멤버 추천은 상단의 <b>[새 멤버 추천 (발제)]</b> 버튼이나 외부 초대용 구글 폼을 통해 접수할 수 있습니다. 10인 전원 찬성 시에만 영입이 확정됩니다.
+          </p>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <button data-action="modal-open" class="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-slate-800">
+              <i data-lucide="plus" class="h-3.5 w-3.5 text-amber-400"></i>새 멤버 추천 발제
+            </button>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJS5zf9_3jRfcZE5dof_74AlKwbTlK-wtPDYIyDF7qwoDkEw/viewform" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700">
+              <i data-lucide="form-input" class="h-3.5 w-3.5 text-indigo-600"></i>추천 폼 열기
+            </a>
+          </div>
+        </div>
+      `}
+    </div>
+
+    <!-- 예시 후보자 / 동작 샘플 아코디언 (클릭하면 보여주기!) -->
+    <div class="mt-5 rounded-2xl border border-indigo-200/90 bg-gradient-to-br from-indigo-50/70 via-white to-slate-50 p-4 sm:p-5 shadow-sm transition">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm mt-0.5">
+            <i data-lucide="play-circle" class="h-5 w-5"></i>
+          </span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-bold text-slate-900">100% 만장일치 거수기 동작 예시</h3>
+              <span class="rounded-full bg-indigo-100 border border-indigo-200 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">샘플 데모</span>
+            </div>
+            <p class="mt-0.5 text-xs text-slate-500 leading-relaxed">
+              10인 전원 찬성 게이지 및 비토 시 오프라인 커피미팅 자동 이관이 어떻게 작동하는지 직접 눌러보실 수 있는 체험용 예시 카드입니다.
+            </p>
+          </div>
+        </div>
+        <button data-action="toggle-samples" class="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl border border-indigo-300 bg-white hover:bg-indigo-50 px-3.5 py-2 text-xs font-bold text-indigo-700 shadow-sm transition active:scale-95">
+          <i data-lucide="${showSamples ? 'chevron-up' : 'eye'}" class="h-3.5 w-3.5"></i>
+          <span>${showSamples ? '예시 카드 접기' : '예시 카드 보기 (클릭)'}</span>
+        </button>
+      </div>
+
+      ${showSamples ? `
+        <div class="mt-5 space-y-4 border-t border-indigo-100/90 pt-5 fade-in">
+          <div class="flex items-center gap-2 rounded-xl bg-indigo-100/60 px-3.5 py-2.5 text-xs font-medium text-indigo-900 border border-indigo-200/70">
+            <i data-lucide="info" class="h-4 w-4 text-indigo-600 shrink-0"></i>
+            <span>아래 카드에서 <b>[찬의], [조건부 찬성], [비토]</b> 버튼을 누르면 실시간 10인 게이지와 오프라인 커피미팅 이관 룰이 즉시 시뮬레이션됩니다.</span>
+          </div>
+          ${sampleCandidates.map(candidateCard).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function agendaCard(a) {
+  const owner = MEMBER_BY_ID[a.owner] || MEMBER_BY_ID[ME];
+  const open = !!agendaOpen[a.id];
+  const rows = a.comments.slice().sort((x, y) => new Date(y.at) - new Date(x.at)).slice(0, open ? 99 : 1);
+
+  const preview = rows.map(cm => {
+    const m = MEMBER_BY_ID[cm.author] || { name: '멤버', title: '' };
+    return '<li class="flex items-start gap-2">' + avatar(cm.author, 'sm') +
+      '<div class="min-w-0"><p class="text-[11px] font-bold text-slate-700">' + esc(m.name) + ' <span class="font-normal text-slate-400">' + esc(m.title) + '</span></p>' +
+      '<p class="mt-0.5 text-[12px] leading-[1.7] text-slate-600 ' + (open ? '' : 'line-clamp-2') + '">' + esc(cm.text) + '</p></div></li>';
+  }).join('');
+
+  return `<article class="card p-4 sm:p-5">
+    <div class="flex items-start gap-3">
+      <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[12px] font-bold tabnum text-white">${a.no}</span>
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[10.5px] font-bold text-indigo-700">${esc(a.status)}</span>
+          ${a.tags.map(tg => '<span class="chip">#' + esc(tg) + '</span>').join('')}
+        </div>
+        <h3 class="mt-1.5 text-[15.5px] font-bold leading-snug tracking-tight text-slate-900">${esc(a.title)}</h3>
+        <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] text-slate-400">
+          <span class="flex items-center gap-1">${avatar(owner.id, 'sm')}<b class="font-semibold text-slate-600">${esc(owner.name)}</b> ${esc(owner.title)} 발제</span>
+          <span>·</span><span class="tabnum">${fmtFull(a.at)}</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-3 text-[12.5px] leading-[1.75] text-slate-600">${esc(a.summary)}</p>
+
+    ${open ? '<div class="mt-3 rounded-xl border border-slate-100 bg-slate-50/70 px-3.5 py-3">' +
+        '<p class="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">핵심 쟁점</p>' +
+        '<ul class="mt-2 space-y-1.5">' + a.points.map((p, i) =>
+          '<li class="flex gap-2 text-[12px] leading-[1.7] text-slate-600"><span class="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-indigo-400"></span><span>' + esc(p) + '</span></li>'
+        ).join('') + '</ul></div>' : ''}
+
+    ${open ? '' : '<ul class="mt-3 space-y-2.5">' + preview + '</ul>'}
+
+    <div class="mt-3 flex items-center justify-between gap-2">
+      <button data-action="agenda-toggle" data-id="${a.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11.5px] font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
+        <i data-lucide="${open ? 'chevron-up' : 'chevron-down'}" class="h-3.5 w-3.5"></i>${open ? '접기' : '쟁점·댓글 ' + a.comments.length + '개 펼치기'}
+      </button>
+      ${open ? '' : '<span class="text-[10.5px] text-slate-400">댓글 ' + a.comments.length + '</span>'}
+    </div>
+
+    ${open ? commentList('agenda', a, true) : ''}
+  </article>`;
+}
+
+function renderTopics() {
+  return `
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 class="text-[15px] font-bold tracking-tight text-slate-900">AX 아젠다 토론
+          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Discussions &amp; Case Studies</span>
+        </h2>
+        <p class="mt-1 text-[12px] text-slate-500">이번 주 커피클럽 테이블에 올라온 안건 ${state.agendas.length}건. 각 안건은 발제자와 현장 사례를 함께 가져옵니다.</p>
+      </div>
+      <span class="chip">댓글 <b class="tabnum ml-0.5">${totalComments()}</b></span>
+    </div>
+    <div class="mt-4 space-y-4">${state.agendas.map(agendaCard).join('')}</div>`;
+}
+
+
+function letterCard(lt) {
+  return `
+    <article class="card fade-in overflow-hidden shadow-sm" id="letter-${lt.id}">
+      <div class="border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-5 text-white">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 rounded-md bg-amber-400/20 px-2 py-0.5 text-[11px] font-extrabold text-amber-300 border border-amber-400/30">
+              VOL. 0${lt.no}
+            </span>
+            <span class="text-[11px] font-medium text-slate-300 tabnum">${esc(lt.date)} 발행</span>
+            <span class="rounded-full bg-white/10 px-2.5 py-0.5 text-[10.5px] font-medium text-slate-200">${esc(lt.badge)}</span>
+          </div>
+      <div class="flex items-center gap-2">
+        <button data-action="copy-letter" data-no="${lt.no}"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 px-2.5 py-1.5 text-[11.5px] font-bold text-amber-200 transition">
+          <i data-lucide="share-2" class="h-3.5 w-3.5 text-amber-300"></i>
+          <span>공유 링크 복사</span>
+        </button>
+        <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-white/15 hover:bg-white/25 border border-white/20 px-3 py-1.5 text-[11.5px] font-semibold text-white transition">
+          <span>Claude Artifact 전문</span>
+          <i data-lucide="external-link" class="h-3 w-3"></i>
+        </a>
+      </div>
+        </div>
+        <h3 class="mt-3 text-[17px] sm:text-[19px] font-extrabold leading-snug tracking-tight text-white">${esc(lt.title)}</h3>
+        <p class="mt-2 text-[12.5px] leading-relaxed text-slate-300/95">${esc(lt.summary)}</p>
+
+        <div class="mt-3.5 flex flex-wrap items-center gap-1.5 pt-3 border-t border-white/10 text-[11px] text-slate-300">
+          <span class="font-semibold text-amber-300">참석:</span>
+          ${lt.attendees.map(at => '<span class="inline-flex items-center rounded-md bg-white/10 px-2 py-0.5 text-slate-200 font-medium">' + esc(at) + '</span>').join('')}
+        </div>
+      </div>
+
+      <div class="p-5 space-y-5">
+        <div class="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
+          <p class="flex items-center gap-1.5 text-[12px] font-bold text-indigo-900">
+            <i data-lucide="check-circle-2" class="h-4 w-4 text-indigo-600"></i>
+            이번 호 핵심 3줄 요약
+          </p>
+          <ol class="mt-2.5 space-y-2 text-[12.5px] text-slate-700 leading-relaxed">
+            ${lt.threeLines.map((line, idx) => `
+              <li class="flex items-start gap-2">
+                <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white tabnum">${idx + 1}</span>
+                <span>${esc(line)}</span>
+              </li>
+            `).join('')}
+          </ol>
+        </div>
+
+        <div>
+          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
+            <i data-lucide="layers" class="h-4 w-4 text-slate-500"></i>
+            테이블 위의 주요 화두
+          </p>
+          <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            ${lt.topics.map(tp => `
+              <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 hover:bg-slate-50 transition">
+                <h4 class="text-[12.5px] font-bold text-slate-800">${esc(tp.title)}</h4>
+                <p class="mt-1.5 text-[11.5px] leading-relaxed text-slate-600">${esc(tp.desc)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[13px] font-bold text-slate-900 flex items-center gap-1.5 mb-2.5">
+            <i data-lucide="quote" class="h-4 w-4 text-amber-500"></i>
+            테이블에서 건진 문장 (어록)
+          </p>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            ${lt.quotes.map(q => `
+              <div class="flex items-start gap-2.5 rounded-xl border border-amber-100 bg-amber-50/40 p-3">
+                <span class="shrink-0 rounded-md bg-amber-200/80 px-1.5 py-0.5 text-[10px] font-bold text-amber-900">${esc(q.by)}</span>
+                <p class="text-[12px] font-medium leading-relaxed text-slate-800 italic">“${esc(q.text)}”</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="pt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
+          <span class="text-[11px] text-slate-400">티로 음성 녹음 + Claude Artifact 실시간 생성본</span>
+          <a href="${esc(lt.artifactUrl)}" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-[12px] font-bold text-indigo-600 hover:text-indigo-800">
+            <span>Claude 원문 아티팩트 전체보기</span>
+            <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderLetters() {
+  const letters = state.letters || SEED.letters;
+  return `
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex h-6 items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+            <i data-lucide="sparkles" class="h-3 w-3"></i> tiro × Claude
+          </span>
+          <span class="chip">매주 금요일 정리</span>
+          <span class="chip">Chatham House Rule</span>
+        </div>
+        <h2 class="mt-2 text-[17px] font-bold tracking-tight text-slate-900 sm:text-[18px]">금요 커피 레터 아카이브
+          <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Coffee Letters Archive</span>
+        </h2>
+        <p class="mt-1 text-[12.5px] leading-relaxed text-slate-500">
+          모임 호스트 양준호 CFO가 <b class="font-semibold text-slate-700">tiro 음성 기록</b>과 <b class="font-semibold text-slate-700">Claude</b>를 결합해 금요일 테이블 직후 정리하는 실전 아카이브입니다.
+        </p>
+      </div>
+      <span class="chip">누적 <b class="tabnum ml-0.5 font-bold text-slate-800">${letters.length}</b>편</span>
+    </div>
+
+    <div class="mt-5 space-y-6">
+      ${letters.map(lt => letterCard(lt)).join('')}
+    </div>
+  `;
+}
+
+function renderRules() {
+  return `
+    <div>
+      <h2 class="wordmark text-[15px] font-bold tracking-tight text-slate-900">커피클럽 그라운드룰
+        <span class="ml-1 text-[11px] font-medium uppercase tracking-wider text-slate-400">Ground Rules</span>
+      </h2>
+      <p class="mt-1 text-[12px] text-slate-500">이 테이블이 유지되는 이유는 세 줄입니다. 개정도 만장일치로만 합니다.</p>
+    </div>
+
+    <div class="mt-4 space-y-4">
+      ${state.rules.map(r => `
+        <article class="card p-4 sm:p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ink text-amber-300">
+              <i data-lucide="${r.icon}" class="h-[18px] w-[18px]"></i>
+            </span>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[10.5px] font-bold tabnum uppercase tracking-wider text-slate-400">Rule ${r.no}</span>
+                <span class="chip">${esc(r.tag)}</span>
+              </div>
+              <h3 class="mt-1.5 text-[15px] font-bold leading-snug tracking-tight text-slate-900">${esc(r.title)}</h3>
+            </div>
+          </div>
+          <p class="mt-3 text-[12.5px] leading-[1.8] text-slate-600">${esc(r.body)}</p>
+          <ul class="mt-3 flex flex-wrap gap-1.5">
+            ${r.notes.map(n => '<li class="chip">' + esc(n) + '</li>').join('')}
+          </ul>
+        </article>`).join('')}
+    </div>
+
+    <div class="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3">
+      <i data-lucide="quote" class="mt-0.5 h-4 w-4 shrink-0 text-amber-600"></i>
+      <p class="text-[12px] leading-[1.75] text-amber-900">비슷한 사람끼리 모이면 하소연만 남는다. 그래서 이 모임은 직군이 아니라 <b class="font-semibold">문제</b>로 사람을 고릅니다.</p>
+    </div>`;
+}
+
+/* ---------------- render ---------------- */
+
+function render() {
+  renderHeaderAvatars();
+  renderStats();
+  renderTabs();
+  const app = document.getElementById('app');
+  if (!app) return;
+  let html = '';
+  if (state.tab === 'gate') html = renderGate();
+  else if (state.tab === 'letters') html = renderLetters();
+  else if (state.tab === 'topics') html = renderTopics();
+  else html = renderRules();
+  app.innerHTML = html;
+  if (window.lucide) window.lucide.createIcons();
+  const up = document.getElementById('updated-at');
+  if (up) up.textContent = fmtDayDot(new Date().toISOString());
+}
+
+/* ---------------- actions ---------------- */
+
+function findItem(kind, id) {
+  if (kind === 'candidate') return state.candidates.find(c => c.id === id);
+  if (kind === 'agenda') return state.agendas.find(a => a.id === id);
+  return null;
+}
+
+function renderMembersModalList() {
+  const el = document.getElementById('members-modal-list');
+  if (!el) return;
+  el.innerHTML = MEMBERS.map(m => `
+    <div class="flex items-center justify-between py-3">
+      <div class="flex items-center gap-3 min-w-0">
+        ${avatar(m.id, 'md')}
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-slate-900">${esc(m.name)}</p>
+          <p class="text-xs text-slate-500 truncate">${esc(m.role)} · ${esc(m.title)}</p>
+        </div>
+      </div>
+      <span class="chip shrink-0 text-[11px] font-semibold">${esc(m.field)}</span>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+
+  if (action === 'toggle-samples') {
+    state.showSamples = !state.showSamples;
+    render();
+    return;
+  }
+
+  if (action === 'toggle-gate-hint') {
+    const hint = document.getElementById('gate-hint-text');
+    if (hint) hint.classList.toggle('hidden');
+    return;
+  }
+
+  if (action === 'members-modal-open') {
+    const modal = document.getElementById('members-modal');
+    if (modal) {
+      renderMembersModalList();
+      modal.classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+    return;
+  }
+
+  if (action === 'members-modal-close') {
+    const modal = document.getElementById('members-modal');
+    if (modal) modal.classList.add('hidden');
+    return;
+  }
+
+  if (action === 'tab') {
+    state.tab = el.dataset.id;
+    saveState();
+    render();
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '?tab=' + state.tab);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  if (action === 'copy-letter') {
+    const no = el.dataset.no;
+    const url = `https://yangspace.co.kr/friday-coffee/?letter=${no}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        toast(`커피 레터 ${no}호 공유 링크가 복사되었습니다! (비밀번호: fx2026)`, 'ok');
+      }).catch(() => {
+        prompt('커피 레터 공유 주소입니다 (복사해서 전달하세요):', url);
+      });
+    } else {
+      prompt('커피 레터 공유 주소입니다 (복사해서 전달하세요):', url);
+    }
+    return;
+  }
+
+  if (action === 'modal-open') {
+    document.getElementById('modal').classList.remove('hidden');
+    const first = document.querySelector('#new-candidate-form input[name="title"]');
+    if (first) setTimeout(() => first.focus(), 60);
+    return;
+  }
+
+  if (action === 'modal-close') {
+    document.getElementById('modal').classList.add('hidden');
+    return;
+  }
+
+  if (action === 'vote') {
+    const c = state.candidates.find(x => x.id === el.dataset.cand);
+    if (!c) return;
+    const vote = el.dataset.vote;
+    c.votes = c.votes || {};
+    const prev = c.votes[ME] || 'pending';
+    c.votes[ME] = (prev === vote) ? 'pending' : vote;   // clicking the same vote withdraws it
+
+    if (c.votes[ME] === 'yes' || c.votes[ME] === 'conditional' || c.votes[ME] === 'veto') {
+      c.votes[ME + '_at'] = new Date().toISOString();
+    }
+    const t = tally(c);
+    if (t.passed && !c.confirmedAt) c.confirmedAt = new Date().toISOString();
+    if (!t.passed) delete c.confirmedAt;
+
+    saveState();
+    render();
+    if (prev === vote) toast('표를 철회했습니다 — ' + VOTE_LABEL.pending + '으로 돌아갑니다');
+    else if (t.passed) toast('10/10 만장일치 — 영입이 확정되었습니다', 'ok');
+    else if (t.blocked) toast('비토가 기록되었습니다 — 오프라인 재논의로 이관됩니다', 'bad');
+    else if (vote === 'yes') toast('찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'ok');
+    else if (vote === 'conditional') toast('조건부 찬성으로 기록했습니다 — ' + t.cast + '/10 (' + t.pct + '%)', 'warn');
+    else toast('비토로 기록했습니다', 'bad');
+    return;
+  }
+
+  if (action === 'agenda-toggle') {
+    const id = el.dataset.id;
+    agendaOpen[id] = !agendaOpen[id];
+    render();
+    const node = document.querySelector('[data-action="agenda-toggle"][data-id="' + id + '"]');
+    if (node) node.scrollIntoView({ block: 'nearest' });
+    return;
+  }
+
+  if (action === 'like') {
+    const item = findItem(el.dataset.kind, el.dataset.item);
+    if (!item) return;
+    const cm = item.comments.find(x => x.id === el.dataset.comment);
+    if (!cm) return;
+    if (cm.likedByMe) { cm.likes = Math.max(0, (cm.likes || 0) - 1); cm.likedByMe = false; }
+    else { cm.likes = (cm.likes || 0) + 1; cm.likedByMe = true; }
+    saveState();
+    render();
+    return;
+  }
+
+  if (action === 'reset') {
+    state = clone(SEED);
+    state.tab = 'gate';
+    drafts = {};
+    agendaOpen = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) {}
+    render();
+    toast('데모 상태를 초기값으로 되돌렸습니다');
+    return;
+  }
+
+  if (action === 'lock-gate') {
+    try {
+      localStorage.removeItem('frontier_ax_auth');
+      sessionStorage.removeItem('frontier_ax_auth');
+    } catch (err) {}
+    lockGate();
+    toast('화면을 잠갔습니다');
+    return;
+  }
+});
+
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el && el.dataset && el.dataset.draft) drafts[el.dataset.draft] = el.value;
+});
+
+document.addEventListener('submit', (e) => {
+  const form = e.target;
+
+  if (form.id === 'gate-form') {
+    e.preventDefault();
+    const passInput = document.getElementById('gate-pass');
+    const errEl = document.getElementById('gate-error');
+    const val = (passInput && passInput.value || '').trim();
+    verifyPasscode(val).then(ok => {
+      if (ok) {
+        try {
+          localStorage.setItem('frontier_ax_auth', 'true');
+          sessionStorage.setItem('frontier_ax_auth', 'true');
+        } catch (err) {}
+        unlockGate();
+        handleLetterDeepLink();
+        toast('인증되었습니다. 환영합니다!', 'ok');
+      } else {
+        if (errEl) errEl.classList.remove('hidden');
+        if (passInput) {
+          passInput.classList.add('border-rose-500', 'ring-1', 'ring-rose-500');
+          passInput.select();
+        }
+      }
+    });
+    return;
+  }
+
+  if (form.id === 'new-candidate-form') {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const title = String(fd.get('title') || '').trim();
+    const summary = String(fd.get('summary') || '').trim();
+    if (!title || !summary) return;
+    const votes = {};
+    MEMBERS.forEach(m => { votes[m.id] = (m.id === ME) ? 'yes' : 'pending'; });
+    const cand = {
+      id: 'c' + Date.now(),
+      title,
+      headline: String(fd.get('headline') || '').trim(),
+      nominator: ME,
+      nominatedAt: new Date().toISOString(),
+      summary,
+      highlights: [],
+      reason: String(fd.get('reason') || '').trim(),
+      email: String(fd.get('email') || '').trim(),
+      isUserCreated: true,
+      votes,
+      comments: []
+    };
+    state.candidates.unshift(cand);
+    state.tab = 'gate';
+    saveState();
+    form.reset();
+    document.getElementById('modal').classList.add('hidden');
+    render();
+    toast('후보자를 발제했습니다 — 1/10 찬성, 나머지 9명에게 심사 카드가 열렸습니다', 'ok');
+    const node = document.getElementById('cand-' + cand.id);
+    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  if (form.dataset.form === 'comment') {
+    e.preventDefault();
+    const item = findItem(form.dataset.kind, form.dataset.item);
+    if (!item) return;
+    const ta = form.querySelector('textarea[name="text"]');
+    const text = (ta && ta.value || '').trim();
+    if (!text) { if (ta) ta.focus(); return; }
+    item.comments.push({
+      id: 'k' + Date.now(),
+      author: ME,
+      text,
+      at: new Date().toISOString(),
+      likes: 0,
+      likedByMe: false
+    });
+    delete drafts[form.dataset.kind + ':' + form.dataset.item];
+    saveState();
+    render();
+    toast('댓글을 등록했습니다', 'ok');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.getElementById('modal').classList.add('hidden');
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    const form = e.target.closest && e.target.closest('form[data-form="comment"]');
+    if (form) form.requestSubmit();
+  }
+});
+
+/* ---------------- gate auth ---------------- */
+
+async function verifyPasscode(input) {
+  const clean = (input || '').trim().toLowerCase();
+  if (clean === 'fx2026') return true;
+  try {
+    const msgBuffer = new TextEncoder().encode(clean);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const validHashes = [
+      '66fee9b5ca0d133470956a0346c598bf0c1d6cea1148964c78946a956d3644e7' // fx2026
+    ];
+    return validHashes.includes(hashHex);
+  } catch (err) {
+    return false;
+  }
+}
+
+async function checkGateAuth() {
+  let isAuth = false;
+  try {
+    isAuth = localStorage.getItem('frontier_ax_auth') === 'true' || sessionStorage.getItem('frontier_ax_auth') === 'true';
+  } catch (e) {}
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const qPass = urlParams.get('pass') || urlParams.get('key');
+  if (qPass) {
+    const ok = await verifyPasscode(qPass);
+    if (ok) {
+      isAuth = true;
+      try {
+        localStorage.setItem('frontier_ax_auth', 'true');
+        sessionStorage.setItem('frontier_ax_auth', 'true');
+      } catch (e) {}
+    }
+  }
+
+  if (isAuth) {
+    unlockGate();
+    handleLetterDeepLink();
+  } else {
+    lockGate();
+  }
+}
+
+function handleLetterDeepLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const qLetter = urlParams.get('letter') || urlParams.get('vol');
+  const qTab = urlParams.get('tab') || window.location.hash.replace('#', '');
+
+  if (qLetter) {
+    state.tab = 'letters';
+    saveState();
+    render();
+    setTimeout(() => {
+      const targetId = 'letter-vol' + qLetter;
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('ring-2', 'ring-amber-400', 'ring-offset-2');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400', 'ring-offset-2'), 2500);
+      }
+    }, 150);
+    return;
+  }
+
+  if (qTab && ['gate', 'letters', 'topics', 'rules'].includes(qTab)) {
+    state.tab = qTab;
+    saveState();
+    render();
+  }
+}
+
+function unlockGate() {
+  const overlay = document.getElementById('gate-overlay');
+  const main = document.getElementById('main-content');
+  if (overlay) overlay.classList.add('hidden');
+  if (main) {
+    main.classList.remove('opacity-0', 'pointer-events-none');
+    main.classList.add('opacity-100');
+  }
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function lockGate() {
+  const overlay = document.getElementById('gate-overlay');
+  const main = document.getElementById('main-content');
+  if (overlay) overlay.classList.remove('hidden');
+  if (main) {
+    main.classList.add('opacity-0', 'pointer-events-none');
+    main.classList.remove('opacity-100');
+  }
+  const passInput = document.getElementById('gate-pass');
+  if (passInput) setTimeout(() => passInput.focus(), 100);
+  if (window.lucide) window.lucide.createIcons();
+}
+
+/* ---------------- boot ---------------- */
+
+function boot() {
+  render();
+  checkGateAuth();
+  if (window.lucide) window.lucide.createIcons();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+window.addEventListener('load', () => { if (window.lucide) window.lucide.createIcons(); });
+</script>
+</body>
+</html>
