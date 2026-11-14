@@ -917,9 +917,18 @@ function profileLink(c) {
     '<i data-lucide="arrow-up-right" style="width:12px;height:12px"></i></a>';
 }
 
+/* 발제자·추천인은 멤버 id일 수도, 익명 anon_id일 수도 있다. */
+function ownerOf(kind, item) {
+  const id = kind === 'agenda' ? item.owner : item.nominator;
+  const nick = kind === 'agenda' ? item.owner_nick : item.nominator_nick;
+  const m = MEMBER_BY_ID[id];
+  if (m) return { id: id, name: m.name, role: m.role, title: m.title, anon: false };
+  return { id: id || '', name: nick || (id === ME && ME_NICK) || '익명 멤버', role: '', title: '익명 · IP 별명', anon: true };
+}
+
 function candidateCard(c) {
   const t = tally(c);
-  const nominator = MEMBER_BY_ID[c.nominator] || MEMBER_BY_ID[ME];
+  const nominator = ownerOf('candidate', c);
 
   const status = t.blocked
     ? '<span class="status is-veto"><span class="dot"></span>비토 — 오프라인 재논의</span>'
@@ -958,7 +967,7 @@ function candidateCard(c) {
       '<p class="summary">' + esc(c.summary) + '</p>' +
       (c.reason
         ? '<figure class="nomination"><blockquote>“' + esc(c.reason) + '”</blockquote>' +
-          '<figcaption>' + avatar(nominator.id, 'sm') + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role) + ' ' + esc(nominator.title) + '</figcaption></figure>'
+          '<figcaption>' + avatar(nominator.id, 'sm', nominator.name) + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role + ' ' + nominator.title).trim() + '</figcaption></figure>'
         : '') +
       banner +
       gauge(t) +
@@ -1403,7 +1412,7 @@ function boardCard(entry) {
   const key = keyOf(kind, item);
   const open = !!openCards[key];
   const st = itemStatusOf(kind, item);
-  const owner = kind === 'agenda' ? (MEMBER_BY_ID[item.owner] || MEMBER_BY_ID[ME]) : (MEMBER_BY_ID[item.nominator] || MEMBER_BY_ID[ME]);
+  const owner = ownerOf(kind, item);
   const at = kind === 'agenda' ? item.at : item.nominatedAt;
   const comments = (item.comments || []).length;
   const votes = itemVoteCount(kind, item);
@@ -1426,7 +1435,7 @@ function boardCard(entry) {
           '<span class="m"><i data-lucide="message-circle"></i>댓글 ' + comments + '</span>' +
           '<span class="m"><i data-lucide="hand"></i>입장 ' + votes + '</span>' +
           '<span class="sep">·</span>' +
-          '<span class="who">' + avatar(owner.id, 'sm') + esc(owner.name) + '</span>' +
+          '<span class="who">' + avatar(owner.id, 'sm', owner.name) + esc(owner.name) + '</span>' +
           '<span>' + esc(fmtDay(at)) + ' 발제</span>' +
           (kind === 'agenda' ? (item.tags || []).slice(0, 3).map(t => '<span>#' + esc(t) + '</span>').join('') : '') +
         '</span>' +
@@ -1437,21 +1446,28 @@ function boardCard(entry) {
   '</article>';
 }
 
+function myItemActions(kind, item) {
+  const author = kind === 'agenda' ? item.owner : item.nominator;
+  if (!author || author !== ME) return '';
+  return '<p class="own-actions"><button type="button" class="comment-del" data-action="topic-delete" data-kind="' + kind + '" data-id="' + item.id + '">내가 발제한 안건 취소</button></p>';
+}
+
 function boardBody(kind, item) {
   if (kind === 'candidate') {
     const t = tally(item);
-    const nominator = MEMBER_BY_ID[item.nominator] || MEMBER_BY_ID[ME];
+    const nominator = ownerOf('candidate', item);
     const myVote = VOTE_LABEL[(item.votes && item.votes[ME]) || 'pending'];
     const banner = t.passed
       ? '<div class="banner is-passed"><i data-lucide="check"></i><p><strong>영입 확정 — 다음 금요일 오프라인 커피클럽 초청</strong><br />10/10 만장일치' + (item.confirmedAt ? ' · ' + fmtFull(item.confirmedAt) + ' 통과' : '') + '</p></div>'
       : t.blocked
         ? '<div class="banner is-veto"><i data-lucide="coffee"></i><p><strong>비토 발생 — 오프라인 커피 미팅으로 이관</strong><br />비토한 멤버와 발제자가 1:1로 경청한 뒤 다시 표를 받습니다.</p></div>'
         : '';
-    return ((item.highlights || []).length ? '<div class="chip-row">' + item.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
+    return myItemActions(kind, item) +
+      ((item.highlights || []).length ? '<div class="chip-row">' + item.highlights.map(h => '<span class="chip">' + esc(h) + '</span>').join('') + '</div>' : '') +
       (item.profile ? '<p class="cand-links">' + profileLink(item) + '</p>' : '') +
       (item.reason
         ? '<figure class="nomination"><blockquote>“' + esc(item.reason) + '”</blockquote>' +
-          '<figcaption>' + avatar(nominator.id, 'sm') + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role) + ' ' + esc(nominator.title) + '</figcaption></figure>'
+          '<figcaption>' + avatar(nominator.id, 'sm', nominator.name) + '<b>' + esc(nominator.name) + '</b> 추천 · ' + esc(nominator.role + ' ' + nominator.title).trim() + '</figcaption></figure>'
         : '') +
       banner +
       aiBlock('candidate', item) +
@@ -1462,7 +1478,8 @@ function boardBody(kind, item) {
       commentList('candidate', item, true);
   }
 
-  return ((item.points || []).length
+  return myItemActions('agenda', item) +
+    ((item.points || []).length
       ? '<div><span class="block-label">핵심 쟁점</span><ul class="points">' + item.points.map(p => '<li><span>' + esc(p) + '</span></li>').join('') + '</ul></div>'
       : '') +
     aiBlock('agenda', item) +
@@ -1823,6 +1840,13 @@ document.addEventListener('click', (e) => {
     boardPost('/api/comments/delete', { kind: el.dataset.kind, id: el.dataset.item, comment: el.dataset.comment })
       .then(() => toast('내 익명 댓글을 삭제했습니다'))
       .catch(err => toast('댓글을 삭제하지 못했습니다(' + err.message + ')', 'warn'));
+    return;
+  }
+
+  if (action === 'topic-delete') {
+    boardPost('/api/topics/delete', { kind: el.dataset.kind, id: el.dataset.id })
+      .then(() => toast('내가 발제한 안건을 취소했습니다'))
+      .catch(err => toast('안건을 취소하지 못했습니다(' + err.message + ')', 'warn'));
     return;
   }
 
