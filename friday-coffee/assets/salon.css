@@ -759,3 +759,29 @@ textarea.input { min-height: 64px; resize: vertical; line-height: 1.65; }
   .letter-main .topics-grid, .letter-main .quotes { grid-template-columns: minmax(0, 1fr); }
   .letter-toolbar { margin-bottom: 12px; }
 }
+
+/* ---------- 20. Shared board: anonymous identity ---------- */
+.status-line-right { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.nick-slot { display: inline-flex; }
+.nick-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 9px 4px 7px; border: 1px solid var(--accent-line); border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-strong);
+  font-size: 11px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+}
+.nick-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
+.nick-badge .nick-label { font-weight: 500; letter-spacing: .04em; color: var(--text-3); }
+.nick-badge b { font-weight: 700; color: var(--accent-strong); }
+.nick-badge .nick-flag { margin-left: 2px; padding: 1px 5px; border-radius: 999px; background: var(--veto-soft); color: var(--veto-ink); font-size: 9.5px; letter-spacing: .06em; }
+.nick-badge.is-off { border-color: var(--border-strong); background: var(--surface-2); color: var(--text-3); }
+.nick-badge.is-off b { color: var(--text-2); }
+.nick-badge.is-busy { border-color: var(--border-strong); background: var(--surface-2); color: var(--text-3); }
+.avatar-anon { background: repeating-linear-gradient(135deg, var(--surface-3), var(--surface-3) 3px, var(--surface-2) 3px, var(--surface-2) 6px); color: #6b5f52; }
+.avatar-wait { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-4); }
+.comment-role.is-anon { padding: 1px 6px; border: 1px solid var(--accent-line); border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 10px; }
+@media (max-width: 640px) {
+  .status-line-right { width: 100%; justify-content: space-between; }
+  .nick-badge { font-size: 10.5px; }
+}
+.comment-del { margin-left: 6px; padding: 2px 6px; border-radius: 6px; font-size: 10.5px; color: var(--text-4); }
+.comment-del:hover { background: var(--veto-soft); color: var(--veto-ink); }
