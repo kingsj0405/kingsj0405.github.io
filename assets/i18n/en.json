@@ -26,11 +26,29 @@
       "hideEmail": "Hide Email"
     },
     "blog": {
-      "kicker": "Popular & Featured essays",
+      "kicker": "Most-read essays",
       "title": "Notes on what stays with me",
       "intro": "I write about ideas that linger as I move through research, technology, work, and life.",
       "cta": "Read more on the blog",
-      "newsletterCta": "Subscribe to Newsletter"
+      "newsletterCta": "Subscribe to Newsletter",
+      "entries": {
+        "inhwaweon": {
+          "title": "Notes from a Talking Potato Ph.D.: Four Nights and Five Days at LG Inhwaweon",
+          "subtitle": "What a career-hire onboarding program left behind — the place and the people more than the lectures."
+        },
+        "unitFormula": {
+          "title": "A Formula With Mismatched Units",
+          "subtitle": "For the world's best minds who would rather stay in Seoul."
+        },
+        "yearReview": {
+          "title": "2025 in Review, and Plans for 2026",
+          "subtitle": "A year of career doubt and a job search, and what I decided to do next."
+        },
+        "controlPlane": {
+          "title": "In Multi-Agent Systems, the Center Is the Control Plane, Not the Runtime",
+          "subtitle": "Driving Claude Code, Gemini CLI, and Codex from one base built on opencode and get-shit-done."
+        }
+      }
     },
     "timeline": {
       "lgai_current": {

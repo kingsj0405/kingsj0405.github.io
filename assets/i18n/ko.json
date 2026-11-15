@@ -26,11 +26,29 @@
       "hideEmail": "이메일 숨기기"
     },
     "blog": {
-      "kicker": "많이 본 글 & 대표 에세이",
+      "kicker": "많이 본 글",
       "title": "오래 남은 생각을 적습니다",
       "intro": "연구와 기술, 일과 삶을 지나며 오래 붙잡고 있던 생각을 적습니다.",
       "cta": "블로그에서 더 읽기",
-      "newsletterCta": "📩 뉴스레터 구독"
+      "newsletterCta": "📩 뉴스레터 구독",
+      "entries": {
+        "inhwaweon": {
+          "title": "말하는 감자 박사의 LG 인화원 경력교육과정 4박 5일",
+          "subtitle": "경력 입사자 온보딩 4박 5일 — 강의보다 공간과 사람에게서 남은 것들"
+        },
+        "unitFormula": {
+          "title": "단위가 맞지 않는 공식",
+          "subtitle": "서울에 남고 싶은 one of the world's best minds를 위해서"
+        },
+        "yearReview": {
+          "title": "2025년 결산 및 2026년 계획",
+          "subtitle": "진로 고민과 구직으로 보낸 한 해, 그리고 다음 해에 하기로 한 것들"
+        },
+        "controlPlane": {
+          "title": "멀티 에이전트의 중심은 런타임이 아니라 control plane이다",
+          "subtitle": "opencode와 get-shit-done을 바탕으로 Claude Code, Gemini CLI, Codex 같은 다른 runtime을 부리는 법"
+        }
+      }
     },
     "timeline": {
       "lgai_current": {
