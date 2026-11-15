@@ -26,29 +26,34 @@
       "hideEmail": "이메일 숨기기"
     },
     "blog": {
-      "kicker": "많이 본 글",
-      "title": "오래 남은 생각을 적습니다",
-      "intro": "연구와 기술, 일과 삶을 지나며 오래 붙잡고 있던 생각을 적습니다.",
+      "kicker": "조회수 랭킹",
+      "title": "많이 팔린 글! 조회수도 함께 보여드립니다",
+      "intro": "최근 1개월 744 PV · 2026.11.15 기준 · 우피 콘솔 조회수 순. 카드 옆 숫자는 이 글의 1개월 조회수와 전체 페이지뷰 대비 비중입니다.",
       "cta": "블로그에서 더 읽기",
       "newsletterCta": "📩 뉴스레터 구독",
       "entries": {
         "inhwaweon": {
           "title": "말하는 감자 박사의 LG 인화원 경력교육과정 4박 5일",
-          "subtitle": "경력 입사자 온보딩 4박 5일 — 강의보다 공간과 사람에게서 남은 것들"
+          "subtitle": "경력 입사자 온보딩 4박 5일 — 강의보다 공간과 사람에게서 남은 것들",
+          "views": "142회 · 19%"
         },
         "unitFormula": {
           "title": "단위가 맞지 않는 공식",
-          "subtitle": "서울에 남고 싶은 one of the world's best minds를 위해서"
+          "subtitle": "서울에 남고 싶은 one of the world's best minds를 위해서",
+          "views": "51회 · 6%"
         },
         "yearReview": {
           "title": "2025년 결산 및 2026년 계획",
-          "subtitle": "진로 고민과 구직으로 보낸 한 해, 그리고 다음 해에 하기로 한 것들"
+          "subtitle": "진로 고민과 구직으로 보낸 한 해, 그리고 다음 해에 하기로 한 것들",
+          "views": "18회 · 2%"
         },
         "controlPlane": {
           "title": "멀티 에이전트의 중심은 런타임이 아니라 control plane이다",
-          "subtitle": "opencode와 get-shit-done을 바탕으로 Claude Code, Gemini CLI, Codex 같은 다른 runtime을 부리는 법"
+          "subtitle": "opencode와 get-shit-done을 바탕으로 Claude Code, Gemini CLI, Codex 같은 다른 runtime을 부리는 법",
+          "views": "17회 · 2%"
         }
-      }
+      },
+      "note": "본문은 한국어로만 씁니다. 영어로 읽으실 분은 브라우저 번역 기능을 켜 주세요."
     },
     "timeline": {
       "lgai_current": {
