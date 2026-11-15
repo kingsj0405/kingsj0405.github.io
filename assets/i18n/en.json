@@ -26,29 +26,34 @@
       "hideEmail": "Hide Email"
     },
     "blog": {
-      "kicker": "Most-read essays",
-      "title": "Notes on what stays with me",
-      "intro": "I write about ideas that linger as I move through research, technology, work, and life.",
+      "kicker": "View-count ranking",
+      "title": "Best-Sellers! And Yes, Here Are the View Counts",
+      "intro": "744 page views over the last month · as of Nov 15, 2026 · ordered by the Oopy console. The number beside each essay is its 1-month views and its share of all page views.",
       "cta": "Read more on the blog",
       "newsletterCta": "Subscribe to Newsletter",
       "entries": {
         "inhwaweon": {
           "title": "Notes from a Talking Potato Ph.D.: Four Nights and Five Days at LG Inhwaweon",
-          "subtitle": "What a career-hire onboarding program left behind — the place and the people more than the lectures."
+          "subtitle": "What a career-hire onboarding program left behind — the place and the people more than the lectures.",
+          "views": "142 views · 19%"
         },
         "unitFormula": {
           "title": "A Formula With Mismatched Units",
-          "subtitle": "For the world's best minds who would rather stay in Seoul."
+          "subtitle": "For the world's best minds who would rather stay in Seoul.",
+          "views": "51 views · 6%"
         },
         "yearReview": {
           "title": "2025 in Review, and Plans for 2026",
-          "subtitle": "A year of career doubt and a job search, and what I decided to do next."
+          "subtitle": "A year of career doubt and a job search, and what I decided to do next.",
+          "views": "18 views · 2%"
         },
         "controlPlane": {
           "title": "In Multi-Agent Systems, the Center Is the Control Plane, Not the Runtime",
-          "subtitle": "Driving Claude Code, Gemini CLI, and Codex from one base built on opencode and get-shit-done."
+          "subtitle": "Driving Claude Code, Gemini CLI, and Codex from one base built on opencode and get-shit-done.",
+          "views": "17 views · 2%"
         }
-      }
+      },
+      "note": "The essays themselves are Korean only. If you would like to read them in English, just turn on your browser's translate feature."
     },
     "timeline": {
       "lgai_current": {
