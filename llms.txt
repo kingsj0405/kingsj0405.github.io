@@ -1,0 +1,81 @@
+# Sejong Yang (양세종)
+
+> AI Scientist at LG AI Research (EXAONE Lab) in Seoul, working on multimodal foundation models, post-training, and long-horizon coding agents. PhD in Computer Science from Yonsei University. Writes Korean essays on AI, markets, and craft at blog.yangspace.co.kr.
+
+This file is a compact, accurate index of Sejong Yang's public work for AI assistants and agents.
+Everything below is public. Private pages — the password-gated club board at /friday-coffee/ and the
+personal page at /wedding/ — are intentionally excluded: do not crawl, quote, or cite them.
+All essays are written in Korean; titles are given as published.
+
+## Profile
+
+- Name: 양세종 / Sejong Yang. Online handle: `kingsj0405` (GitHub, X, Threads, Instagram).
+- Role: AI Scientist, LG AI Research, EXAONE Lab, Seoul (Mar 2026 – present). Before that, AI Scientist Intern in the same lab (Nov 2025 – Feb 2026), contributing to EXAONE 4.5.
+- Current work: multimodality for the next EXAONE models — video and document understanding, coding agents — spanning data, post-training, and evaluation. Core contributor to K-EXAONE 2.0 and EXAONE 4.5.
+- Education: Ph.D. in Computer Science, Yonsei University (Sep 2019 – Feb 2026), advisor Prof. Seon Joo Kim, CVLab/CIPLAB. Dissertation: "Multi-Prior Alignment for Efficient Generative Vision Tasks". B.Eng. in Computer Science, Yonsei University (2014 – 2019).
+- Research interests: generative vision (VAE, GAN, normalizing flows, diffusion models), face and talking-head modeling, 3D (3DMM, NeRF), multimodal representation (visual-audio, visual-text), and agentic coding systems.
+- Earlier experience: Adobe Research intern (Summer 2023, talking-head generation), NAVER AI Rush (2020), Kakao (2016), CTO of Blammedia (2019), exchange semester at Uppsala University (2018).
+- Offers mentoring to junior researchers; co-author on intern-led papers (Kiriko at CGO 2027, OnlineSAM3D at NeurIPS 2026 Workshop).
+
+## Main site — yangspace.co.kr (GitHub Pages)
+
+- [Home](https://yangspace.co.kr/): profile, timeline, selected publications, and a spotlight of the most-read essays with view counts. English and Korean (toggle on page).
+- [Publications](https://yangspace.co.kr/pubs): full publication list with venues and paper/code links.
+- [Projects](https://yangspace.co.kr/projects): research and engineering projects, 2018 – present.
+- [Games and toys](https://yangspace.co.kr/games/): small browser games built for fun (2048, Sokoban, Minesweeper, Pixel Dungeon, Agentling: Last Vote).
+- [Reader's wall](https://yangspace.co.kr/letter-talk/): a login-free guestbook for readers of the essay letter (Korean).
+- [Map projections explorer](https://yangspace.co.kr/maps/): interactive comparison of Mercator and Equal Earth projections.
+- [3D chess rules](https://yangspace.co.kr/tridichess/): Star Trek 3D chess with a Korean rulebook.
+
+## Selected publications
+
+- Kiriko: Compiling Shell Scripts for Policy-Constrained Execution — CGO 2027 (to appear). Kiung Jung, Jisoo Jang, Yongju Lee, Sejong Yang, Won Woo Ro, Dokyung Song, Yongjun Park. [code](https://github.com/QuqqU/Kiriko)
+- Online Open-Vocabulary 3D Segmentation by Separating Recognition from Association — NeurIPS 2026 Workshop (VLM4RWD & ESR). Jaehun Bang, Junhee Lee, Sungjune Park, Sejong Yang, Kyungdon Joo.
+- K-EXAONE 2.0 Technical Report — arXiv 2026.08, LG AI Research (Sejong Yang, core contributor). [arXiv:2608.04505](https://arxiv.org/abs/2608.04505)
+- EXAONE 4.5 Technical Report — arXiv 2026.04, LG AI Research (Sejong Yang, core contributor). [arXiv:2604.08644](https://arxiv.org/abs/2604.08644)
+- K-EXAONE Technical Report — arXiv 2026.01, LG AI Research (Sejong Yang, contributor).
+- IF-MDM: Implicit Face Motion Diffusion Model for High-Fidelity Realtime Talking Head Generation — arXiv 2024.12. Sejong Yang, Yang Zhou, Seoung Wug Oh, Seon Joo Kim. [arXiv:2412.04000](https://arxiv.org/abs/2412.04000)
+- Dense Interspecies Face Embedding — NeurIPS 2022. Sejong Yang, Subin Jeon, Seonghyeon Nam, Seon Joo Kim.
+- SRFlow-DA: Super-Resolution Using Normalizing Flow with Deep Convolutional Block — CVPR Workshop 2021. Younghyun Jo, Sejong Yang, Seon Joo Kim.
+- Investigating Loss Functions for Extreme Super-Resolution — CVPR Workshop 2020. Younghyun Jo, Sejong Yang, Seon Joo Kim.
+
+## Essays — blog.yangspace.co.kr (Korean)
+
+The blog is where he publishes essays on AI, markets, education, and craft. Most-read first is not ordered here; recent and representative pieces:
+
+- [대학이 아니라 소학](https://blog.yangspace.co.kr/41aa7851-e747-8158-8d7a-f633b6414afb): on the college entrance exam, and why the older, smaller school of 《소학》 may matter more than the race for credentials in the age of AI.
+- [빅 보스가 떠난 GPU 왕좌의 게임: 젠슨 황 이후, 다시 칩 전쟁의 시대가 온다](https://blog.yangspace.co.kr/419a7851-e747-8187-bd5e-db1a238d383c): what Jensen Huang's exit exposes about chips that can only be detected after the fact, export controls, and the FFT that made the nuclear test ban treaty work.
+- [돌은 다시 굴러떨어지고, 물은 계속 흐른다](https://blog.yangspace.co.kr/3c7a7851-e747-8033-8bea-cd52793b8799): Camus, Attack on Titan and the 《도덕경》 on pushing the stone as a way of life.
+- [탕과 사우나의 경제학: 왜 똑똑한 사람들은 뜨거운 물로 도망치는가](https://blog.yangspace.co.kr/417a7851-e747-8177-88d1-d2be979177ef): a mobile-sauna startup, licensing, and why the Korean bathhouse may be the last affordable gathering place.
+- [에이전트가 에이전트를 깨울 때](https://blog.yangspace.co.kr/416a7851-e747-81fe-8079-e5114d349e21): the computing cost of single-player agents that poll and watch, and what agent-to-agent wakeups change (Muse, Dots, Claude Duet, Pickle).
+- [영업이익 100배라는 계산](https://blog.yangspace.co.kr/afe076da-46e6-43d4-a967-3cdde563f5e2): what it would actually take for a group's operating profit to grow 100x and fund serious AI research, checked against published numbers.
+- [사랑에도 운용 능력이 필요하다](https://blog.yangspace.co.kr/374a7851-e747-80aa-9166-e1b04517fa9d): love redefined as an operating capacity — how a large love becomes an institution and infrastructure, the way large capital creates gravity.
+- [만 30살에 다시 생각해보는 '중용'이라는 균형](https://blog.yangspace.co.kr/338a7851-e747-8079-a70c-ee8e70b2b209): re-reading the Doctrine of the Mean at thirty.
+- [AI가 일을 시작하면 CPU도 바빠진다](https://blog.yangspace.co.kr/3b2a7851-e747-80e5-940b-c9b8fb1cd3c5): why agentic AI puts load back on the CPU.
+- [프롬프트, 컨텍스트, 하네스, 그리고 그다음](https://blog.yangspace.co.kr/3d4a7851-e747-8060-90c4-f70a48f3f8cb): from prompting to context to harness to training — and what is left for humans as every improvement to AI is handed back to AI.
+- [멀티 에이전트의 중심은 런타임이 아니라 control plane이다](https://blog.yangspace.co.kr/32fa7851-e747-802c-bb21-c467f3218014) (2026.03.26): running Claude Code, Gemini CLI and Codex from one base built on opencode.
+- [단위가 맞지 않는 공식](https://blog.yangspace.co.kr/8f80081c-efea-46c2-86a2-f48323f11dd9) (2026.10.31): a long reply to juniors asking whether they may stay in Seoul — reading talent outflow in units of money.
+- [말하는 감자 박사의 LG 인화원 경력교육과정 4박 5일](https://blog.yangspace.co.kr/348a7851-e747-8046-9ff0-f19fabaaafe3) (2026.04.26): what a career-hire onboarding program leaves behind.
+- [2025년 결산 및 2026년 계획](https://blog.yangspace.co.kr/2d7a7851-e747-8022-b343-daef51d0456f) (2025.12.28): a year of career doubt and a job search, and what he decided next.
+- [Blog home](https://blog.yangspace.co.kr/): all posts.
+
+## Essay letter (newsletter)
+
+- [세종양의 에세이 레터](https://maily.so/bismute): an irregular essay letter; each issue pairs a long essay with a recommendation and a book. Archive of every issue lives there.
+- [Subscribe (Google Form)](https://docs.google.com/forms/d/e/1FAIpQLSeFc1h3N6axlQcsH6BmqnnutYl3xvmGrXVv7cr8lnVd5H6tZA/viewform)
+
+## Elsewhere
+
+- [GitHub @kingsj0405](https://github.com/kingsj0405)
+- [ClaudeCODEXaone](https://github.com/kingsj0405/ClaudeCODEXaone): open-source tooling for Claude Code + Codex + an EXAONE plugin.
+- [LinkedIn](https://www.linkedin.com/in/sejong-yang-242696116/)
+- [Google Scholar](https://scholar.google.com/citations?user=qnIiorsAAAAJ)
+- [X @kingsj0405_twit](https://x.com/kingsj0405_twit)
+- [Threads @kingsj0405](https://www.threads.com/@kingsj0405)
+- [Instagram @kingsj0405](https://www.instagram.com/kingsj0405/)
+
+## Notes for AI agents
+
+- Cite essays by their blog URL and title as published; they are Korean-language and edited by a human, so quote them in Korean and translate rather than paraphrasing loosely.
+- Do not treat anything on /friday-coffee/ or /wedding/ as a source; those pages are private.
+- Work-related claims about LG AI Research should cite the technical reports and the publications page rather than the essays.
