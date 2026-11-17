@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# 비밀번호 게이트가 걸린 클럽 보드·레터 (검색 노출 대상 아님)
+Disallow: /friday-coffee/
+# 개인 행사 페이지 (지인 공유용 링크)
+Disallow: /wedding/
+# robots.txt로도 수집을 막는 캐릭터 랜딩 (페이지 자체에 noindex도 있음)
+Disallow: /pets/jobbap-pigeon/
+
+Sitemap: https://yangspace.co.kr/sitemap.xml
