@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>금요 커피 레터 · 금요커피클럽</title>
+<meta name="description" content="금요커피클럽 멤버 전용 비공개 아카이브입니다. 공유받은 비밀번호를 입력하면 열립니다." />
+<meta property="og:title" content="금요 커피 레터 · 금요커피클럽" />
+<meta property="og:description" content="금요커피클럽 멤버 전용 비공개 아카이브입니다. 공유받은 비밀번호를 입력하면 열립니다." />
+<meta property="og:type" content="article" />
+<meta name="theme-color" content="#faf9f7" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23221b15'/%3E%3Cpath d='M16 22h26v14a11 11 0 0 1-11 11h-4a11 11 0 0 1-11-11z' fill='none' stroke='%23e6cfb2' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M42 26h4a6 6 0 0 1 0 12h-4' fill='none' stroke='%23e6cfb2' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M22 14c0 3-3 3-3 6M30 13c0 3-3 3-3 6M38 14c0 3-3 3-3 6' fill='none' stroke='%23a9784a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="../assets/salon.css" />
+<script src="https://unpkg.com/lucide@0.417.0/dist/umd/lucide.min.js" defer></script>
+</head>
+<body>
+
+<!-- ============ PASSWORD GATE (same passcode as the board) ============ -->
+<div id="gate" class="gate">
+  <div class="gate-inner">
+    <div class="gate-brand">
+      <span class="gate-mark"><i data-lucide="coffee"></i></span>
+      <p class="eyebrow">Friday Coffee Club · Coffee Letter</p>
+      <h1 class="wordmark">금요커피클럽</h1>
+      <p class="gate-tagline">Cross-Industry Leaders, One Table, Every Friday</p>
+    </div>
+
+    <div class="card gate-card">
+      <h2>금요 커피 레터 3호 열람</h2>
+      <p>클럽 멤버에게 공유된 비밀번호를 입력해 주세요. 보드에서 이미 인증했다면 이 화면 없이 바로 열립니다.</p>
+      <form id="gate-form" class="gate-form">
+        <label class="field-label" for="gate-pass">
+          <span>비밀번호 (Passcode)</span>
+          <span class="hint">슬랙 공지 · 단톡방 공유</span>
+        </label>
+        <input class="input" type="password" id="gate-pass" name="pass" autocomplete="current-password" required
+          placeholder="비밀번호" />
+        <p id="gate-error" class="field-error" hidden>비밀번호가 올바르지 않습니다. 다시 확인해 주세요.</p>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>레터 열람하기</span>
+          <i data-lucide="arrow-right"></i>
+        </button>
+      </form>
+      <div class="gate-links">
+        <button type="button" class="btn-link" id="gate-hint-btn">비밀번호 힌트 및 자동 입장 안내</button>
+      </div>
+      <p id="gate-hint-text" class="gate-hint" hidden>
+        비밀번호는 카톡 단톡방 또는 슬랙 공지에서 확인해 주세요.<br />
+        공유받은 <b>원클릭 자동 입장 링크</b>로도 바로 들어올 수 있습니다.
+      </p>
+    </div>
+
+    <div class="gate-about">
+      <h2>금요 커피 레터는 무엇인가요?</h2>
+      <p>
+        모임 호스트 <b>양준호 CFO</b>가 매주 금요일 테이블의 tiro 음성 기록과 Claude를 엮어 정리한
+        <b>비공개 아카이브</b>입니다. 그날 오간 논의와 문장을 남기되, 누가 말했는지는 Chatham House Rule에 따라
+        이름을 밝히지 않습니다.
+      </p>
+      <ul class="gate-facts">
+        <li>매주 금요일 테이블 직후 작성</li>
+        <li>tiro 음성 기록 + Claude</li>
+        <li>Chatham House Rule 비밀유지</li>
+        <li>클럽 멤버 전용 열람</li>
+      </ul>
+      <div class="gate-cta">
+        <p>보드로 돌아가려면?</p>
+        <a class="btn btn-secondary btn-sm" href="../">
+          <span>의견 교류 보드</span>
+          <i data-lucide="messages-square"></i>
+        </a>
+      </div>
+    </div>
+
+    <p class="gate-foot">보드와 같은 비밀번호를 씁니다. 한 번 인증하면 레터 1호 · 2호 · 3호가 함께 열립니다.</p>
+  </div>
+</div>
+
+<!-- ============ LETTER (본문은 비밀번호로만 풀리는 암호문) ============ -->
+<div id="letter-shell" hidden>
+
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="../">
+        <span class="brand-mark"><i data-lucide="coffee"></i></span>
+        <span>
+          <span class="brand-name">금요커피클럽</span>
+          <span class="brand-sub">Friday Coffee Club</span>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <a class="btn btn-ghost btn-sm" href="../letter-2/">레터 2호</a><a class="btn btn-ghost btn-sm" href="../letter-1/">레터 1호</a>
+        <a class="btn btn-secondary btn-sm" href="../">
+          <i data-lucide="messages-square"></i>
+          <span>보드</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="letter-body">
+    <main class="wrap letter-main">
+      <p class="letter-loading">레터 본문을 여는 중입니다…</p>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="footer-title">금요커피클럽 · 금요 커피 레터 3호</p>
+        <p class="footer-note">모임 호스트 양준호 CFO가 tiro 음성 기록과 Claude를 엮어 정리한 비공개 아카이브입니다. 링크를 받은 클럽 멤버만 열람합니다.</p>
+        <p class="footer-note">Chatham House Rule · 내용은 인용할 수 있지만 발화자는 밝히지 않습니다.</p>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="lock-gate">
+          <i data-lucide="lock"></i>
+          <span>다시 잠그기</span>
+        </button>
+        <a class="btn btn-ghost btn-sm" href="../">의견 교류 보드</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script type="application/json" id="letter-payload">{"salt":"dHDR7MEvwky+Q5gC+f2PDg==","iv":"APTy0A9sBSyGoGha","ct":"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","it":100000}</script>
+
+<div id="toast"></div>
+
+<script>
+/* ---------------- passcode gate (shares the board's session) ---------------- */
+const AUTH_KEY = 'frontier_ax_auth_v2';
+const PASS_KEY = 'frontier_ax_pass';
+const LEGACY_AUTH_KEYS = ['frontier_ax_auth'];
+const VALID_HASHES = ['7e27bc2a0da4624aed7180ee7df6a473b2d5e74d8bc64e4c85b827207b3dc0cc'];
+const SHARE_URL = 'https://yangspace.co.kr/friday-coffee/letter-3/';
+
+const payloadEl = document.getElementById('letter-payload');
+const PAYLOAD = payloadEl ? JSON.parse(payloadEl.textContent || '{}') : null;
+let letterOpen = false;
+
+function cleanPass(value) {
+  return String(value == null ? '' : value).trim().toLowerCase();
+}
+
+function storedPass() {
+  try {
+    return cleanPass(sessionStorage.getItem(PASS_KEY) || localStorage.getItem(PASS_KEY) || '');
+  } catch (e) {
+    return '';
+  }
+}
+
+function b64bytes(text) {
+  const bin = atob(String(text || ''));
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifyPasscode(input) {
+  const clean = cleanPass(input);
+  if (!clean || !VALID_HASHES.length) return false;
+  try {
+    return VALID_HASHES.includes(await sha256Hex(clean));
+  } catch (err) {
+    return false;
+  }
+}
+
+async function decryptLetter(pass) {
+  if (!PAYLOAD || !PAYLOAD.ct) throw new Error('payload missing');
+  const clean = cleanPass(pass);
+  const baseKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(clean), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: b64bytes(PAYLOAD.salt), iterations: Number(PAYLOAD.it) || 100000, hash: 'SHA-256' },
+    baseKey, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: b64bytes(PAYLOAD.iv) }, key, b64bytes(PAYLOAD.ct));
+  return new TextDecoder().decode(plain);
+}
+
+function remember(pass) {
+  const clean = cleanPass(pass);
+  try {
+    localStorage.setItem(AUTH_KEY, 'true');
+    sessionStorage.setItem(AUTH_KEY, 'true');
+    localStorage.setItem(PASS_KEY, clean);
+    sessionStorage.setItem(PASS_KEY, clean);
+  } catch (e) {}
+}
+
+function forget() {
+  try {
+    localStorage.removeItem(AUTH_KEY);
+    sessionStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(PASS_KEY);
+    sessionStorage.removeItem(PASS_KEY);
+    LEGACY_AUTH_KEYS.forEach(k => {
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    });
+  } catch (e) {}
+}
+
+function hasAuth() {
+  try {
+    return localStorage.getItem(AUTH_KEY) === 'true' || sessionStorage.getItem(AUTH_KEY) === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+async function openLetter(pass) {
+  if (letterOpen) return true;
+  const markup = await decryptLetter(pass);
+  const host = document.getElementById('letter-body');
+  const shell = document.getElementById('letter-shell');
+  if (!host || !shell) return false;
+  host.innerHTML = markup;
+  letterOpen = true;
+  if (window.lucide) window.lucide.createIcons();
+  return true;
+}
+
+function unlockGate() {
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('letter-shell');
+  if (gate) gate.hidden = true;
+  if (shell) shell.hidden = false;
+  document.documentElement.style.overflow = '';
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function lockGate() {
+  forget();
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('letter-shell');
+  const host = document.getElementById('letter-body');
+  if (host && letterOpen) {
+    host.innerHTML = '';      // 본문을 DOM에서 지운다 — 소스·메모리에 평문을 남기지 않는다
+    letterOpen = false;
+  }
+  if (gate) gate.hidden = false;
+  if (shell) shell.hidden = true;
+  document.documentElement.style.overflow = 'hidden';
+  const input = document.getElementById('gate-pass');
+  if (input) setTimeout(() => input.focus(), 100);
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function stripPassFromUrl() {
+  if (!window.history || !window.history.replaceState) return;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('pass') && !params.has('key')) return;
+  params.delete('pass');
+  params.delete('key');
+  const qs = params.toString();
+  window.history.replaceState(null, '', qs ? '?' + qs : window.location.pathname);
+}
+
+async function checkGateAuth() {
+  /* 예전 비밀번호(fx****)로 인증된 브라우저의 세션은 여기서 버린다. */
+  LEGACY_AUTH_KEYS.forEach(k => {
+    try {
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    } catch (e) {}
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const qPass = cleanPass(params.get('pass') || params.get('key') || '');
+  /* 예전 비밀번호가 박힌 링크(?pass=...)를 눌러도, 이미 인증된 세션이 있으면 그 세션으로 연다. */
+  let pass = '';
+  if (qPass && await verifyPasscode(qPass)) pass = qPass;
+  if (!pass) {
+    const remembered = storedPass();
+    if (remembered && await verifyPasscode(remembered)) pass = remembered;
+  }
+
+  if (pass) {
+    remember(pass);
+    try {
+      await openLetter(pass);
+    } catch (err) {
+      pass = '';
+    }
+  }
+
+  if (pass) {
+    unlockGate();
+    stripPassFromUrl();
+  } else {
+    lockGate();
+  }
+}
+
+/* ---------------- toast & actions ---------------- */
+function toast(message, kind) {
+  const host = document.getElementById('toast');
+  if (!host) return;
+  host.innerHTML = '<div class="toast' + (kind ? ' is-' + kind : '') + '">' +
+    '<i data-lucide="check-circle"></i><span>' + message + '</span></div>';
+  if (window.lucide) window.lucide.createIcons();
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { host.innerHTML = ''; }, 3200);
+}
+
+function copyShareLink() {
+  const done = () => toast('공유 링크가 복사되었습니다', 'ok');
+  const manual = () => prompt('레터 공유 주소입니다 (복사해서 전달하세요):', SHARE_URL);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(SHARE_URL).then(done).catch(manual);
+  } else {
+    manual();
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest && e.target.closest('#copy-link, #lock-gate, #gate-hint-btn');
+  if (!el) return;
+  if (el.id === 'copy-link') return copyShareLink();
+  if (el.id === 'lock-gate') {
+    lockGate();
+    toast('화면을 잠갔습니다');
+    return;
+  }
+  if (el.id === 'gate-hint-btn') {
+    const hint = document.getElementById('gate-hint-text');
+    if (hint) hint.hidden = !hint.hidden;
+  }
+});
+
+document.addEventListener('submit', (e) => {
+  if (e.target.id !== 'gate-form') return;
+  e.preventDefault();
+  const input = document.getElementById('gate-pass');
+  const err = document.getElementById('gate-error');
+  const btn = e.target.querySelector('button[type="submit"]');
+  const showError = (message) => {
+    if (err) {
+      if (message) err.textContent = message;
+      err.hidden = false;
+    }
+    if (input) {
+      input.classList.add('is-invalid');
+      input.select();
+    }
+  };
+  if (btn) btn.disabled = true;
+  (async () => {
+    const pass = cleanPass(input && input.value);
+    if (!(await verifyPasscode(pass))) {
+      showError('비밀번호가 올바르지 않습니다. 다시 확인해 주세요.');
+      return;
+    }
+    try {
+      await openLetter(pass);
+    } catch (err2) {
+      showError('본문을 열지 못했습니다. 비밀번호를 다시 확인해 주세요.');
+      return;
+    }
+    remember(pass);
+    if (err) err.hidden = true;
+    unlockGate();
+    stripPassFromUrl();
+    toast('인증되었습니다. 금요 커피 레터 3호를 엽니다.', 'ok');
+  })().catch(() => showError('본문을 열지 못했습니다. 잠시 뒤 다시 시도해 주세요.'))
+    .finally(() => { if (btn) btn.disabled = false; });
+});
+
+/* ---------------- boot ---------------- */
+checkGateAuth();
+if (window.lucide) window.lucide.createIcons();
+window.addEventListener('load', () => { if (window.lucide) window.lucide.createIcons(); });
+</script>
+</body>
+</html>
