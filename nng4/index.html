@@ -1,0 +1,3735 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#f4f1ea">
+<meta name="description" content="Lean 4 자연수 게임(Natural Number Game 4) 한국어판 — 모바일에서 즐기는 인터랙티브 수학 증명 게임">
+<title>자연수 게임 · 한국어판</title>
+<style>:root {
+  --bg: #f4f1ea;
+  --panel: #fffdf8;
+  --ink: #23201b;
+  --ink-2: #6a6255;
+  --ink-3: #9b9284;
+  --line: #e2dbcd;
+  --accent: #5b8def;
+  --ok: #2f9e6b;
+  --bad: #c8433a;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", "Segoe UI", system-ui, sans-serif;
+  --r: 12px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+button { font-family: inherit; font-size: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+code, .mono { font-family: var(--mono); }
+
+#app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ---------- 공통 ---------- */
+.screen { display: none; flex-direction: column; height: 100%; min-height: 0; }
+.screen.on { display: flex; }
+
+header.bar {
+  flex: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  padding-top: calc(8px + env(safe-area-inset-top));
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  min-height: 46px;
+}
+header.bar h1 {
+  font-size: 14px; font-weight: 700; margin: 0; flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+header.bar .sub { font-size: 11px; color: var(--ink-3); font-weight: 500; }
+.iconbtn {
+  width: 32px; height: 32px; border-radius: 9px; flex: none;
+  display: grid; place-items: center; font-size: 15px;
+  background: #efeae0; color: var(--ink-2);
+}
+.iconbtn:active { background: #e3ddcf; }
+.pill {
+  font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+  background: #efeae0; color: var(--ink-2); flex: none;
+}
+
+/* ---------- 홈 ---------- */
+#scr-home .scroll { flex: 1; overflow-y: auto; padding: 18px 16px 40px; }
+.brand { text-align: center; padding: 10px 0 4px; }
+.brand .kicker { font-size: 11px; letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase; }
+.brand h1 { font-size: 30px; margin: 6px 0 4px; letter-spacing: -.02em; }
+.brand .lede { color: var(--ink-2); font-size: 13.5px; }
+.logo {
+  width: 76px; height: 76px; margin: 8px auto 6px; border-radius: 22px;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 30px;
+  background: linear-gradient(145deg, #6c9bf5, #4a6fd4); color: #fff;
+  box-shadow: 0 10px 24px -12px #4a6fd4;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 15px;
+  background: var(--ink); color: #fff;
+}
+.btn.wide { width: 100%; }
+.btn.ghost { background: #efeae0; color: var(--ink); }
+.btn.accent { background: var(--accent); }
+.btn:active { filter: brightness(.93); }
+.progressline { height: 6px; border-radius: 999px; background: #e7e1d4; overflow: hidden; }
+.progressline > i { display: block; height: 100%; background: var(--ok); }
+
+/* ---------- 맵 ---------- */
+#scr-map .scroll { flex: 1; overflow-y: auto; padding: 12px 12px 40px; }
+.wcard {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  margin-bottom: 10px; overflow: hidden;
+}
+.wcard .head { display: flex; align-items: center; gap: 10px; padding: 12px 12px; }
+.wcard .badge {
+  width: 32px; height: 32px; border-radius: 10px; flex: none;
+  display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 14px;
+}
+.wcard .t { flex: 1; min-width: 0; }
+.wcard .t b { display: block; font-size: 14.5px; }
+.wcard .t span { font-size: 11.5px; color: var(--ink-3); }
+.wcard .meta { font-size: 11px; color: var(--ink-2); font-weight: 700; flex: none; }
+.wcard .bar { padding: 0 12px 12px; }
+.wcard.locked { opacity: .62; }
+.wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; padding: 0 12px 12px; }
+.lvbtn {
+  aspect-ratio: 1; border-radius: 9px; background: #f0ebe0; color: var(--ink-2);
+  font-size: 13px; font-weight: 700; display: grid; place-items: center;
+  border: 1.5px solid transparent;
+}
+.lvbtn.cleared { background: #dff0e6; color: #1f7a50; border-color: #bfe2cf; }
+.lvbtn.current { background: #fff; border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 3px rgba(91,141,239,.13); }
+.lvbtn.lock { background: #efeae0; color: #c6bfb1; }
+.wintro { padding: 0 12px 12px; font-size: 12.5px; color: var(--ink-2); }
+
+/* ---------- 레벨 ---------- */
+#level { background: var(--bg); }
+.goalbox {
+  flex: 1 1 auto; min-height: 104px; overflow-y: auto;
+  padding: 10px 12px 12px; background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+.glabel { font-size: 10.5px; font-weight: 800; letter-spacing: .1em; color: var(--ink-3); text-transform: uppercase; }
+.glabel .cnt { color: var(--accent); letter-spacing: 0; text-transform: none; font-weight: 700; }
+.goal {
+  font-family: var(--mono); font-size: 15px; line-height: 1.45;
+  margin: 3px 0 10px; word-break: break-word;
+  padding: 8px 10px; border-radius: 9px; background: #f7f3e9; border-left: 3px solid var(--accent);
+}
+.goal.empty { border-left-color: var(--ok); color: #1f7a50; }
+.hyps { display: flex; flex-wrap: wrap; gap: 5px 10px; }
+.hyp {
+  font-family: var(--mono); font-size: 12.5px; color: var(--ink-2);
+  background: #f7f3e9; border-radius: 7px; padding: 2px 7px;
+  max-width: 100%; overflow-wrap: anywhere;
+}
+.hyp b { color: var(--ink); font-weight: 700; }
+.hyp .ty { color: var(--ink-2); }
+.newbox { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.newbox .lb { font-size: 10.5px; font-weight: 800; color: var(--ink-3); letter-spacing: .06em; }
+.newbox .it { font-family: var(--mono); font-size: 11.5px; background: #e9f2ec; color: #1f7a50; border-radius: 6px; padding: 2px 7px; }
+.newbox .it.t { background: #e3ecff; color: #2f5fb8; }
+
+.codebox { flex: none; background: #23201b; color: #f0ece2; max-height: 40vh; display: flex; flex-direction: column; }
+.lines { overflow-y: auto; padding: 8px 10px 2px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; min-height: 26px; max-height: 22vh; }
+.line { display: flex; gap: 8px; white-space: pre-wrap; word-break: break-word; }
+.line .n { color: #7d7566; flex: none; width: 14px; text-align: right; }
+.line.err { color: #ff9d92; }
+.line .mark { color: #6f9d5a; }
+.inputrow { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-top: 1px solid #38332b; background: #1b1815; }
+.inputrow .caret { color: #8fd18f; font-family: var(--mono); font-size: 13px; }
+#cmd {
+  flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
+  color: #fff; font-family: var(--mono); font-size: 14px; padding: 6px 2px;
+}
+#cmd::placeholder { color: #6f6659; }
+.runbtn {
+  flex: none; background: #3c7d4e; color: #fff; font-weight: 800; font-size: 13px;
+  padding: 9px 14px; border-radius: 9px;
+}
+.runbtn:active { filter: brightness(1.15); }
+
+.actionrow { flex: none; display: flex; gap: 6px; padding: 7px 8px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.act { flex: 1; padding: 9px 4px; border-radius: 9px; background: #efeae0; font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+.act:active { background: #e3ddcf; }
+.act.primary { background: #e3ecff; color: #2f5fb8; }
+.act:disabled { opacity: .4; }
+
+.palette { flex: none; background: var(--panel); border-bottom: 1px solid var(--line); padding: 6px 0 6px; }
+.prow { display: flex; gap: 6px; overflow-x: auto; padding: 0 8px; scrollbar-width: none; }
+.prow::-webkit-scrollbar { display: none; }
+.prow + .prow { margin-top: 6px; }
+.chip {
+  flex: none; padding: 6px 10px; border-radius: 999px; font-family: var(--mono);
+  font-size: 12.5px; background: #f0ebe0; color: var(--ink); border: 1px solid #e2dbcd;
+  white-space: nowrap;
+}
+.chip:active { background: #e5dfd1; }
+.chip.sym { background: #fff; color: #4c4639; font-weight: 700; }
+.chip.hot { background: #e3ecff; border-color: #c4d6fb; color: #2f5fb8; }
+
+.dock { flex: 0 1 auto; max-height: 46vh; background: var(--panel); border-top: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden; }
+.tabs { display: flex; flex: none; border-bottom: 1px solid var(--line); }
+.tab {
+  flex: 1; padding: 10px 4px; font-size: 12.5px; font-weight: 700; color: var(--ink-3);
+  border-bottom: 2px solid transparent;
+}
+.tab.on { color: var(--ink); border-bottom-color: var(--accent); }
+.tabbody { overflow-y: auto; padding: 10px 12px 16px; flex: 1 1 auto; min-height: 60px; }
+.tabbody.hide { display: none; }
+
+.card { background: #f7f3e9; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+.card h4 { margin: 0 0 4px; font-size: 13px; font-family: var(--mono); }
+.card p { margin: 0 0 6px; font-size: 12.5px; color: var(--ink-2); }
+.card p:last-child { margin-bottom: 0; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 800; color: #fff; background: var(--accent); border-radius: 5px; padding: 1px 5px; margin-left: 5px; vertical-align: 1px; }
+.tag.new { background: var(--ok); }
+.thm { padding: 8px 0; border-bottom: 1px dashed #e6e0d2; }
+.thm:last-child { border-bottom: 0; }
+.thm .nmrow { display: flex; align-items: center; gap: 6px; }
+.thm .nm { font-family: var(--mono); font-size: 12.5px; font-weight: 700; flex: 1; min-width: 0; }
+.thm .st { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); display: block; margin-top: 3px; word-break: break-word; }
+.thm .st.ko { font-family: var(--sans); font-size: 12px; line-height: 1.5; }
+.thm button.use { flex: none; font-size: 11px; font-weight: 800; color: var(--accent); background: #eef3ff; border-radius: 7px; padding: 4px 9px; }
+.hintitem { font-size: 13px; padding: 9px 11px; background: #fff8e2; border-radius: 9px; margin-bottom: 7px; border: 1px solid #f0e3bd; display: flex; gap: 8px; }
+.hintitem .num { flex: none; }
+.hintitem .hbody { flex: 1; min-width: 0; }
+.hintitem .hbody .md { font-size: 13px; }
+.hintitem .hbody .md p:last-child { margin-bottom: 0; }
+.hintitem .num { font-weight: 800; color: #a2801f; margin-right: 5px; }
+.hintmore { width: 100%; padding: 10px; border-radius: 9px; background: #efeae0; font-weight: 700; font-size: 12.5px; color: var(--ink-2); }
+.muted { color: var(--ink-3); font-size: 12.5px; }
+.sec { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--ink-3); text-transform: uppercase; margin: 12px 0 4px; }
+.sec:first-child { margin-top: 0; }
+
+/* ---------- 시트/모달 ---------- */
+.sheetwrap { position: fixed; inset: 0; background: rgba(20,17,12,.45); display: none; z-index: 40; }
+.sheetwrap.on { display: block; }
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; max-height: 88dvh;
+  background: var(--panel); border-radius: 18px 18px 0 0; display: flex; flex-direction: column;
+  animation: up .22s ease-out;
+}
+@keyframes up { from { transform: translateY(24px); opacity: .6; } }
+.sheet .sh { display: flex; align-items: center; gap: 8px; padding: 14px 16px 8px; }
+.sheet .sh h3 { margin: 0; font-size: 15px; flex: 1; }
+.sheet .sb { overflow-y: auto; padding: 0 16px 22px; }
+
+/* ---------- 마크다운 ---------- */
+.md { font-size: 13.5px; line-height: 1.62; color: #3a352c; }
+.md h3 { font-size: 16px; margin: 14px 0 6px; color: var(--ink); }
+.md h4 { font-size: 14px; margin: 13px 0 5px; color: var(--ink); }
+.md h5 { font-size: 13px; font-weight: 800; margin: 12px 0 4px; color: var(--ink); }
+.md p { margin: 0 0 9px; }
+.md ul { margin: 0 0 9px; padding-left: 18px; }
+.md li { margin: 0 0 4px; }
+.md code { background: #efe9dc; padding: 1px 5px; border-radius: 5px; font-size: 12.5px; color: #7a3f22; }
+.md pre { background: #23201b; color: #ece7dc; padding: 10px 12px; border-radius: 9px; overflow-x: auto; margin: 0 0 10px; }
+.md pre code { background: none; color: inherit; padding: 0; font-size: 12px; }
+.md strong { color: var(--ink); }
+.md .math { font-family: var(--mono); font-style: italic; }
+
+/* ---------- 클리어 오버레이 ---------- */
+.clearbox { text-align: center; padding: 6px 0 12px; }
+.clearbox .em { font-size: 34px; }
+.clearbox h3 { margin: 6px 0 2px; }
+.clearbox p { color: var(--ink-2); font-size: 13px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(20px);
+  background: #23201b; color: #fff; font-size: 13px; padding: 10px 16px; border-radius: 999px;
+  opacity: 0; pointer-events: none; transition: .2s; z-index: 60; max-width: 88vw; text-align: center;
+}
+.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.errbar {
+  background: #fbe9e7; color: #a3352c; font-size: 12.5px; padding: 8px 12px;
+  border-bottom: 1px solid #f3cfca; display: none; white-space: pre-wrap;
+}
+.errbar.on { display: block; }
+
+@media (min-width: 560px) {
+  #app { max-width: 520px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  body { background: #ebe6db; }
+}
+
+.levelnote { margin-top: 14px; padding-top: 11px; border-top: 1px dashed var(--line); }
+.levelnote .md { font-size: 12.5px; color: #4a4438; }
+.levelnote .md h3, .levelnote .md h4 { font-size: 13px; margin: 10px 0 4px; }
+.levelnote .md h5 { font-size: 12.5px; }
+.levelnote .md p { margin: 0 0 7px; }
+.levelnote .md code { font-size: 11.5px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 홈 -->
+  <section id="scr-home" class="screen on">
+    <div class="scroll" id="homeBody"></div>
+  </section>
+
+  <!-- 월드 맵 -->
+  <section id="scr-map" class="screen">
+    <header class="bar">
+      <button class="iconbtn" id="backHome" aria-label="홈">←</button>
+      <h1>월드 맵</h1>
+      <span class="pill">NNG4 · KR</span>
+    </header>
+    <div class="scroll" id="mapBody"></div>
+  </section>
+
+  <!-- 레벨 -->
+  <section id="scr-level" class="screen">
+    <header class="bar">
+      <button class="iconbtn" id="backMap" aria-label="맵">←</button>
+      <div style="flex:1;min-width:0">
+        <h1 id="lvTitle">레벨</h1>
+        <div class="sub" id="lvSub"></div>
+      </div>
+      <button class="iconbtn" id="lvInfo" aria-label="설명">?</button>
+    </header>
+
+    <div class="goalbox" id="goalbox"></div>
+
+    <div class="codebox">
+      <div class="lines" id="lines"></div>
+      <div class="inputrow">
+        <span class="caret">▶</span>
+        <input id="cmd" type="text" inputmode="text" autocomplete="off" autocorrect="off"
+               autocapitalize="off" spellcheck="false" placeholder="전술 입력 · 예: rw [h]">
+        <button class="runbtn" id="run">실행</button>
+      </div>
+    </div>
+
+    <div class="errbar" id="errbar"></div>
+
+    <div class="actionrow">
+      <button class="act" id="btnUndo">↶ 되돌리기</button>
+      <button class="act" id="btnHint">💡 힌트</button>
+      <button class="act" id="btnReset">⟲ 초기화</button>
+    </div>
+
+    <div class="palette" id="palette">
+      <div class="prow" id="prowTac"></div>
+      <div class="prow" id="prowSym"></div>
+    </div>
+
+    <div class="dock">
+      <div class="tabs" id="tabs"></div>
+      <div class="tabbody" id="tabBody"></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="sheetwrap" id="sheetwrap">
+  <div class="sheet">
+    <div class="sh"><h3 id="sheetTitle"></h3><button class="iconbtn" id="sheetClose" onclick="document.getElementById('sheetwrap').classList.remove('on')">✕</button></div>
+    <div class="sb" id="sheetBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>/* ===== 엔진 ===== */
+;
+/* =====================================================================
+   NNG4-KR · 경량 Lean 4 증명 엔진 (Natural Number Game 4 한국어판)
+   - 항(AST) 기반 목표 상태, 전술 실행, 통일(unification), 재작성(rewrite)
+   ===================================================================== */
+(function (root) {
+  'use strict';
+
+  /* ---------------------------- 항(AST) ---------------------------- */
+  var NAT = { t: 'nat' };
+  var FALSE = { t: 'false' };
+  var TRUE = { t: 'true' };
+
+  function num(n) { return { t: 'num', v: n }; }
+  function vr(n) { return { t: 'var', n: n }; }
+  function succ(a) { return { t: 'succ', a: a }; }
+  function add(a, b) { return { t: 'add', a: a, b: b }; }
+  function mul(a, b) { return { t: 'mul', a: a, b: b }; }
+  function pw(a, b) { return { t: 'pow', a: a, b: b }; }
+  function eq(a, b) { return { t: 'eq', a: a, b: b }; }
+  function imp(a, b) { return { t: 'imp', a: a, b: b }; }
+  function or(a, b) { return { t: 'or', a: a, b: b }; }
+  function and(a, b) { return { t: 'and', a: a, b: b }; }
+  function le(a, b) { return { t: 'le', a: a, b: b }; }
+  function ex(v, body) { return { t: 'ex', v: v, body: body }; }
+  function all(v, body) { return { t: 'all', v: v, body: body }; }
+  function isZero(a) { return { t: 'isZero', a: a }; }
+  function pred(a) { return { t: 'pred', a: a }; }
+  function ne(a, b) { return imp(eq(a, b), FALSE); }
+
+  var HOLE_ID = 0;
+  function hole() { return { t: 'hole', id: ++HOLE_ID }; }
+
+  function kids(t) {
+    switch (t.t) {
+      case 'succ': case 'pred': case 'isZero': return [t.a];
+      case 'add': case 'mul': case 'pow': case 'eq': case 'imp':
+      case 'or': case 'and': case 'le': return [t.a, t.b];
+      case 'ex': case 'all': return [t.body];
+      default: return [];
+    }
+  }
+  function withKids(t, ks) {
+    var c = { t: t.t };
+    switch (t.t) {
+      case 'succ': case 'pred': case 'isZero': c.a = ks[0]; break;
+      case 'add': case 'mul': case 'pow': case 'eq': case 'imp':
+      case 'or': case 'and': case 'le': c.a = ks[0]; c.b = ks[1]; break;
+      case 'ex': case 'all': c.v = t.v; c.body = ks[0]; break;
+      default: throw new Error('withKids: ' + t.t);
+    }
+    if (t.t === 'num') c.v = t.v;
+    if (t.t === 'var') c.n = t.n;
+    return c;
+  }
+
+  function exprEq(a, b) {
+    if (!a || !b) return false;
+    if (a.t !== b.t) return false;
+    switch (a.t) {
+      case 'num': return a.v === b.v;
+      case 'var': case 'name': return a.n === b.n;
+      case 'nat': case 'false': case 'true': return true;
+      case 'ex': case 'all': return exprEq(a.body, substOne(b.body, b.v, vr(a.v)));
+      default: {
+        var ka = kids(a), kb = kids(b);
+        if (ka.length !== kb.length) return false;
+        for (var i = 0; i < ka.length; i++) if (!exprEq(ka[i], kb[i])) return false;
+        return true;
+      }
+    }
+  }
+
+  function hasVar(t, name) {
+    if (t.t === 'var') return t.n === name;
+    if ((t.t === 'ex' || t.t === 'all') && t.v === name) return false;
+    var ks = kids(t);
+    for (var i = 0; i < ks.length; i++) if (hasVar(ks[i], name)) return true;
+    return false;
+  }
+
+  var FRESH = 0;
+  function freshName(base, avoid) {
+    var n = base + "'";
+    while (avoid && avoid.indexOf(n) >= 0) n += "'";
+    FRESH++;
+    return n;
+  }
+
+  function substOne(t, name, rep) {
+    if (t.t === 'var') return t.n === name ? rep : t;
+    if (t.t === 'ex' || t.t === 'all') {
+      if (t.v === name) return t;
+      var body = substOne(t.body, name, rep);
+      return { t: t.t, v: t.v, body: body };
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    var changed = false, nk = [];
+    for (var i = 0; i < ks.length; i++) {
+      var k = substOne(ks[i], name, rep);
+      if (k !== ks[i]) changed = true;
+      nk.push(k);
+    }
+    return changed ? withKids(t, nk) : t;
+  }
+
+  function applySub(t, sub) {
+    if (t.t === 'hole') { var b = sub[t.id]; return b === undefined ? t : b; }
+    if (t.t === 'ex' || t.t === 'all') {
+      var body = applySub(t.body, sub);
+      return body === t.body ? t : { t: t.t, v: t.v, body: body };
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    var changed = false, nk = [];
+    for (var i = 0; i < ks.length; i++) {
+      var k = applySub(ks[i], sub);
+      if (k !== ks[i]) changed = true;
+      nk.push(k);
+    }
+    return changed ? withKids(t, nk) : t;
+  }
+
+  function countHoles(t) {
+    if (t.t === 'hole') return 1;
+    var ks = kids(t), n = 0;
+    for (var i = 0; i < ks.length; i++) n += countHoles(ks[i]);
+    return n;
+  }
+  function hasHole(t) { return countHoles(t) > 0; }
+
+  /* ---------- 수치 정규화 (0 = 0, 1 = succ 0, 2 = succ (succ 0) ...) ---------- */
+  function expandNum(t) {
+    if (t.t === 'num') {
+      if (t.v <= 0) return num(0);
+      var r = num(0);
+      for (var i = 0; i < t.v; i++) r = succ(r);
+      return r;
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    var changed = false, nk = [];
+    for (var i = 0; i < ks.length; i++) {
+      var k = expandNum(ks[i]);
+      if (k !== ks[i]) changed = true;
+      nk.push(k);
+    }
+    if (t.t === 'ex' || t.t === 'all') return { t: t.t, v: t.v, body: nk[0] };
+    return changed ? withKids(t, nk) : t;
+  }
+  function defEq(a, b) { return exprEq(expandNum(a), expandNum(b)); }
+
+  /* 이름(name) 노드를 자유변수(var)로 바꾼다 */
+  function toVars(t, nameSet) {
+    if (t.t === 'name' && (nameSet[t.n] || nameSet === true)) return vr(t.n);
+    if (t.t === 'ex' || t.t === 'all') {
+      var s2 = nameSet === true ? true : (function () { var o = {}; for (var k in nameSet) o[k] = true; o[t.v] = true; return o; })();
+      return { t: t.t, v: t.v, body: toVars(t.body, s2) };
+    }
+    if (t.t === 'app') {
+      return { t: 'app', f: t.f, args: t.args.map(function (a) { return toVars(a, nameSet); }) };
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    return withKids(t, ks.map(function (k) { return toVars(k, nameSet); }));
+  }
+
+  /* ------------------------------ 출력 ------------------------------ */
+  var PREC = {
+    imp: 1, or: 2, and: 3, eq: 4, le: 4, add: 5, mul: 6, pow: 7,
+    succ: 8, pred: 8, isZero: 8, num: 9, var: 9, nat: 9, false: 9, true: 9,
+    ex: 0, all: 0
+  };
+
+  function pp(t, outer) {
+    outer = outer === undefined ? 0 : outer;
+    var s, p = PREC[t.t] === undefined ? 9 : PREC[t.t];
+    switch (t.t) {
+      case 'num': s = String(t.v); break;
+      case 'var': s = t.n; break;
+      case 'name': s = t.n; break;
+      case 'nat': s = 'ℕ'; break;
+      case 'false': s = 'False'; break;
+      case 'true': s = 'True'; break;
+      case 'succ': s = 'succ ' + pp(t.a, 8); break;
+      case 'pred': s = 'pred ' + pp(t.a, 8); break;
+      case 'isZero': s = 'is_zero ' + pp(t.a, 8); break;
+      case 'add': s = pp(t.a, 5) + ' + ' + pp(t.b, 6); break;
+      case 'mul': s = pp(t.a, 6) + ' * ' + pp(t.b, 7); break;
+      case 'pow': s = pp(t.a, 8) + ' ^ ' + pp(t.b, 7); break;
+      case 'le': s = pp(t.a, 5) + ' ≤ ' + pp(t.b, 5); break;
+      case 'eq': s = pp(t.a, 5) + ' = ' + pp(t.b, 5); break;
+      case 'imp':
+        if (t.b.t === 'false' && t.a.t === 'eq') {
+          s = pp(t.a.a, 5) + ' ≠ ' + pp(t.a.b, 5);
+        } else if (t.b.t === 'false') {
+          s = '¬' + pp(t.a, 3);
+        } else {
+          s = pp(t.a, 2) + ' → ' + pp(t.b, 1);
+        }
+        p = 1;
+        break;
+      case 'or': s = pp(t.a, 3) + ' ∨ ' + pp(t.b, 2); break;
+      case 'and': s = pp(t.a, 4) + ' ∧ ' + pp(t.b, 3); break;
+      case 'ex': s = '∃ ' + t.v + ', ' + pp(t.body, 0); break;
+      case 'all': s = '∀ ' + t.v + ', ' + pp(t.body, 0); break;
+      case 'hole': s = '?_' + t.id; break;
+      default: s = '?';
+    }
+    return (p < outer) ? '(' + s + ')' : s;
+  }
+
+  /* ------------------------------ 렉서 ------------------------------ */
+  var SYMS = ['→', '≠', '≤', '∨', '∧', '¬', '∀', '∃', '←', '↔', 'ℕ', '⊢',
+    '(', ')', '[', ']', ',', ':', '*', '+', '^', '=', '_'];
+
+  function lex(s) {
+    var out = [], i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      var m;
+      if (/[0-9]/.test(c)) {
+        m = /^[0-9]+/.exec(s.slice(i)); out.push({ k: 'num', v: parseInt(m[0], 10) }); i += m[0].length; continue;
+      }
+      if (/[A-Za-z]/.test(c)) {
+        m = /^[A-Za-z][A-Za-z0-9_'.]*/.exec(s.slice(i));
+        out.push({ k: 'id', v: m[0] }); i += m[0].length; continue;
+      }
+      var two = s.slice(i, i + 2);
+      if (two === ':=') { out.push({ k: 'sym', v: ':=' }); i += 2; continue; }
+      var hit = null;
+      for (var j = 0; j < SYMS.length; j++) if (s.startsWith(SYMS[j], i)) { hit = SYMS[j]; break; }
+      if (hit) { out.push({ k: 'sym', v: hit }); i += hit.length; continue; }
+      throw new Error('알 수 없는 문자: ' + c);
+    }
+    return out;
+  }
+
+  /* --------------------------- 항 파서 --------------------------- */
+  var INFIX = {
+    '→': { p: 1, assoc: 'right', build: imp },
+    '∨': { p: 2, assoc: 'right', build: or },
+    '∧': { p: 3, assoc: 'right', build: and },
+    '=': { p: 4, assoc: 'left', build: eq },
+    '≠': { p: 4, assoc: 'left', build: ne },
+    '≤': { p: 4, assoc: 'left', build: le },
+    '+': { p: 5, assoc: 'left', build: add },
+    '*': { p: 6, assoc: 'left', build: mul },
+    '^': { p: 7, assoc: 'right', build: pw }
+  };
+
+  function Parser(toks, thmNames) {
+    this.t = toks; this.i = 0; this.thmNames = thmNames || {};
+  }
+  Parser.prototype.peek = function () { return this.t[this.i]; };
+  Parser.prototype.next = function () { return this.t[this.i++]; };
+  Parser.prototype.atSym = function (v) { var x = this.peek(); return x && x.k === 'sym' && x.v === v; };
+
+  Parser.prototype.parseTerm = function (minP) {
+    minP = minP === undefined ? 0 : minP;
+    var left = this.parsePrefix();
+    for (; ;) {
+      var tk = this.peek();
+      if (!tk) break;
+      if (tk.k === 'id' || tk.k === 'num' || (tk.k === 'sym' && tk.v === '(')) {
+        // 나열(juxtaposition) = 함수 적용; 인자는 원자항만(괄호·숫자·이름)
+        if (9 < (minP || 0)) break;
+        if (left.t === 'name' || left.t === 'var' || left.t === 'app') {
+          var arg = this.parsePrefix();
+          left = left.t === 'app'
+            ? { t: 'app', f: left.f, args: left.args.concat([arg]) }
+            : { t: 'app', f: left, args: [arg] };
+          continue;
+        }
+        break;
+      }
+      if (tk.k === 'sym' && INFIX[tk.v]) {
+        var op = INFIX[tk.v];
+        if (op.p < minP) break;
+        this.next();
+        var rmin = op.assoc === 'right' ? op.p : op.p + 1;
+        var right = this.parseTerm(rmin);
+        left = op.build(left, right);
+        continue;
+      }
+      break;
+    }
+    return left;
+  };
+
+  Parser.prototype.parsePrefix = function () {
+    var tk = this.next();
+    if (!tk) throw new Error('식이 예상보다 일찍 끝났습니다');
+    if (tk.k === 'num') return num(tk.v);
+    if (tk.k === 'id') return this.identTerm(tk.v);
+    if (tk.k === 'sym') {
+      switch (tk.v) {
+        case '(': {
+          var e = this.parseTerm(0);
+          if (this.atSym(':')) { this.next(); this.parseTerm(0); }  /* 타입 표기 무시 */
+          if (!this.atSym(')')) throw new Error('괄호가 닫히지 않았습니다');
+          this.next();
+          return e;
+        }
+        case '¬': return imp(this.parseTerm(3), FALSE);
+        case '∀': case '∃': {
+          var v = this.next();
+          if (!v || v.k !== 'id') throw new Error('변수 이름이 필요합니다');
+          if (this.atSym(':')) { this.next(); this.parseTerm(0); }
+          if (!this.atSym(',')) throw new Error('`,`가 필요합니다');
+          this.next();
+          var body = this.parseTerm(0);
+          return tk.v === '∀' ? all(v.v, body) : ex(v.v, body);
+        }
+        case 'ℕ': return NAT;
+        case '_': return hole();
+        default: throw new Error('예상치 못한 기호: ' + tk.v);
+      }
+    }
+    throw new Error('예상치 못한 토큰');
+  };
+
+  Parser.prototype.identTerm = function (name) {
+    if (name === 'succ') return succ(this.parseTerm(9));
+    if (name === 'pred') return pred(this.parseTerm(9));
+    if (name === 'is_zero') return isZero(this.parseTerm(9));
+    if (name === 'False') return FALSE;
+    if (name === 'True') return TRUE;
+    if (name === 'ℕ') return NAT;
+    return { t: 'name', n: name };
+  };
+
+  function parseTermText(text, thmNames) {
+    var p = new Parser(lex(text), thmNames);
+    var e = p.parseTerm(0);
+    if (p.i < p.t.length) throw new Error('해석할 수 없는 나머지: ' + p.t.slice(p.i).map(function (x) { return x.v; }).join(' '));
+    return e;
+  }
+
+  /* ------------------------ 진술 파싱 ------------------------ */
+  function splitTopLevel(s, ch) {
+    var out = [], depth = 0, cur = '', i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if (c === '(' || c === '[' || c === '{') depth++;
+      else if (c === ')' || c === ']' || c === '}') depth--;
+      if (c === ch && depth === 0) { out.push(cur); cur = ''; i++; continue; }
+      cur += c; i++;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  function parseStatement(raw) {
+    var s = String(raw).replace(/^\s*Statement\s*/, '');
+    var cut = s.indexOf(':= by');
+    if (cut >= 0) s = s.slice(0, cut);
+    s = s.trim();
+    // 최상위 콜론 위치 찾기
+    var depth = 0, colon = -1;
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (c === '(') depth++;
+      else if (c === ')') depth--;
+      else if (c === ':' && depth === 0) { colon = i; break; }
+    }
+    if (colon < 0) throw new Error('진술 형식을 해석할 수 없습니다: ' + raw);
+    var head = s.slice(0, colon).trim();
+    var typeText = s.slice(colon + 1).trim();
+
+    var name = null;
+    var m = /^([A-Za-z][A-Za-z0-9_']*)\s*/.exec(head);
+    if (m && !head.startsWith('(')) {
+      name = m[1];
+      head = head.slice(m[0].length).trim();
+    }
+    var binders = [];
+    var pos = 0;
+    while (pos < head.length) {
+      if (/\s/.test(head[pos])) { pos++; continue; }
+      if (head[pos] === '(') {
+        var d = 0, end = -1;
+        for (var k = pos; k < head.length; k++) {
+          if (head[k] === '(') d++;
+          else if (head[k] === ')') { d--; if (d === 0) { end = k; break; } }
+        }
+        var inner = head.slice(pos + 1, end);
+        var c2 = inner.indexOf(':');
+        var names = inner.slice(0, c2).trim().split(/\s+/).filter(Boolean);
+        var tyTxt = inner.slice(c2 + 1).trim();
+        var ty = (tyTxt === 'ℕ') ? NAT : parseTermText(tyTxt);
+        names.forEach(function (n) { binders.push({ name: n, type: ty }); });
+        pos = end + 1;
+      } else {
+        var mm = /^[A-Za-z][A-Za-z0-9_']*/.exec(head.slice(pos));
+        if (!mm) break;
+        binders.push({ name: mm[0], type: NAT });
+        pos += mm[0].length;
+      }
+    }
+    var target = parseTermText(typeText);
+
+    /* 바인더 이름을 자유변수(var)로 바꾼다 */
+    var nameSet = {};
+    binders.forEach(function (b) { nameSet[b.name] = true; });
+    binders = binders.map(function (b) { return { name: b.name, type: toVars(b.type, nameSet) }; });
+    target = toVars(target, nameSet);
+
+    return { name: name, binders: binders, target: target, typeText: typeText, raw: raw };
+  }
+
+  /* ------------------------- 정리 데이터베이스 ------------------------- */
+  var THMS = {};
+  function setTheorems(db) { THMS = db; }
+
+  function thmType(name) {
+    var t = THMS[name];
+    if (!t) return null;
+    return t.type;
+  }
+
+  var UNIQN = 0;
+  /* 선두 ∀ 바인더 이름을 겹치지 않는 이름으로 바꿔 포획을 막는다 */
+  function freshenAll(ty) {
+    var chain = [], cur = ty;
+    while (cur.t === 'all') { chain.push(cur.v); cur = cur.body; }
+    if (!chain.length) return ty;
+    var fresh = chain.map(function () { return '#' + (++UNIQN); });
+    var body = cur;
+    for (var i = chain.length - 1; i >= 0; i--) body = substOne(body, chain[i], vr(fresh[i]));
+    for (var j = chain.length - 1; j >= 0; j--) body = { t: 'all', v: fresh[j], body: body };
+    return body;
+  }
+
+  function instantiate(ty, args) {
+    var out = freshenAll(ty), i = 0;
+    while (out.t === 'all' && i < args.length) {
+      out = substOne(out.body, out.v, args[i]); i++;
+    }
+    while (out.t === 'imp' && i < args.length) {
+      out = out.b; i++;
+    }
+    return { ty: out, used: i };
+  }
+
+  /* --------------------------- 통일 --------------------------- */
+  function unify(pat, term, sub, avoid) {
+    if (pat.t === 'hole') {
+      if (sub[pat.id] !== undefined) return defEq(sub[pat.id], term);
+      if (hasVar(term, '?never')) return false;
+      sub[pat.id] = term;
+      return true;
+    }
+    if (term.t === 'hole') return false;
+    if (pat.t !== term.t) return false;
+    if ((pat.t === 'ex' || pat.t === 'all')) {
+      var av = avoid || [];
+      var fresh = freshName(pat.v, av);
+      var pb = substOne(pat.body, pat.v, vr(fresh));
+      var tb = substOne(term.body, term.v, vr(fresh));
+      return unify(pb, tb, sub, av.concat([fresh]));
+    }
+    if (pat.t === 'num') return pat.v === term.v;
+    if (pat.t === 'var') return pat.n === term.n;
+    if (pat.t === 'nat' || pat.t === 'false' || pat.t === 'true') return true;
+    var ka = kids(pat), kb = kids(term);
+    for (var i = 0; i < ka.length; i++) if (!unify(ka[i], kb[i], sub, avoid)) return false;
+    return true;
+  }
+
+  /* ----------------------- 재작성(rw) ----------------------- */
+  function collectPaths(t, path, acc, patLhs) {
+    var sub = {};
+    if (unify(patLhs, t, sub)) { acc.push({ path: path.slice(), sub: sub, inst: t }); }
+    var ks = kids(t);
+    for (var i = 0; i < ks.length; i++) {
+      if ((t.t === 'ex' || t.t === 'all') && ks[i].t === 'var') continue;
+      collectPaths(ks[i], path.concat([i]), acc, patLhs);
+    }
+  }
+
+  function replaceAtPath(t, path, rep) {
+    if (!path.length) return rep;
+    var ks = kids(t);
+    var idx = path[0];
+    ks[idx] = replaceAtPath(ks[idx], path.slice(1), rep);
+    return withKids(t, ks);
+  }
+
+  function replaceAllEq(t, target, rep, insideBinder) {
+    if (exprEq(t, target)) return rep;
+    var ks = kids(t);
+    if (!ks.length) return t;
+    var changed = false, nk = [];
+    for (var i = 0; i < ks.length; i++) {
+      var k = replaceAllEq(ks[i], target, rep, false);
+      if (k !== ks[i]) changed = true;
+      nk.push(k);
+    }
+    if (t.t === 'ex' || t.t === 'all') return { t: t.t, v: t.v, body: nk[0] };
+    return changed ? withKids(t, nk) : t;
+  }
+
+  /* 재작성 1회: 첫 번째 일치 위치를 찾아, 그 '인스턴스'와 같은 모든 곳을 바꾼다 */
+  function rewriteGo(target, patLhs, patRhs, opts) {
+    opts = opts || {};
+    var acc = [];
+    collectPaths(target, [], acc, patLhs);
+    if (!acc.length) return null;
+    var pick = opts.nth ? acc[opts.nth - 1] : acc[0];
+    if (!pick) return { error: 'nth', count: acc.length };
+    var instLhs = pick.inst;
+    var instRhs = applySub(patRhs, pick.sub);
+    if (opts.nth) return replaceAtPath(target, pick.path, instRhs);
+    return replaceAllEq(target, instLhs, instRhs);
+  }
+
+  /* ------------------------ 전술 오류 ------------------------ */
+  function TErr(msg, detail) {
+    var e = new Error(msg);
+    e.isTactic = true;
+    e.detail = detail || '';
+    return e;
+  }
+
+  /* ------------------------ 목표 상태 ------------------------ */
+  function mkState(level) {
+    var hyps = level.statement.binders.map(function (b) {
+      return { name: b.name, type: b.type };
+    });
+    return { goals: [{ hyps: hyps, target: level.statement.target }] };
+  }
+
+  function clone(s) { return JSON.parse(JSON.stringify(s)); }
+
+  function closeGoal(st) {
+    var g = st.goals.shift();
+    if (g && g.onClose && st.goals.length) {
+      for (var i = 0; i < st.goals.length; i++) {
+        g.onClose.forEach(function (h) { st.goals[i].hyps.push({ name: h.name, type: h.type }); });
+      }
+    }
+    return st;
+  }
+
+  function findHyp(g, name) {
+    for (var i = g.hyps.length - 1; i >= 0; i--) if (g.hyps[i].name === name) return i;
+    return -1;
+  }
+
+  function typeOf(e, g) {
+    if (e.t === 'var' || e.t === 'name') {
+      var i = findHyp(g, e.n);
+      if (i >= 0) return g.hyps[i].type;
+      if (e.t === 'name') {
+        var ty0 = thmType(e.n);
+        if (!ty0) throw TErr('`' + e.n + '`이라는 이름의 가정이나 정리를 찾을 수 없습니다.');
+        return ty0;
+      }
+      throw TErr('`' + e.n + '`이라는 이름을 찾을 수 없습니다.');
+    }
+    if (e.t === 'app') {
+      var baseTy;
+      if (e.f.t === 'name' || e.f.t === 'var') {
+        var hi = findHyp(g, e.f.n);
+        if (hi >= 0) baseTy = g.hyps[hi].type;
+        else {
+          baseTy = thmType(e.f.n);
+          if (!baseTy) throw TErr('`' + e.f.n + '`이라는 정리를 찾을 수 없습니다.');
+        }
+      } else throw TErr('적용할 수 없는 항입니다.');
+      var r = instantiate(baseTy, e.args);
+      return r.ty;
+    }
+    throw TErr('증명 항으로 쓸 수 없는 식입니다.');
+  }
+
+  /* 선두의 ∀ 를 모두 ?(hole) 로 바꾸어 결론을 꺼낸다 */
+  function forallToHoles(ty) {
+    var out = ty;
+    while (out.t === 'all') out = substOne(out.body, out.v, hole());
+    return out;
+  }
+
+  /* ------------------------ 수치 평가 ------------------------ */
+  function evalNat(t) {
+    switch (t.t) {
+      case 'num': return t.v;
+      case 'succ': { var a = evalNat(t.a); return a === null ? null : a + 1; }
+      case 'pred': { var b = evalNat(t.a); return b === null ? null : (b === 0 ? 37 : b - 1); }
+      case 'add': { var x = evalNat(t.a), y = evalNat(t.b); return (x === null || y === null) ? null : x + y; }
+      case 'mul': { var x2 = evalNat(t.a), y2 = evalNat(t.b); return (x2 === null || y2 === null) ? null : x2 * y2; }
+      case 'pow': { var x3 = evalNat(t.a), y3 = evalNat(t.b); return (x3 === null || y3 === null) ? null : Math.pow(x3, y3); }
+      case 'isZero': { var z = evalNat(t.a); return z === null ? null : (z === 0 ? 1 : 0); }
+      default: return null;
+    }
+  }
+  function evalProp(t) {
+    switch (t.t) {
+      case 'true': return true;
+      case 'false': return false;
+      case 'eq': { var a = evalNat(t.a), b = evalNat(t.b); return (a === null || b === null) ? null : a === b; }
+      case 'le': { var c = evalNat(t.a), d = evalNat(t.b); return (c === null || d === null) ? null : c <= d; }
+      case 'isZero': { var z = evalNat(t.a); return z === null ? null : z === 0; }
+      case 'and': { var x = evalProp(t.a), y = evalProp(t.b); if (x === false || y === false) return false; if (x === true && y === true) return true; return null; }
+      case 'or': { var x2 = evalProp(t.a), y2 = evalProp(t.b); if (x2 === true || y2 === true) return true; if (x2 === false && y2 === false) return false; return null; }
+      case 'imp': { var x3 = evalProp(t.a), y3 = evalProp(t.b); if (x3 === false) return true; if (y3 === true) return true; if (x3 === true && y3 === false) return false; return null; }
+      default: return null;
+    }
+  }
+
+  /* --------------------- 명제 논리(tauto) --------------------- */
+  function atomsOf(t, acc) {
+    if (t.t === 'imp' || t.t === 'or' || t.t === 'and' || t.t === 'true' || t.t === 'false') {
+      kids(t).forEach(function (k) { atomsOf(k, acc); });
+      return acc;
+    }
+    if (!acc.some(function (a) { return exprEq(a, t); })) acc.push(t);
+    return acc;
+  }
+  function evalWith(t, val) {
+    switch (t.t) {
+      case 'true': return true;
+      case 'false': return false;
+      case 'imp': if (!evalWith(t.a, val)) return true; return evalWith(t.b, val);
+      case 'or': return evalWith(t.a, val) || evalWith(t.b, val);
+      case 'and': return evalWith(t.a, val) && evalWith(t.b, val);
+      default: {
+        for (var i = 0; i < val.atoms.length; i++) if (exprEq(val.atoms[i], t)) return val.bits[i];
+        return true;
+      }
+    }
+  }
+  function tauto(g) {
+    var atoms = [];
+    atomsOf(g.target, atoms);
+    g.hyps.forEach(function (h) { atomsOf(h.type, atoms); });
+    // 닫힌 원자는 미리 평가
+    var free = [], fixed = [];
+    atoms.forEach(function (a) {
+      var v = evalProp(a);
+      fixed.push(v); if (v === null) free.push(a);
+    });
+    if (free.length > 14) return false;
+    var n = free.length;
+    var total = Math.pow(2, n);
+    for (var m = 0; m < total; m++) {
+      var bits = [], idx = 0;
+      for (var i = 0; i < atoms.length; i++) {
+        if (fixed[i] === null) { bits.push(!!((m >> idx) & 1)); idx++; }
+        else bits.push(fixed[i]);
+      }
+      var val = { atoms: atoms, bits: bits };
+      var ok = g.hyps.every(function (h) { return evalWith(h.type, val); });
+      if (ok && !evalWith(g.target, val)) return false;
+    }
+    return true;
+  }
+
+  /* --------------------- AC 정규화 (simp) --------------------- */
+  function acFlatten(t, op, accIn) {
+    var acc = accIn || [];
+    if (t.t === op) { acFlatten(t.a, op, acc); acFlatten(t.b, op, acc); }
+    else acc.push(t);
+    return acc;
+  }
+  function acKey(t) { return pp(t, 0); }
+  function acNorm(t) {
+    if (t.t === 'add' || t.t === 'mul') {
+      var leaves = acFlatten(t, t.t, []);
+      var norm = leaves.map(function (x) {
+        x = acNorm(x);
+        return x;
+      });
+      norm.sort(function (a, b) {
+        var ka = acKey(a), kb = acKey(b);
+        return ka < kb ? -1 : ka > kb ? 1 : 0;
+      });
+      var r = norm[0];
+      for (var i = 1; i < norm.length; i++) r = t.t === 'add' ? add(r, norm[i]) : mul(r, norm[i]);
+      return r;
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    var nk = ks.map(acNorm);
+    if (t.t === 'ex' || t.t === 'all') return { t: t.t, v: t.v, body: nk[0] };
+    return withKids(t, nk);
+  }
+
+  /* ------------------------ 전술 해석 ------------------------ */
+  var TACTICS = {};
+
+  TACTICS.rfl = function (st) {
+    var g = st.goals[0];
+    if (g.target.t === 'eq' && defEq(g.target.a, g.target.b)) return closeGoal(st);
+    if (g.target.t === 'true') return closeGoal(st);
+    throw TErr('`rfl`은 양변이 같은 `X = X` 꼴에서만 통합니다.', '지금 목표: ' + pp(g.target));
+  };
+
+  TACTICS.trivial = function (st) {
+    var g = st.goals[0];
+    if (g.target.t === 'true') return closeGoal(st);
+    if (g.target.t === 'eq' && defEq(g.target.a, g.target.b)) return closeGoal(st);
+    if (evalProp(g.target) === true) return closeGoal(st);
+    throw TErr('`trivial`로 닫히지 않습니다. 목표: ' + pp(g.target));
+  };
+
+  TACTICS.decide = function (st) {
+    var g = st.goals[0];
+    var v = evalProp(g.target);
+    if (v === true) return closeGoal(st);
+    if (v === false) throw TErr('목표가 거짓입니다: ' + pp(g.target));
+    throw TErr('`decide`는 변수가 없는 닫힌 식에서만 쓸 수 있습니다.');
+  };
+
+  TACTICS.tauto = function (st) {
+    var g = st.goals[0];
+    if (tauto(g)) return closeGoal(st);
+    throw TErr('`tauto`로는 이 목표를 닫을 수 없습니다(명제 논리적으론 참이 아님).');
+  };
+
+  TACTICS.symm = function (st, args, at) {
+    if (at && at.length) {
+      var g0 = st.goals[0];
+      var i = findHyp(g0, at[0]);
+      if (i < 0) throw TErr('가정 `' + at[0] + '`을 찾을 수 없습니다.');
+      g0.hyps[i].type = symmOf(g0.hyps[i].type);
+      return st;
+    }
+    var g = st.goals[0];
+    g.target = symmOf(g.target);
+    return st;
+  };
+  function symmOf(t) {
+    if (t.t === 'eq') return eq(t.b, t.a);
+    if (t.t === 'imp' && t.b.t === 'false' && t.a.t === 'eq') return imp(eq(t.a.b, t.a.a), FALSE);
+    if (t.t === 'le') throw TErr('`≤`에는 `symm`을 쓸 수 없습니다.');
+    throw TErr('`symm`을 적용할 수 있는 등식이 아닙니다: ' + pp(t));
+  }
+
+  TACTICS.intro = function (st, args) {
+    var g = st.goals[0];
+    var name = (args && args[0]) || null;
+    if (g.target.t === 'imp') {
+      var nm = name || 'h';
+      if (findHyp(g, nm) >= 0) nm = freshName(nm, g.hyps.map(function (h) { return h.name; }));
+      g.hyps.push({ name: nm, type: g.target.a });
+      g.target = g.target.b;
+      return st;
+    }
+    if (g.target.t === 'all') {
+      var nm2 = name || g.target.v;
+      if (findHyp(g, nm2) >= 0) nm2 = freshName(nm2, g.hyps.map(function (h) { return h.name; }));
+      g.hyps.push({ name: nm2, type: NAT });
+      g.target = substOne(g.target.body, g.target.v, vr(nm2));
+      return st;
+    }
+    if (g.target.t === 'ex') throw TErr('`∃` 목표는 `use`로 풉니다.');
+    throw TErr('`intro`를 적용할 수 있는 함축/∀ 목표가 아닙니다: ' + pp(g.target));
+  };
+
+  TACTICS.exact = function (st, argText) {
+    var g = st.goals[0];
+    var e = resolveLocals(parseTermText(argText), g);
+    var ty = typeOf(e, g);
+    if (defEq(ty, g.target)) return closeGoal(st);
+    throw TErr('`' + argText + '`의 타입이 목표와 다릅니다.',
+      '기대: ' + pp(g.target) + '\n제시: ' + pp(ty));
+  };
+
+  TACTICS.apply = function (st, argText, at) {
+    var g = st.goals[0];
+    var e = resolveLocals(parseTermText(argText), g);
+    var ty = forallToHoles(typeOf(e, g));
+
+    if (at && at.length) {
+      var idx = findHyp(g, at[0]);
+      if (idx < 0) throw TErr('가정 `' + at[0] + '`을 찾을 수 없습니다.');
+      var hypType = g.hyps[idx].type;
+      var pre = [], c = ty;
+      while (c.t === 'imp') { pre.push(c.a); c = c.b; }
+      if (!pre.length) throw TErr('`' + argText + '`에는 적용할 전제가 없습니다.');
+      var sub = {};
+      if (!unify(pre[0], hypType, sub)) {
+        throw TErr('`' + argText + '`의 전제가 `' + at[0] + '`의 타입과 맞지 않습니다.',
+          '전제: ' + pp(pre[0]) + '\n가정: ' + pp(hypType));
+      }
+      var rest = c;
+      for (var i = pre.length - 1; i >= 1; i--) rest = imp(pre[i], rest);
+      rest = applySub(rest, sub);
+      if (hasHole(rest)) throw TErr('타입 인자를 추론하지 못했습니다.');
+      g.hyps[idx].type = rest;
+      return st;
+    }
+
+    // 목표 전체와 바로 일치하면 닫는다 (apply h 로 목표가 곧 h의 타입일 때)
+    var sub2 = {};
+    if (unify(ty, g.target, sub2) && !hasHole(applySub(ty, sub2))) return closeGoal(st);
+
+    var pre2 = [], c2 = ty;
+    while (c2.t === 'imp') { pre2.push(c2.a); c2 = c2.b; }
+    var sub3 = {};
+    if (!unify(c2, g.target, sub3)) {
+      if (defEq(ty, g.target)) return closeGoal(st);
+      throw TErr('`' + argText + '`의 결론이 목표와 맞지 않습니다.',
+        '결론: ' + pp(c2) + '\n목표: ' + pp(g.target));
+    }
+    var newGoals = pre2.map(function (p) {
+      var np = applySub(p, sub3);
+      if (hasHole(np)) throw TErr('타입 인자를 추론하지 못했습니다.');
+      return { hyps: g.hyps.map(function (h) { return { name: h.name, type: h.type }; }), target: np };
+    });
+    st.goals.splice.apply(st.goals, [0, 1].concat(newGoals));
+    return st;
+  };
+
+  TACTICS.left = function (st) {
+    var g = st.goals[0];
+    if (g.target.t !== 'or') throw TErr('`left`는 `A ∨ B` 목표에서만 씁니다.');
+    g.target = g.target.a; return st;
+  };
+  TACTICS.right = function (st) {
+    var g = st.goals[0];
+    if (g.target.t !== 'or') throw TErr('`right`는 `A ∨ B` 목표에서만 씁니다.');
+    g.target = g.target.b; return st;
+  };
+
+  TACTICS.use = function (st, argText) {
+    var g = st.goals[0];
+    var t = resolveLocals(parseTermText(argText), g);
+    if (g.target.t === 'le') {
+      g.target = eq(g.target.b, add(g.target.a, t));
+      return st;
+    }
+    if (g.target.t === 'ex') {
+      g.target = substOne(g.target.body, g.target.v, t);
+      return st;
+    }
+    throw TErr('`use`는 `∃ ...` 또는 `x ≤ y` 목표에서만 씁니다.');
+  };
+
+  TACTICS.have = function (st, rest) {
+    var g = st.goals[0];
+    var m = /^([A-Za-z][A-Za-z0-9_']*)\s*(:=|:)\s*([\s\S]+)$/.exec(rest.trim());
+    if (!m) throw TErr('`have h : 타입` 또는 `have h := 증명` 형식으로 적어 주세요.');
+    var name = m[1], how = m[2], body = m[3].trim();
+    if (findHyp(g, name) >= 0) throw TErr('`' + name + '`이라는 이름이 이미 있습니다.');
+    if (how === ':=') {
+      var ty1 = typeOf(resolveLocals(parseTermText(body), g), g);
+      g.hyps.push({ name: name, type: ty1 });
+      return st;
+    }
+    var ty = resolveLocals(parseTermText(body), g);
+    var haveGoal = { hyps: JSON.parse(JSON.stringify(g.hyps)), target: ty, onClose: [{ name: name, type: ty }] };
+    st.goals.unshift(haveGoal);
+    return st;
+  };
+
+  TACTICS.cases = function (st, raw) {
+    var g = st.goals[0];
+    var m = /^([A-Za-z][A-Za-z0-9_']*)\s*(?:with\s+([\s\S]+))?$/.exec(raw.trim());
+    if (!m) throw TErr('`cases h with a b` 형식으로 적어 주세요.');
+    var name = m[1];
+    var names = m[2] ? m[2].trim().split(/\s+/).filter(Boolean) : [];
+    var idx = findHyp(g, name);
+    if (idx < 0) throw TErr('`' + name + '`이라는 가정 또는 변수를 찾을 수 없습니다.');
+    var ty = g.hyps[idx].type;
+    var rest = g.hyps.slice(0, idx).concat(g.hyps.slice(idx + 1));
+
+    if (ty.t === 'le') {
+      var w = names[0] || 'c', pr = names[1] || 'h';
+      var body = eq(ty.b, add(ty.a, vr(w)));
+      var hyps2 = JSON.parse(JSON.stringify(rest));
+      hyps2.push({ name: w, type: NAT });
+      hyps2.push({ name: pr, type: body });
+      st.goals.splice(0, 1, { hyps: hyps2, target: g.target });
+      return st;
+    }
+    if (ty.t === 'ex') {
+      var w2 = names[0] || ty.v, pr2 = names[1] || 'h';
+      var body2 = substOne(ty.body, ty.v, vr(w2));
+      var hyps3 = JSON.parse(JSON.stringify(rest));
+      hyps3.push({ name: w2, type: NAT });
+      hyps3.push({ name: pr2, type: body2 });
+      st.goals.splice(0, 1, { hyps: hyps3, target: g.target });
+      return st;
+    }
+    if (ty.t === 'or') {
+      var h1 = JSON.parse(JSON.stringify(rest)); h1.push({ name: names[0] || 'hl', type: ty.a });
+      var h2 = JSON.parse(JSON.stringify(rest)); h2.push({ name: names[1] || 'hr', type: ty.b });
+      st.goals.splice(0, 1, { hyps: h1, target: g.target }, { hyps: h2, target: g.target });
+      return st;
+    }
+    if (ty.t === 'false') {
+      if (names.length) throw TErr('`False` 가정에는 이름을 줄 수 없습니다.');
+      return closeGoal(st);
+    }
+    if (ty.t === 'nat') {
+      var d = names[0] || 'd';
+      var baseHyps = JSON.parse(JSON.stringify(g.hyps.filter(function (h) { return h.name !== name; })));
+      var base = subAll({ hyps: baseHyps, target: g.target }, name, num(0));
+      var stepHyps = JSON.parse(JSON.stringify(baseHyps));
+      stepHyps.push({ name: d, type: NAT });
+      var step = subAll({ hyps: stepHyps, target: g.target }, name, succ(vr(d)));
+      st.goals.splice(0, 1, base, step);
+      return st;
+    }
+    throw TErr('`cases`를 적용할 수 없는 대상입니다: ' + name + ' : ' + pp(ty));
+  };
+
+  function subAll(goal, name, rep) {
+    goal.target = substOne(goal.target, name, rep);
+    goal.hyps = goal.hyps.map(function (h) { return { name: h.name, type: substOne(h.type, name, rep) }; });
+    return goal;
+  }
+
+  TACTICS.induction = function (st, raw) {
+    var g = st.goals[0];
+    var m = /^([A-Za-z][A-Za-z0-9_']*)\s+with\s+([A-Za-z][A-Za-z0-9_']*)\s+([A-Za-z][A-Za-z0-9_']*)\s*(?:generalizing\s+([A-Za-z][A-Za-z0-9_']*))?$/.exec(raw.trim());
+    if (!m) throw TErr('`induction n with d hd` 형식으로 적어 주세요.');
+    var v = m[1], d = m[2], ih = m[3], gen = m[4] || null;
+
+    if (gen) return inductionGeneralizing(st, g, v, d, ih, gen);
+
+    var vi = findHyp(g, v);
+    if (vi < 0) throw TErr('`' + v + '`이라는 변수를 찾을 수 없습니다.');
+    var baseHyps = JSON.parse(JSON.stringify(g.hyps.filter(function (h) { return h.name !== v; })));
+    var b = subAll({ hyps: baseHyps, target: g.target }, v, num(0));
+
+    var stepHyps = JSON.parse(JSON.stringify(g.hyps.filter(function (h) { return h.name !== v; })));
+    // IH 는 d 기준 목표
+    var tmp = { hyps: stepHyps, target: g.target };
+    subAll(tmp, v, vr(d));
+    var ihTy = tmp.target;
+    var stepHyps2 = tmp.hyps.concat([{ name: d, type: NAT }, { name: ih, type: ihTy }]);
+    var step = subAll({ hyps: stepHyps2, target: g.target }, v, succ(vr(d)));
+
+    st.goals.splice(0, 1, b, step);
+    return st;
+  };
+
+  function inductionGeneralizing(st, g, v, d, ih, gen) {
+    // gen 변수와 그것에 의존하는 가정을 revert → ∀ 사슬
+    var gi = findHyp(g, gen);
+    if (gi < 0) throw TErr('`' + gen + '`이라는 변수를 찾을 수 없습니다.');
+    var revertedHyps = [];
+    var keepHyps = [];
+    g.hyps.forEach(function (h) {
+      if (h.name === gen) return;
+      if (hasVar(h.type, gen)) revertedHyps.push(h);
+      else keepHyps.push(h);
+    });
+    var target = g.target;
+    // revert: 가정들을 역순으로 imp, 그 다음 gen 을 ∀
+    for (var i = revertedHyps.length - 1; i >= 0; i--) target = imp(revertedHyps[i].type, target);
+    target = all(gen, target);
+
+    var savedHyps = JSON.parse(JSON.stringify(keepHyps));
+    var b = subAll({ hyps: JSON.parse(JSON.stringify(savedHyps)), target: target }, v, num(0));
+    var tmp = { hyps: JSON.parse(JSON.stringify(savedHyps)), target: target };
+    subAll(tmp, v, vr(d));
+    var ihTy = tmp.target;
+    var stepHyps = tmp.hyps.concat([{ name: d, type: NAT }, { name: ih, type: ihTy }]);
+    var step = subAll({ hyps: stepHyps, target: target }, v, succ(vr(d)));
+
+    // revert 했던 것들을 다시 intro
+    var reintro = [gen].concat(revertedHyps.map(function (h) { return h.name; }));
+    [b, step].forEach(function (goal) {
+      reintro.forEach(function (nm) {
+        if (goal.target.t === 'all') {
+          goal.target = substOne(goal.target.body, goal.target.v, vr(nm));
+          goal.hyps.push({ name: nm, type: NAT });
+        } else if (goal.target.t === 'imp') {
+          goal.hyps.push({ name: nm, type: goal.target.a });
+          goal.target = goal.target.b;
+        }
+      });
+    });
+
+    st.goals.splice(0, 1, b, step);
+    return st;
+  }
+
+  TACTICS.contrapose = function (st, raw) {
+    var g = st.goals[0];
+    var name = raw.trim();
+    if (!name) throw TErr('`contrapose h` 형식으로 적어 주세요.');
+    var i = findHyp(g, name);
+    if (i < 0) throw TErr('`' + name + '`이라는 가정을 찾을 수 없습니다.');
+    var hTy = g.hyps[i].type;
+    if (g.target.t !== 'imp' || g.target.b.t !== 'false')
+      throw TErr('`contrapose`는 `¬A` 꼴 목표에서만 씁니다.');
+    if (hTy.t !== 'imp' || hTy.b.t !== 'false')
+      throw TErr('`contrapose`는 부정(`≠`) 가정에서만 씁니다.');
+    var A = g.target.a, B = hTy.a;
+    g.target = B;
+    g.hyps[i].type = A;
+    return st;
+  };
+
+  TACTICS.xyzzy = function (st) { return closeGoal(st); };
+
+  TACTICS.sorry = function () {
+    throw TErr('`sorry`는 증명을 끝내지 않습니다. 직접 증명해 보세요!');
+  };
+
+  TACTICS.simp_add = function (st) { return simpAC(st, 'add'); };
+
+  function simpAC(st, mode) {
+    var g = st.goals[0];
+    if (g.target.t !== 'eq') throw TErr('`simp`는 등식 목표에서 씁니다. 목표: ' + pp(g.target));
+    var a = acNorm(g.target.a), b = acNorm(g.target.b);
+    if (defEq(a, b)) return closeGoal(st);
+    g.target = eq(a, b);
+    if (defEq(a, b)) return closeGoal(st);
+    var v = evalProp(g.target);
+    if (v === true) return closeGoal(st);
+    throw TErr('`simp` 후에도 목표가 닫히지 않았습니다.', '남은 목표: ' + pp(g.target));
+  }
+
+  TACTICS.simp = function (st) { return simpAC(st, "add"); };
+
+  /* ------------------------------ rw ------------------------------ */
+  function parseRwSpec(spec) {
+    var s = spec.trim();
+    var back = false;
+    if (s.startsWith('←') || s.startsWith('<-')) { back = true; s = s.slice(1).trim(); }
+    var e = parseTermText(s);
+    return { back: back, expr: e };
+  }
+
+  /* 전술 인자에서 지역 이름(name)을 자유변수(var)로 바꾼다 */
+  function resolveLocals(t, g) {
+    if (t.t === 'name' && findHyp(g, t.n) >= 0) return vr(t.n);
+    if (t.t === 'ex' || t.t === 'all') {
+      return { t: t.t, v: t.v, body: resolveLocals(t.body, g) };
+    }
+    if (t.t === 'app') {
+      return { t: 'app', f: t.f, args: t.args.map(function (a) { return resolveLocals(a, g); }) };
+    }
+    var ks = kids(t);
+    if (!ks.length) return t;
+    return withKids(t, ks.map(function (k) { return resolveLocals(k, g); }));
+  }
+
+  function typeOfRewrite(spec, g) {
+    var ty = forallToHoles(typeOf(resolveLocals(spec.expr, g), g));
+    var lhs, rhs;
+    if (ty.t === 'eq') { lhs = ty.a; rhs = ty.b; }
+    else if (ty.t === 'imp' && ty.a.t === 'eq' && ty.b.t === 'false') { lhs = ty.a.a; rhs = ty.a.b; }
+    else throw TErr('재작성에는 등식이 필요합니다: ' + pp(ty));
+    if (spec.back) { var tmp = lhs; lhs = rhs; rhs = tmp; }
+    return { lhs: lhs, rhs: rhs };
+  }
+
+  function applyRw(st, goal, spec, nth, where) {
+    var r = typeOfRewrite(spec, goal);
+    var target = where === 'hyp' ? goal.hyps[findHyp(goal, nth.hyp)].type : goal.target;
+    var res = rewriteGo(target, r.lhs, r.rhs, { nth: nth.n || null });
+    if (res === null) throw TErr('바꿀 `' + pp(r.lhs) + '` 꼴을 찾지 못했습니다.');
+    if (res && res.error === 'nth') throw TErr('`' + pp(r.lhs) + '`이(가) ' + res.count + '번밖에 나오지 않습니다.');
+    if (hasHole(res)) throw TErr('재작성 후 알 수 없는 항이 남았습니다.');
+    if (where === 'hyp') goal.hyps[findHyp(goal, nth.hyp)].type = res;
+    else goal.target = res;
+    return res !== target;
+  }
+
+  TACTICS.rw = function (st, body, at, nth) {
+    var g = st.goals[0];
+    var specs = splitTopLevel(body, ',').map(parseRwSpec).filter(function (s) { return s.expr; });
+    if (!specs.length) throw TErr('`rw [정리이름]` 처럼 바꿀 등식을 적어 주세요.');
+    var targets = [];
+    if (!at) targets = ['goal'];
+    else at.forEach(function (a) { targets.push(a === '⊢' ? 'goal' : a); });
+    specs.forEach(function (spec) {
+      var locked = typeOfRewrite(spec, g);   /* 홀(hole) 을 한 번만 만들어 좌·우변에서 공유 */
+      targets.forEach(function (tg) {
+        if (tg === 'goal') {
+          var res = rewriteGo(g.target, locked.lhs, locked.rhs, { nth: nth });
+          if (res === null) throw TErr('바꿀 `' + pp(locked.lhs) + '` 꼴을 찾지 못했습니다.');
+          if (res.error === 'nth') throw TErr('`' + pp(locked.lhs) + '`은(는) ' + res.count + '번만 나옵니다.');
+          if (hasHole(res)) throw TErr('재작성 결과에 알 수 없는 항이 남았습니다.');
+          g.target = res;
+        } else {
+          var i = findHyp(g, tg);
+          if (i < 0) throw TErr('가정 `' + tg + '`을 찾을 수 없습니다.');
+          var res2 = rewriteGo(g.hyps[i].type, locked.lhs, locked.rhs, { nth: nth });
+          if (res2 === null) throw TErr('가정 `' + tg + '`에서 바꿀 `' + pp(locked.lhs) + '` 꼴을 찾지 못했습니다.');
+          if (res2.error === 'nth') throw TErr('`' + pp(locked.lhs) + '`은(는) ' + res2.count + '번만 나옵니다.');
+          if (hasHole(res2)) throw TErr('재작성 결과에 알 수 없는 항이 남았습니다.');
+          g.hyps[i].type = res2;
+        }
+      });
+    });
+    return st;
+  };
+
+  /* ------------------------ 전술 문장 파싱 ------------------------ */
+  function parseAtAndRest(rest) {
+    var s = rest.trim();
+    if (/^at\s+/.test(s)) s = s.replace(/^at\s+/, ' @AT@');
+    // "... at h ⊢" / "... at h1 h2 ⊢" / "... at h"  를 분리
+    var m = /^(.*?)\s*@AT@\s*(.+)$/.exec(s);
+    if (!m) {
+      var m2 = /^(.*?)\s+at\s+(.+)$/.exec(s);
+      if (!m2) return { body: rest.trim(), at: null };
+      m = m2;
+    }
+    var body = m[1].trim();
+    var names = m[2].trim().split(/\s+/).filter(Boolean);
+    return { body: body, at: names };
+  }
+
+  function splitTactic(line) {
+    var s = line.trim();
+    var m = /^([A-Za-z_]+)([\s\S]*)$/.exec(s);
+    if (!m) throw TErr('전술 이름을 읽을 수 없습니다.');
+    return { name: m[1], rest: m[2].replace(/^\s+/, '') };
+  }
+
+  function execTactic(st, line) {
+    var s = line.trim();
+    if (s.startsWith('·')) s = s.slice(1).trim();
+    if (!s) throw TErr('실행할 전술이 비어 있습니다.');
+    if (s.startsWith('--')) return st;
+
+    // repeat
+    var mr = /^repeat\s+([\s\S]+)$/.exec(s);
+    if (mr) {
+      var inner = mr[1].trim();
+      var n = 0;
+      for (; ;) {
+        var snapshot = JSON.stringify(st);
+        try { st = execTactic(clone(st), inner); }
+        catch (e) { break; }
+        if (JSON.stringify(st) === snapshot) { break; }
+        n++;
+        if (n > 60) break;
+      }
+      return st;
+    }
+
+    var t = splitTactic(s);
+    var name = t.name, rest = t.rest;
+
+    if (name === 'rw' || name === 'nth_rewrite' || name === 'simp' || name === 'simp_add') {
+      var nth = null;
+      if (name === 'nth_rewrite') {
+        var mn = /^(\d+)\s*([\s\S]*)$/.exec(rest);
+        if (!mn) throw TErr('`nth_rewrite 2 [h]` 처럼 몇 번째인지 적어 주세요.');
+        nth = parseInt(mn[1], 10);
+        rest = mn[2].trim();
+      }
+      var br = 0, d = 0, end = -1;
+      for (var i = 0; i < rest.length; i++) {
+        if (rest[i] === '[') { d++; }
+        else if (rest[i] === ']') { d--; if (d === 0) { end = i; break; } }
+      }
+      var body = '', after = '';
+      if (end >= 0) { body = rest.slice(rest.indexOf('[') + 1, end); after = rest.slice(end + 1); }
+      else { body = rest; }
+      var at = null;
+      var ma = /^\s*at\s+([\s\S]+)$/.exec(after.trim());
+      if (ma) at = ma[1].trim().split(/\s+/).filter(Boolean);
+
+      if (name === 'simp' || name === 'simp_add') return TACTICS[name](st);
+      return TACTICS.rw(st, body, at, nth);
+    }
+
+    if (name === 'apply' || name === 'exact' || name === 'intro' || name === 'use') {
+      var sp = parseAtAndRest(rest);
+      if (name === 'apply') return TACTICS.apply(st, sp.body, sp.at);
+      if (name === 'exact') {
+        if (sp.at) throw TErr('`exact`에는 `at`을 쓸 수 없습니다.');
+        return TACTICS.exact(st, sp.body);
+      }
+      if (sp.at) throw TErr('이 전술에는 `at`을 쓸 수 없습니다.');
+      if (name === 'use') return TACTICS.use(st, rest);
+      return TACTICS.intro(st, rest ? rest.split(/\s+/) : []);
+    }
+
+    if (name === 'symm') {
+      var sp2 = parseAtAndRest(rest);
+      return TACTICS.symm(st, [], sp2.at);
+    }
+    if (name === 'have') return TACTICS.have(st, rest);
+    if (name === 'cases') return TACTICS.cases(st, rest);
+    if (name === 'induction') return TACTICS.induction(st, rest);
+    if (name === 'contrapose') return TACTICS.contrapose(st, rest);
+
+    if (TACTICS[name]) {
+      if (rest && rest.trim()) throw TErr('`' + name + '`에는 인자를 줄 수 없습니다.');
+      return TACTICS[name](st);
+    }
+    throw TErr('`' + name + '`은(는) 이 게임에서 지원하지 않는 전술입니다.');
+  }
+
+  /* ------------------------ 공개 API ------------------------ */
+  var NNG = {
+    NAT: NAT, FALSE: FALSE, TRUE: TRUE,
+    num: num, vr: vr, succ: succ, add: add, mul: mul, pw: pw, eq: eq, imp: imp,
+    or: or, and: and, le: le, ex: ex, all: all, isZero: isZero, pred: pred, ne: ne,
+    pp: pp, parseStatement: parseStatement, parseTermText: parseTermText, toVars: toVars,
+    setTheorems: setTheorems, mkState: mkState, clone: clone,
+    execTactic: execTactic, defEq: defEq, exprEq: exprEq,
+    typeOf: typeOf, tauto: tauto, evalProp: evalProp,
+    TErr: TErr
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = NNG;
+  else root.NNG = NNG;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+;
+/* ===== 정리 데이터베이스 ===== */
+;
+/* NNG4-KR · 정리(lemma) 데이터베이스
+   각 항목: 이름 -> { 인자들, 진술(Lean 표기), 짧은 설명(한국어), 탭 } */
+(function (root) {
+  'use strict';
+  var RAW = [
+    ['one_eq_succ_zero', '', '1 = succ 0', '1은 0의 다음 수', '012'],
+    ['two_eq_succ_one', '', '2 = succ 1', '2는 1의 다음 수', '012'],
+    ['three_eq_succ_two', '', '3 = succ 2', '3은 2의 다음 수', '012'],
+    ['four_eq_succ_three', '', '4 = succ 3', '4는 3의 다음 수', '012'],
+    ['add_zero', 'a', 'a + 0 = a', 'a에 0을 더하면 a', '+'],
+    ['add_succ', 'a d', 'a + succ d = succ (a + d)', 'a에 (d의 다음 수)를 더하면 (a+d)의 다음 수', '+'],
+    ['succ_eq_add_one', 'n', 'succ n = n + 1', 'succ n 은 n + 1', '+'],
+    ['zero_add', 'n', '0 + n = n', '0에 n을 더하면 n', '+'],
+    ['succ_add', 'a b', 'succ a + b = succ (a + b)', '(succ a) + b = succ (a + b)', '+'],
+    ['add_comm', 'a b', 'a + b = b + a', '덧셈의 교환법칙', '+'],
+    ['add_assoc', 'a b c', 'a + b + c = a + (b + c)', '덧셈의 결합법칙', '+'],
+    ['add_right_comm', 'a b c', 'a + b + c = a + c + b', '가운데 두 항을 맞바꾸기', '+'],
+    ['add_left_comm', 'a b c', 'a + (b + c) = b + (a + c)', '왼쪽 두 항을 맞바꾸기', '+'],
+    ['mul_zero', 'a', 'a * 0 = 0', 'a에 0을 곱하면 0', '*'],
+    ['mul_succ', 'a b', 'a * succ b = a * b + a', 'a * (b+1) = a*b + a', '*'],
+    ['mul_one', 'm', 'm * 1 = m', 'm에 1을 곱하면 m', '*'],
+    ['zero_mul', 'm', '0 * m = 0', '0에 m을 곱하면 0', '*'],
+    ['succ_mul', 'a b', 'succ a * b = a * b + b', '(a+1) * b = a*b + b', '*'],
+    ['mul_comm', 'a b', 'a * b = b * a', '곱셈의 교환법칙', '*'],
+    ['one_mul', 'm', '1 * m = m', '1에 m을 곱하면 m', '*'],
+    ['two_mul', 'm', '2 * m = m + m', '2 * m = m + m', '*'],
+    ['mul_add', 'a b c', 'a * (b + c) = a * b + a * c', '분배법칙 (오른쪽)', '*'],
+    ['add_mul', 'a b c', '(a + b) * c = a * c + b * c', '분배법칙 (왼쪽)', '*'],
+    ['mul_assoc', 'a b c', 'a * b * c = a * (b * c)', '곱셈의 결합법칙', '*'],
+    ['pow_zero', 'm', 'm ^ 0 = 1', '0제곱은 1', '^'],
+    ['pow_succ', 'm n', 'm ^ succ n = m ^ n * m', '지수가 하나 늘면 m을 한 번 더 곱한다', '^'],
+    ['zero_pow_zero', '', '0 ^ 0 = 1', '0의 0제곱은 1', '^'],
+    ['zero_pow_succ', 'm', '0 ^ succ m = 0', '0의 (0이 아닌) 거듭제곱은 0', '^'],
+    ['pow_one', 'a', 'a ^ 1 = a', '1제곱은 자기 자신', '^'],
+    ['one_pow', 'm', '1 ^ m = 1', '1의 거듭제곱은 1', '^'],
+    ['pow_two', 'a', 'a ^ 2 = a * a', '2제곱은 자기 자신과의 곱', '^'],
+    ['pow_add', 'a m n', 'a ^ (m + n) = a ^ m * a ^ n', '지수의 덧셈은 거듭제곱의 곱', '^'],
+    ['mul_pow', 'a b n', '(a * b) ^ n = a ^ n * b ^ n', '곱의 거듭제곱', '^'],
+    ['pow_pow', 'a m n', '(a ^ m) ^ n = a ^ (m * n)', '거듭제곱의 거듭제곱', '^'],
+    ['add_sq', 'a b', '(a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b', '(a+b)의 제곱 전개', '^'],
+    ['succ_inj', 'a b', 'succ a = succ b → a = b', 'succ는 단사(하나 늘리기는 겹치지 않음)', 'Peano'],
+    ['zero_ne_succ', 'a', '0 ≠ succ a', '0은 어떤 수의 다음 수도 아니다', 'Peano'],
+    ['zero_ne_one', '', '0 ≠ 1', '0과 1은 다르다', '012'],
+    ['one_ne_zero', '', '1 ≠ 0', '1과 0은 다르다', '012'],
+    ['succ_ne_zero', 'a', 'succ a ≠ 0', '어떤 수의 다음 수도 0이 아니다', 'Peano'],
+    ['succ_ne_succ', 'm n', 'm ≠ n → succ m ≠ succ n', '다르면 하나 늘려도 다르다', 'Peano'],
+    ['pred_succ', 'n', 'pred (succ n) = n', '하나 늘린 수의 바로 앞 수는 자기 자신', 'Peano'],
+    ['is_zero_zero', '', 'is_zero 0 = True', '0인지 묻는 판정은 0에서 참', 'Peano'],
+    ['is_zero_succ', 'n', 'is_zero (succ n) = False', '0인지 묻는 판정은 다음 수에서 거짓', 'Peano'],
+    ['add_right_cancel', 'a b n', 'a + n = b + n → a = b', '오른쪽 덧셈 지우기', '+'],
+    ['add_left_cancel', 'a b n', 'n + a = n + b → a = b', '왼쪽 덧셈 지우기', '+'],
+    ['add_left_eq_self', 'x y', 'x + y = y → x = 0', 'y를 더해서 y가 되면 x는 0', '+'],
+    ['add_right_eq_self', 'x y', 'x + y = x → y = 0', 'x에 더해서 x가 되면 y는 0', '+'],
+    ['add_right_eq_zero', 'a b', 'a + b = 0 → a = 0', '합이 0이면 왼쪽도 0', '+'],
+    ['add_left_eq_zero', 'a b', 'a + b = 0 → b = 0', '합이 0이면 오른쪽도 0', '+'],
+    ['le_refl', 'x', 'x ≤ x', '≤ 는 반사적', '≤'],
+    ['zero_le', 'x', '0 ≤ x', '0은 모든 수보다 작거나 같다', '≤'],
+    ['le_succ_self', 'x', 'x ≤ succ x', 'x는 x+1보다 작거나 같다', '≤'],
+    ['le_trans', 'x y z', 'x ≤ y → y ≤ z → x ≤ z', '≤ 의 추이성', '≤'],
+    ['le_zero', 'x', 'x ≤ 0 → x = 0', '0보다 작거나 같으면 0', '≤'],
+    ['le_antisymm', 'x y', 'x ≤ y → y ≤ x → x = y', '≤ 의 반대칭성', '≤'],
+    ['le_total', 'x y', 'x ≤ y ∨ y ≤ x', '어느 쪽이든 한쪽은 작거나 같다', '≤'],
+    ['succ_le_succ', 'x y', 'succ x ≤ succ y → x ≤ y', '양변에서 하나씩 지우기', '≤'],
+    ['le_one', 'x', 'x ≤ 1 → x = 0 ∨ x = 1', '1보다 작거나 같으면 0 또는 1', '≤'],
+    ['le_two', 'x', 'x ≤ 2 → x = 0 ∨ x = 1 ∨ x = 2', '2보다 작거나 같으면 0, 1, 2 중 하나', '≤'],
+    ['mul_le_mul_right', 'a b t', 'a ≤ b → a * t ≤ b * t', '부등식에 같은 수를 곱하기', '*'],
+    ['mul_left_ne_zero', 'a b', 'a * b ≠ 0 → b ≠ 0', '곱이 0이 아니면 두 인자 모두 0이 아니다', '*'],
+    ['eq_succ_of_ne_zero', 'a', 'a ≠ 0 → ∃ n, a = succ n', '0이 아니면 누군가의 다음 수', '≤'],
+    ['one_le_of_ne_zero', 'a', 'a ≠ 0 → 1 ≤ a', '0이 아니면 1 이상', '≤'],
+    ['le_mul_right', 'a b', 'a * b ≠ 0 → a ≤ a * b', '곱이 0이 아니면 인자는 곱보다 작거나 같다', '≤'],
+    ['mul_right_eq_one', 'x y', 'x * y = 1 → x = 1', '곱이 1이면 x는 1', '*'],
+    ['mul_ne_zero', 'a b', 'a ≠ 0 → b ≠ 0 → a * b ≠ 0', '0이 아닌 것끼리의 곱은 0이 아니다', '*'],
+    ['mul_eq_zero', 'a b', 'a * b = 0 → a = 0 ∨ b = 0', '곱이 0이면 어느 한쪽이 0', '*'],
+    ['mul_left_cancel', 'a b c', 'a ≠ 0 → a * b = a * c → b = c', '0이 아닌 수로는 나눌 수 있다(약분)', '*'],
+    ['mul_right_eq_self', 'a b', 'a ≠ 0 → a * b = a → b = 1', 'a를 곱해서 a가 되면 b는 1', '*']
+  ];
+
+  function build(NNG) {
+    var db = {};
+    RAW.forEach(function (r) {
+      var ps = r[1] ? r[1].split(/\s+/) : [];
+      var nameSet = {};
+      ps.forEach(function (p) { nameSet[p] = true; });
+      var ty = NNG.toVars(NNG.parseTermText(r[2]), nameSet);
+      for (var i = ps.length - 1; i >= 0; i--) ty = NNG.all(ps[i], ty);
+      db[r[0]] = { type: ty, params: ps, tex: r[2], ko: r[3], tab: r[4] };
+    });
+    return db;
+  }
+
+  var API = { RAW: RAW, build: build };
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+  else root.NNG_THEOREMS = API;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+;
+/* ===== 게임 콘텐츠 ===== */
+;
+/* NNG4-KR · 한국어 콘텐츠 (월드 파일들이 이 배열에 하나씩 추가된다) */
+var NNG_WORLDS = [];
+var NNG_META = {
+  title: '자연수 게임',
+  subtitle: 'Lean 4 로 배우는 수학 증명 · 한국어판',
+  intro: [
+    '## 자연수 게임에 오신 것을 환영합니다',
+    '이 게임에서는 `0, 1, 2, 3, ...` 자연수의 기본 성질을 **맨 바닥부터** 증명합니다.',
+    '첫 목표는 `2 + 2 = 4`. 그다음은 `x + y = y + x`. 마지막에는 페르마의 마지막 정리를 만나게 됩니다.',
+    '',
+    '### 이렇게 하면 됩니다',
+    '* 화면 위쪽은 지금 증명해야 할 **목표(Goal)** 와 사용할 수 있는 **가정(Assumptions)** 입니다.',
+    '* 가운데 칸에 전술(tactic)을 한 줄씩 적고 **실행**을 누르면, 증명 상태가 즉시 바뀝니다.',
+    '* 아래 칩을 눌러 전술·정리 이름을 넣을 수 있습니다. 직접 타이핑해도 됩니다.',
+    '* 목표가 하나도 남지 않으면 레벨 클리어! 진행 상황은 자동으로 저장됩니다.',
+    '',
+    '### 처음이라면',
+    '**튜토리얼 월드**부터 차례로 따라오세요. 읽을 것을 다 읽는 사람이 가장 빨리 늡니다.',
+    '막히면 각 레벨의 **힌트** 탭과 **전술/정리** 탭을 펼쳐 보세요.'
+  ].join('\n'),
+  worlds: [
+    { id: 'tutorial', color: '#5b8def', icon: '①' },
+    { id: 'addition', color: '#3fb27f', icon: '②' },
+    { id: 'multiplication', color: '#d99a2b', icon: '③' },
+    { id: 'power', color: '#c0553f', icon: '④' },
+    { id: 'implication', color: '#7a5bd6', icon: '⑤' },
+    { id: 'advaddition', color: '#2f8f9d', icon: '⑥' },
+    { id: 'lessorequal', color: '#b8558a', icon: '⑦' },
+    { id: 'advmultiplication', color: '#6b7a2f', icon: '⑧' },
+    { id: 'algorithm', color: '#4a5a7a', icon: '⑨' }
+  ]
+};
+
+;
+NNG_WORLDS.push({
+  id: 'tutorial',
+  title: '튜토리얼 월드',
+  subtitle: 'rfl · rw · 첫 증명',
+  intro: [
+    '이 월드에서 증명의 기본기를 익힙니다. 마지막에는 **2 + 2 = 4** 를 직접 증명합니다.',
+    '',
+    '전술은 화면 가운데 칸에 한 줄씩 적고 **실행**을 누릅니다. 틀리면 되돌리기(Undo)로 한 줄씩 취소할 수 있습니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'rfl 전술',
+      statement: '(x q : ℕ) : 37 * x + q = 37 * x + q',
+      intro: [
+        '## 먼저 이걸 읽으세요',
+        '레벨마다 하나의 수학 정리를 증명합니다. 그 정리를 **목표(Goal)** 라고 부릅니다.',
+        '목표는 수에 관한 문장입니다. `37` 처럼 값을 아는 수도 있고, `x`, `q` 처럼 값은 모르지만 "어떤 자연수"인 수(변수)도 있습니다.',
+        '화면 위쪽 **가정**에 `x q : ℕ` 이 보이면, `x` 와 `q` 가 자연수라는 뜻입니다.',
+        '',
+        'Lean 에서 증명은 **전술(tactic)** 을 하나씩 실행해서 만듭니다. 첫 전술은 `rfl` 입니다.',
+        '`rfl` 은 "반사성(reflexivity)"의 줄임말로, `X = X` 꼴의 목표를 닫습니다. 양변이 **똑같은 항**일 때만 통합니다.',
+        '',
+        '`37x + q = 37x + q` 를 `rfl` 로 증명해 보세요.'
+      ].join('\n'),
+      hints: [{ t: '`rfl` 을 입력하고 **실행**을 누르세요.' }],
+      conclusion: '축하합니다! 첫 번째로 검증된 증명을 완성했습니다.\n\n`rfl` 은 전술입니다. 오른쪽 아래 **전술** 탭에서 언제든 설명을 다시 볼 수 있습니다.',
+      solution: ['rfl'],
+      thmTab: '012', newThms: [], newTacs: ['rfl']
+    },
+    {
+      n: 2,
+      title: 'rw 전술',
+      statement: '(x y : ℕ) (h : y = x + 7) : 2 * y = 2 * (x + 7)',
+      intro: [
+        '이번 목표는 `2 * y = 2 * (x + 7)` 입니다. 그런데 가정에 `h : y = x + 7` 이 있습니다.',
+        '',
+        '`rfl` 을 쓰려면 양변이 똑같아야 하는데, 지금은 `y` 와 `x + 7` 이 달라 보입니다.',
+        '`h` 를 이용해 **치환**하면 됩니다. 이때 쓰는 전술이 `rw` (rewrite, 재작성)입니다.',
+        '',
+        '`rw [h]` 는 "목표에서 `h` 의 왼쪽을 오른쪽으로 바꿔라" 는 뜻입니다. 즉 `y` 를 `x + 7` 로 바꿉니다.'
+      ].join('\n'),
+      hints: [
+        { t: '먼저 `rw [h]` 를 실행해 `y` 를 `x + 7` 로 바꾸세요.' },
+        { t: '이제 `rfl` 로 끝낼 수 있습니다.', hidden: true }
+      ],
+      conclusion: '이제 `2 + 2 = 4` 를 증명할 준비가 거의 끝났습니다. 여정을 시작하죠.',
+      solution: ['rw [h]', 'rfl'],
+      thmTab: '012', newThms: [], newTacs: ['rw']
+    },
+    {
+      n: 3,
+      title: '수의 이름',
+      statement: ': 2 = succ (succ 0)',
+      intro: [
+        '## 수의 탄생',
+        'Lean 에서 자연수는 두 규칙으로 정의됩니다.',
+        '',
+        '* `0` 은 수다.',
+        '* `n` 이 수라면, `n` 의 **다음 수(successor)** `succ n` 도 수다.',
+        '',
+        '`succ n` 은 "n 바로 다음 수"라는 뜻입니다. 이제 몇 개의 작은 수에 이름을 붙입시다.',
+        '',
+        '## 넷까지 세기',
+        '`0` 은 수이므로 `succ 0` 도 수입니다. 이 수를 `1` 이라 부릅니다.',
+        '같은 방식으로 `2 = succ 1`, `3 = succ 2`, `4 = succ 3` 으로 정의합니다.',
+        '',
+        '`2 = succ 1` 이라는 **증명**의 이름은 `two_eq_succ_one` 입니다. 오른쪽 **정리** 탭의 `012` 그룹에서 확인하세요.',
+        '',
+        '이제 `2` 가 0의 다음 수의 다음 수임을 증명해 봅시다.'
+      ].join('\n'),
+      hints: [
+        { t: '`rw [two_eq_succ_one]` 으로 `2` 를 그 정의로 풀어 보세요.' },
+        { t: '다음엔 `rw [one_eq_succ_zero]` 로 `1` 을 `succ 0` 으로 바꿉니다.', hidden: true },
+        { t: '마지막은 `rfl`.', hidden: true }
+      ],
+      conclusion: '`rw [two_eq_succ_one, one_eq_succ_zero]` 처럼 한 번에 여러 개를 쓸 수도 있습니다.',
+      solution: ['rw [two_eq_succ_one]', 'rw [one_eq_succ_zero]', 'rfl'],
+      thmTab: '012', newThms: ['one_eq_succ_zero', 'two_eq_succ_one', 'three_eq_succ_two'], newTacs: []
+    },
+    {
+      n: 4,
+      title: '거꾸로 재작성',
+      statement: ': 2 = succ (succ 0)',
+      intro: [
+        '`h` 가 `X = Y` 의 증명이면 `rw [h]` 는 `X` 를 `Y` 로 바꿉니다. 그런데 반대 방향, 즉 `Y` 를 `X` 로 바꾸고 싶으면요?',
+        '',
+        '그때는 왼쪽 화살표 `←` 를 붙입니다: `rw [← h]`. (칩 팔레트에도 `←` 가 있습니다.)',
+        '',
+        '이번에는 `succ (succ 0)` 을 `2` 로 바꾸는 방향으로 증명해 봅시다.'
+      ].join('\n'),
+      hints: [
+        { t: '`rw [← one_eq_succ_zero]` 로 `succ 0` 을 `1` 로 바꾸세요.' },
+        { t: '`rw [← two_eq_succ_one]` 로 `succ 1` 을 `2` 로 바꾸면 끝납니다.', hidden: true }
+      ],
+      conclusion: '`succ n` 을 처음부터 `n + 1` 로 정의하지 않은 이유는, 아직 덧셈을 정의하지 않았기 때문입니다. 다음 레벨에서 정의합니다.',
+      solution: ['rw [← one_eq_succ_zero]', 'rw [← two_eq_succ_one]', 'rfl'],
+      thmTab: '012', newThms: [], newTacs: []
+    },
+    {
+      n: 5,
+      title: '0을 더하기',
+      statement: '(a b c : ℕ) : a + (b + 0) + (c + 0) = a + b + c',
+      intro: [
+        '`2 + 2 = 4` 를 증명하고 싶지만, 아직 덧셈을 **정의**하지 않아서 진술조차 쓸 수 없습니다.',
+        '',
+        '## 덧셈의 정의',
+        '수를 만드는 방법은 `0` 과 `succ` 둘뿐입니다. 그래서 덧셈도 두 경우로 정의합니다.',
+        '',
+        '### 0 더하기',
+        '`a + 0` 은 `a` 로 정의합니다. 이 증명의 이름이 `add_zero a` 입니다.',
+        '* `add_zero 37` : `37 + 0 = 37` 의 증명',
+        '* `add_zero` : `? + 0 = ?` 의 증명 (입력은 나중에 채워짐)',
+        '',
+        '증명의 이름 옆에 콜론을 붙여 `증명 : 진술` 꼴로 씁니다.',
+        '',
+        '목표에는 `b + 0` 과 `c + 0` 이 둘 다 있습니다. `rw [add_zero]` 는 **처음 만나는 하나만** 바꿉니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`rw [add_zero]` 는 `b + 0` 을 `b` 로 바꿉니다.' },
+        { t: '한 번 더 `rw [add_zero]` 를 실행하면 `c + 0` 도 정리됩니다.' }
+      ],
+      conclusion: '속도를 원한다면 `repeat rw [add_zero]` 하나로 두 번의 재작성을 한꺼번에 할 수도 있습니다.',
+      solution: ['rw [add_zero]', 'rw [add_zero]', 'rfl'],
+      thmTab: '+', newThms: ['add_zero'], newTacs: []
+    },
+    {
+      n: 6,
+      title: '정밀 재작성',
+      statement: '(a b c : ℕ) : a + (b + 0) + (c + 0) = a + b + c',
+      intro: [
+        '## 정밀 재작성',
+        '지난 레벨에서는 `rw [add_zero]` 가 처음 만난 `b + 0` 을 바꿨습니다.',
+        '이번에는 `c + 0` 을 먼저 바꾸고 싶습니다. 방법은 간단합니다. `add_zero` 에 **입력을 직접** 주면 됩니다.',
+        '',
+        '`add_zero c` 는 `c + 0 = c` 의 증명이므로, `rw [add_zero c]` 는 `c + 0` 만 콕 집어 바꿉니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`rw [add_zero c]` 를 실행해 보세요.' },
+        { t: '`c + 0` 이 `c` 로 바뀌었습니다. 이제 `rw [add_zero]` 로 `b + 0` 도 정리하면 됩니다.' }
+      ],
+      conclusion: '이제 덧셈의 두 번째 공리 `add_succ` 를 배웁니다.',
+      solution: ['rw [add_zero c]', 'rw [add_zero]', 'rfl'],
+      thmTab: '+', newThms: [], newTacs: []
+    },
+    {
+      n: 7,
+      title: 'add_succ',
+      statement: 'succ_eq_add_one n : succ n = n + 1',
+      intro: [
+        'Lean 에서 모든 수는 `0` 이거나 `succ` 입니다. `0` 을 더하는 법은 알았으니, 다음 수를 더하는 법을 알아야 합니다.',
+        '',
+        '`37 + d = q` 라면 `37 + succ d` 는 얼마일까요? `succ d` 는 `d` 보다 하나 크니, 답도 `q` 보다 하나 커야 합니다. 즉 `succ (37 + d)` 입니다.',
+        '일반적으로 `x + succ d = succ (x + d)` 입니다.',
+        '',
+        '* `add_succ x d : x + succ d = succ (x + d)`',
+        '',
+        '목표에 `... + succ ...` 꼴이 보이면 `rw [add_succ]` 가 보통 좋은 선택입니다.',
+        '',
+        '이제 `succ n = n + 1` 을 증명해 봅시다. `1` 을 어떻게 바꿔야 `+ succ` 꼴이 나올지 생각해 보세요.'
+      ].join('\n'),
+      hints: [
+        { t: '먼저 `1` 을 풀어 보세요.' },
+        { t: '`rw [one_eq_succ_zero]` 로 `1` 을 `succ 0` 으로 바꿉니다.', hidden: true },
+        { t: '이제 `rw [add_succ]`.', hidden: true },
+        { t: '`rw [add_zero]` 로 마무리하고 `rfl`.', hidden: true }
+      ],
+      conclusion: '이제 이 월드의 첫 보스를 만날 준비가 되었습니다.',
+      solution: ['rw [one_eq_succ_zero]', 'rw [add_succ]', 'rw [add_zero]', 'rfl'],
+      thmTab: '012', newThms: ['add_succ', 'succ_eq_add_one'], newTacs: []
+    },
+    {
+      n: 8,
+      title: '2 + 2 = 4',
+      statement: ': (2 : ℕ) + 2 = 4',
+      intro: [
+        '행운을 빕니다!',
+        '',
+        '마지막 힌트 하나. `h : X = Y` 일 때 `rw [h]` 는 **모든** `X` 를 `Y` 로 바꿉니다. 만약 세 번째 `X` 하나만 바꾸고 싶다면 `nth_rewrite 3 [h]` 를 쓰세요.'
+      ].join('\n'),
+      hints: [
+        { t: '`nth_rewrite 2 [two_eq_succ_one]` 이 `rw [two_eq_succ_one]` 보다 빠릅니다.', hidden: true },
+        { t: '이제 `rw [add_succ]`.', hidden: true }
+      ],
+      conclusion: [
+        '다음은 한 가지 예시 풀이입니다.',
+        '```lean',
+        'nth_rewrite 2 [two_eq_succ_one]   -- 두 번째 2 만 succ 1 로',
+        'rw [add_succ]',
+        'rw [one_eq_succ_zero]',
+        'rw [add_succ, add_zero]           -- 두 번을 한꺼번에',
+        'rw [← three_eq_succ_two]',
+        'rw [← four_eq_succ_three]',
+        'rfl',
+        '```',
+        '',
+        '튜토리얼 월드 완료! 이제 덧셈 월드에서 `induction` 을 배웁니다.'
+      ].join('\n'),
+      solution: ['nth_rewrite 2 [two_eq_succ_one]', 'rw [add_succ]', 'rw [one_eq_succ_zero]',
+        'rw [add_succ]', 'rw [add_zero]', 'rw [four_eq_succ_three]', 'rw [three_eq_succ_two]', 'rfl'],
+      thmTab: '012', newThms: [], newTacs: ['nth_rewrite', 'repeat']
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'addition',
+  title: '덧셈 월드',
+  subtitle: 'induction · 보스 add_comm',
+  intro: [
+    '이 월드에서 `induction` 전술을 배웁니다. 이 하나로 이 월드의 보스 `x + y = y + x` 를 잡습니다.',
+    '',
+    '`rw`, `rfl`, `induction` 세 전술만으로 덧셈 월드·곱셈 월드·거듭제곱 월드를 모두 깰 수 있습니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'zero_add',
+      statement: 'zero_add (n : ℕ) : 0 + n = n',
+      intro: [
+        '이번에는 `0 + n = n` 을 증명합니다. `n` 은 값이 정해지지 않은 자연수입니다.',
+        '',
+        '"이미 `n + 0 = n` 을 알지 않나?" 싶지만 그건 `add_zero` 이고, 이번 것은 `zero_add` 로 다릅니다.',
+        '',
+        '`0 + n` 을 계산할 공식은 `n` 이 `0` 인지 다음 수인지에 따라 다릅니다. 그래서 경우를 나눠야 하고, 그 전술이 `induction` 입니다.',
+        '* 기본 경우: `0 + 0 = 0`',
+        '* 귀납 단계: `0 + d = d` 라면 `0 + succ d = succ d`',
+        '',
+        '수를 만드는 방법이 이 둘뿐이므로, 이 둘만 보이면 모든 `n` 을 덮습니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`induction n with d hd` 를 입력하면 `n` 에 대한 귀납법이 시작됩니다.' },
+        { t: '첫 번째 목표가 기본 경우 `n = 0` 입니다. 사용할 수 있는 정리와 가정은 모두 재작성에 쓸 수 있습니다.' },
+        { t: '`rw [add_zero]` 를 써 보세요.', hidden: true },
+        { t: '두 번째 목표에서는 귀납 가정 `hd : 0 + d = d` 를 받습니다. 목표는 `0 + succ d = succ d` 입니다.' },
+        { t: '`rw [add_succ]` 를 쓰세요.', hidden: true },
+        { t: '목표에 `0 + d` 가 보이니 귀납 가정 `rw [hd]` 를 씁니다.', hidden: true }
+      ],
+      conclusion: '`x + y = y + x` 를 알았다면 이 정리는 한 줄이었겠지만, 그 정리(`add_comm`)의 증명이 바로 `add_zero` 와 `zero_add` 를 필요로 합니다. 순서대로 갑시다.',
+      solution: ['induction n with d hd', 'rw [add_zero]', 'rfl', 'rw [add_succ]', 'rw [hd]', 'rfl'],
+      thmTab: '+', newThms: ['zero_add'], newTacs: ['induction']
+    },
+    {
+      n: 2,
+      title: 'succ_add',
+      statement: 'succ_add (a b : ℕ) : succ a + b = succ (a + b)',
+      intro: [
+        '`add_comm` 으로 가는 길에 `succ_add` 가 나타났습니다.',
+        '`succ_add a b` 는 `(succ a) + b = succ (a + b)` 의 증명입니다.',
+        '',
+        '이번에는 `b` 에 무엇을 더하는 상황이므로 `b` 를 기준으로 경우를 나눠야 합니다.',
+        '',
+        '주의: `succ_add` 는 `a` 에 대한 귀납법으로는 잘 풀리지 않습니다. 직접 확인해 보세요.'
+      ].join('\n'),
+      hints: [
+        { t: '`a` 에 대한 귀납법이 좋을지 `b` 에 대한 귀납법이 좋을지 생각해 보세요.', hidden: true },
+        { t: '`a` 에 대한 귀납법은 여기서는 막힙니다. `b` 로 바꿔 보세요.' },
+        { t: '`succ a + d` 는 `(succ a) + d` 라는 뜻입니다.' }
+      ],
+      conclusion: '이제 이 월드의 보스를 잡을 도구가 모두 준비되었습니다.',
+      solution: ['induction b with d hd', 'rw [add_zero]', 'rw [add_zero]', 'rfl',
+        'rw [add_succ, add_succ, hd]', 'rfl'],
+      thmTab: '+', newThms: ['succ_add'], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'add_comm (보스)',
+      statement: 'add_comm (a b : ℕ) : a + b = b + a',
+      intro: [
+        '[보스 전투 음악]',
+        '',
+        '지금까지 익힌 정리들로 충분합니다. 지금 가진 것을 잘 살펴보세요.',
+        '',
+        '`add_zero`, `add_succ`, `zero_add`, `succ_add` — 이 네 개면 됩니다.'
+      ].join('\n'),
+      hints: [{ t: '`a` 에 대한 귀납법이든 `b` 에 대한 귀납법이든 결과는 같습니다.', hidden: true }],
+      conclusion: '덧셈의 교환법칙을 증명했습니다! 이제 세 수를 더하는 순서를 다룰 차례입니다.',
+      solution: ['induction b with d hd', 'rw [add_zero, zero_add]', 'rfl', 'rw [add_succ, succ_add, hd]', 'rfl'],
+      thmTab: '+', newThms: ['add_comm'], newTacs: []
+    },
+    {
+      n: 4,
+      title: 'add_assoc (덧셈의 결합법칙)',
+      statement: 'add_assoc (a b c : ℕ) : a + b + c = a + (b + c)',
+      intro: [
+        '지금까지는 두 수를 더했습니다. 이번엔 세 수를 더합니다.',
+        '',
+        '`x + y + z` 는 무슨 뜻일까요? `(x + y) + z` 일까요, `x + (y + z)` 일까요?',
+        'Lean 에서는 `(x + y) + z` 입니다. 왼쪽부터 묶입니다.',
+        '',
+        '그런데 둘은 **같습니다**. 아직 증명하지 않았을 뿐이죠. 지금 하면 됩니다.'
+      ].join('\n'),
+      hints: [
+        { t: 'Lean 이 `a + b + c` 라고 쓰면 `(a + b) + c` 라는 뜻입니다. 괄호가 어디에 있는지 헷갈리면 `+` 기호 위치를 잘 살펴보세요.' }
+      ],
+      conclusion: '지나가던 수학자가 "자연수는 덧셈의 가환 모노이드"라며 축하해 줍니다. 떠나기 전에 `add_assoc` 과 `add_comm` 을 한 번 더 연습합니다.',
+      solution: ['induction c with d hd', 'rw [add_zero, add_zero]', 'rfl',
+        'rw [add_succ, add_succ, hd, add_succ]', 'rfl'],
+      thmTab: '+', newThms: ['add_assoc'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'add_right_comm',
+      statement: 'add_right_comm (a b c : ℕ) : a + b + c = a + c + b',
+      intro: [
+        '`add_comm b c` 는 `b + c = c + b` 의 증명입니다. 그런데 목표가 `a + b + c = a + c + b` 라면 `rw [add_comm b c]` 는 **통하지 않습니다**.',
+        '목표는 `(a + b) + c = (a + c) + b` 라는 뜻이고, 여기엔 `b + c` 라는 항이 **직접** 없기 때문입니다.',
+        '',
+        '결합법칙으로 괄호를 옮기고, 교환법칙으로 변수를 옮겨서 증명하세요. 귀납법은 필요 없습니다.',
+        '',
+        '정리에 값을 직접 주면 더 정밀한 재작성이 가능합니다. `rw [add_comm b]` 는 `b + ? = ? + b` 꼴만, `rw [add_comm b c]` 는 `b + c = c + b` 꼴만 바꿉니다.'
+      ].join('\n'),
+      hints: [
+        { t: '먼저 `rw [add_assoc]` 로 왼쪽 괄호를 오른쪽으로 밀어 보세요.' },
+        { t: '이제 `rw [add_comm b]` 로 왼쪽 안쪽의 `b` 를 옮깁니다. 이어서 `rw [add_assoc]`.' }
+      ],
+      conclusion: '이 월드에서 필요한 전술은 모두 보았습니다. 곱셈 월드로 가거나, 함축 월드에서 새 전술을 배우러 갈 수 있습니다.',
+      solution: ['rw [add_assoc]', 'rw [add_comm b, add_assoc]', 'rfl'],
+      thmTab: '+', newThms: ['add_right_comm'], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'multiplication',
+  title: '곱셈 월드',
+  subtitle: '곱셈의 기본 정리 9개',
+  intro: [
+    '곱셈을 정의하고, 그 기본 성질을 차례로 증명합니다. 여기서 배우는 `mul_comm` 은 뒤에서 큰 보스를 잡을 때 다시 나옵니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'mul_one',
+      statement: 'mul_one (m : ℕ) : m * 1 = m',
+      intro: [
+        '정리 목록에 `*` 그룹이 생겼습니다. 지금 아는 곱셈의 사실은 `mul_zero` 와 `mul_succ` 둘뿐입니다.',
+        '',
+        '* `mul_zero a : a * 0 = 0`',
+        '* `mul_succ a b : a * succ b = a * b + a`',
+        '',
+        '이 둘로 9개를 더 증명합니다. 우선 워밍업. `1` 이 다음 수라는 걸 아니까 귀납법도 필요 없습니다.'
+      ].join('\n'),
+      hints: [{ t: '`1` 을 `succ 0` 으로 바꾸는 것부터 시작하세요.' }],
+      conclusion: '',
+      solution: ['rw [one_eq_succ_zero]', 'rw [mul_succ]', 'rw [mul_zero]', 'rw [zero_add]', 'rfl'],
+      thmTab: '*', newThms: ['mul_zero', 'mul_succ'], newTacs: []
+    },
+    {
+      n: 2,
+      title: 'zero_mul',
+      statement: 'zero_mul (m : ℕ) : 0 * m = 0',
+      intro: [
+        '첫 목표는 `mul_comm x y : x * y = y * x` 이고, 귀납법으로 증명할 생각입니다.',
+        '그 귀납법의 0 인 경우에 `mul_zero` 와 `zero_mul` 이 필요한데, `zero_mul` 이 아직 없습니다. 먼저 이것부터 증명합니다.'
+      ].join('\n'),
+      hints: [{ t: '`m` 에 대한 귀납법으로 시작하세요.' }],
+      conclusion: '',
+      solution: ['induction m with d hd', 'rw [mul_zero]', 'rfl',
+        'rw [mul_succ]', 'rw [hd]', 'rw [add_zero]', 'rfl'],
+      thmTab: '*', newThms: [], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'succ_mul',
+      statement: 'succ_mul (a b : ℕ) : succ a * b = a * b + b',
+      intro: [
+        '`mul_succ` 는 있지만 `succ_mul` 은 없습니다. 이름 규칙을 보면 무엇을 뜻하는지 감이 올 겁니다.',
+        '`succ a * b = a * b + b` 입니다.',
+        '',
+        '덧셈 월드의 마지막 레벨(`add_right_comm`)이 여기서 도움이 됩니다.'
+      ].join('\n'),
+      hints: [{ t: '`b` 에 대한 귀납법으로 진행하세요.' }],
+      conclusion: '',
+      solution: ['induction b with d hd', 'rw [mul_zero]', 'rw [mul_zero]', 'rw [add_zero]', 'rfl',
+        'rw [mul_succ]', 'rw [mul_succ]', 'rw [hd]', 'rw [add_succ]', 'rw [add_succ]', 'rw [add_right_comm]', 'rfl'],
+      thmTab: '*', newThms: ['succ_mul'], newTacs: []
+    },
+    {
+      n: 4,
+      title: 'mul_comm',
+      statement: 'mul_comm (a b : ℕ) : a * b = b * a',
+      intro: [
+        '곱셈 월드의 첫 번째 부보스, `x * y = y * x` 입니다.',
+        '',
+        '이걸 증명하고 나면 `zero_mul` 같은 정리는 `mul_zero` 에서 쉽게 따라 나옵니다. 그래도 정확한 도구는 각각 들고 있는 게 편합니다.'
+      ].join('\n'),
+      hints: [{ t: '`b` 에 대한 귀납법이 자연스럽습니다. 귀납 단계에서 `hd` 를 거꾸로 쓰면 편합니다.' }],
+      conclusion: '',
+      solution: ['induction b with d hd', 'rw [zero_mul]', 'rw [mul_zero]', 'rfl',
+        'rw [succ_mul]', 'rw [← hd]', 'rw [mul_succ]', 'rfl'],
+      thmTab: '*', newThms: ['mul_comm'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'one_mul',
+      statement: 'one_mul (m : ℕ) : 1 * m = m',
+      intro: [
+        '`1 * m = m` 은 적어도 세 가지 방법으로 증명할 수 있습니다. 귀납법, `succ_mul`, 그리고 교환법칙.',
+        '어느 쪽이 가장 빠를까요?'
+      ].join('\n'),
+      hints: [],
+      conclusion: '한 줄 풀이: `rw [mul_comm, mul_one]` 다음 `rfl`.',
+      solution: ['rw [mul_comm, mul_one]', 'rfl'],
+      thmTab: '*', newThms: ['one_mul'], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'two_mul',
+      statement: 'two_mul (m : ℕ) : 2 * m = m + m',
+      intro: [
+        '생각보다 중요한 레벨입니다. 나중에 큰 보스와 싸울 때 결정적인 역할을 합니다.'
+      ].join('\n'),
+      hints: [{ t: '`2` 를 `succ 1` 로, 다시 `succ 0` 으로 풀어 가면 됩니다.' }],
+      conclusion: '한 줄 풀이: `rw [two_eq_succ_one, succ_mul, one_mul]` 다음 `rfl`.',
+      solution: ['rw [two_eq_succ_one, succ_mul, one_mul]', 'rfl'],
+      thmTab: '*', newThms: ['two_mul'], newTacs: []
+    },
+    {
+      n: 7,
+      title: 'mul_add',
+      statement: 'mul_add (a b c : ℕ) : a * (b + c) = a * b + a * c',
+      intro: [
+        '이번 목표는 분배법칙 `a * (b + c) = a * b + a * c` 입니다.',
+        '왼쪽에 곱셈이 있고 그 안에 덧셈이 들어 있습니다.',
+        '',
+        '세 변수 중 아무거나로 귀납법을 할 수 있지만, 어떤 것을 고르느냐에 따라 난이도가 크게 달라집니다.'
+      ].join('\n'),
+      hints: [
+        { t: '세 변수 모두 귀납법이 가능합니다. 귀납 단계를 재작성 5번으로 끝낼 수 있을까요?' },
+        { t: '`a` 로 하는 게 가장 힘들고, `b` 가 그다음, `c` 가 가장 쉽습니다.', hidden: true }
+      ],
+      conclusion: '`c` 에 대한 귀납법 풀이는 `induction c with d hd` → `rw [add_zero, mul_zero, add_zero]` → `rfl` → `rw [add_succ, mul_succ, hd, mul_succ, add_assoc]` → `rfl`.',
+      solution: ['induction c with d hd', 'rw [add_zero, mul_zero, add_zero]', 'rfl',
+        'rw [add_succ, mul_succ, hd, mul_succ, add_assoc]', 'rfl'],
+      thmTab: '*', newThms: ['mul_add'], newTacs: []
+    },
+    {
+      n: 8,
+      title: 'add_mul',
+      statement: 'add_mul (a b c : ℕ) : (a + b) * c = a * c + b * c',
+      intro: [
+        '`add_mul` 도 귀납법으로 증명하면 꽤 번거롭습니다. 그런데 귀납법을 피하는 요령이 있습니다.',
+        '무엇일까요?'
+      ].join('\n'),
+      hints: [{ t: '이미 증명한 `mul_comm` 과 `mul_add` 를 쓰면 됩니다.' }],
+      conclusion: '풀이: `rw [mul_comm, mul_add]` → `repeat rw [mul_comm c]` → `rfl`.',
+      solution: ['rw [mul_comm, mul_add]', 'repeat rw [mul_comm c]', 'rfl'],
+      thmTab: '*', newThms: ['add_mul'], newTacs: []
+    },
+    {
+      n: 9,
+      title: 'mul_assoc',
+      statement: 'mul_assoc (a b c : ℕ) : (a * b) * c = a * (b * c)',
+      intro: [
+        '곱셈이 결합법칙을 만족함을 증명할 도구가 모두 모였습니다. 곱셈 월드의 보스 레벨입니다. 행운을 빕니다!'
+      ].join('\n'),
+      hints: [{ t: '`c` 에 대한 귀납법으로 시작하세요.' }],
+      conclusion: '지나가던 수학자가 "자연수는 가환 반환(semiring)"이라며 감탄합니다.\n\n최종 보스로 가려면 거듭제곱 월드로 향하세요.',
+      solution: ['induction c with d hd', 'rw [mul_zero, mul_zero, mul_zero]', 'rfl',
+        'rw [mul_succ]', 'rw [mul_succ]', 'rw [hd]', 'rw [mul_add]', 'rfl'],
+      thmTab: '*', newThms: ['mul_assoc'], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'power',
+  title: '거듭제곱 월드',
+  subtitle: 'a ^ n · 최종 보스',
+  intro: [
+    '거듭제곱을 정의하고 성질을 증명합니다. 이 월드의 마지막에 게임 전체의 최종 보스가 있습니다.',
+    '',
+    '`rw`, `rfl`, `induction` 만으로 충분합니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'zero_pow_zero',
+      statement: 'zero_pow_zero : (0 : ℕ) ^ 0 = 1',
+      intro: [
+        '수학자들은 `0 ^ 0` 이 무엇인지 종종 논쟁합니다. 답은 정의하기 나름입니다.',
+        '이 게임에서는 `0 ^ 0 = 1` 입니다. 증명해 보세요.',
+        '',
+        '정리 목록의 `^` 그룹에 새 정리가 생겼습니다.'
+      ].join('\n'),
+      hints: [{ t: '`pow_zero m : m ^ 0 = 1` 을 쓰세요.' }],
+      conclusion: '',
+      solution: ['rw [pow_zero]', 'rfl'],
+      thmTab: '^', newThms: ['pow_zero'], newTacs: []
+    },
+    {
+      n: 2,
+      title: 'zero_pow_succ',
+      statement: 'zero_pow_succ (m : ℕ) : (0 : ℕ) ^ (succ m) = 0',
+      intro: [
+        '`0 ^ 0 = 1` 이었지만, 지수가 다음 수라면 `0 ^ n = 0` 입니다. 이걸 증명합니다.'
+      ].join('\n'),
+      hints: [{ t: '`pow_succ m n : m ^ succ n = m ^ n * m` 을 쓰세요.' }],
+      conclusion: '',
+      solution: ['rw [pow_succ]', 'rw [mul_zero]', 'rfl'],
+      thmTab: '^', newThms: ['zero_pow_zero', 'pow_succ'], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'pow_one',
+      statement: 'pow_one (a : ℕ) : a ^ 1 = a',
+      intro: ['`a ^ 1 = a` 를 증명합니다. `1` 은 `succ 0` 이라는 점을 기억하세요.'],
+      hints: [{ t: '`one_eq_succ_zero` → `pow_succ` → `pow_zero` → `one_mul` 순서로 가면 됩니다.' }],
+      conclusion: '',
+      solution: ['rw [one_eq_succ_zero]', 'rw [pow_succ]', 'rw [pow_zero]', 'rw [one_mul]', 'rfl'],
+      thmTab: '^', newThms: ['pow_one'], newTacs: []
+    },
+    {
+      n: 4,
+      title: 'one_pow',
+      statement: 'one_pow (m : ℕ) : (1 : ℕ) ^ m = 1',
+      intro: ['`1` 의 거듭제곱은 항상 `1` 입니다.'],
+      hints: [{ t: '`m` 에 대한 귀납법으로 시작하세요.' }],
+      conclusion: '',
+      solution: ['induction m with t ht', 'rw [pow_zero]', 'rfl', 'rw [pow_succ]', 'rw [ht]', 'rw [mul_one]', 'rfl'],
+      thmTab: '^', newThms: ['one_pow'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'pow_two',
+      statement: 'pow_two (a : ℕ) : a ^ 2 = a * a',
+      intro: ['참고: 이 정리는 최종 보스에게 아주 유용합니다.'],
+      hints: [{ t: '`2` 를 `succ 1` 로 바꾼 뒤 `pow_succ`, 다시 `pow_one` 을 쓰세요.' }],
+      conclusion: '',
+      solution: ['rw [two_eq_succ_one]', 'rw [pow_succ]', 'rw [pow_one]', 'rfl'],
+      thmTab: '^', newThms: ['pow_two'], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'pow_add',
+      statement: 'pow_add (a m n : ℕ) : a ^ (m + n) = a ^ m * a ^ n',
+      intro: ['최종 보스를 향한 여정을 시작합니다. 거듭제곱에 관한 더 정교한 사실들입니다.'],
+      hints: [{ t: '`n` 에 대한 귀납법으로 시작하세요.' }],
+      conclusion: '',
+      solution: ['induction n with t ht', 'rw [add_zero, pow_zero, mul_one]', 'rfl',
+        'rw [add_succ, pow_succ, pow_succ, ht, mul_assoc]', 'rfl'],
+      thmTab: '^', newThms: ['pow_add'], newTacs: []
+    },
+    {
+      n: 7,
+      title: 'mul_pow',
+      statement: 'mul_pow (a b n : ℕ) : (a * b) ^ n = a ^ n * b ^ n',
+      intro: [
+        '음악이 점점 격해집니다. 거듭제곱과 곱셈이 만나는 지점을 탐험합니다.',
+        '',
+        '`rw [mul_comm]` 이 엉뚱한 곱셈을 바꿔서 원하는 `a * b` 를 못 바꾸는 상황이라면, **값을 직접 주는** 정밀 재작성을 떠올리세요.'
+      ].join('\n'),
+      hints: [{ t: '`n` 에 대한 귀납법. 귀납 단계에서 `repeat rw [mul_assoc]` 로 괄호를 정리한 뒤 정밀 `mul_comm` 을 쓰세요.' }],
+      conclusion: '',
+      solution: ['induction n with t Ht', 'rw [pow_zero, pow_zero, pow_zero, mul_one]', 'rfl',
+        'rw [pow_succ, pow_succ, pow_succ, Ht]', 'repeat rw [mul_assoc]',
+        'rw [mul_comm a (_ * b), mul_assoc, mul_comm b a]', 'rfl'],
+      thmTab: '^', newThms: ['mul_pow'], newTacs: []
+    },
+    {
+      n: 8,
+      title: 'pow_pow',
+      statement: 'pow_pow (a m n : ℕ) : (a ^ m) ^ n = a ^ (m * n)',
+      intro: ['게임에서 이름이 가장 근사한 레벨. `pow_pow` 부보스가 나타납니다.'],
+      hints: [{ t: '`n` 에 대한 귀납법으로 시작하세요.' }],
+      conclusion: '음악이 잦아듭니다. 이걸로 끝일까요?\n\n아직 두 레벨이 남아 있습니다. 그리고 마지막 하나가 진짜 최종 보스입니다.',
+      solution: ['induction n with t Ht', 'rw [mul_zero, pow_zero, pow_zero]', 'rfl',
+        'rw [pow_succ, Ht, mul_succ, pow_add]', 'rfl'],
+      thmTab: '^', newThms: ['pow_pow'], newTacs: []
+    },
+    {
+      n: 9,
+      title: 'add_sq',
+      statement: 'add_sq (a b : ℕ) : (a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b',
+      intro: ['[최종 보스 음악]'],
+      hints: [{ t: '`pow_two` 를 세 번, `add_right_comm`, 분배법칙들, `two_mul` 순으로 밀고 나가세요.' }],
+      conclusion: '해냈습니다! 여러 세대의 학생들을 넘어뜨린 그 정리(`(a+b)^2 = a^2+b^2` 라고 착각하는, 이른바 "신입생의 꿈")를 증명했습니다.\n\n그런데… 이 보스가 아직 꿈틀거립니다. 더 강한 두 번째 형태로 변신합니다!',
+      solution: ['rw [pow_two, pow_two, pow_two]', 'rw [add_right_comm]', 'rw [mul_add, add_mul, add_mul]',
+        'rw [two_mul, add_mul]', 'rw [mul_comm b a]', 'rw [← add_assoc, ← add_assoc]', 'rfl'],
+      thmTab: '^', newThms: ['add_sq'], newTacs: []
+    },
+    {
+      n: 10,
+      title: '페르마의 마지막 정리',
+      statement: '(a b c n : ℕ) : (a + 1) ^ (n + 3) + (b + 1) ^ (n + 3) ≠ (c + 1) ^ (n + 3)',
+      intro: [
+        '이제 페르마의 마지막 정리를 수학적으로 정확하지만 약간 투박한 형태로 진술할 수 있습니다.',
+        '',
+        '페르마의 마지막 정리: $x, y, z > 0$ 이고 $m \\ge 3$ 이면 $x^m + y^m \\ne z^m$ 입니다.',
+        '아직 부등호를 다루지 않았으므로 `m ≥ 3` 대신 `n + 3` 을, `x > 0` 대신 `a + 1` 을 씁니다.',
+        '',
+        '이 레벨은 앞의 레벨들과 비슷해 보이지만, 인류가 아는 가장 짧은 증명도 Lean 코드로는 수백만 줄이 됩니다.',
+        '이 게임의 저자 Kevin Buzzard 는 Wiles 와 Taylor 의 증명을 Lean 으로 옮기는 작업을 하고 있습니다.',
+        '',
+        '## 축하합니다',
+        '자연수 게임의 본 퀘스트를 완료했습니다!'
+      ].join('\n'),
+      hints: [{ t: '이 레벨은 게임의 농담입니다. 숨겨진 전술 `xyzzy` 를 입력하면 통과합니다.', hidden: true }],
+      conclusion: '축하합니다! 페르마의 마지막 정리를 증명했습니다!\n\n…아니면 마법을 썼거나요.',
+      solution: ['xyzzy'],
+      thmTab: '^', newThms: [], newTacs: ['xyzzy']
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'implication',
+  title: '함축 월드',
+  subtitle: '→ · exact · apply · intro',
+  intro: [
+    '이 월드에서는 "P 이면 Q 이다" 꼴의 정리를 다룹니다. 이를 위해 `exact`, `apply`, `intro`, `symm` 을 배웁니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'exact 전술',
+      statement: '(x y z : ℕ) (h1 : x + y = 37) (h2 : 3 * x + z = 42) : x + y = 37',
+      intro: [
+        '`exact` 는 목표가 가정과 **똑같을 때** 그 가정으로 목표를 닫는 전술입니다. 가정 이름을 인자로 줍니다: `exact h`'
+      ].join('\n'),
+      hints: [{ t: '목표가 가정 중 하나와 같습니다. `exact h1` 을 실행하세요.' }],
+      conclusion: '',
+      solution: ['exact h1'],
+      thmTab: '', newThms: [], newTacs: ['exact']
+    },
+    {
+      n: 2,
+      title: 'exact 연습',
+      statement: '(x y : ℕ) (h : 0 + x = 0 + y + 2) : x = y + 2',
+      intro: ['목표가 가정과 **완전히** 같지는 않을 때는, 재작성으로 모양을 맞춘 뒤 `exact` 를 씁니다.'],
+      hints: [
+        { t: '`rw [zero_add] at h` 처럼 `at` 을 붙이면 목표가 아니라 가정 `h` 를 재작성합니다.' },
+        { t: '한 번 더 `rw [zero_add] at h` 를 하세요. `zero_add` 는 처음 만난 `0 + ?` 하나만 바꾸기 때문입니다.', hidden: true },
+        { t: '이제 `rw [h]` 후 `rfl` 로도 되지만, `exact h` 면 한 줄입니다.' }
+      ],
+      conclusion: '두 줄 풀이: `repeat rw [zero_add] at h` 다음 `exact h`.',
+      solution: ['rw [zero_add] at h', 'rw [zero_add] at h', 'exact h'],
+      thmTab: '', newThms: [], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'apply 전술',
+      statement: '(x y : ℕ) (h1 : x = 37) (h2 : x = 37 → y = 42) : y = 42',
+      intro: [
+        '가정 `h2` 는 **함축**입니다. "만약 `x = 37` 이라면 `y = 42`" 라는 뜻입니다.',
+        '`apply` 로 이 함축을 사용할 수 있습니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`apply h2 at h1` 을 실행하면 `h1` 이 `y = 42` 로 바뀝니다.' },
+        { t: '이제 `exact h1` 로 끝냅니다.' }
+      ],
+      conclusion: '',
+      solution: ['apply h2 at h1', 'exact h1'],
+      thmTab: 'Peano', newThms: [], newTacs: ['apply']
+    },
+    {
+      n: 4,
+      title: 'succ_inj (다음 수는 단사)',
+      statement: '(x : ℕ) (h : x + 1 = 4) : x = 3',
+      intro: [
+        '`succ_inj a b` 는 `succ a = succ b` 이면 `a = b` 라는 정리입니다. `Peano` 그룹에서 확인하세요.',
+        '',
+        'Peano 는 이 정리를 공리로 두었지만, 알고리즘 월드에서 Lean 으로 증명합니다. 지금은 받아들이고 `x + 1 = 4 → x = 3` 을 증명합시다.',
+        '',
+        '전략은 가정을 조작해서 목표의 모양으로 만드는 것입니다.'
+      ].join('\n'),
+      hints: [
+        { t: '먼저 `h` 를 `succ x = succ 3` 꼴로 만들어야 `succ_inj` 를 쓸 수 있습니다. `rw [four_eq_succ_three] at h` 로 오른쪽 `4` 를 바꾸세요.' },
+        { t: '이제 `succ_eq_add_one` 을 거꾸로 `h` 에 적용합니다.' },
+        { t: '`←` 를 붙이면 반대 방향입니다. `rw [← succ_eq_add_one] at h`.' },
+        { t: '이제 `apply succ_inj at h` 로 `succ` 를 지웁니다.' },
+        { t: '목표가 가정이 되었습니다. `exact h`.', hidden: true }
+      ],
+      conclusion: '다음 레벨에서는 같은 증명을 거꾸로, 즉 목표를 가정 쪽으로 끌어와서 해 봅니다.',
+      solution: ['rw [four_eq_succ_three] at h', 'rw [← succ_eq_add_one] at h', 'apply succ_inj at h', 'exact h'],
+      thmTab: 'Peano', newThms: ['succ_inj'], newTacs: []
+    },
+    {
+      n: 5,
+      title: '거꾸로 논증하기',
+      statement: '(x : ℕ) (h : x + 1 = 4) : x = 3',
+      intro: [
+        '지난 레벨에서는 가정을 목표 모양으로 바꿨습니다. 이번에는 **목표를** 가정 모양으로 바꿉니다. `apply` 가 목표에도 쓸 수 있습니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`apply succ_inj` 로 목표에 `succ_inj` 를 적용하세요.' },
+        { t: '`P → Q` 의 증명을 목표에 적용하면 목표 `Q` 가 `P` 로 바뀝니다. 이제 `rw [succ_eq_add_one]` 로 목표를 가정에 가깝게 만드세요.' },
+        { t: '`four_eq_succ_three` 를 거꾸로 적용하면 목표가 가정과 같아집니다.' },
+        { t: '`exact h` 로 끝냅니다.' }
+      ],
+      conclusion: '`apply t at h` 는 쉽게 느끼면서 `apply t` 는 헷갈려 하는 사람이 많습니다. 헷갈리면 앞으로만 논증하면 됩니다.',
+      solution: ['apply succ_inj', 'rw [succ_eq_add_one]', 'rw [← four_eq_succ_three]', 'exact h'],
+      thmTab: 'Peano', newThms: [], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'intro',
+      statement: '(x : ℕ) : x = 37 → x = 37',
+      intro: [
+        '목표 자체가 `P → Q` 꼴이면 어떻게 할까요?',
+        '"P 를 가정하고 Q 를 보이자" 라고 말해야 합니다. 그 전술이 `intro` 입니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`intro h` 로 가정을 하나 도입하고 그 증명을 `h` 라 부릅니다.' },
+        { t: '`exact h` 로 끝납니다.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['intro h', 'exact h'],
+      thmTab: '', newThms: [], newTacs: ['intro']
+    },
+    {
+      n: 7,
+      title: 'intro 연습',
+      statement: '(x y : ℕ) : x + 1 = y + 1 → x = y',
+      intro: ['지금까지 배운 전술로 `x + 1 = y + 1 → x = y` 를 증명해 보세요.'],
+      hints: [
+        { t: '`intro h` 로 가정을 도입합니다.', hidden: true },
+        { t: '`repeat rw [← succ_eq_add_one] at h` 가 가장 빠릅니다.', hidden: true },
+        { t: '`apply succ_inj at h` 로 `succ` 를 지웁니다.', hidden: true },
+        { t: '`rw [h]` 후 `rfl` 도 되지만 `exact h` 가 더 빠릅니다.', hidden: true }
+      ],
+      conclusion: '완전히 거꾸로 간 풀이: `intro h` → `apply succ_inj` → `repeat rw [succ_eq_add_one]` → `exact h`.',
+      solution: ['intro h', 'repeat rw [← succ_eq_add_one] at h', 'apply succ_inj at h', 'exact h'],
+      thmTab: '', newThms: [], newTacs: []
+    },
+    {
+      n: 8,
+      title: '≠',
+      statement: '(x y : ℕ) (h1 : x = y) (h2 : x ≠ y) : False',
+      intro: [
+        '`2 + 2 ≠ 5` 를 아직 증명할 수 없는 이유는 `≠` 의 정의를 다루지 않았기 때문입니다.',
+        '',
+        'Lean 에서 `a ≠ b` 는 `a = b → False` 의 **표기**입니다. `False` 는 항상 거짓인 명제입니다.',
+        '`True → False` 는 거짓, `False → False` 는 참이므로 `X → False` 는 `X` 의 논리적 부정입니다.',
+        '',
+        '`a ≠ b` 가 함축처럼 보이지 않아도 함축으로 다루면 됩니다.',
+        '`False` 는 일관된 가정에서는 이끌어낼 수 없는 목표입니다. 따라서 목표가 `False` 라면 가정이 모순이길 바라야 합니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`h2` 는 `x = y → False` 의 증명입니다. `apply h2 at h1` 을 해 보세요.' }
+      ],
+      conclusion: '기억하세요: `x ≠ y` 는 `x = y → False` 의 표기입니다.',
+      solution: ['apply h2 at h1', 'exact h1'],
+      thmTab: 'Peano', newThms: [], newTacs: []
+    },
+    {
+      n: 9,
+      title: 'zero_ne_succ',
+      statement: 'zero_ne_one : (0 : ℕ) ≠ 1',
+      intro: [
+        '`2 + 2 ≠ 5` 를 위한 워밍업으로 `0 ≠ 1` 을 증명합니다.',
+        'Peano 의 마지막 공리 `zero_ne_succ n : 0 ≠ succ n` 이 필요합니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`intro h` 로 시작하세요.' },
+        { t: '`h` 안의 `1` 을 `succ 0` 으로 바꿉니다.' },
+        { t: '`apply zero_ne_succ at h`.' }
+      ],
+      conclusion: '좋습니다!',
+      solution: ['intro h', 'rw [one_eq_succ_zero] at h', 'apply zero_ne_succ at h', 'exact h'],
+      thmTab: 'Peano', newThms: ['zero_ne_succ', 'zero_ne_one'], newTacs: []
+    },
+    {
+      n: 10,
+      title: '1 ≠ 0',
+      statement: 'one_ne_zero : (1 : ℕ) ≠ 0',
+      intro: [
+        '`zero_ne_succ n` 은 `0 = succ n → False` 입니다. 그런데 가정이 `succ n = 0`, 즉 방향이 반대라면요?',
+        '',
+        '`symm` 은 목표 `x = y` 를 `y = x` 로, `x ≠ y` 를 `y ≠ x` 로 바꿉니다. `symm at h` 는 가정에 대해 같은 일을 합니다.',
+        '',
+        '`0 ≠ 1` 은 이미 `zero_ne_one` 이라는 이름으로 증명해 두었습니다.'
+      ].join('\n'),
+      hints: [{ t: '`symm` 다음 `exact zero_ne_one`.' }],
+      conclusion: '`exact` 는 가정뿐 아니라 시스템에 있는 **모든 증명**을 먹습니다.',
+      solution: ['symm', 'exact zero_ne_one'],
+      thmTab: '012', newThms: ['one_ne_zero'], newTacs: ['symm']
+    },
+    {
+      n: 11,
+      title: '2 + 2 ≠ 5',
+      statement: ': succ (succ 0) + succ (succ 0) ≠ succ (succ (succ (succ (succ 0))))',
+      intro: [
+        '지금 가진 도구로 `2 + 2 ≠ 5` 를 하나하나 증명하면 지루합니다. 그래서 모든 수를 `succ` 형태로 미리 풀어 두었습니다.',
+        '`zero_ne_succ` 와 `succ_inj` 로 증명해 보세요.'
+      ].join('\n'),
+      hints: [{ t: '`intro h` → `rw [add_succ, add_succ, add_zero] at h` → `repeat apply succ_inj at h` → `apply zero_ne_succ at h` → `exact h`.' }],
+      conclusion: 'Lean 은 정리 증명기이고, 아직 계산기로 쓰기엔 부족합니다. 알고리즘 월드에서 계산을 다루는 기계를 만듭니다.',
+      solution: ['intro h', 'rw [add_succ, add_succ, add_zero] at h', 'repeat apply succ_inj at h',
+        'apply zero_ne_succ at h', 'exact h'],
+      thmTab: 'Peano', newThms: [], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'advaddition',
+  title: '심화 덧셈 월드',
+  subtitle: '양변 지우기 · cases',
+  intro: [
+    '이 월드에서는 대부분 혼자 힘으로 증명합니다. 필요한 정리들은 `+` 그룹에 있습니다. 여기서 얻는 정리는 부등호 월드에서 다시 쓰입니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'add_right_cancel',
+      statement: 'add_right_cancel (a b n : ℕ) : a + n = b + n → a = b',
+      intro: ['`add_right_cancel a b n` 은 `a + n = b + n → a = b` 라는 정리입니다.'],
+      hints: [{ t: '`n` 에 대한 귀납법으로 시작하세요. 두 경우 모두 `intro h` 로 가정을 들여놓고 시작합니다.', hidden: true }],
+      conclusion: '좋습니다!',
+      solution: ['induction n with d hd', 'intro h', 'repeat rw [add_zero] at h', 'exact h',
+        'intro h', 'repeat rw [add_succ] at h', 'apply succ_inj at h', 'apply hd at h', 'exact h'],
+      thmTab: '+', newThms: ['add_right_cancel'], newTacs: []
+    },
+    {
+      n: 2,
+      title: 'add_left_cancel',
+      statement: 'add_left_cancel (a b n : ℕ) : n + a = n + b → a = b',
+      intro: [
+        '`add_left_cancel a b n` 은 `n + a = n + b → a = b` 입니다.',
+        '`n` 에 대한 귀납법으로 직접 해도 되고, `add_right_cancel` 에서 끌어낼 수도 있습니다.'
+      ].join('\n'),
+      hints: [{ t: '`repeat rw [add_comm n]` 으로 왼쪽 더하기를 오른쪽 더하기로 바꿔 보세요.' }],
+      conclusion: '두 줄 풀이: `repeat rw [add_comm n]` 다음 `exact add_right_cancel a b n`.',
+      solution: ['repeat rw [add_comm n]', 'intro h', 'apply add_right_cancel at h', 'exact h'],
+      thmTab: '+', newThms: ['add_left_cancel'], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'add_left_eq_self',
+      statement: 'add_left_eq_self (x y : ℕ) : x + y = y → x = 0',
+      intro: ['`add_left_eq_self x y` 는 `x + y = y → x = 0` 입니다.'],
+      hints: [{ t: '귀납법 대신, 오른쪽의 `y` 를 `0 + y` 로 바꾼 뒤 `add_right_cancel` 을 쓸 수 있습니다. `nth_rewrite 2 [← zero_add y]`.' }],
+      conclusion: '두 줄 풀이: `nth_rewrite 2 [← zero_add y] at h` 다음 `apply add_right_cancel at h`.',
+      solution: ['intro h', 'nth_rewrite 2 [← zero_add y] at h', 'apply add_right_cancel at h', 'exact h'],
+      thmTab: '+', newThms: ['add_left_eq_self'], newTacs: []
+    },
+    {
+      n: 4,
+      title: 'add_right_eq_self',
+      statement: 'add_right_eq_self (x y : ℕ) : x + y = x → y = 0',
+      intro: ['`add_right_eq_self x y` 는 `x + y = x → y = 0` 입니다. 두 가지 방법이 떠오릅니다.'],
+      hints: [
+        { t: '`rw` 로 가정에 적용하면 막힙니다. `add_left_eq_self` 는 함축이므로 `apply` 로 써야 합니다.' }
+      ],
+      conclusion: [
+        '`add_comm` 으로 방향을 바꾼 뒤 `add_left_eq_self` 를 적용하면 한 줄입니다.',
+        '```',
+        'rw [add_comm]',
+        'exact add_left_eq_self y x',
+        '```'
+      ].join('\n'),
+      solution: ['rw [add_comm]', 'exact add_left_eq_self y x'],
+      thmTab: '+', newThms: ['add_right_eq_self'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'add_right_eq_zero',
+      statement: 'add_right_eq_zero (a b : ℕ) : a + b = 0 → a = 0',
+      intro: [
+        '`≤` 월드에서 필요할 정리입니다. `a + b = 0` 이면 `a = 0` 입니다.',
+        '',
+        '## 새 전술: cases',
+        '`cases` 는 대상이나 가정을 "그것이 만들어질 수 있는 경우들"로 쪼갭니다.',
+        '* 가정이 `False` 라면 `cases h` 는 목표를 닫습니다. `False` 를 만드는 방법은 없으니까요.',
+        '* 수 `b` 라면 `cases b with d` 는 `b = 0` 과 `b = succ d` 두 경우로 나눕니다. 귀납 가정은 필요 없을 때 유용합니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`b = 0` 인 경우와 `b` 가 다음 수인 경우를 나눠 다룹니다. `cases b with d` 로 시작하세요.' }
+      ],
+      conclusion: '잘했습니다!',
+      solution: ['cases b with d', 'intro h', 'rw [add_zero] at h', 'exact h',
+        'intro h', 'rw [add_succ] at h', 'apply succ_ne_zero at h', 'cases h'],
+      thmTab: 'Peano', newThms: ['add_right_eq_zero'], newTacs: ['cases']
+    },
+    {
+      n: 6,
+      title: 'add_left_eq_zero',
+      statement: 'add_left_eq_zero (a b : ℕ) : a + b = 0 → b = 0',
+      intro: ['앞의 증명을 흉내 내도 되고, 앞의 정리를 이용하는 방법을 찾아도 됩니다.'],
+      hints: [{ t: '`rw [add_comm]` 으로 방향을 바꾸면 `add_right_eq_zero` 를 쓸 수 있습니다.' }],
+      conclusion: '심화 덧셈 월드 끝! 다음은 `≤` 월드입니다.',
+      solution: ['rw [add_comm]', 'exact add_right_eq_zero b a'],
+      thmTab: '+', newThms: ['add_left_eq_zero'], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'lessorequal',
+  title: '≤ 월드',
+  subtitle: '존재 양화 · use · left/right',
+  intro: [
+    '이 월드에서는 `a ≤ b` 를 정의하고 그 기본 성질을 증명합니다.',
+    '',
+    '`a ≤ b` 의 정의는 "`b = a + c` 인 수 `c` 가 존재한다" 입니다. 그래서 "존재한다" 를 증명하는 전술(`use`)과, 그것을 이용하는 방법(`cases`)을 배웁니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'use 전술',
+      statement: 'le_refl (x : ℕ) : x ≤ x',
+      intro: [
+        '`a ≤ b` 는 `∃ c, b = a + c` 의 **표기**입니다. 거꾸로 된 E 는 "존재한다" 는 뜻입니다.',
+        '즉 `a ≤ b` 는 "`b = a + c` 인 수 `c` 가 있다" 입니다. 음수가 없는 게임이라 이 정의가 잘 동작합니다.',
+        '',
+        '"존재한다" 를 **증명하려면** `use` 전술로 그 수를 직접 제시합니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`x ≤ x` 인 이유는 `x = x + 0` 이기 때문입니다. `use 0` 으로 시작하세요.' },
+        { t: '이제 `rw [add_zero]` 후 `rfl`.' }
+      ],
+      conclusion: '',
+      solution: ['use 0', 'rw [add_zero]', 'rfl'],
+      thmTab: '≤', newThms: ['le_refl'], newTacs: ['use']
+    },
+    {
+      n: 2,
+      title: '0 ≤ x',
+      statement: 'zero_le (x : ℕ) : 0 ≤ x',
+      intro: ['`x = 0 + _` 가 되도록 무언가를 `use` 하면 됩니다.'],
+      hints: [{ t: '`use x` 를 해 보세요.' }],
+      conclusion: '',
+      solution: ['use x', 'rw [zero_add]', 'rfl'],
+      thmTab: '≤', newThms: ['zero_le'], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'x ≤ succ x',
+      statement: 'le_succ_self (x : ℕ) : x ≤ succ x',
+      intro: ['잘못된 수를 `use` 하면 증명할 수 없는 목표가 남습니다. 여기서는 어떤 수를 `use` 해야 할까요?'],
+      hints: [{ t: '`use 1` 을 해 보세요. 그러면 `succ x = x + 1` 이라는 목표가 됩니다.' }],
+      conclusion: '두 줄 풀이: `use 1` 다음 `exact succ_eq_add_one x`.',
+      solution: ['use 1', 'rw [succ_eq_add_one]', 'rfl'],
+      thmTab: '+', newThms: ['le_succ_self'], newTacs: []
+    },
+    {
+      n: 4,
+      title: 'x ≤ y 이고 y ≤ z 이면 x ≤ z',
+      statement: 'le_trans (x y z : ℕ) (hxy : x ≤ y) (hyz : y ≤ z) : x ≤ z',
+      intro: ['이번에는 부등식이 **가정**으로 나옵니다. `cases` 로 `hxy` 를 분해할 수 있습니다.'],
+      hints: [
+        { t: '`cases hxy with a ha` 로 시작하세요.' },
+        { t: '`ha` 는 `y = x + a` 의 증명이 되고, `hxy` 는 사라집니다. 같은 방식으로 `cases hyz with b hb`.' },
+        { t: '이제 어떤 수를 `use` 할지 정하면 됩니다.' }
+      ],
+      conclusion: '지나가던 수학자: 반사성과 추이성을 보였으니 `≤` 는 `ℕ` 위의 **준순서** 입니다.',
+      solution: ['cases hxy with a ha', 'cases hyz with b hb', 'use a + b', 'rw [hb, ha]', 'exact add_assoc x a b'],
+      thmTab: '≤', newThms: ['le_trans'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'x ≤ 0 → x = 0',
+      statement: 'le_zero (x : ℕ) (hx : x ≤ 0) : x = 0',
+      intro: ['"0보다 작은 수는 없다" 는 직관적으로 자명하지만, 증명하려면 심화 덧셈 월드의 결과가 필요합니다.'],
+      hints: [
+        { t: '`add_right_eq_zero` 를 쓰고 싶지만 방향이 반대입니다. 먼저 가정에 `symm at` 을 하세요.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['cases hx with y hy', 'symm at hy', 'apply add_right_eq_zero at hy', 'exact hy'],
+      thmTab: '+', newThms: ['le_zero'], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'x ≤ y 이고 y ≤ x 이면 x = y',
+      statement: 'le_antisymm (x y : ℕ) (hxy : x ≤ y) (hyx : y ≤ x) : x = y',
+      intro: ['`≤` 의 **반대칭성** 입니다. 지금까지 중 가장 까다롭습니다. 행운을 빕니다!'],
+      hints: [{ t: '두 가정을 모두 `cases` 로 풀고, `add_assoc`, `symm`, `add_right_eq_self`, `add_right_eq_zero` 를 차례로 쓰세요.' }],
+      conclusion: '지나가던 수학자: 반대칭성까지 보였으니 `≤` 는 `ℕ` 위의 **부분순서** 입니다.\n\n이 월드의 보스는 `≤` 가 전순서임을 증명하는 것입니다. 먼저 쉬운 전술 두 개를 배웁니다.',
+      solution: ['cases hxy with a ha', 'cases hyx with b hb', 'rw [ha]', 'rw [ha, add_assoc] at hb',
+        'symm at hb', 'apply add_right_eq_self at hb', 'apply add_right_eq_zero at hb',
+        'rw [hb, add_zero]', 'rfl'],
+      thmTab: '≤', newThms: ['le_antisymm'], newTacs: []
+    },
+    {
+      n: 7,
+      title: 'or 다루기',
+      statement: '(x y : ℕ) (h : x = 37 ∨ y = 42) : y = 42 ∨ x = 37',
+      intro: [
+        '`≤` 의 전순서성은 다음 레벨입니다. 먼저 `or` 를 다루는 법을 봅니다.',
+        '',
+        '1) "또는" 의 기호는 `∨` 입니다.',
+        '2) **목표**가 `A ∨ B` 라면 `left` (A 를 증명) 또는 `right` (B 를 증명) 로 나아갑니다. 가정이 어느 쪽이 참인지 보장하지 않으면 섣불리 고르면 안 됩니다.',
+        '3) **가정**이 `h : A ∨ B` 라면 `cases h with h1 h2` 로 두 개의 목표를 만듭니다.'
+      ].join('\n'),
+      hints: [
+        { t: '어느 쪽으로 갈지 아직 모르므로 `cases h with hx hy` 로 시작합니다.' },
+        { t: '첫 경우는 `right`, 둘째 경우는 `left` 가 통합니다.', hidden: true }
+      ],
+      conclusion: '이 월드의 보스 레벨로 갈 준비가 되었나요?',
+      solution: ['cases h with hx hy', 'right', 'exact hx', 'left', 'exact hy'],
+      thmTab: '≤', newThms: [], newTacs: ['left', 'right']
+    },
+    {
+      n: 8,
+      title: 'x ≤ y 또는 y ≤ x',
+      statement: 'le_total (x y : ℕ) : x ≤ y ∨ y ≤ x',
+      intro: [
+        '지금까지 중 가장 어려운 레벨입니다.',
+        '',
+        '힌트: `a` 가 수일 때 `cases a with b` 는 `a = 0` 과 `a = succ b` 로 나눕니다.',
+        '그리고 가정이 어느 쪽 목표를 증명할 수 있다고 보장할 때까지 `left`/`right` 를 고르지 마세요.'
+      ].join('\n'),
+      hints: [
+        { t: '`induction y with d hd` 로 시작하세요.', hidden: true },
+        { t: '`cases hd with h1 h2` 로 귀납 가정을 쪼갭니다.', hidden: true },
+        { t: '`cases h2 with e he` 로 두 번째 경우를 풉니다.', hidden: true },
+        { t: '`cases e with a` 로 아직 방향을 정하지 못한 상태를 나눕니다.', hidden: true }
+      ],
+      conclusion: '정말 잘했습니다. 이제 `ℕ` 이 전순서임을 증명했습니다.\n\n이 월드의 마지막 두 레벨은 훨씬 쉽습니다.',
+      solution: ['induction y with d hd', 'right', 'exact zero_le x', 'cases hd with h1 h2', 'left',
+        'cases h1 with e h1', 'rw [h1]', 'use e + 1', 'rw [succ_eq_add_one, add_assoc]', 'rfl',
+        'cases h2 with e he', 'cases e with a', 'rw [he]', 'left', 'rw [add_zero]', 'use 1',
+        'exact succ_eq_add_one d', 'right', 'use a', 'rw [add_succ] at he', 'rw [succ_add]', 'exact he'],
+      thmTab: '≤', newThms: ['le_total'], newTacs: []
+    },
+    {
+      n: 9,
+      title: 'succ x ≤ succ y → x ≤ y',
+      statement: 'succ_le_succ (x y : ℕ) (hx : succ x ≤ succ y) : x ≤ y',
+      intro: ['`x ≤ 0` 이면 `x = 0` 은 이미 증명했습니다. 다음 두 레벨은 `≤ 1`, `≤ 2` 인 수가 무엇인지 다룹니다. 이 정리가 도움이 됩니다.'],
+      hints: [{ t: '`cases hx with d hd` → `use d` → `rw [succ_add] at hd` → `apply succ_inj at hd` → `exact hd`.' }],
+      conclusion: '',
+      solution: ['cases hx with d hd', 'use d', 'rw [succ_add] at hd', 'apply succ_inj at hd', 'exact hd'],
+      thmTab: '≤', newThms: ['succ_le_succ'], newTacs: []
+    },
+    {
+      n: 10,
+      title: 'x ≤ 1',
+      statement: 'le_one (x : ℕ) (hx : x ≤ 1) : x = 0 ∨ x = 1',
+      intro: ['`x ≤ 0` 이면 `x = 0` 이라는 `le_zero` 는 이미 있습니다. 이번엔 `x ≤ 1` 입니다.'],
+      hints: [{ t: '`cases x with y` 로 나눈 뒤, 0 인 경우는 `left` 후 `rfl`. 다음 수인 경우는 `rw [one_eq_succ_zero] at hx ⊢` 로 시작하세요.' }],
+      conclusion: '이 레벨을 풀었다면 다음 레벨도 괜찮을 겁니다.',
+      solution: ['cases x with y', 'left', 'rfl', 'rw [one_eq_succ_zero] at hx ⊢',
+        'apply succ_le_succ at hx', 'apply le_zero at hx', 'rw [hx]', 'right', 'rfl'],
+      thmTab: '≤', newThms: ['le_one'], newTacs: []
+    },
+    {
+      n: 11,
+      title: 'le_two',
+      statement: 'le_two (x : ℕ) (hx : x ≤ 2) : x = 0 ∨ x = 1 ∨ x = 2',
+      intro: [
+        '이 정리는 나중에 "2는 소수" 를 증명할 때 필요합니다.',
+        '',
+        '`∨` 는 **오른쪽 결합**이라는 점을 기억하세요. 즉 `x = 0 ∨ x = 1 ∨ x = 2` 는 `x = 0 ∨ (x = 1 ∨ x = 2)` 입니다. 이 점이 `left`/`right` 의 동작에 영향을 줍니다.'
+      ].join('\n'),
+      hints: [{ t: '`cases x with y` 로 시작하고, 0인 경우를 먼저 끝낸 뒤 `cases y with z` 로 한 단계 더 나누세요.' }],
+      conclusion: '좋습니다! 다음 단계는 `≤` 와 곱셈의 관계입니다. 곱셈 월드를 마쳤다면 **심화 곱셈 월드** 로 가세요.',
+      solution: ['cases x with y', 'left', 'rfl', 'cases y with z', 'right', 'left',
+        'rw [one_eq_succ_zero]', 'rfl', 'rw [two_eq_succ_one, one_eq_succ_zero] at hx ⊢',
+        'apply succ_le_succ at hx', 'apply succ_le_succ at hx', 'apply le_zero at hx',
+        'rw [hx]', 'right', 'right', 'rfl'],
+      thmTab: '012', newThms: ['le_two'], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'advmultiplication',
+  title: '심화 곱셈 월드',
+  subtitle: '0이 아닌 수 · 약분 · have',
+  intro: [
+    '곱셈과 부등호가 만나는 지점을 다룹니다. 0으로 곱하면 수가 작아질 수 있으므로, 여기서는 `a ≠ 0` 이라는 가정이 자주 등장합니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'mul_le_mul_right',
+      statement: 'mul_le_mul_right (a b t : ℕ) (h : a ≤ b) : a * t ≤ b * t',
+      intro: ['`t = 0` 이어도 성립하는 쉬운 레벨로 몸을 풉니다.'],
+      hints: [{ t: '`cases h with d hd` → `use d * t` → `rw [hd, add_mul]` → `rfl`.' }],
+      conclusion: '',
+      solution: ['cases h with d hd', 'use d * t', 'rw [hd, add_mul]', 'rfl'],
+      thmTab: '*', newThms: ['mul_le_mul_right'], newTacs: []
+    },
+    {
+      n: 2,
+      title: 'mul_left_ne_zero',
+      statement: 'mul_left_ne_zero (a b : ℕ) (h : a * b ≠ 0) : b ≠ 0',
+      intro: [
+        '알고리즘 월드를 마쳤다면 `contrapose` 를 쓸 수 있습니다. 아니라면 손으로 해 봅시다.',
+        '',
+        '`b = 0` 이라는 가정과 `a * b = 0` 이라는 목표로 바꾸는 것이 핵심입니다. 논리적으로 같은 문장인데 훨씬 쉽습니다.',
+        '`X ≠ 0` 은 `X = 0 → False` 의 표기임을 기억하세요.'
+      ].join('\n'),
+      hints: [
+        { t: '`intro hb` 로 `b = 0` 을 가정합니다.', hidden: true },
+        { t: '`apply h` 로 `a * b = 0` 을 목표로 만듭니다.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['intro hb', 'apply h', 'rw [hb, mul_zero]', 'rfl'],
+      thmTab: '*', newThms: ['mul_left_ne_zero'], newTacs: []
+    },
+    {
+      n: 3,
+      title: 'eq_succ_of_ne_zero',
+      statement: 'eq_succ_of_ne_zero (a : ℕ) (ha : a ≠ 0) : ∃ n, a = succ n',
+      intro: [
+        '곱셈은 보통 수를 크게 만들지만 0을 곱하면 작게 만들 수 있습니다. 그래서 부등식과 곱셈에 관한 정리에는 `a ≠ 0` 이라는 가정이 자주 필요합니다.',
+        '이 레벨은 그 가정을 쓸 수 있게 해 주는 열쇠입니다.',
+        '',
+        '`tauto` 전술이 도움이 됩니다. 명제 논리적으로 참인 목표를 자동으로 닫아 줍니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`cases a with d` 로 `a = 0` 과 `a = succ d` 로 나눕니다.' },
+        { t: '기본 경우에는 `ha : 0 ≠ 0` 이라는 거짓 가정이 있으므로 무엇이든 따라 나옵니다. `tauto` 가 닫아 줍니다.' }
+      ],
+      conclusion: '',
+      solution: ['cases a with d', 'tauto', 'use d', 'rfl'],
+      thmTab: '≤', newThms: ['eq_succ_of_ne_zero'], newTacs: ['tauto']
+    },
+    {
+      n: 4,
+      title: 'one_le_of_ne_zero',
+      statement: 'one_le_of_ne_zero (a : ℕ) (ha : a ≠ 0) : 1 ≤ a',
+      intro: ['앞의 정리로 이걸 증명할 수 있습니다.'],
+      hints: [
+        { t: '`apply eq_succ_of_ne_zero at ha` 로 가정을 바꿉니다.', hidden: true },
+        { t: '`cases ha with n hn` 으로 존재 문장을 풉니다.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['apply eq_succ_of_ne_zero at ha', 'cases ha with n hn', 'use n',
+        'rw [hn, succ_eq_add_one, add_comm]', 'rfl'],
+      thmTab: '≤', newThms: ['one_le_of_ne_zero'], newTacs: []
+    },
+    {
+      n: 5,
+      title: 'le_mul_right',
+      statement: 'le_mul_right (a b : ℕ) (h : a * b ≠ 0) : a ≤ a * b',
+      intro: [
+        '이 게임에 소수 월드가 생기면 최종 보스는 "2는 소수" 가 될 것입니다. 그러려면 `2 = 37 × 42` 같은 것을 배제해야 합니다.',
+        '2의 약수는 2보다 작거나 같다는 사실로 그것을 배제합니다. 이 레벨이 그 정리입니다.',
+        '',
+        '가정을 목표 모양이 될 때까지 조작하는 것이 요령입니다. `mul_left_ne_zero`, `one_le_of_ne_zero`, `mul_le_mul_right` 를 씁니다.'
+      ].join('\n'),
+      hints: [{ t: '`apply mul_left_ne_zero at h` → `apply one_le_of_ne_zero at h` → `apply mul_le_mul_right 1 b a at h` → `rw [one_mul, mul_comm] at h` → `exact h`.' }],
+      conclusion: '',
+      solution: ['apply mul_left_ne_zero at h', 'apply one_le_of_ne_zero at h',
+        'apply mul_le_mul_right 1 b a at h', 'rw [one_mul, mul_comm] at h', 'exact h'],
+      thmTab: '≤', newThms: ['le_mul_right'], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'mul_right_eq_one',
+      statement: 'mul_right_eq_one (x y : ℕ) (h : x * y = 1) : x = 1',
+      intro: [
+        '`x * y = 1 → x = 1` 입니다. 심화 덧셈 월드의 `x + y = 0 → x = 0` 과 같은 모양입니다.',
+        '전략은 `x ≤ 1` 을 보이고 `≤` 월드의 `le_one` 을 쓰는 것입니다.',
+        '',
+        '이번에 새로 쓰는 전술은 `have` 입니다. 중간에 보조 사실을 하나 만들어 두는 전술입니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`le_mul_right` 를 쓰려면 `x * y ≠ 0` 이라는 가정이 필요합니다. `have h2 : x * y ≠ 0` 로 하나 만들고, 그 목표를 증명하세요.' },
+        { t: '`apply le_mul_right at h2`.', hidden: true },
+        { t: '`rw [h] at h2` 로 `x * y` 를 `1` 로 바꾸고 `apply le_one at h2`.', hidden: true },
+        { t: '`cases h2 with h0 h1` 로 두 경우를 나눕니다.', hidden: true },
+        { t: '첫 경우는 `tauto` 로 닫힙니다.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['have h2 : x * y ≠ 0', 'rw [h]', 'exact one_ne_zero', 'apply le_mul_right at h2',
+        'rw [h] at h2', 'apply le_one at h2', 'cases h2 with h0 h1', 'rw [h0, zero_mul] at h',
+        'tauto', 'exact h1'],
+      thmTab: '*', newThms: ['mul_right_eq_one'], newTacs: ['have']
+    },
+    {
+      n: 7,
+      title: 'mul_ne_zero',
+      statement: 'mul_ne_zero (a b : ℕ) (ha : a ≠ 0) (hb : b ≠ 0) : a * b ≠ 0',
+      intro: ['`a ≠ 0` 이고 `b ≠ 0` 이면 `a * b ≠ 0` 입니다. `a`, `b` 를 각각 어떤 수의 다음 수로 쓰고, `a * b` 도 다음 수가 됨을 보인 뒤 `zero_ne_succ` 를 쓰는 전략이 있습니다.'],
+      hints: [{ t: '`apply eq_succ_of_ne_zero at ha`, `apply eq_succ_of_ne_zero at hb` 로 시작하세요.', hidden: true }],
+      conclusion: '',
+      solution: ['apply eq_succ_of_ne_zero at ha', 'apply eq_succ_of_ne_zero at hb',
+        'cases ha with c hc', 'cases hb with d hd', 'rw [hc, hd]', 'rw [mul_succ, add_succ]',
+        'symm', 'apply zero_ne_succ'],
+      thmTab: '*', newThms: ['mul_ne_zero'], newTacs: []
+    },
+    {
+      n: 8,
+      title: 'mul_eq_zero',
+      statement: 'mul_eq_zero (a b : ℕ) (h : a * b = 0) : a = 0 ∨ b = 0',
+      intro: ['`a * b = 0` 이면 `a = 0` 또는 `b = 0` 입니다. 앞 레벨과 논리적으로 같은 말이라 아주 짧게 증명됩니다.'],
+      hints: [
+        { t: '`have h2 := mul_ne_zero a b` 로 보조 사실을 만드세요.', hidden: true },
+        { t: '이제 순수 논리 문제입니다. `tauto` 를 쓰세요.', hidden: true }
+      ],
+      conclusion: '두 줄 풀이: `have h2 := mul_ne_zero a b` 다음 `tauto`.',
+      solution: ['have h2 := mul_ne_zero a b', 'tauto'],
+      thmTab: '*', newThms: ['mul_eq_zero'], newTacs: []
+    },
+    {
+      n: 9,
+      title: 'mul_left_cancel',
+      statement: 'mul_left_cancel (a b c : ℕ) (ha : a ≠ 0) (h : a * b = a * c) : b = c',
+      intro: [
+        '`a * b = a * c` 이고 `a ≠ 0` 이면 `b = c` 입니다. 꽤 까다롭습니다.',
+        '',
+        '`induction b with d hd` 로 시작하면 안 됩니다. 귀납 단계에서 가정이 `a * d = a * c → d = c` 인데 우리가 아는 것은 `a * succ d = a * c` 라서 귀납 가정이 적용되지 않습니다.',
+        '',
+        '`a ≠ 0` 을 고정하고 `b` 에 대해 귀납법을 할 때, 실제로 증명해야 하는 문장은 "**모든 c 에 대하여** `a * b = a * c` 이면 `b = c`" 입니다. 이렇게 하면 `c` 를 자유롭게 바꿀 수 있어 귀납법이 통합니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`induction b with d hd generalizing c` 로 시작하세요.' },
+        { t: '기본 경우는 `mul_eq_zero` 와 `tauto` 로 정리됩니다. `a = 0` 과 `a ≠ 0` 이 함께 있으면 `tauto` 가 닫습니다.', hidden: true },
+        { t: '귀납 단계에서는 `hd` 가 "모든 `c` 에 대하여 …" 이므로 `apply hd at h` 로 쓸 수 있습니다.' },
+        { t: '`cases c with e` 로 나눠 보세요.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['induction b with d hd generalizing c', 'rw [mul_zero] at h', 'symm at h',
+        'apply mul_eq_zero at h', 'cases h with h1 h2', 'tauto', 'rw [h2]', 'rfl',
+        'cases c with e', 'rw [mul_succ, mul_zero] at h', 'apply add_left_eq_zero at h', 'tauto',
+        'rw [mul_succ, mul_succ] at h', 'apply add_right_cancel at h', 'apply hd at h', 'rw [h]', 'rfl'],
+      thmTab: '*', newThms: ['mul_left_cancel'], newTacs: []
+    },
+    {
+      n: 10,
+      title: 'mul_right_eq_self',
+      statement: 'mul_right_eq_self (a b : ℕ) (ha : a ≠ 0) (h : a * b = a) : b = 1',
+      intro: ['이 월드의 마지막 레벨에서 증명하는 정리는 나중에 약수 이론에서 유용합니다.'],
+      hints: [
+        { t: '`nth_rewrite 2 [← mul_one a] at h` 로 앞 레벨에 맞는 모양으로 바꾸세요.', hidden: true },
+        { t: '이제 `exact mul_left_cancel a b 1 ha h`.', hidden: true }
+      ],
+      conclusion: '두 줄 풀이: `nth_rewrite 2 [← mul_one a] at h` 다음 `exact mul_left_cancel a b 1 ha h`.\n\n이제 자연수의 약수 이론을 세울 도구가 모두 준비되었습니다.',
+      solution: ['nth_rewrite 2 [← mul_one a] at h', 'exact mul_left_cancel a b 1 ha h'],
+      thmTab: '*', newThms: ['mul_right_eq_self'], newTacs: []
+    }
+  ]
+});
+
+;
+NNG_WORLDS.push({
+  id: 'algorithm',
+  title: '알고리즘 월드',
+  subtitle: 'simp · decide · 자동화',
+  intro: [
+    '선택 사항인 월드입니다. 순서를 바꾸는 일을 자동화하고, 계산을 다루는 기계를 만듭니다.',
+    '',
+    '여기서는 `simp`, `simp_add`, `decide`, `contrapose`, `trivial` 을 배웁니다.'
+  ].join('\n'),
+  levels: [
+    {
+      n: 1,
+      title: 'add_left_comm',
+      statement: 'add_left_comm (a b c : ℕ) : a + (b + c) = b + (a + c)',
+      intro: [
+        '교환법칙과 결합법칙으로 변수를 손수 옮기는 일은 지루합니다. 이 레벨에서는 그 지루함을 잊고 `add_left_comm` 자체를 증명합니다.',
+        '',
+        '`rw [add_comm b c]` 같은 정밀 재작성을 쓸 수 있다는 것, 그리고 `a + b + c` 는 `(a + b) + c` 라는 것을 기억하세요.'
+      ].join('\n'),
+      hints: [{ t: '왼쪽 괄호를 풀려면 `rw [← add_assoc]` 이 필요합니다.' }],
+      conclusion: '',
+      solution: ['rw [← add_assoc]', 'rw [add_comm a b]', 'rw [add_assoc]', 'rfl'],
+      thmTab: '+', newThms: ['add_left_comm'], newTacs: []
+    },
+    {
+      n: 2,
+      title: '편하게 만들기',
+      statement: '(a b c d : ℕ) : a + b + (c + d) = a + c + d + b',
+      intro: [
+        '나중에는 `(a + a + 1) + (b + b + 1) = (a + b + 1) + (a + b + 1)` 처럼 더 지저분한 목표도 만납니다.',
+        '',
+        '이번 레벨은 괄호를 잊고 변수 순서만 생각해 봅시다. `a+b+c+d` 를 `a+c+d+b` 로 바꾸려면 `b` 와 `c` 를 바꾸고, 그다음 `b` 와 `d` 를 바꾸면 됩니다. `add_left_comm` 을 쓰면 생각보다 쉽습니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`repeat rw [add_assoc]` 로 모든 괄호를 오른쪽으로 밀어 보세요.' },
+        { t: '`rw [add_left_comm b c]` 로 왼쪽의 `b` 와 `c` 를 바꿉니다.' },
+        { t: '마지막은 `rw [add_comm b d]`.', hidden: true }
+      ],
+      conclusion: '이 알고리즘을 이제 자동화로 돌려 봅시다.',
+      solution: ['repeat rw [add_assoc]', 'rw [add_left_comm b c]', 'rw [add_comm b d]', 'rfl'],
+      thmTab: '+', newThms: [], newTacs: []
+    },
+    {
+      n: 3,
+      title: '아주 간단하게',
+      statement: '(a b c d e f g h : ℕ) : (d + f) + (h + (a + c)) + (g + e + b) = a + b + c + d + e + f + g + h',
+      intro: [
+        'Lean 의 단순화기 `simp` 는 "`rw` 의 상위 버전" 입니다. `simp` 로 표시된 정리와 사용자가 준 정리를 가능한 한 많이, 자동으로 적용합니다.',
+        '',
+        '이 레벨은 손으로 풀 레벨이 아닙니다. 단순화기에게 맡기세요.'
+      ].join('\n'),
+      hints: [{ t: '`simp only [add_left_comm, add_comm]` 한 줄이면 됩니다.' }],
+      conclusion: '이제 이걸 하는 나만의 전술을 만들어 봅시다.',
+      solution: ['simp only [add_left_comm, add_comm]'],
+      thmTab: '+', newThms: [], newTacs: ['simp']
+    },
+    {
+      n: 4,
+      title: '가장 간단한 방법',
+      statement: '(a b c d e f g h : ℕ) : (d + f) + (h + (a + c)) + (g + e + b) = a + b + c + d + e + f + g + h',
+      intro: [
+        'Lean 에서는 나만의 전술을 만들 수 있습니다. 이 게임에는',
+        '`simp only [add_assoc, add_left_comm, add_comm]` 를 실행하는 `simp_add` 라는 전술이 준비되어 있습니다.',
+        '',
+        '`simp_add` 로 이 레벨을 풀어 보세요.'
+      ].join('\n'),
+      hints: [{ t: '`simp_add` 한 줄.' }],
+      conclusion: '이제 `20 + 20 = 40` 처럼 계산이 필요한 문제를 다루는 쪽으로 갑니다.',
+      solution: ['simp_add'],
+      thmTab: '+', newThms: [], newTacs: ['simp_add']
+    },
+    {
+      n: 5,
+      title: 'pred',
+      statement: '(a b : ℕ) (h : succ a = succ b) : a = b',
+      intro: [
+        '덧셈을 더 효율적으로 다루는 알고리즘을 만듭니다. 먼저 새 함수 `pred` 를 정의합니다.',
+        '```',
+        'pred 0 := 37',
+        'pred (succ n) := n',
+        '```',
+        '0에서 1을 뺄 수는 없으니 아무 값이나 돌려줍니다. 함께 `pred_succ n : pred (succ n) = n` 이라는 정리도 생겼습니다.',
+        '',
+        '이 정리로 `succ_inj` — Peano 가 공리로 두었고 우리가 여태 근거 없이 써 온 정리 — 를 증명합니다.'
+      ].join('\n'),
+      hints: [{ t: '`rw [← pred_succ a]` 로 시작해 보세요. 이 정리는 이 레벨에서만 쓸 수 있도록 `succ_inj` 는 잠겨 있습니다.' }],
+      conclusion: '`succ_inj` 를 증명했습니다! 이제 Peano 의 또 다른 공리 — 다음 수는 0이 될 수 없다 — 를 증명합니다.',
+      solution: ['rw [← pred_succ a]', 'rw [h]', 'rw [pred_succ]', 'rfl'],
+      thmTab: 'Peano', newThms: ['pred_succ'], newTacs: []
+    },
+    {
+      n: 6,
+      title: 'is_zero',
+      statement: 'succ_ne_zero (a : ℕ) : succ a ≠ 0',
+      intro: [
+        '`is_zero` 함수를 정의합니다.',
+        '```',
+        'is_zero 0 := True',
+        'is_zero (succ n) := False',
+        '```',
+        '함께 `is_zero_zero : is_zero 0 = True`, `is_zero_succ n : is_zero (succ n) = False` 라는 정리가 생겼습니다.',
+        '',
+        '이것으로 `succ_ne_zero`, Peano 의 마지막 공리를 증명합니다. `zero_ne_succ` 를 가져다 쓸 수도 있지만, 이 월드의 목적은 그런 결과를 **증명하는** 법을 보여 주는 것입니다.',
+        '',
+        '목표를 `True` 로 바꿀 수 있다면 `trivial` 전술이 닫아 줍니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`intro h` 로 시작하세요. `X ≠ Y` 는 `X = Y → False` 의 표기입니다.' },
+        { t: '`False` 를 `True` 로 바꿀 것입니다. 먼저 `rw [← is_zero_succ a]` 로 `is_zero (succ a)` 로 만드세요.' },
+        { t: '`rw [h]` 로 `succ a` 를 `0` 으로, `rw [is_zero_zero]` 로 `True` 로.' }
+      ],
+      conclusion: '',
+      solution: ['intro h', 'rw [← is_zero_succ a]', 'rw [h]', 'rw [is_zero_zero]', 'trivial'],
+      thmTab: 'Peano', newThms: ['succ_ne_zero', 'is_zero_zero', 'is_zero_succ'], newTacs: ['trivial']
+    },
+    {
+      n: 7,
+      title: '등식 판정 알고리즘',
+      statement: 'succ_ne_succ (m n : ℕ) (h : m ≠ n) : succ m ≠ succ n',
+      intro: [
+        '두 자연수 `a`, `b` 가 주어졌을 때 "`a = b` 인가?" 를 답하는 알고리즘을 만듭니다.',
+        '',
+        '* 둘 다 `0` 이면 "예".',
+        '* 하나가 `0`, 다른 하나가 `succ n` 이면 "아니오".',
+        '* `a = succ m`, `b = succ n` 이면 "`m = n` 인가?" 의 답을 그대로 돌려준다.',
+        '',
+        '이 알고리즘이 항상 옳다는 것을 증명해야 합니다. `0 = 0` 은 `rfl`, `0 ≠ succ n` 은 `zero_ne_succ n`, `succ m ≠ 0` 은 `succ_ne_zero m`, 그리고 `h : m = n` 이면 `rw [h]` 후 `rfl` 로 `succ m = succ n` 을 얻습니다.',
+        '',
+        '남은 하나가 이 레벨입니다: `m ≠ n` 이면 `succ m ≠ succ n` 입니다.'
+      ].join('\n'),
+      hints: [
+        { t: '`contrapose h` 로 목표를 대우로 바꿉니다. 가정은 `succ m = succ n`, 목표는 `m = n` 이 됩니다.' },
+        { t: '이제 `apply succ_inj at h` 후 `exact h`.', hidden: true }
+      ],
+      conclusion: '',
+      solution: ['contrapose h', 'apply succ_inj at h', 'exact h'],
+      thmTab: 'Peano', newThms: ['succ_ne_succ'], newTacs: ['contrapose']
+    },
+    {
+      n: 8,
+      title: 'decide',
+      statement: ': (20 : ℕ) + 20 = 40',
+      intro: [
+        '앞에서 만든 등식 판정 알고리즘은 형식적으로 검증되었으므로 Lean 의 증명에 쓸 수 있습니다. 그 알고리즘을 실행하는 전술이 `decide` 입니다.'
+      ].join('\n'),
+      hints: [{ t: '`decide` 한 줄.' }],
+      conclusion: '`decide` 는 변수가 없는 구체적인 계산 문제를 단번에 해결합니다.',
+      solution: ['decide'],
+      thmTab: 'Peano', newThms: [], newTacs: ['decide']
+    },
+    {
+      n: 9,
+      title: 'decide 다시',
+      statement: ': (2 : ℕ) + 2 ≠ 5',
+      intro: ['앞에서는 `2 + 2 ≠ 5` 를 꽤 불만족스럽게 증명했습니다. 이번엔 더 멋지게 해 봅시다.'],
+      hints: [{ t: '`decide` 한 줄.' }],
+      conclusion: '축하합니다! 알고리즘 월드를 완료했습니다.',
+      solution: ['decide'],
+      thmTab: 'Peano', newThms: [], newTacs: []
+    }
+  ]
+});
+
+;
+/* 작성 편의를 위해 배열로 둔 텍스트를 문자열로 정규화한다 */
+(function () {
+  if (typeof NNG_WORLDS === 'undefined') return;
+  NNG_WORLDS.forEach(function (w) {
+    if (Array.isArray(w.intro)) w.intro = w.intro.join('\n');
+    w.levels.forEach(function (l) {
+      if (Array.isArray(l.intro)) l.intro = l.intro.join('\n');
+      if (Array.isArray(l.conclusion)) l.conclusion = l.conclusion.join('\n');
+      if (Array.isArray(l.subtitle)) l.subtitle = l.subtitle.join(' ');
+    });
+  });
+})();
+
+;
+/* ===== UI ===== */
+;
+/* =====================================================================
+   NNG4-KR · UI
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  /* 정리 데이터베이스 등록 (엔진이 재작성·apply 에 쓴다) */
+  NNG.setTheorems(NNG_THEOREMS.build(NNG));
+
+  var KEY = 'nng4kr.v2';
+  var S = loadSave();
+  var rt = { world: null, level: null, state: null, lines: [], stmt: null, hint: 0, tab: 'tac' };
+  var el = {};
+
+  /* ------------------------ 저장 ------------------------ */
+  function fresh() { return { cleared: {}, code: {}, seen: {}, mode: 'normal', last: null }; }
+  function loadSave() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return fresh();
+      var o = JSON.parse(raw);
+      var f = fresh();
+      for (var k in f) if (!(k in o)) o[k] = f[k];
+      return o;
+    } catch (e) { return fresh(); }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { }
+  }
+
+  /* ------------------------ 유틸 ------------------------ */
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function worldById(id) {
+    for (var i = 0; i < NNG_WORLDS.length; i++) if (NNG_WORLDS[i].id === id) return NNG_WORLDS[i];
+    return null;
+  }
+  function worldIndex(id) { for (var i = 0; i < NNG_WORLDS.length; i++) if (NNG_WORLDS[i].id === id) return i; }
+  function colorOf(id) {
+    var m = NNG_META.worlds.filter(function (x) { return x.id === id; })[0];
+    return m ? m.color : '#5b8def';
+  }
+  function iconOf(id) {
+    var m = NNG_META.worlds.filter(function (x) { return x.id === id; })[0];
+    return m ? m.icon : '·';
+  }
+  function clearedCount(w) {
+    var c = S.cleared[w.id] || {};
+    return w.levels.filter(function (l) { return c[l.n]; }).length;
+  }
+  function isCleared(wid, n) { return !!(S.cleared[wid] && S.cleared[wid][n]); }
+  function worldOpen(wid) {
+    var i = worldIndex(wid);
+    if (i <= 0) return true;
+    if (S.mode === 'free') return true;
+    return clearedCount(NNG_WORLDS[i - 1]) === NNG_WORLDS[i - 1].levels.length;
+  }
+  function currentLevel(w) {
+    var c = S.cleared[w.id] || {};
+    for (var i = 0; i < w.levels.length; i++) if (!c[w.levels[i].n]) return w.levels[i].n;
+    return w.levels.length;
+  }
+
+  /* ------------------------ 마크다운 ------------------------ */
+  function inlineMd(s) {
+    s = esc(s);
+    s = s.replace(/`([^`]+)`/g, function (_, a) { return '<code>' + a + '</code>'; });
+    s = s.replace(/\*\*([^*]+)\*\*/g, function (_, a) { return '<strong>' + a + '</strong>'; });
+    return s;
+  }
+  function md(src) {
+    var lines = String(src || '').split('\n');
+    var out = [], i = 0, para = [], list = null;
+    function flushP() { if (para.length) { out.push('<p>' + inlineMd(para.join(' ')) + '</p>'); para = []; } }
+    function flushL() { if (list) { out.push('<ul>' + list.map(function (x) { return '<li>' + inlineMd(x) + '</li>'; }).join('') + '</ul>'); list = null; } }
+    while (i < lines.length) {
+      var L = lines[i];
+      if (/^```/.test(L)) {
+        flushP(); flushL();
+        var buf = []; i++;
+        while (i < lines.length && !/^```/.test(lines[i])) { buf.push(lines[i]); i++; }
+        i++;
+        out.push('<pre><code>' + esc(buf.join('\n')) + '</code></pre>');
+        continue;
+      }
+      if (/^\s*$/.test(L)) { flushP(); flushL(); i++; continue; }
+      var m;
+      if ((m = /^###\s+(.*)$/.exec(L))) { flushP(); flushL(); out.push('<h5>' + inlineMd(m[1]) + '</h5>'); i++; continue; }
+      if ((m = /^##\s+(.*)$/.exec(L))) { flushP(); flushL(); out.push('<h4>' + inlineMd(m[1]) + '</h4>'); i++; continue; }
+      if ((m = /^#\s+(.*)$/.exec(L))) { flushP(); flushL(); out.push('<h3>' + inlineMd(m[1]) + '</h3>'); i++; continue; }
+      if ((m = /^\*\s+(.*)$/.exec(L))) { flushP(); if (!list) list = []; list.push(m[1]); i++; continue; }
+      flushL(); para.push(L); i++;
+    }
+    flushP(); flushL();
+    return out.join('');
+  }
+
+  /* ------------------------ 토스트 ------------------------ */
+  var toastT = null;
+  function toast(msg) {
+    var t = el.toast;
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { t.classList.remove('on'); }, 1900);
+  }
+
+  /* ------------------------ 시트 ------------------------ */
+  function sheet(title, bodyHtml, actionHtml) {
+    el.sheetTitle.innerHTML = title;
+    el.sheetBody.innerHTML = bodyHtml + (actionHtml ? '<div style="height:10px"></div>' + actionHtml : '');
+    el.sheetwrap.classList.add('on');
+  }
+  function closeSheet() { el.sheetwrap.classList.remove('on'); }
+
+  /* ------------------------ 정리/전술 메타 ------------------------ */
+  var TAC_DOCS = [
+    ['rfl', 'rfl', '양변이 같은 `X = X` 꼴의 목표를 닫습니다.'],
+    ['rw', 'rw [h]', '`h : X = Y` 로 목표의 `X` 를 `Y` 로 바꿉니다. `rw [← h]` 는 반대 방향, `rw [h] at h2` 는 가정 `h2` 를 바꾸고, `at h ⊢` 는 가정과 목표 둘 다 바꿉니다.'],
+    ['nth_rewrite', 'nth_rewrite 2 [h]', '여러 군데 중 **n번째** 것만 바꿉니다.'],
+    ['repeat', 'repeat rw [add_zero]', '더 이상 바뀌지 않을 때까지 반복합니다.'],
+    ['induction', 'induction n with d hd', '`n` 에 대한 수학적 귀납법. `n = 0` 과 `n = succ d` 두 목표가 생기고 `hd` 는 귀납 가정입니다. `generalizing c` 를 붙이면 다른 변수까지 자유롭게 쓸 수 있습니다.'],
+    ['cases', 'cases h with a b', '대상이나 가정을 만들어질 수 있는 경우들로 쪼갭니다. `∃`/`≤` 는 가정 두 개, `∨` 와 자연수는 목표 두 개, `False` 는 목표를 닫습니다.'],
+    ['intro', 'intro h', '목표 `P → Q` 에서 `P` 를 가정으로 들여놓습니다.'],
+    ['exact', 'exact h', '목표와 똑같은 증명을 내밀어 목표를 닫습니다.'],
+    ['apply', 'apply h', '`h : P → Q` 를 목표에 적용해 목표 `Q` 를 `P` 로 바꿉니다. `apply h at h2` 는 가정 `h2` 를 바꿉니다.'],
+    ['use', 'use 3', '`∃ ...` 나 `a ≤ b` 목표에서 쓸 값을 직접 내밉니다.'],
+    ['left', 'left', '목표 `A ∨ B` 를 `A` 로 바꿉니다.'],
+    ['right', 'right', '목표 `A ∨ B` 를 `B` 로 바꿉니다.'],
+    ['symm', 'symm', '목표 `x = y` 를 `y = x` 로, `x ≠ y` 를 `y ≠ x` 로. `symm at h` 는 가정에.'],
+    ['have', 'have h : T', '보조 사실을 하나 만들어 둡니다. `have h := 증명` 은 바로 추가하고, `have h : T` 는 증명할 목표를 하나 만듭니다.'],
+    ['contrapose', 'contrapose h', '목표를 대우로 바꿉니다. `h : ¬A`, 목표 `¬B` 이면 목표가 `A`, 가정이 `B` 가 됩니다.'],
+    ['trivial', 'trivial', '`True` 처럼 자명한 목표를 닫습니다.'],
+    ['decide', 'decide', '변수가 없는 구체적인 계산 문제를 판정 알고리즘으로 해결합니다.'],
+    ['tauto', 'tauto', '명제 논리적으로 참인 목표를 자동으로 닫습니다.'],
+    ['simp', 'simp', '단순화기. 주어진 정리들을 가능한 한 많이 자동 적용합니다.'],
+    ['simp_add', 'simp_add', '덧셈의 교환·결합법칙으로 항을 정리하는 이 게임 전용 전술.'],
+    ['xyzzy', 'xyzzy', '비밀 전술. 마지막 농담 레벨에서만 통합니다.']
+  ];
+
+  var SYMS = ['←', 'at', 'with', '[', ']', '(', ')', ',', '⊢', '_', '≠', '≤', '→', '∨', '∃', '∀', 'generalizing', 'succ', 'pred', 'is_zero', ':='];
+  var NUMS = ['0', '1', '2', '3', '4'];
+
+  var TAC_INS = {
+    rw: ['rw []', 4],
+    nth_rewrite: ['nth_rewrite 2 []', 15],
+    repeat: ['repeat ', 7],
+    induction: ['induction  with  ', 10],
+    cases: ['cases ', 6],
+    have: ['have  : ', 5],
+    apply: ['apply ', 6],
+    exact: ['exact ', 6],
+    intro: ['intro ', 6],
+    use: ['use ', 4],
+    contrapose: ['contrapose ', 11],
+    simp: ['simp only []', 11]
+  };
+
+  /* 레벨별 사용 가능한 정리/전술 (해금 누적 + 그 레벨 풀이에 쓰인 것) */
+  var cumT = {}, cumC = {};
+  NNG_WORLDS.forEach(function (w) {
+    w.levels.forEach(function (l) {
+      (l.newThms || []).forEach(function (t) { cumT[t] = 1; });
+      (l.newTacs || []).forEach(function (t) { cumC[t] = 1; });
+      var th = Object.keys(cumT);
+      var used = [];
+      var txt = (l.solution || []).join(' ');
+      NNG_THEOREMS.RAW.forEach(function (r) {
+        if (new RegExp('(^|[^A-Za-z0-9_])' + r[0] + '([^A-Za-z0-9_]|$)').test(txt)) used.push(r[0]);
+      });
+      l._thms = th.concat(used.filter(function (x) { return th.indexOf(x) < 0; }));
+      l._tacs = Object.keys(cumC);
+    });
+  });
+
+  /* ------------------------ 홈 ------------------------ */
+  function renderHome() {
+    el.homeBody.innerHTML =
+      '<div class="brand">' +
+      '<div class="logo">λ</div>' +
+      '<div class="kicker">NATURAL NUMBER GAME</div>' +
+      '<h1>' + esc(NNG_META.title) + '</h1>' +
+      '<div class="lede">' + esc(NNG_META.subtitle) + '</div>' +
+      '</div>' +
+      '<div class="card" style="margin-top:16px"><div class="md">' + md(NNG_META.intro) + '</div></div>' +
+      '<button class="btn wide accent" id="goMap" style="margin-top:6px">월드 맵 열기</button>' +
+      '<div class="muted" style="text-align:center;margin-top:12px">Lean 4 · Natural Number Game 4 (leanprover-community/NNG4) 한국어판</div>';
+    $('goMap').onclick = function () { show('map'); renderMap(); };
+  }
+
+  /* ------------------------ 맵 ------------------------ */
+  function renderMap() {
+    var total = 0, done = 0;
+    NNG_WORLDS.forEach(function (w) { total += w.levels.length; done += clearedCount(w); });
+    var head =
+      '<div class="card">' +
+      '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:7px">' +
+      '<b style="flex:1;font-size:13.5px">전체 진행률</b>' +
+      '<span><b style="font-size:19px">' + done + '</b><span class="muted">/' + total + '</span></span>' +
+      '</div>' +
+      '<div class="progressline"><i style="width:' + (total ? done / total * 100 : 0) + '%"></i></div>' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-top:11px">' +
+      '<span class="muted" style="flex:1;font-size:11.5px">게임 규칙</span>' +
+      '<button class="pill" id="modeBtn">' + (S.mode === 'free' ? '자유 모드' : '일반 모드') + '</button>' +
+      '</div>' +
+      '</div>' +
+      '<div class="muted" style="margin:0 2px 12px;font-size:11.5px;line-height:1.55">' +
+      (S.mode === 'free'
+        ? '자유 모드 · 모든 월드와 모든 정리·전술이 열려 있습니다.'
+        : '일반 모드 · 앞 월드를 모두 깨면 다음 월드가 열리고, 아직 배우지 않은 정리는 칩에 나오지 않습니다. 막히면 오른쪽 위 버튼으로 자유 모드로 바꿔 보세요.') +
+      '</div>';
+
+    var cards = NNG_WORLDS.map(function (w, i) {
+      var open = worldOpen(w.id);
+      var cc = clearedCount(w), tot = w.levels.length;
+      var grid = '';
+      if (open) {
+        grid = '<div class="wgrid">' + w.levels.map(function (l) {
+          var cls = isCleared(w.id, l.n) ? 'cleared' : (l.n === currentLevel(w) ? 'current' : '');
+          return '<button class="lvbtn ' + cls + '" data-w="' + w.id + '" data-n="' + l.n + '">' + l.n + '</button>';
+        }).join('') + '</div>';
+      }
+      var introHtml = open ? '' : '<div class="wintro">🔒 ' + (i === 0 ? '' : '앞 월드 「' + NNG_WORLDS[i - 1].title + '」 를 모두 완료하면 열립니다.') + '</div>';
+      return '<div class="wcard' + (open ? '' : ' locked') + '">' +
+        '<div class="head">' +
+        '<div class="badge" style="background:' + colorOf(w.id) + '">' + esc(iconOf(w.id)) + '</div>' +
+        '<div class="t"><b>' + esc(w.title) + '</b><span>' + esc(w.subtitle || '') + '</span></div>' +
+        '<div class="meta">' + cc + '/' + tot + '</div>' +
+        '</div>' +
+        '<div class="bar"><div class="progressline"><i style="width:' + (cc / tot * 100) + '%;background:' + colorOf(w.id) + '"></i></div></div>' +
+        introHtml + grid +
+        '</div>';
+    }).join('');
+
+    el.mapBody.innerHTML = head + cards;
+    $('modeBtn').onclick = function () {
+      S.mode = S.mode === 'free' ? 'normal' : 'free'; save(); renderMap(); renderPalette(); renderDock();
+    };
+    Array.prototype.forEach.call(el.mapBody.querySelectorAll('.lvbtn'), function (b) {
+      b.onclick = function () { openLevel(b.getAttribute('data-w'), parseInt(b.getAttribute('data-n'), 10)); };
+    });
+  }
+
+  /* ------------------------ 레벨 ------------------------ */
+  function openLevel(wid, n) {
+    var w = worldById(wid);
+    if (!w || !worldOpen(wid)) { toast('아직 잠긴 월드입니다.'); return; }
+    var lv = w.levels[n - 1];
+    if (!lv) return;
+    rt.world = w; rt.level = lv; rt.hint = 0;
+    rt.stmt = NNG.parseStatement('Statement ' + lv.statement);
+
+    var saved = (S.code[wid] && S.code[wid][String(n)]) ? S.code[wid][String(n)].slice() : [];
+    var st = NNG.mkState({ statement: rt.stmt });
+    var ok = [];
+    for (var i = 0; i < saved.length; i++) {
+      try {
+        var nx = NNG.execTactic(NNG.clone(st), saved[i]);
+        st = nx; ok.push(saved[i]);
+        if (st.goals.length === 0) break;
+      } catch (e) { break; }
+    }
+    rt.lines = ok;
+    rt.state = st;
+    S.last = { w: wid, n: n }; save();
+
+    $('lvTitle').textContent = lv.title;
+    $('lvSub').textContent = w.title + ' · 레벨 ' + n;
+    el.errbar.classList.remove('on');
+    $('cmd').value = '';
+    show('level');
+    renderLevel();
+    renderPalette();
+    renderDock();
+
+    if (!(S.seen[wid] && S.seen[wid][String(n)])) {
+      S.seen[wid] = S.seen[wid] || {}; S.seen[wid][String(n)] = 1; save();
+      showIntro();
+    }
+  }
+
+  function showIntro() {
+    var lv = rt.level;
+    sheet(esc(lv.title),
+      '<div class="md">' + md(lv.intro) + '</div>',
+      '<button class="btn wide accent" id="introGo">시작하기</button>');
+    $('introGo').onclick = closeSheet;
+  }
+
+  function hypsHtml(hyps) {
+    if (!hyps.length) return '<div class="nohyp">가정 없음</div>';
+    var groups = [];
+    hyps.forEach(function (h) {
+      var last = groups[groups.length - 1];
+      if (h.type.t === 'nat' && last && last.type.t === 'nat') last.names.push(h.name);
+      else groups.push({ names: [h.name], type: h.type });
+    });
+    return '<div class="hyps">' + groups.map(function (g) {
+      return '<div class="hyp"><b>' + esc(g.names.join(' ')) + '</b> : <span class="ty">' + esc(NNG.pp(g.type)) + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  function newStuffHtml() {
+    var lv = rt.level; if (!lv) return '';
+    var t = (lv.newTacs || []), s = (lv.newThms || []);
+    if (!t.length && !s.length) return '';
+    var h = '<div class="newbox">';
+    if (t.length) h += '<span class="lb">새 전술</span>' + t.map(function (x) { return '<span class="it t">' + esc(x) + '</span>'; }).join('');
+    if (s.length) h += '<span class="lb">새 정리</span>' + s.map(function (x) { return '<span class="it">' + esc(x) + '</span>'; }).join('');
+    return h + '</div>';
+  }
+
+  function renderLevel() {
+    var goals = rt.state.goals;
+    var box = el.goalbox;
+    if (!goals.length) {
+      box.innerHTML = '<div class="glabel">목표</div><div class="goal empty">✓ 모든 목표를 닫았습니다</div>';
+    } else {
+      var g = goals[0];
+      var cnt = goals.length > 1 ? ' <span class="cnt">목표 1 / ' + goals.length + '</span>' : '';
+      var rest = goals.length > 1
+        ? '<div class="sec">남은 목표</div>' + goals.slice(1).map(function (x, i) {
+          return '<div class="hyp" style="display:block;margin-bottom:4px">' + (i + 2) + '. ' + esc(NNG.pp(x.target)) + '</div>';
+        }).join('')
+        : '';
+      box.innerHTML =
+        '<div class="glabel">목표' + cnt + '</div>' +
+        '<div class="goal">' + esc(NNG.pp(g.target)) + '</div>' +
+        '<div class="glabel">가정</div>' + hypsHtml(g.hyps) + rest + newStuffHtml() +
+        (rt.level.intro ? '<div class="levelnote"><div class="md">' + md(rt.level.intro) + '</div></div>' : '');
+    }
+
+    var lines = rt.lines.map(function (t, i) {
+      return '<div class="line"><span class="n">' + (i + 1) + '</span><span>' + esc(t) + '</span><span class="mark">✓</span></div>';
+    }).join('');
+    el.lines.innerHTML = lines || '<div class="line" style="color:#7d7566">전술을 입력하고 실행을 누르세요.</div>';
+    el.lines.scrollTop = el.lines.scrollHeight;
+
+    $('btnUndo').disabled = rt.lines.length === 0;
+    currentPaletteTab();
+  }
+
+  function showErr(e) {
+    var msg = e && e.message ? e.message : String(e);
+    if (e && e.detail) msg += '\n' + e.detail;
+    el.errbar.textContent = msg;
+    el.errbar.classList.add('on');
+    if (el.lines) { el.lines.scrollTop = el.lines.scrollHeight; }
+  }
+  function clearErr() { el.errbar.classList.remove('on'); }
+
+  function runLine() {
+    var txt = $('cmd').value.trim();
+    if (!txt) return;
+    clearErr();
+    var next;
+    try { next = NNG.execTactic(NNG.clone(rt.state), txt); }
+    catch (e) { showErr(e); return; }
+    rt.lines.push(txt);
+    rt.state = next;
+    $('cmd').value = '';
+    persistCode();
+    renderLevel();
+    if (rt.state.goals.length === 0) onCleared();
+  }
+
+  function persistCode() {
+    var wid = rt.world.id, n = String(rt.level.n);
+    S.code[wid] = S.code[wid] || {};
+    S.code[wid][n] = rt.lines.slice();
+    save();
+  }
+
+  function recompute() {
+    var st = NNG.mkState({ statement: rt.stmt });
+    for (var i = 0; i < rt.lines.length; i++) {
+      try { st = NNG.execTactic(NNG.clone(st), rt.lines[i]); }
+      catch (e) { rt.lines = rt.lines.slice(0, i); break; }
+      if (st.goals.length === 0) { rt.lines = rt.lines.slice(0, i + 1); break; }
+    }
+    rt.state = st;
+    persistCode();
+    clearErr();
+    renderLevel();
+  }
+
+  function undo() {
+    if (!rt.lines.length) return;
+    rt.lines.pop();
+    recompute();
+  }
+
+  function resetLevel() {
+    if (!rt.lines.length) return;
+    rt.lines = [];
+    recompute();
+    toast('처음부터 다시 시작합니다');
+  }
+
+  function onCleared() {
+    var wid = rt.world.id, n = rt.level.n;
+    S.cleared[wid] = S.cleared[wid] || {};
+    var first = !S.cleared[wid][n];
+    S.cleared[wid][n] = true;
+    save();
+    persistCode();
+
+    var nextLv = rt.world.levels[n];
+    var nw = NNG_WORLDS[worldIndex(wid) + 1];
+    var body =
+      '<div class="clearbox"><div class="em">🎉</div><h3>레벨 클리어!</h3>' +
+      '<p>' + esc(rt.world.title) + ' · ' + esc(rt.level.title) + '</p></div>' +
+      (rt.level.conclusion ? '<div class="md">' + md(rt.level.conclusion) + '</div>' : '');
+    var actions = '';
+    if (nextLv) actions = '<button class="btn wide accent" id="nextBtn">다음 레벨 (' + (n + 1) + '. ' + esc(nextLv.title) + ')</button>';
+    else if (nw) actions = '<button class="btn wide accent" id="nextWorldBtn">다음 월드: ' + esc(nw.title) + '</button>';
+    actions += '<div style="height:8px"></div><button class="btn wide ghost" id="mapBtn">월드 맵으로</button>';
+    sheet('', body, actions);
+    if ($('nextBtn')) $('nextBtn').onclick = function () { closeSheet(); openLevel(wid, n + 1); };
+    if ($('nextWorldBtn')) $('nextWorldBtn').onclick = function () { closeSheet(); show('map'); renderMap(); };
+    $('mapBtn').onclick = function () { closeSheet(); show('map'); renderMap(); };
+    if (first) toast('진행 상황이 저장되었습니다');
+  }
+
+  /* ------------------------ 칩 팔레트 ------------------------ */
+  function availTacs() {
+    var lv = rt.level;
+    var list = (lv && S.mode !== 'free') ? (lv._tacs || []).slice() : TAC_DOCS.map(function (d) { return d[0]; });
+    if (S.mode === 'free') list = TAC_DOCS.map(function (d) { return d[0]; });
+    return list;
+  }
+
+  function renderPalette() {
+    if (!rt.level) return;
+    var tacs = availTacs();
+    var order = ['rfl', 'rw', 'nth_rewrite', 'repeat', 'induction', 'cases', 'intro', 'exact', 'apply',
+      'use', 'left', 'right', 'symm', 'have', 'contrapose', 'trivial', 'decide', 'tauto', 'simp', 'simp_add', 'xyzzy'];
+    var shown = order.filter(function (t) { return tacs.indexOf(t) >= 0; });
+    el.prowTac.innerHTML = shown.map(function (t) {
+      return '<button class="chip hot" data-ins="' + esc(t) + '">' + esc(t) + '</button>';
+    }).join('') +
+      '<button class="chip" data-ins="' + esc('') + '" style="display:none"></button>';
+
+    el.prowSym.innerHTML = SYMS.map(function (s) {
+      return '<button class="chip sym" data-ins="' + esc(s) + '">' + esc(s) + '</button>';
+    }).join('') + NUMS.map(function (s) {
+      return '<button class="chip sym" data-ins="' + esc(s) + '">' + esc(s) + '</button>';
+    }).join('');
+
+    Array.prototype.forEach.call(el.palette.querySelectorAll('.chip'), function (b) {
+      b.onclick = function () { insertText(b.getAttribute('data-ins')); };
+    });
+  }
+
+  function insertText(text) {
+    var inp = $('cmd');
+    var start = inp.selectionStart === null ? inp.value.length : inp.selectionStart;
+    var end = inp.selectionEnd === null ? inp.value.length : inp.selectionEnd;
+    var before = inp.value.slice(0, start), after = inp.value.slice(end);
+    var ins = text, caret = null;
+    var pair = { rw: ['rw []', 4], nth_rewrite: ['nth_rewrite 2 []', 15], have: ['have  : ', 5], induction: ['induction  with  ', 10], simp: ['simp only []', 11] };
+    if (pair[text]) { ins = pair[text][0]; caret = pair[text][1]; }
+    else if (/^(left|right|rfl|trivial|decide|tauto|symm|simp_add|xyzzy)$/.test(text)) { ins = text; }
+    else if (text && !/\s$/.test(text) && before.length && !/\s$/.test(before) && !/^[\[\),]/.test(text)) { ins = ' ' + text; }
+    inp.value = before + ins + after;
+    var pos = caret !== null ? before.length + caret : before.length + ins.length;
+    inp.focus();
+    try { inp.setSelectionRange(pos, pos); } catch (e) { }
+  }
+
+  /* ------------------------ 독 ------------------------ */
+  function currentPaletteTab() { }
+  function renderDock() {
+    if (!rt.level) return;
+    var tabs = [['tac', '전술'], ['thm', '정리'], ['def', '정의'], ['hint', '힌트']];
+    el.tabs.innerHTML = tabs.map(function (t) {
+      return '<button class="tab' + (rt.tab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>';
+    }).join('');
+    Array.prototype.forEach.call(el.tabs.querySelectorAll('.tab'), function (b) {
+      b.onclick = function () { rt.tab = b.getAttribute('data-tab'); renderDock(); };
+    });
+    el.tabBody.innerHTML = rt.tab === 'tac' ? tabTactics() : rt.tab === 'thm' ? tabTheorems() : rt.tab === 'def' ? tabDefs() : tabHints();
+    bindDock();
+  }
+
+  function tabTactics() {
+    var lv = rt.level;
+    var avail = (S.mode === 'free') ? TAC_DOCS.map(function (d) { return d[0]; }) : (lv._tacs || []);
+    var rows = TAC_DOCS.map(function (d) {
+      var locked = S.mode !== 'free' && avail.indexOf(d[0]) < 0;
+      if (locked) return '';
+      var isNew = (lv.newTacs || []).indexOf(d[0]) >= 0;
+      return '<div class="thm">' +
+        '<div class="nmrow"><span class="nm">' + esc(d[1]) + (isNew ? '<span class="tag new">새 전술</span>' : '') + '</span>' +
+        '<button class="use" data-ins="' + esc(d[0]) + '">넣기</button></div>' +
+        '<div class="st ko">' + md(d[2]).replace(/^<p>|(<\/p>)$/g, '') + '</div></div>';
+    }).join('');
+    return '<div class="sec">이 레벨에서 쓸 수 있는 전술</div>' + rows;
+  }
+
+  function tabTheorems() {
+    var lv = rt.level;
+    var avail = (S.mode === 'free') ? null : (lv._thms || []);
+    var byTab = {};
+    NNG_THEOREMS.RAW.forEach(function (r) {
+      if (avail && avail.indexOf(r[0]) < 0) return;
+      (byTab[r[4]] = byTab[r[4]] || []).push(r);
+    });
+    var order = ['012', '+', '*', '^', 'Peano', '≤'];
+    var html = '<div class="sec">사용 가능한 정리 (눌러서 입력)</div>';
+    order.forEach(function (k) {
+      if (!byTab[k]) return;
+      html += '<div class="sec" style="margin-top:10px">' + esc(k) + ' 그룹</div>';
+      html += byTab[k].map(function (r) {
+        var isNew = (lv.newThms || []).indexOf(r[0]) >= 0;
+        return '<div class="thm">' +
+          '<div class="nmrow"><span class="nm">' + esc(r[0]) + (isNew ? '<span class="tag new">새 정리</span>' : '') + '</span>' +
+          '<button class="use" data-ins="' + esc(r[0]) + '">넣기</button></div>' +
+          '<div class="st">' + esc(r[2]) + '</div>' +
+          '<div class="st ko" style="font-size:11.5px;color:var(--ink-3)">' + esc(r[3]) + '</div></div>';
+      }).join('');
+    });
+    return html;
+  }
+
+  function tabDefs() {
+    var defs = [
+      ['ℕ', '`0` 은 자연수이고, `n` 이 자연수면 `succ n` 도 자연수입니다. 이 게임의 모든 수는 이 두 규칙으로 만들어집니다.'],
+      ['≠', '`a ≠ b` 는 `a = b → False` 의 표기입니다. "a = b 를 가정하면 모순" 이라는 뜻입니다.'],
+      ['False / True', '`False` 는 항상 거짓인 명제입니다. `True` 는 항상 참입니다.'],
+      ['≤', '`a ≤ b` 는 `∃ c, b = a + c` 의 표기입니다. "b = a + c 인 수 c 가 있다" 는 뜻입니다.'],
+      ['∨ / ∧', '`A ∨ B` 는 "A 또는 B", `A ∧ B` 는 "A 이고 B" 입니다. `∨` 는 오른쪽 결합이라 `A ∨ B ∨ C` 는 `A ∨ (B ∨ C)` 입니다.'],
+      ['∃ / ∀', '`∃ n, P n` 은 "P 를 만족하는 n 이 있다", `∀ n, P n` 은 "모든 n 에 대해 P" 입니다.'],
+      ['is_zero', '`is_zero 0 = True`, `is_zero (succ n) = False`. 0인지 판정하는 함수입니다.'],
+      ['pred', '`pred 0 = 37`, `pred (succ n) = n`. 1을 빼는 함수입니다(0에서는 아무 값).']
+    ];
+    return '<div class="sec">정의와 기호</div>' + defs.map(function (d) {
+      return '<div class="card"><h4>' + esc(d[0]) + '</h4><div class="md" style="font-size:12.5px">' + md(d[1]) + '</div></div>';
+    }).join('');
+  }
+
+  function tabHints() {
+    var lv = rt.level;
+    var hints = lv.hints || [];
+    var n = Math.max(1, Math.min(rt.hint || 1, hints.length));
+    var visible = hints.slice(0, n);
+    var html = '<div class="sec">힌트</div>';
+    if (!hints.length) html += '<div class="muted">이 레벨에는 힌트가 없습니다. 직접 증명해 보세요!</div>';
+    html += visible.map(function (h, i) {
+      return '<div class="hintitem"><span class="num">' + (i + 1) + '</span><div class="hbody">' + md(h.t) + '</div></div>';
+    }).join('');
+    if (n < hints.length) {
+      html += '<button class="hintmore" id="moreHint">힌트 하나 더 보기 (' + (n + 1) + '/' + hints.length + ')</button>';
+    } else if (hints.length) {
+      html += '<div class="muted" style="margin-top:2px">힌트를 모두 보았습니다.</div>';
+    }
+    html += '<div class="sec">막혔을 때</div>' +
+      '<button class="hintmore" id="showSol">정답 코드 보기</button>';
+    return html;
+  }
+
+  function bindDock() {
+    Array.prototype.forEach.call(el.tabBody.querySelectorAll('[data-ins]'), function (b) {
+      b.onclick = function () { insertText(b.getAttribute('data-ins')); };
+    });
+    if ($('moreHint')) $('moreHint').onclick = function () { rt.hint = (rt.hint || 1) + 1; renderDock(); };
+    if ($('showSol')) $('showSol').onclick = function () {
+      var sol = (rt.level.solution || []).join('\n');
+      sheet('정답 코드', '<div class="md"><p>아래를 한 줄씩 직접 입력해 보세요. 붙여넣고 싶다면 이 코드를 복사하면 됩니다.</p><pre><code>' + esc(sol) + '</code></pre></div>',
+        '<button class="btn wide ghost" id="solClose">닫기</button>');
+      $('solClose').onclick = closeSheet;
+    };
+  }
+
+  /* ------------------------ 화면 전환 ------------------------ */
+  function show(id) {
+    ['home', 'map', 'level'].forEach(function (s) {
+      $('scr-' + s).classList.toggle('on', s === id);
+    });
+  }
+
+  /* ------------------------ 초기화 ------------------------ */
+  function init() {
+    ['toast', 'sheetwrap', 'sheetTitle', 'sheetBody', 'homeBody', 'mapBody', 'goalbox', 'lines',
+      'errbar', 'prowTac', 'prowSym', 'palette', 'tabs', 'tabBody', 'cmd', 'lvTitle', 'lvSub'].forEach(function (k) { el[k] = $(k); });
+
+    renderHome();
+
+    $('scr-map').querySelector('#backHome').onclick = function () { show('home'); };
+    $('scr-level').querySelector('#backMap').onclick = function () { show('map'); renderMap(); };
+    $('scr-level').querySelector('#lvInfo').onclick = showIntro;
+    $('run').onclick = runLine;
+    $('btnUndo').onclick = undo;
+    $('btnReset').onclick = resetLevel;
+    $('btnHint').onclick = function () { rt.tab = 'hint'; renderDock(); };
+    $('cmd').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); runLine(); }
+    });
+    el.sheetwrap.onclick = function (e) { if (e.target === el.sheetwrap) closeSheet(); };
+
+    // 마지막 위치 복원
+    if (S.last && worldById(S.last.w)) {
+      // 자동 진입은 하지 않고 맵만 보여준다
+    }
+    show('home');
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+</body>
+</html>
