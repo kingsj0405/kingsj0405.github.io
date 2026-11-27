@@ -125,7 +125,7 @@
             <span>멤버 <b class="tabnum">10</b>인 명단</span>
             <i data-lucide="chevron-right" style="width:12px;height:12px"></i>
           </button>
-          <a class="btn-link" href="letter-3/">
+          <a class="btn-link" href="letter-4/">
             <span>금요 커피 레터 최신호</span>
             <i data-lucide="arrow-right" style="width:12px;height:12px"></i>
           </a>
@@ -164,6 +164,8 @@
           <a class="btn-link" href="letter-2/">2호</a>
           <span class="footer-dot">·</span>
           <a class="btn-link" href="letter-3/">3호</a>
+          <span class="footer-dot">·</span>
+          <a class="btn-link" href="letter-4/">4호</a>
           <span class="footer-letters-note">보드와 같은 비밀번호로 열립니다</span>
         </p>
       </div>
@@ -2135,13 +2137,13 @@ function setTabUrl(tab) {
 }
 
 /* 기존 공유 링크(?letter=1 · ?vol=1 등)는 단독 레터 페이지로 넘긴다.
-   레터는 더 이상 이 보드 안에 렌더링되지 않는다. (./letter-1/ · ./letter-2/ · ./letter-3/) */
+   레터는 더 이상 이 보드 안에 렌더링되지 않는다. (./letter-1/ · ./letter-2/ · ./letter-3/ · ./letter-4/) */
 function legacyLetterTarget() {
   const urlParams = new URLSearchParams(window.location.search);
   const qLetter = String(urlParams.get('letter') || urlParams.get('vol') || '').trim();
   if (!qLetter) return '';
   const no = (qLetter.match(/[0-9]/g) || []).slice(-1)[0];
-  if (no !== '1' && no !== '2' && no !== '3') return '';
+  if (no !== '1' && no !== '2' && no !== '3' && no !== '4') return '';
   const pass = urlParams.get('pass') || urlParams.get('key');
   return './letter-' + no + '/' + (pass ? '?pass=' + encodeURIComponent(pass) : '');
 }
